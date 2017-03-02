@@ -15,7 +15,7 @@ import Supporting_Classes.RequestResponse;
 
 
 
-public class DtcRaringService implements API 
+public class DtcRatingService implements API 
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -31,7 +31,7 @@ public class DtcRaringService implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public DtcRaringService(PropertiesHandle config) throws SQLException
+	public DtcRatingService(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");

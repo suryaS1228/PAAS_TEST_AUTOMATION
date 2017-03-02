@@ -55,7 +55,7 @@ public class DtcPayIssue implements API
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -105,7 +105,7 @@ public class DtcPayIssue implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
