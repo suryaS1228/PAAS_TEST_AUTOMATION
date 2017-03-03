@@ -1,10 +1,5 @@
 package apiPackage;
 
-<<<<<<< HEAD
-public class eg {
-
-}
-=======
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -19,7 +14,7 @@ import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
 
-public class IsoBopissue implements API 
+public class IsoBopRateCancel implements API 
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -35,7 +30,7 @@ public class IsoBopissue implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public IsoBopissue(PropertiesHandle config) throws SQLException
+	public IsoBopRateCancel(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
@@ -114,9 +109,9 @@ public class IsoBopissue implements API
 	}
 	
 	
-	public void SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-		/*String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -138,8 +133,8 @@ public class IsoBopissue implements API
 				output.WriteData("User_maessage", UserMessage);
 				
 			}
-		}*/
-	
+		}
+	return output;
 	}
 	
 	
@@ -202,4 +197,3 @@ public class IsoBopissue implements API
 
 
 
->>>>>>> origin/master
