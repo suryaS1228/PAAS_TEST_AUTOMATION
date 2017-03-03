@@ -14,7 +14,7 @@ import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
 
-public class IsoBopEndrosement implements API 
+public class IsoBopPayissue implements API 
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -30,7 +30,7 @@ public class IsoBopEndrosement implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public IsoBopEndrosement(PropertiesHandle config) throws SQLException
+	public IsoBopPayissue(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
@@ -111,7 +111,7 @@ public class IsoBopEndrosement implements API
 	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-		/*String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -133,8 +133,8 @@ public class IsoBopEndrosement implements API
 				output.WriteData("User_maessage", UserMessage);
 				
 			}
-		}*/
-	 return output;
+		}
+	return output;
 	}
 	
 	

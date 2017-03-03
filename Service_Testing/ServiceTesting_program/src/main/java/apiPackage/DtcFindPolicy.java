@@ -1,5 +1,4 @@
 package apiPackage;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -13,8 +12,7 @@ import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
-
-public class IsoBopEndrosement implements API 
+public class DtcFindPolicy implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -30,7 +28,7 @@ public class IsoBopEndrosement implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public IsoBopEndrosement(PropertiesHandle config) throws SQLException
+	public DtcFindPolicy(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
@@ -44,14 +42,19 @@ public class IsoBopEndrosement implements API
 		
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
+	
+	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException 
 	{
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		
 	}
+
+
 	
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+	
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -61,17 +64,22 @@ public class IsoBopEndrosement implements API
 			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
 			}
 		}
-
 	}
+
+
 	
 	public void AddHeaders() throws IOException
 	{
+		
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
 		http.AddHeader("Token", config.getProperty("token"));
 		//http.AddHeader("EventName", config.getProperty("EventName"));
 		
+		
 	}
+
+
 	
 	public void SendAndReceiveData() throws SQLException
 	{
@@ -97,7 +105,7 @@ public class IsoBopEndrosement implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -105,13 +113,14 @@ public class IsoBopEndrosement implements API
 			e.printStackTrace();
 		}
 		
-		
 	}
+
+
 	
-	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
+			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
-		/*String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -133,13 +142,14 @@ public class IsoBopEndrosement implements API
 				output.WriteData("User_maessage", UserMessage);
 				
 			}
-		}*/
-	 return output;
+		}
+		return output;
+		
 	}
-	
-	
+
+
 	public void CompareFunction(DatabaseOperation output) throws SQLException
-	{/*
+	{
 		for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
@@ -155,10 +165,9 @@ public class IsoBopEndrosement implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}*/
+		}
+		
 	}
-	
-	
 	private static boolean premium_comp(String expected,String actual)
 	{
 		
@@ -187,13 +196,9 @@ public class IsoBopEndrosement implements API
 				status = false;
 			}
 		}
-		return status;
+		return status;	
+		
 	}
-
 	
-
+	
 }
-
-
-
-
