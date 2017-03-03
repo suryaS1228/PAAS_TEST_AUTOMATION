@@ -130,7 +130,7 @@ public class DtcSaveDetails2 implements API
 	
 //============================================fetching actual datas from response===================================	
 	
-	public void SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
 		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
@@ -155,6 +155,7 @@ public class DtcSaveDetails2 implements API
 				
 			}
 		}
+		return output;
 	
 	}
 	
