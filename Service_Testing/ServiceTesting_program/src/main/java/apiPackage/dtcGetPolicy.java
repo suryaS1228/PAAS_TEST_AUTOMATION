@@ -123,7 +123,7 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 	}
 
 	
-	public void SendResponseDataToFile(DatabaseOperation output)
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
 		  String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
@@ -149,6 +149,7 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 					
 				}
 			}
+			return output;
 			
 		
 	}
