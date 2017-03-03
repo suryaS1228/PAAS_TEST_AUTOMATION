@@ -111,7 +111,7 @@ public class IsoBopissue implements API
 	
 	public void SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-		/*String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -133,7 +133,7 @@ public class IsoBopissue implements API
 				output.WriteData("User_maessage", UserMessage);
 				
 			}
-		}*/
+		}
 	
 	}
 	

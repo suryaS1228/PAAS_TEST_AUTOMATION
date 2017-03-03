@@ -1,195 +1,202 @@
 package apiPackage;
 
-import Supporting_Classes.http_handle;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 import org.dom4j.DocumentException;
+import org.json.simple.parser.ParseException;
 
-import Supporting_Classes.database_operation;
-import Supporting_Classes.properties_handle;
-import Supporting_Classes.request_response;
+import Supporting_Classes.DatabaseOperation;
+import Supporting_Classes.HttpHandle;
+import Supporting_Classes.JsonHandle;
+import Supporting_Classes.PropertiesHandle;
+import Supporting_Classes.RequestResponse;
 
-/**
- * Hello world!
- *
- */
-public class IsoBopInstalllmentPayissue 
+
+public class IsoBopInstalllmentPayissue implements API 
 {
-    //private static FileInputStream configuration1;
-	//public static properties_handle config = null;
-	public static request_response sample_input = null;
-	public static request_response request = null;
-	public static request_response response = null;
-	public static void main( String[] args ) throws SQLException, ClassNotFoundException, UnsupportedEncodingException, IOException, DocumentException
+	private RequestResponse sampleInput = null;
+	private RequestResponse request = null;
+	private RequestResponse response = null;
+	private DatabaseOperation jsonElements = null;
+	private PropertiesHandle config = null;
+	private DatabaseOperation input = null;
+	private String[] actualColumnCol = null;
+	private String[] inputColumnCol = null;
+	private String[] statusColumnCol = null;
+	private int statusColumnSize;
+	private int actualColumnSize;
+	private int inputColumnSize;
+	private HttpHandle http = null;
 	
-    {
-        //System.out.println( "Hello World!" );
-		database_operation.config = new properties_handle
-				("Q:/Automation Team/1 Projects/09 ISO/Release_9_Sunday_Prod/Install_Payissue_InstalCancel_preprod/configuration_file/config_json.properties");
-		         
-		database_operation.conn_setup();
-    	System.setProperty("jsse.enableSNIExtension", "false");
+	public IsoBopInstalllmentPayissue(PropertiesHandle config) throws SQLException
+	{
+		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		//actualColumnCol = config.getProperty("actual_column").split(";");
+		inputColumnCol = config.getProperty("input_column").split(";");
+		statusColumnCol = config.getProperty("status_column").split(";");
+		statusColumnSize = statusColumnCol.length;
 		
-		sample_input = new request_response(database_operation.config.getProperty("sample_request"),database_operation.config.getProperty("type"));//added
+		//actualColumnSize = actualColumnCol.length;
+		inputColumnSize = inputColumnCol.length;
 		
-		database_operation input = new database_operation();
-		database_operation output = new database_operation();
-		database_operation json_elements = new database_operation();
-		input.get_dataobjects(database_operation.config.getProperty("input_query"));
-		output.get_dataobjects(database_operation.config.getProperty("output_query"));
 		
-		/*switch(input.read_data("Plan"))
+	}
+	
+	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
+	{
+		input = InputData;
+		switch(InputData.ReadData("Plan"))
 		{
-		 case "TA01":
-		 {	 
-			 json_elements.get_dataobjects(database_operation.config.getProperty("json_query_TA01"));
-			 actual_column_col = database_operation.config.getProperty("actual_column_TA01").split(";");
-		 }	
+		case "TA01":
+		 	 
+			sampleInput = new JsonHandle(config.getProperty("json_query_TA01")); 
+			actualColumnCol = config.getProperty("actual_column_TA01").split(";");
+			actualColumnSize = actualColumnCol.length;
+			 break;
+		 	
 		case "BM2M":
-		{
-			json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BM2M"));
-			actual_column_col = database_operation.config.getProperty("actual_column_BM2M").split(";");
-		}
+		
+			sampleInput = new JsonHandle(config.getProperty("json_query_BM2M"));
+			actualColumnCol = config.getProperty("actual_column_BM2M").split(";");
+			actualColumnSize = actualColumnCol.length;
+			break;
+			
 		case "BQ25":
-		{
-			json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BQ25"));
-			actual_column_col = database_operation.config.getProperty("actual_column_BQ25").split(";");
-			
-		}
+		
+			sampleInput = new JsonHandle(config.getProperty("json_query_BQ25")); 
+			actualColumnCol = config.getProperty("actual_column_BQ25").split(";");
+			actualColumnSize = actualColumnCol.length;
+			break;
+		
 		case "BQ50":
-		{
-			json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BQ50")); 
-			actual_column_col = database_operation.config.getProperty("actual_column_BQ50").split(";");
-		}
+		
+			sampleInput = new JsonHandle(config.getProperty("json_query_BQ50")); 
+			actualColumnCol = config.getProperty("actual_column_BQ50").split(";");
+			actualColumnSize = actualColumnCol.length;
+			break;
+			
 		default :
-			System.out.println((input.read_data("Plan"))+"is not available");
+			System.out.println(InputData.ReadData("Plan") + "is not available");
+		}
+	}
+	
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
+	{
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		request.StringToFile(sampleInput.FileToString());
+		
+		for(int i=0;i<inputColumnSize;i++)
+		{
+			if(!input.ReadData(inputColumnCol[i]).equals(""))
+			{
+			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+			}
+		}
+
+	}
+	
+	public void AddHeaders() throws IOException
+	{
+		http = new HttpHandle(config.getProperty("test_url"),"POST");
+		http.AddHeader("Content-Type", config.getProperty("content_type"));
+		http.AddHeader("Token", config.getProperty("token"));
+		//http.AddHeader("EventName", config.getProperty("EventName"));
+		
+	}
+	
+	public void SendAndReceiveData() throws SQLException
+	{
+		String input_data= null;
+		try {
+			input_data = request.FileToString();
+		} catch (IOException | ParseException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			http.SendData(input_data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		json_elements.get_dataobjects(database_operation.config.getProperty("json_query"));
-		input.get_dataobjects(database_operation.config.getProperty("input_query"));
-		output.get_dataobjects(database_operation.config.getProperty("output_query"));
-		//String[] expected_column_col = config.getProperty("expected_column").split(";");
-		String[] input_column_col = database_operation.config.getProperty("input_column").split(";");
-		//String[] status_column_col = database_operation.config.getProperty("status_column").split(";");
-		//int status_column_size = status_column_col.length;
-		//int expected_column_size = expected_column_col.length;
-		int actual_column_size = actual_column_col.length;
-		int input_column_size = input_column_col.length;*/
+		String response_string = null;
 		
-		do
+		try {
+			response_string = http.ReceiveData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		try {
+			response.StringToFile(response_string);
+		} catch (IOException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+	public void SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	{
+		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		
+		for(int i=0;i<actualColumnSize;i++)
 		{
-			System.out.println("check");
-			String[] actual_column_col = null;
-			if(input.read_data("Flag_for_execution").equals("Y"))
+			
+			if(StatusCode.equals("SUCCESS"))
 			{
-				System.out.println(input.read_data("Plan"));
-				switch(input.read_data("Plan"))
-				{
-				 case "TA01":
-				 	 
-					 json_elements.get_dataobjects(database_operation.config.getProperty("json_query_TA01"));
-					 actual_column_col = database_operation.config.getProperty("actual_column_TA01").split(";");
-					 break;
-				 	
-				case "BM2M":
+				String actual=null;
+				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.WriteData(actualColumnCol[i], actual);
+				output.WriteData("Flag_for_execution", StatusCode);
 				
-					json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BM2M"));
-					actual_column_col = database_operation.config.getProperty("actual_column_BM2M").split(";");
-					break;
-					
-				case "BQ25":
-				
-					json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BQ25"));
-					actual_column_col = database_operation.config.getProperty("actual_column_BQ25").split(";");
-					break;
-				
-				case "BQ50":
-				
-					json_elements.get_dataobjects(database_operation.config.getProperty("json_query_BQ50")); 
-					actual_column_col = database_operation.config.getProperty("actual_column_BQ50").split(";");
-					break;
-					
-				default :
-					System.out.println((input.read_data("Plan"))+"is not available");
-				}
-			
-				//String[] expected_column_col = config.getProperty("expected_column").split(";");
-				String[] input_column_col = database_operation.config.getProperty("input_column").split(";");
-				//String[] status_column_col = database_operation.config.getProperty("status_column").split(";");
-				//int status_column_size = status_column_col.length;
-				//int expected_column_size = expected_column_col.length;
-				int actual_column_size = actual_column_col.length;
-				int input_column_size = input_column_col.length;
-				
-				request = new request_response(database_operation.config.getProperty("request_location")+input.read_data("testdata")+"_request",database_operation.config.getProperty("type"));
-				request.String_to_object(sample_input.Object_to_String());
-				for(int i=0;i<input_column_size;i++)
-				{
-					request.write(json_elements.read_data(input_column_col[i]), input.read_data(input_column_col[i]));
-				}
-				
-				http_handle http = new http_handle(database_operation.config.getProperty("test_url"),"POST");
-				http.add_header("Content-Type", database_operation.config.getProperty("content_type"));
-				http.add_header("Token", database_operation.config.getProperty("token"));
-				String input_data = request.Object_to_String();
-				http.send_data(input_data);
-				
-				String response_string = null;
-				try {
-					response_string = http.Receive_data();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				response = new request_response(database_operation.config.getProperty("response_location")+input.read_data("testdata")+"_response",database_operation.config.getProperty("type"));  // response location
-				response.String_to_object(response_string);
-				for(int i=0;i<actual_column_size;i++)
-				{
-					System.out.println(actual_column_col[i]+"-"+json_elements.read_data(actual_column_col[i]));
-					String actual=((response.read(json_elements.read_data(actual_column_col[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "")).replaceAll("\\\\","");
-					output.write_data(actual_column_col[i],actual);
-					//output.write_data(actual_column_col[i], response.read(json_elements.read_data(actual_column_col[i])));
-					
-					System.out.println(actual);
-				}
-			/*	for(int i=0;i<status_column_size;i++)
-				{
-					String[] status_ind_col = status_column_col[i].split("-");
-					String expected_column = status_ind_col[0];
-					String actual_column = status_ind_col[1];
-					String status_column = status_ind_col[2];
-					if(premium_comp(output.read_data(expected_column),output.read_data(actual_column)))
-					{
-						output.write_data(status_column, "Pass");
-					}
-					else
-					{
-						output.write_data(status_column, "Fail");
-					}
-					
-				}*/
 			}
-			input.write_data("flag_for_execution", "Completed");
-			output.write_data("flag_for_execution", "Completed");
-			input.update_row();
-			output.update_row();
+			else
+			{
+				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.WriteData("Flag_for_execution", "Error response");
+				output.WriteData("Message_code", MessageCode);
+				output.WriteData("User_maessage", UserMessage);
+				
+			}
+		}
+	
+	}
+	
+	
+	public void CompareFunction(DatabaseOperation output) throws SQLException
+	{
+		/*for(int i=0;i<statusColumnSize;i++)
+		{
+			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
+			String ExpectedColumn = StatusIndividualColumn[0];
+			String ActualColumn = StatusIndividualColumn[1];
+			String StatusColumn = StatusIndividualColumn[2];
+			if(premium_comp(output.ReadData(ExpectedColumn),output.ReadData(ActualColumn)))
+			{
+				output.WriteData(StatusColumn, "Pass");
+			}
+			else
+			{
+				output.WriteData(StatusColumn, "Fail");
+			}
 			
-		}while(input.move_forward() && output.move_forward());
-		
-		database_operation.close_conn();
-					
-    }
-    
+		}*/
+	}
+	
 	
 	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
-		if(expected == null || actual == null)
+		if(expected == null || actual == null ||expected.equals("") || actual.equals(""))
 		{
 			status = false;
 		}
@@ -199,6 +206,9 @@ public class IsoBopInstalllmentPayissue
 			actual = actual.replaceAll("\\[\"", "");
 			expected = expected.replaceAll("\"\\]", "");
 			actual = actual.replaceAll("\"\\]", "");
+			expected = expected.replaceAll("\\.[0-9]*", "");
+			actual = actual.replaceAll("\\.[0-9]*", "");
+			
 			System.out.println(actual);
 			System.out.println(expected);
 			if(expected.equals(actual))
@@ -212,4 +222,11 @@ public class IsoBopInstalllmentPayissue
 		}
 		return status;
 	}
+
+	
+
 }
+
+
+
+
