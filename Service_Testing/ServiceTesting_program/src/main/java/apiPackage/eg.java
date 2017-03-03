@@ -1,5 +1,10 @@
 package apiPackage;
 
+<<<<<<< HEAD
+public class eg {
+
+}
+=======
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -197,3 +202,4 @@ public class IsoBopissue implements API
 
 
 
+>>>>>>> origin/master

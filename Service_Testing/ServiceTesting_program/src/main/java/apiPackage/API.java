@@ -15,7 +15,7 @@ public interface API
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException;
 	public void AddHeaders() throws IOException;
 	public void SendAndReceiveData() throws SQLException;
-	public void SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException;
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException;
 	public void CompareFunction(DatabaseOperation output) throws SQLException;
 	
 	
