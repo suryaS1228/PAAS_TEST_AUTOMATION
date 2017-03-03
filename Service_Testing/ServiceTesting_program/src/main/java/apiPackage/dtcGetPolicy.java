@@ -13,7 +13,7 @@ import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
-public class dtcGetPolicy implements API
+public class DtcGetPolicy implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -29,7 +29,7 @@ public class dtcGetPolicy implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public dtcGetPolicy(PropertiesHandle config) throws SQLException
+	public DtcGetPolicy(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
