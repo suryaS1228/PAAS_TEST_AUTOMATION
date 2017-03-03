@@ -13,7 +13,7 @@ import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
-public class DtcGetPolicy implements API
+public class ChicForms implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -29,7 +29,7 @@ public class DtcGetPolicy implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public DtcGetPolicy(PropertiesHandle config) throws SQLException
+	public ChicForms(PropertiesHandle config) throws SQLException
 	{
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
@@ -44,26 +44,18 @@ public class DtcGetPolicy implements API
 	}
 	
 
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException 
+	
+	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
-		String PolicyORbatch=InputData.ReadData("Policy_or_Batch");
 		
-		if(PolicyORbatch.equals("Policy"))
-	    {
-			sampleInput = new JsonHandle(config.getProperty("sample_request_policy"));
-			
-	    }
-		else
-		{
-			sampleInput = new JsonHandle(config.getProperty("sample_request_batch"));
-			
-		}
+		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		
 	}
 
-
-public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
+	
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -77,18 +69,17 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 	}
 
 	
-	public void AddHeaders() throws IOException 
+	public void AddHeaders() throws IOException
 	{
-
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
 		http.AddHeader("Token", config.getProperty("token"));
-		http.AddHeader("EventName", config.getProperty("EventName"));
+		//http.AddHeader("EventName", config.getProperty("EventName"));
 		
 	}
 
-	
-	public void SendAndReceiveData() throws SQLException
+
+	public void SendAndReceiveData() throws SQLException 
 	{
 		String input_data= null;
 		try {
@@ -126,36 +117,35 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-		  String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+    String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+		
+		for(int i=0;i<actualColumnSize;i++)
+		{
 			
-			for(int i=0;i<actualColumnSize;i++)
+			if(StatusCode.equals("SUCCESS"))
 			{
+				String actual=null;
+				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.WriteData(actualColumnCol[i], actual);
+				output.WriteData("Flag_for_execution", StatusCode);
 				
-				if(StatusCode.equals("SUCCESS"))
-				{
-					String actual=null;
-					actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-					output.WriteData(actualColumnCol[i], actual);
-					output.WriteData("Flag_for_execution", StatusCode);
-					
-				}
-				else
-				{
-					String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-					String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-					output.WriteData("Flag_for_execution", "Error response");
-					output.WriteData("Message_code", MessageCode);
-					output.WriteData("User_maessage", UserMessage);
-					
-				}
 			}
-			return output;
-			
+			else
+			{
+				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.WriteData("Flag_for_execution", "Error response");
+				output.WriteData("Message_code", MessageCode);
+				output.WriteData("User_maessage", UserMessage);
+				
+			}
+		}
+		return output;
 		
 	}
 
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
+	public void CompareFunction(DatabaseOperation output) throws SQLException 
 	{
 		for(int i=0;i<statusColumnSize;i++)
 		{
@@ -173,6 +163,7 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 			}
 			
 		}
+		
 	}
 	private static boolean premium_comp(String expected,String actual)
 	{
@@ -205,9 +196,6 @@ public void PumpDataToRequest() throws SQLException, IOException, DocumentExcept
 		return status;	
 		
 	}
-	
+    
+
 }
-
-
-
-
