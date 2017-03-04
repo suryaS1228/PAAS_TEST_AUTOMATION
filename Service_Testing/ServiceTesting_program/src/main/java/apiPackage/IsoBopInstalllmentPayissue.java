@@ -24,26 +24,21 @@ public class IsoBopInstalllmentPayissue implements API
 	private DatabaseOperation input = null;
 	private String[] actualColumnCol = null;
 	private String[] inputColumnCol = null;
-	private String[] statusColumnCol = null;
-	private int statusColumnSize;
 	private int actualColumnSize;
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
 	public IsoBopInstalllmentPayissue(PropertiesHandle config) throws SQLException
 	{
+		this.config = config;
+		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
-		//actualColumnCol = config.getProperty("actual_column").split(";");
+		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
-		
-		//actualColumnSize = actualColumnCol.length;
+		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;
 		
-		
 	}
-	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		input = InputData;
@@ -54,7 +49,7 @@ public class IsoBopInstalllmentPayissue implements API
 			sampleInput = new JsonHandle(config.getProperty("json_query_TA01")); 
 			actualColumnCol = config.getProperty("actual_column_TA01").split(";");
 			actualColumnSize = actualColumnCol.length;
-			 break;
+			break;
 		 	
 		case "BM2M":
 		
@@ -84,7 +79,8 @@ public class IsoBopInstalllmentPayissue implements API
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
+		//+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -130,7 +126,8 @@ public class IsoBopInstalllmentPayissue implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+".json");
+		//+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -144,11 +141,17 @@ public class IsoBopInstalllmentPayissue implements API
 	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
 			
+			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			output.WriteData(actualColumnCol[i], actual);
+			//output.write_data(actual_column_col[i], response.read(json_elements.read_data(actual_column_col[i])));
+			System.out.println(actual);
+			output.WriteData("flag_for_execution", "Completed");
+			
+			/*System.out.println(StatusCode);
 			if(StatusCode.equals("SUCCESS"))
 			{
 				String actual=null;
@@ -162,18 +165,18 @@ public class IsoBopInstalllmentPayissue implements API
 				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 				output.WriteData("Flag_for_execution", "Error response");
-				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
+				//output.WriteData("Message_code", MessageCode);
+				//output.WriteData("User_maessage", UserMessage);
 				
-			}
+			}*/
 		}
-	   return output;
+	return output;
 	}
 	
 	
 	public void CompareFunction(DatabaseOperation output) throws SQLException
-	{
-		/*for(int i=0;i<statusColumnSize;i++)
+	{/*
+		for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
 			String ExpectedColumn = StatusIndividualColumn[0];
@@ -192,7 +195,7 @@ public class IsoBopInstalllmentPayissue implements API
 	}
 	
 	
-	private static boolean premium_comp(String expected,String actual)
+	/*private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -221,8 +224,7 @@ public class IsoBopInstalllmentPayissue implements API
 			}
 		}
 		return status;
-	}
-
+	}*/
 	
 
 }
