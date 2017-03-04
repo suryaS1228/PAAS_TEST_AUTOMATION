@@ -2,6 +2,17 @@ package servicetesting.code.ServiceTesting_program;
 
 import Supporting_Classes.DatabaseOperation;
 import apiPackage.API;
+import apiPackage.ChicForms;
+import apiPackage.ChicRating;
+import apiPackage.DtcFindPolicy;
+import apiPackage.DtcGetCustomerDetails;
+import apiPackage.DtcPayIssue;
+import apiPackage.DtcPreviewPDF;
+import apiPackage.DtcRatingService;
+import apiPackage.DtcSaveDetails1;
+import apiPackage.DtcSaveDetails2;
+import apiPackage.DtcSaveDetails3;
+import apiPackage.DtcSaveDetails4;
 import apiPackage.IsoBopEndrosement;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
@@ -11,6 +22,7 @@ import apiPackage.IsoBopRateCancel;
 import apiPackage.IsoBopissue;
 import apiPackage.IsoBoprating;
 import apiPackage.SolartisIsoBopRating;
+import apiPackage.StarrSearchRescueIssueCertificate;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,7 +42,7 @@ public class App
 	public static void main( String[] args ) throws SQLException, IOException, DocumentException, ParseException, ClassNotFoundException
     {
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/08 DTC/Release2/SaveCustomer/configuration_file/config_json_save1.properties");
+		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_10/Quote/configuration_file/config_json.properties");
 		DatabaseOperation.ConnectionSetup(config);
 		DatabaseOperation input = new DatabaseOperation();
 		input.GetDataObjects(config.getProperty("input_query"));
@@ -39,64 +51,115 @@ public class App
 		
 		String ApiType = config.getProperty("ApiType");
 		
-		switch(ApiType)
+		switch(ApiType.toLowerCase())
         {
       
-          case "IsoQuote":
-    	        api = new IsoBopQuote(config);
+          case "isoquote":
+           	    api = new IsoBopQuote(config);
     	        break;
       
-          case "IsoRate":
+          case "isorate":
     	        api = new IsoBoprating(config);
     	        break;
     	  
-          case "IsoBopEndrosement":
+          case "isobopendrosement":
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
-          case "IsoBopInstalllmentPayissue":
+          case "isobopinstalllmentpayissue":
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
-          case "IsoBopissue":
+          case "isobopissue":
     	        api = new IsoBopissue(config);
     	        break;
     	  
-          case "IsoBopPayissue":
+          case "isoboppayissue":
     	        api = new IsoBopPayissue(config);
     	        break;
     	  
-          case "IsoBopPayissueCancel":
+          case "isoboppayissuecancel":
     	        api = new IsoBopPayissueCancel(config);
     	        break;
     	  
-          case "SolartisIsoBopRating":
+          case "solartisisoboprating":
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
-          case "IsoBopRateCancel":
+          case "isobopratecancel":
     	        api = new IsoBopRateCancel(config);	  
     	        break;
+    	        
+          case "chicform":
+  	            api = new ChicForms(config);
+  	            break;
+  	        
+          case "chicrating":
+  	           api = new ChicRating(config);
+  	           break;
+  	        
+          case "dtcfindpolicy":
+  	            api = new DtcFindPolicy(config);
+  	            break;
+  	        
+          case "dtcgetcustomerdetails":
+  	            api = new DtcGetCustomerDetails(config);
+  	            break;
+  	        
+          case "dtcpayissue":
+  	            api = new DtcPayIssue(config);
+  	            break;
+  	        
+          case "dtcpreviewpdf":
+  	            api = new DtcPreviewPDF(config);
+  	            break;
+  	        
+          case "dtcatingservice":
+  	           api = new DtcRatingService(config);
+  	           break;
+  	        
+          case "dtcsavedetails1":
+  	            api = new DtcSaveDetails1(config);
+  	            break;
+  	        
+          case "dtcsavedetails2":
+  	            api = new DtcSaveDetails2(config);
+  	            break;
+  	        
+          case "dtcsavedetails3":
+    	        api = new DtcSaveDetails3(config);
+    	        break;
+    	        
+          case "dtcsavedetails4":
+    	        api = new DtcSaveDetails4(config);
+    	        break;
+    	        
+          case "starrsearchrescueissuecertificate":
+  	            api = new StarrSearchRescueIssueCertificate(config);
+  	             break;
     	        
           default :
         	     System.out.println("API is not coded"); 
     	  
        }
 		System.out.println("Code Startsss");
+		int i = 1;
 		do
 		{
-			int i = 1;
 			System.out.println("TestData : " + i);
 			if(input.ReadData("flag_for_execution").equals("Y"))
 			{
-				api.LoadSampleRequest(input);	
+				api.LoadSampleRequest(input);
 				api.PumpDataToRequest();
 				api.AddHeaders();
 				api.SendAndReceiveData();
 				output = api.SendResponseDataToFile(output);
+				output.UpdateRow();
 				//output = api.CompareFunction(output);
-				i++;
+				//output.UpdateRow();
+				input.WriteData("flag_for_execution", "Completed");
 			}
+			i++;
 		}while(input.MoveForward() && output.MoveForward());
 		DatabaseOperation.CloseConn();
    }
