@@ -23,19 +23,21 @@ public class DtcPreviewPDF implements API
 	private DatabaseOperation input = null;
 	private String[] actualColumnCol = null;
 	private String[] inputColumnCol = null;
-	private String[] statusColumnCol = null;
-	private int statusColumnSize;
+	//private String[] statusColumnCol = null;
+	//private int statusColumnSize;
 	private int actualColumnSize;
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
 	public DtcPreviewPDF(PropertiesHandle config) throws SQLException
 	{
+		this.config = config;
+		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
+		//statusColumnCol = config.getProperty("status_column").split(";");
+		//statusColumnSize = statusColumnCol.length;
 		
 		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;
@@ -46,6 +48,7 @@ public class DtcPreviewPDF implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException 
 	{
+		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 	}
 
@@ -115,7 +118,7 @@ public class DtcPreviewPDF implements API
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
-String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+      String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -146,7 +149,7 @@ String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).rep
 	
 	public void CompareFunction(DatabaseOperation output) throws SQLException
 	{
-		for(int i=0;i<statusColumnSize;i++)
+	 /*	for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
 			String ExpectedColumn = StatusIndividualColumn[0];
@@ -161,11 +164,11 @@ String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).rep
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		} */
 		
 	}
 	
-	private static boolean premium_comp(String expected,String actual)
+ /*	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -195,6 +198,6 @@ String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).rep
 		}
 		return status;	
 		
-	}	
+	}	*/
 	
 }

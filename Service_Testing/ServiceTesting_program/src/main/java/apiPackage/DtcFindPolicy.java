@@ -22,19 +22,21 @@ public class DtcFindPolicy implements API
 	private DatabaseOperation input = null;
 	private String[] actualColumnCol = null;
 	private String[] inputColumnCol = null;
-	private String[] statusColumnCol = null;
-	private int statusColumnSize;
+	//private String[] statusColumnCol = null;
+	//private int statusColumnSize;
 	private int actualColumnSize;
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
 	public DtcFindPolicy(PropertiesHandle config) throws SQLException
 	{
+		this.config=config;
+		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
+		//statusColumnCol = config.getProperty("status_column").split(";");
+		//statusColumnSize = statusColumnCol.length;
 		
 		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;
@@ -45,6 +47,7 @@ public class DtcFindPolicy implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException 
 	{
+		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 		
 	}
@@ -54,7 +57,7 @@ public class DtcFindPolicy implements API
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
 	
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -74,7 +77,7 @@ public class DtcFindPolicy implements API
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
 		http.AddHeader("Token", config.getProperty("token"));
-		//http.AddHeader("EventName", config.getProperty("EventName"));
+		http.AddHeader("EventName", config.getProperty("EventName"));
 		
 		
 	}
@@ -105,7 +108,7 @@ public class DtcFindPolicy implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response");
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -139,7 +142,7 @@ public class DtcFindPolicy implements API
 				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 				output.WriteData("Flag_for_execution", "Error response");
 				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
+				output.WriteData("User_message", UserMessage);
 				
 			}
 		}
@@ -150,7 +153,7 @@ public class DtcFindPolicy implements API
 
 	public void CompareFunction(DatabaseOperation output) throws SQLException
 	{
-		for(int i=0;i<statusColumnSize;i++)
+		/* for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
 			String ExpectedColumn = StatusIndividualColumn[0];
@@ -165,10 +168,11 @@ public class DtcFindPolicy implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		} */
 		
 	}
-	private static boolean premium_comp(String expected,String actual)
+	
+/* 	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -198,7 +202,7 @@ public class DtcFindPolicy implements API
 		}
 		return status;	
 		
-	}
+	} */
 	
 	
 }
