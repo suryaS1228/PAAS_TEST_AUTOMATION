@@ -6,6 +6,7 @@ import apiPackage.ChicForms;
 import apiPackage.ChicRating;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
+import apiPackage.DtcGetPolicy;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
@@ -42,7 +43,7 @@ public class App
 	public static void main( String[] args ) throws SQLException, IOException, DocumentException, ParseException, ClassNotFoundException
     {
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_10/Quote/configuration_file/config_json.properties");
+		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/07 CHIC/Release_1/Rating/configuration_file/config_XML.properties");
 		DatabaseOperation.ConnectionSetup(config);
 		DatabaseOperation input = new DatabaseOperation();
 		input.GetDataObjects(config.getProperty("input_query"));
@@ -101,6 +102,10 @@ public class App
           case "dtcfindpolicy":
   	            api = new DtcFindPolicy(config);
   	            break;
+  	            
+          case "dtcgetpolicy":
+        	    api = new DtcGetPolicy(config);
+	            break;
   	        
           case "dtcgetcustomerdetails":
   	            api = new DtcGetCustomerDetails(config);
@@ -114,7 +119,7 @@ public class App
   	            api = new DtcPreviewPDF(config);
   	            break;
   	        
-          case "dtcatingservice":
+          case "dtcratingservice":
   	           api = new DtcRatingService(config);
   	           break;
   	        
@@ -157,7 +162,8 @@ public class App
 				output.UpdateRow();
 				//output = api.CompareFunction(output);
 				//output.UpdateRow();
-				input.WriteData("flag_for_execution", "Completed");
+				input.WriteData("Flag_for_execution", "Completed");
+				input.UpdateRow();
 			}
 			i++;
 		}while(input.MoveForward() && output.MoveForward());
