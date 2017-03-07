@@ -3,10 +3,8 @@ package apiPackage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
 import Supporting_Classes.DatabaseOperation;
 import Supporting_Classes.HttpHandle;
 import Supporting_Classes.JsonHandle;
@@ -147,8 +145,9 @@ public class IsoBopQuote implements API
 	}
 	
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
-	{/*
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
+	{
+		return output;/*
 		for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
