@@ -43,7 +43,8 @@ public class App
 	public static void main( String[] args ) throws SQLException, IOException, DocumentException, ParseException, ClassNotFoundException
     {
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/07 CHIC/Release_1/Rating/configuration_file/config_XML.properties");
+		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/08 DTC/Release6/Rating/configuration_file/config_json_CFAR.properties");
+		//PropertiesHandle config = new PropertiesHandle(args[0]);
 		DatabaseOperation.ConnectionSetup(config);
 		DatabaseOperation input = new DatabaseOperation();
 		input.GetDataObjects(config.getProperty("input_query"));
@@ -160,8 +161,8 @@ public class App
 				api.SendAndReceiveData();
 				output = api.SendResponseDataToFile(output);
 				output.UpdateRow();
-				//output = api.CompareFunction(output);
-				//output.UpdateRow();
+				output = api.CompareFunction(output);
+				output.UpdateRow();
 				input.WriteData("Flag_for_execution", "Completed");
 				input.UpdateRow();
 			}

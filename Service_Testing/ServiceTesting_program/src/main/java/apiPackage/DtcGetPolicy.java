@@ -155,7 +155,7 @@ String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).rep
 		
 	}
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException 
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException 
 	{
 		/* for(int i=0;i<statusColumnSize;i++)
 		{
@@ -172,7 +172,7 @@ String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).rep
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		} */
+		} */ return output;
 		
 	}
 	
