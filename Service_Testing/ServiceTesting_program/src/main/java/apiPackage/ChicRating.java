@@ -144,7 +144,7 @@ public class ChicRating implements API
 
 
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
 		for(int i=0;i<statusColumnSize;i++)
 		{
@@ -161,7 +161,7 @@ public class ChicRating implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		} return output;
 		
 	}
 	

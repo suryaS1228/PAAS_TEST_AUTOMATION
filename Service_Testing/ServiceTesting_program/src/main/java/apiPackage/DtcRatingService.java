@@ -138,11 +138,11 @@ public class DtcRatingService implements API
 			}
 			else
 			{
-				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData("Flag_for_execution", "Error response");
-				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
+				//String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				//String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				//output.WriteData("Flag_for_execution", "Error response");
+				//output.WriteData("Message_code", MessageCode);
+				//output.WriteData("User_message", UserMessage);
 				
 			}
 		}
@@ -151,7 +151,7 @@ public class DtcRatingService implements API
 	}
 
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
 	 	for(int i=0;i<statusColumnSize;i++)
 		{
@@ -168,7 +168,7 @@ public class DtcRatingService implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}  
+		}  return output;
 }
 	
 	
