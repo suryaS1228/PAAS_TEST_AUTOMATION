@@ -43,9 +43,11 @@ public class App
 	public static void main( String[] args ) throws SQLException, IOException, DocumentException, ParseException, ClassNotFoundException
     {
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/08 DTC/Release6/Rating/configuration_file/config_json_CFAR.properties");
+		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_10/Quote/configuration_file/config_json.properties");		
 		//PropertiesHandle config = new PropertiesHandle(args[0]);
 		DatabaseOperation.ConnectionSetup(config);
+		String actualchoice = config.getProperty("actual");
+		String statuschoice = config.getProperty("status");
 		DatabaseOperation input = new DatabaseOperation();
 		input.GetDataObjects(config.getProperty("input_query"));
 		DatabaseOperation output = new DatabaseOperation();
@@ -57,7 +59,7 @@ public class App
         {
       
           case "isoquote":
-           	    api = new IsoBopQuote(config);
+        	    api = new IsoBopQuote(config);
     	        break;
       
           case "isorate":
@@ -159,10 +161,16 @@ public class App
 				api.PumpDataToRequest();
 				api.AddHeaders();
 				api.SendAndReceiveData();
-				output = api.SendResponseDataToFile(output);
-				output.UpdateRow();
-				output = api.CompareFunction(output);
-				output.UpdateRow();
+				if(actualchoice == "Y")
+				{
+				 output = api.SendResponseDataToFile(output);
+				 output.UpdateRow();
+				} 
+				if(statuschoice == "Y")
+				{
+				 output = api.CompareFunction(output);
+				 output.UpdateRow();
+				} 
 				input.WriteData("Flag_for_execution", "Completed");
 				input.UpdateRow();
 			}
