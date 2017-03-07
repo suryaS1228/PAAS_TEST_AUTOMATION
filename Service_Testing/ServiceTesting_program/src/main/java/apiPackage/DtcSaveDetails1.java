@@ -32,6 +32,8 @@ public class DtcSaveDetails1 implements API
 	
 	public DtcSaveDetails1(PropertiesHandle config) throws SQLException
 	{
+		this.config = config;
+		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
@@ -46,6 +48,7 @@ public class DtcSaveDetails1 implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
+		this.input = InputData;
 		input = InputData;
 			switch(InputData.ReadData("Plan_Type"))
 			{
@@ -64,7 +67,7 @@ public class DtcSaveDetails1 implements API
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -110,7 +113,7 @@ public class DtcSaveDetails1 implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -152,7 +155,7 @@ public class DtcSaveDetails1 implements API
 	}
 	
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
 		for(int i=0;i<statusColumnSize;i++)
 		{
@@ -169,7 +172,7 @@ public class DtcSaveDetails1 implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		} return output;
 	}
 	
 	

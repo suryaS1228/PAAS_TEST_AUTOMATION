@@ -12,11 +12,7 @@ import Supporting_Classes.HttpHandle;
 import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
-/**
- * Hello world!
- *
- */
-public class DtcSaveDetails3 implements API
+public class DtcGetPolicy implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -32,9 +28,9 @@ public class DtcSaveDetails3 implements API
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
-	public DtcSaveDetails3(PropertiesHandle config) throws SQLException
+	public DtcGetPolicy(PropertiesHandle config) throws SQLException
 	{
-		this.config = config;
+		this.config=config;
 		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
@@ -47,33 +43,33 @@ public class DtcSaveDetails3 implements API
 		
 		
 	}
-	
-	
-	
 
-	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
+    
+	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException 
 	{
 		this.input = InputData;
-		input = InputData;
-		switch(InputData.ReadData("Plan_Type"))
+		
+		String PolicyOrBatch=InputData.ReadData("Policy_or_Batch");
+		System.out.println(PolicyOrBatch);
+		switch(PolicyOrBatch)
 		{
-		 case "Annual Plan":			sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
-		 									break;
-		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip"));
-											break;
-		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request_RenterCollision"));
-											break; 
-		 
-		 default:
+		case "Policy":
+				sampleInput = new JsonHandle(config.getProperty("sample_request_policy"));
+				break;
+		case "Batch":
+				sampleInput = new JsonHandle(config.getProperty("sample_request_batch"));
+				break;
+		default:
+			System.out.println("no sample request");
+			break;
 		}
 		
+		
 	}
-
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -85,7 +81,6 @@ public class DtcSaveDetails3 implements API
 		}
 		
 	}
-
 	
 	public void AddHeaders() throws IOException 
 	{
@@ -95,7 +90,6 @@ public class DtcSaveDetails3 implements API
 		http.AddHeader("EventName", config.getProperty("EventName"));
 		
 	}
-
 	
 	public void SendAndReceiveData() throws SQLException 
 	{
@@ -121,7 +115,7 @@ public class DtcSaveDetails3 implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -130,12 +124,11 @@ public class DtcSaveDetails3 implements API
 		}
 		
 	}
-
-
+	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
-			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
+			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-         String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
@@ -159,9 +152,8 @@ public class DtcSaveDetails3 implements API
 			}
 		}
 		return output;
-
+		
 	}
-
 	
 	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException 
 	{
@@ -183,7 +175,8 @@ public class DtcSaveDetails3 implements API
 		} */ return output;
 		
 	}
-	/* private static boolean premium_comp(String expected,String actual)
+	
+/* 	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -211,8 +204,9 @@ public class DtcSaveDetails3 implements API
 				status = false;
 			}
 		}
-		return status;
+		return status;	
+		
+		
+		
 	} */
-
 }
-

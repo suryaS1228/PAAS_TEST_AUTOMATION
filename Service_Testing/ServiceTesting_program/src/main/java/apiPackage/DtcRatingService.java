@@ -33,6 +33,8 @@ public class DtcRatingService implements API
 	
 	public DtcRatingService(PropertiesHandle config) throws SQLException
 	{
+		this.config = config;
+		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
@@ -50,19 +52,20 @@ public class DtcRatingService implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
-		
-		sampleInput = new JsonHandle(config.getProperty("sample_request_Annualplan"));
+		this.input = InputData;
+		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 		
 	}
 
 
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_name")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
 		{
+			System.out.println(input.ReadData(inputColumnCol[i]));
 			if(!input.ReadData(inputColumnCol[i]).equals(""))
 			{
 			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
@@ -106,7 +109,7 @@ public class DtcRatingService implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type"));
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_name")+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -135,11 +138,11 @@ public class DtcRatingService implements API
 			}
 			else
 			{
-				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData("Flag_for_execution", "Error response");
-				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
+				//String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				//String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				//output.WriteData("Flag_for_execution", "Error response");
+				//output.WriteData("Message_code", MessageCode);
+				//output.WriteData("User_message", UserMessage);
 				
 			}
 		}
@@ -148,9 +151,9 @@ public class DtcRatingService implements API
 	}
 
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
-		for(int i=0;i<statusColumnSize;i++)
+	 	for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
 			String ExpectedColumn = StatusIndividualColumn[0];
@@ -165,11 +168,11 @@ public class DtcRatingService implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		}  return output;
 }
 	
 	
-	private static boolean premium_comp(String expected,String actual)
+ 	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -200,5 +203,5 @@ public class DtcRatingService implements API
 		return status;	
 		
 		
-	}
+	} 
 }
