@@ -12,30 +12,33 @@ import Supporting_Classes.HttpHandle;
 import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
+import Supporting_Classes.XmlHandle;
 
 public class ChicForms implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
 	private RequestResponse response = null;
-	private DatabaseOperation jsonElements = null;
+	private DatabaseOperation XmlElements = null;
 	private PropertiesHandle config = null;
 	private DatabaseOperation input = null;
 	private String[] actualColumnCol = null;
 	private String[] inputColumnCol = null;
-	private String[] statusColumnCol = null;
-	private int statusColumnSize;
+	//private String[] statusColumnCol = null;
+	//private int statusColumnSize;
 	private int actualColumnSize;
 	private int inputColumnSize;
 	private HttpHandle http = null;
 	
 	public ChicForms(PropertiesHandle config) throws SQLException
 	{
-		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		this.config = config;
+		XmlElements = new DatabaseOperation();
+		XmlElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
+		//statusColumnCol = config.getProperty("status_column").split(";");
+		//statusColumnSize = statusColumnCol.length;
 		
 		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;
@@ -47,7 +50,7 @@ public class ChicForms implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
-		
+		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 		
 	}
@@ -55,14 +58,14 @@ public class ChicForms implements API
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
+		request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
 		{
 			if(!input.ReadData(inputColumnCol[i]).equals(""))
 			{
-			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+			request.write(XmlElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
 			}
 		}
 		
@@ -103,7 +106,7 @@ public class ChicForms implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response");
+		response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -117,37 +120,28 @@ public class ChicForms implements API
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
-    String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+  
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
 			
-			if(StatusCode.equals("SUCCESS"))
-			{
-				String actual=null;
-				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData(actualColumnCol[i], actual);
-				output.WriteData("Flag_for_execution", StatusCode);
-				
-			}
-			else
-			{
-				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData("Flag_for_execution", "Error response");
-				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
-				
-			}
+			String actual = (response.read(XmlElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			output.WriteData(actualColumnCol[i], actual);
+		
+			
 		}
 		return output;
 		
 	}
 
+
+
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException 
+
+	
+ public void CompareFunction(DatabaseOperation output) throws SQLException 
 	{
-		for(int i=0;i<statusColumnSize;i++)
+		/* for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
 			String ExpectedColumn = StatusIndividualColumn[0];
@@ -162,10 +156,10 @@ public class ChicForms implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		}
+		} */
 		
-	}
-	private static boolean premium_comp(String expected,String actual)
+	} 
+/*	private static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
@@ -195,7 +189,8 @@ public class ChicForms implements API
 		}
 		return status;	
 		
-	}
+	} */
+	
     
 
 }
