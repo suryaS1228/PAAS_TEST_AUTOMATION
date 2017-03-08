@@ -151,8 +151,9 @@ public class IsoBoprating implements API
 	}
 	
 	
-	public void CompareFunction(DatabaseOperation output) throws SQLException
-	{/*
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
+	{
+		return output;/*
 		for(int i=0;i<statusColumnSize;i++)
 		{
 			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
