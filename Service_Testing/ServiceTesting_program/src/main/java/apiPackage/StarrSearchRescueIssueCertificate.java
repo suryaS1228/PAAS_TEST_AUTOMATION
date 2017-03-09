@@ -13,7 +13,7 @@ import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
-public class StarrSearchRescueIssueCertificate implements API
+public class StarrSearchRescueIssueCertificate extends BaseClass implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;

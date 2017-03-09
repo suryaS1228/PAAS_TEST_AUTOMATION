@@ -15,7 +15,7 @@ import Supporting_Classes.RequestResponse;
 
 
 
-public class DtcRatingService implements API 
+public class DtcRatingService extends BaseClass implements API 
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;

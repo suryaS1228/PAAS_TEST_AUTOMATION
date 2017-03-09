@@ -16,7 +16,7 @@ import Supporting_Classes.RequestResponse;
  * Hello world!
  *
  */
-public class DtcSaveDetails3 implements API
+public class DtcSaveDetails3 extends BaseClass implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;

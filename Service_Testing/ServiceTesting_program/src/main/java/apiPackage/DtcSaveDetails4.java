@@ -14,7 +14,7 @@ import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 
 
-public class DtcSaveDetails4 implements API
+public class DtcSaveDetails4 extends BaseClass implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;

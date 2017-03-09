@@ -14,7 +14,7 @@ import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 import Supporting_Classes.XmlHandle;
 
-public class ChicRating implements API
+public class ChicRating extends BaseClass implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
