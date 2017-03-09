@@ -17,6 +17,7 @@ public interface API
 	public void SendAndReceiveData() throws SQLException;
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException;
 	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException;
-	
+	public String RequestToString() throws IOException, ParseException, DocumentException;
+	public String ResponseToString() throws IOException, ParseException, DocumentException;
 	
 }

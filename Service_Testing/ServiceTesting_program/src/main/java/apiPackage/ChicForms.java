@@ -14,7 +14,7 @@ import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
 import Supporting_Classes.XmlHandle;
 
-public class ChicForms implements API
+public class ChicForms extends BaseClass implements API
 {
 	private RequestResponse sampleInput = null;
 	private RequestResponse request = null;
@@ -32,6 +32,7 @@ public class ChicForms implements API
 	
 	public ChicForms(PropertiesHandle config) throws SQLException
 	{
+		
 		this.config = config;
 		XmlElements = new DatabaseOperation();
 		XmlElements.GetDataObjects(config.getProperty("json_query"));
