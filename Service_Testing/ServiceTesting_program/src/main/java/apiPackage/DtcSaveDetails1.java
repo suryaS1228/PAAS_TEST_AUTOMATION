@@ -22,6 +22,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	private DatabaseOperation jsonElements = null;
 	private PropertiesHandle config = null;
 	private DatabaseOperation input = null;
+	private DatabaseOperation output = null;
 	private String[] actualColumnCol = null;
 	private String[] inputColumnCol = null;
 	private String[] statusColumnCol = null;
@@ -172,7 +173,8 @@ public class DtcSaveDetails1 extends BaseClass implements API
 				output.WriteData(StatusColumn, "Fail");
 			}
 			
-		} return output;
+		}output.UpdateRow(); 
+		return output;
 	}
 	
 	

@@ -55,7 +55,7 @@ public class DtcPreviewPDF extends BaseClass implements API
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
@@ -104,7 +104,7 @@ public class DtcPreviewPDF extends BaseClass implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response");
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -118,29 +118,23 @@ public class DtcPreviewPDF extends BaseClass implements API
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
-      String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+     
 		
 		for(int i=0;i<actualColumnSize;i++)
 		{
 			
-			if(StatusCode.equals("SUCCESS"))
-			{
+			  System.out.println(jsonElements.ReadData(actualColumnCol[i]));
+			  
 				String actual=null;
-				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				System.out.println(actual);
+				System.out.println(actualColumnCol[i]);
 				output.WriteData(actualColumnCol[i], actual);
-				output.WriteData("Flag_for_execution", StatusCode);
 				
-			}
-			else
-			{
-				String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData("Flag_for_execution", "Error response");
-				output.WriteData("Message_code", MessageCode);
-				output.WriteData("User_maessage", UserMessage);
 				
-			}
+		
 		}
+		output.UpdateRow();
 		return output;
 		
 		
