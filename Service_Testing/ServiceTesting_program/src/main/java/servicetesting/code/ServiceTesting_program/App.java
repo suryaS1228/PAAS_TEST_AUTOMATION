@@ -30,9 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
 import Supporting_Classes.PropertiesHandle;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -48,8 +46,8 @@ public class App
 	public static void main( String[] args ) 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_10/Quote/configuration_file/config_json.properties");
-		try 
+		PropertiesHandle config = new PropertiesHandle("E:/selenium/PDFTest/Configuration/config_json.properties");
+		try
 		{
 			logInfo.info("Connecting DataBase");
 			DatabaseOperation.ConnectionSetup(config);
