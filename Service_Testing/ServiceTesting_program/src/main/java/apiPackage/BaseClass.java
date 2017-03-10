@@ -37,19 +37,18 @@ public class BaseClass
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 	}
 
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
 		{
 			if(!input.ReadData(inputColumnCol[i]).equals(""))
 			{
-			request.write(XmlElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
 			}
 		}
-		
 	}
 
 	public String RequestToString() throws IOException, ParseException, DocumentException
@@ -64,38 +63,46 @@ public class BaseClass
 		http.AddHeader("Token", config.getProperty("token"));
 	}
 
-	public void SendAndReceiveData() throws SQLException 
+	public void SendAndReceiveData() throws SQLException
 	{
 		String input_data= null;
-		try {
+		try 
+		{
 			input_data = request.FileToString();
-		} catch (IOException | ParseException | DocumentException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException | ParseException | DocumentException e) 
+		{
 			e.printStackTrace();
 		}
-		try {
+		try 
+		{
 			http.SendData(input_data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 		
 		String response_string = null;
 		
-		try {
+		try 
+		{
 			response_string = http.ReceiveData();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) 
+		{
+			
 			e.printStackTrace();
 		}
-		response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
-		try {
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+".json");
+		try 
+		{
 			response.StringToFile(response_string);
-		} catch (IOException | DocumentException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException | DocumentException e) 
+		{
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public String ResponseToString() throws IOException, ParseException, DocumentException
@@ -103,15 +110,17 @@ public class BaseClass
 		return response.FileToString();
 	}
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
 		for(int i=0;i<actualColumnSize;i++)
 		{
-			String actual = (response.read(XmlElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-			output.WriteData(actualColumnCol[i], actual);		
+			
+			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			output.WriteData(actualColumnCol[i], actual);
+			System.out.println(actual);
+			output.WriteData("flag_for_execution", "Completed");
 		}
-		output.UpdateRow();
-		return output;
+	return output;
 	}
 
 	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
