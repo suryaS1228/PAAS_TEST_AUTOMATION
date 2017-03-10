@@ -29,12 +29,14 @@ public class BaseClass
 	protected int inputColumnSize;
 	protected HttpHandle http = null;
 	
+//---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 	}
 
+//-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
@@ -49,11 +51,13 @@ public class BaseClass
 		}
 	}
 
+//------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
 	public String RequestToString() throws IOException, ParseException, DocumentException
 	{
 		return request.FileToString();
 	}
 	
+//-------------------------------------------------------------ADDING HEADER || TOKENS------------------------------------------------------------------	
 	public void AddHeaders() throws IOException
 	{
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
@@ -61,6 +65,7 @@ public class BaseClass
 		http.AddHeader("Token", config.getProperty("token"));
 	}
 
+//------------------------------------------------------------STORING RESPONSE TO FOLDER----------------------------------------------------------------	
 	public void SendAndReceiveData() throws SQLException
 	{
 		String input_data= null;
@@ -103,11 +108,13 @@ public class BaseClass
 		}
 	}
 	
+//-------------------------------------------------------------CONVERTING RESPONSE TO STRING------------------------------------------------------------
 	public String ResponseToString() throws IOException, ParseException, DocumentException
 	{
 		return response.FileToString();
 	}
 	
+//-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
 		for(int i=0;i<actualColumnSize;i++)
@@ -127,6 +134,7 @@ public class BaseClass
 	return output;
 	}
 
+//---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
 		for(int i=0;i<statusColumnSize;i++)
@@ -148,6 +156,7 @@ public class BaseClass
 		
 	}
 	
+//-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
 	protected static boolean premium_comp(String expected,String actual)
 	{
 		
