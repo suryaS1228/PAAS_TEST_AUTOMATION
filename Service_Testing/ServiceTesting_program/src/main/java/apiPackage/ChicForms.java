@@ -3,60 +3,34 @@ package apiPackage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
 import Supporting_Classes.DatabaseOperation;
-import Supporting_Classes.HttpHandle;
-import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
-import Supporting_Classes.RequestResponse;
 import Supporting_Classes.XmlHandle;
 
 public class ChicForms extends BaseClass implements API
-{
-	private RequestResponse sampleInput = null;
-	private RequestResponse request = null;
-	private RequestResponse response = null;
-	private DatabaseOperation XmlElements = null;
-	private PropertiesHandle config = null;
-	private DatabaseOperation input = null;
-	private String[] actualColumnCol = null;
-	private String[] inputColumnCol = null;
-	//private String[] statusColumnCol = null;
-	//private int statusColumnSize;
-	private int actualColumnSize;
-	private int inputColumnSize;
-	private HttpHandle http = null;
-	
+{	
 	public ChicForms(PropertiesHandle config) throws SQLException
 	{
-		
 		this.config = config;
 		XmlElements = new DatabaseOperation();
 		XmlElements.GetDataObjects(config.getProperty("json_query"));
 		actualColumnCol = config.getProperty("actual_column").split(";");
 		inputColumnCol = config.getProperty("input_column").split(";");
-		//statusColumnCol = config.getProperty("status_column").split(";");
-		//statusColumnSize = statusColumnCol.length;
-		
 		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;
-		
-		
 	}
 	
-
-	
+	@Override
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		sampleInput = new XmlHandle(config.getProperty("sample_request"));
 		
 	}
-
 	
+	@Override
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
 	{
 		request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
@@ -72,17 +46,7 @@ public class ChicForms extends BaseClass implements API
 		
 	}
 
-	
-	public void AddHeaders() throws IOException
-	{
-		http = new HttpHandle(config.getProperty("test_url"),"POST");
-		http.AddHeader("Content-Type", config.getProperty("content_type"));
-		http.AddHeader("Token", config.getProperty("token"));
-		//http.AddHeader("EventName", config.getProperty("EventName"));
-		
-	}
-
-
+	@Override
 	public void SendAndReceiveData() throws SQLException 
 	{
 		String input_data= null;
@@ -117,7 +81,7 @@ public class ChicForms extends BaseClass implements API
 		
 	}
 
-	
+	@Override
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
@@ -134,64 +98,4 @@ public class ChicForms extends BaseClass implements API
 		return output;
 		
 	}
-
-
-
-	
-
-	
- public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException 
-	{
-		/* for(int i=0;i<statusColumnSize;i++)
-		{
-			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
-			String ExpectedColumn = StatusIndividualColumn[0];
-			String ActualColumn = StatusIndividualColumn[1];
-			String StatusColumn = StatusIndividualColumn[2];
-			if(premium_comp(output.ReadData(ExpectedColumn),output.ReadData(ActualColumn)))
-			{
-				output.WriteData(StatusColumn, "Pass");
-			}
-			else
-			{
-				output.WriteData(StatusColumn, "Fail");
-			}
-			
-		} */return output; 
-		
-	} 
-/*	private static boolean premium_comp(String expected,String actual)
-	{
-		
-		boolean status = false;
-		if(expected == null || actual == null ||expected.equals("") || actual.equals(""))
-		{
-			status = false;
-		}
-		else
-		{
-			expected = expected.replaceAll("\\[\"", "");
-			actual = actual.replaceAll("\\[\"", "");
-			expected = expected.replaceAll("\"\\]", "");
-			actual = actual.replaceAll("\"\\]", "");
-			expected = expected.replaceAll("\\.[0-9]*", "");
-			actual = actual.replaceAll("\\.[0-9]*", "");
-			
-			System.out.println(actual);
-			System.out.println(expected);
-			if(expected.equals(actual))
-			{
-				status = true;
-			}
-			else 
-			{
-				status = false;
-			}
-		}
-		return status;	
-		
-	} */
-	
-    
-
 }

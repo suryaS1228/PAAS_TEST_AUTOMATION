@@ -3,16 +3,14 @@ package apiPackage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
+import com.jayway.jsonpath.PathNotFoundException;
 import Supporting_Classes.DatabaseOperation;
 import Supporting_Classes.HttpHandle;
 import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
-import Supporting_Classes.XmlHandle;
 
 public class BaseClass 
 {
@@ -31,32 +29,35 @@ public class BaseClass
 	protected int inputColumnSize;
 	protected HttpHandle http = null;
 	
+//---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request"));
 	}
 
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException 
+//-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
-		request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		for(int i=0;i<inputColumnSize;i++)
 		{
 			if(!input.ReadData(inputColumnCol[i]).equals(""))
 			{
-			request.write(XmlElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
 			}
 		}
-		
 	}
 
+//------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
 	public String RequestToString() throws IOException, ParseException, DocumentException
 	{
 		return request.FileToString();
 	}
 	
+//-------------------------------------------------------------ADDING HEADER || TOKENS------------------------------------------------------------------	
 	public void AddHeaders() throws IOException
 	{
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
@@ -64,56 +65,76 @@ public class BaseClass
 		http.AddHeader("Token", config.getProperty("token"));
 	}
 
-	public void SendAndReceiveData() throws SQLException 
+//------------------------------------------------------------STORING RESPONSE TO FOLDER----------------------------------------------------------------	
+	public void SendAndReceiveData() throws SQLException
 	{
 		String input_data= null;
-		try {
+		try 
+		{
 			input_data = request.FileToString();
-		} catch (IOException | ParseException | DocumentException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException | ParseException | DocumentException e) 
+		{
 			e.printStackTrace();
 		}
-		try {
+		try 
+		{
 			http.SendData(input_data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 		
 		String response_string = null;
 		
-		try {
+		try 
+		{
 			response_string = http.ReceiveData();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) 
+		{
+			
 			e.printStackTrace();
 		}
-		response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
-		try {
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+".json");
+		try 
+		{
 			response.StringToFile(response_string);
-		} catch (IOException | DocumentException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException | DocumentException e) 
+		{
 			e.printStackTrace();
 		}
-		
 	}
 	
+//-------------------------------------------------------------CONVERTING RESPONSE TO STRING------------------------------------------------------------
 	public String ResponseToString() throws IOException, ParseException, DocumentException
 	{
 		return response.FileToString();
 	}
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+//-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
 		for(int i=0;i<actualColumnSize;i++)
 		{
-			String actual = (response.read(XmlElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-			output.WriteData(actualColumnCol[i], actual);		
+			try
+			{
+			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			output.WriteData(actualColumnCol[i], actual);
+			System.out.println(actual);
+			output.WriteData("flag_for_execution", "Completed");
+			}
+			catch(PathNotFoundException e)
+			{
+				output.WriteData(actualColumnCol[i], "Path not Found");
+			}
 		}
-		output.UpdateRow();
-		return output;
+	return output;
 	}
 
+//---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
 	{
 		for(int i=0;i<statusColumnSize;i++)
@@ -135,6 +156,7 @@ public class BaseClass
 		
 	}
 	
+//-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
 	protected static boolean premium_comp(String expected,String actual)
 	{
 		
