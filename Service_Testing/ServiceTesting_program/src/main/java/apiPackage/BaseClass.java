@@ -121,7 +121,7 @@ public class BaseClass
 		{
 			try
 			{
-			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 			output.WriteData(actualColumnCol[i], actual);
 			System.out.println(actual);
 			output.WriteData("flag_for_execution", "Completed");
