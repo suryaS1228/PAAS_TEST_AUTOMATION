@@ -3,16 +3,14 @@ package apiPackage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
+import com.jayway.jsonpath.PathNotFoundException;
 import Supporting_Classes.DatabaseOperation;
 import Supporting_Classes.HttpHandle;
 import Supporting_Classes.JsonHandle;
 import Supporting_Classes.PropertiesHandle;
 import Supporting_Classes.RequestResponse;
-import Supporting_Classes.XmlHandle;
 
 public class BaseClass 
 {
@@ -114,11 +112,17 @@ public class BaseClass
 	{
 		for(int i=0;i<actualColumnSize;i++)
 		{
-			
+			try
+			{
 			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 			output.WriteData(actualColumnCol[i], actual);
 			System.out.println(actual);
 			output.WriteData("flag_for_execution", "Completed");
+			}
+			catch(PathNotFoundException e)
+			{
+				output.WriteData(actualColumnCol[i], "Path not Found");
+			}
 		}
 	return output;
 	}
