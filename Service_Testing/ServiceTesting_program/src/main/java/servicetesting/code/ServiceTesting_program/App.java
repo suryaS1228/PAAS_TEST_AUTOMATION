@@ -46,7 +46,7 @@ public class App
 	public static void main( String[] args ) 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("E:/selenium/PDFTest/Configuration/config_json.properties");
+		PropertiesHandle config = new PropertiesHandle("E:/Automation Team/1 Projects/08 DTC/Release6/PreviewPDF/configuration_file/config_json.properties");
 		try
 		{
 			logInfo.info("Connecting DataBase");
@@ -64,6 +64,7 @@ public class App
 		}
 		String actualchoice = config.getProperty("actual");
 		String statuschoice = config.getProperty("status");
+		String outputtable = config.getProperty("output_in_same_table");
 		DatabaseOperation input = new DatabaseOperation();
 		try 
 		{
@@ -288,23 +289,41 @@ public class App
 								
 								if(actualchoice.equals("Y"))
 								{
-								 logInfo.info("Fetching Data from Response to Store in DB is selected");
-								  
-								 try 
-								 {
-									logInfo.info("Storing Response--" + i + "Data into DB");
-								    output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-								 } 
-								 catch (IOException | ParseException | DocumentException e) 
-								 {
-									 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
-									 e.printStackTrace();
-								 }
-								 
-								     logInfo.info("Updating DB For Testdata--" + i);
-									   output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+									 logInfo.info("Fetching Data from Response to Store in DB is selected");
+									  
+								if(outputtable.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
+								{	
+							    try 
+							    {
+										logInfo.info("Storing Response--" + i + "Data into DB");
+										input = api.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
-								
+								catch (IOException | ParseException | DocumentException e) 
+								{
+										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 e.printStackTrace();
+								}
+									 
+									     logInfo.info("Updating DB For Testdata--" + i);
+									     input.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+								}
+								else//INPUT AND OUT DB TABLE ARE DIFFERENT
+								{	
+								try 
+							    {
+										logInfo.info("Storing Response--" + i + "Data into DB");
+										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+								} 
+								catch (IOException | ParseException | DocumentException e) 
+							    {
+										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 e.printStackTrace();
+								}
+									 
+									     logInfo.info("Updating DB For Testdata--" + i);
+									     output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+								}
+								} 
 								
 								if(statuschoice.equals("Y"))
 								{
