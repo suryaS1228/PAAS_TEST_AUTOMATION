@@ -80,7 +80,11 @@
      <artifactId>exec-maven-plugin</artifactId>
      <version>1.4.0</version>
      <configuration>
+     <archive>
+      <manifest>
       <mainClass>servicetesting.code.ServiceTesting_program.App</mainClass>
+      </manifest>
+      </archive>
      </configuration>
     </plugin> 
    </plugins>
