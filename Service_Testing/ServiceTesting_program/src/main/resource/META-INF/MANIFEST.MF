@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.8.0_121
+Created-By: apache-maven-3.3.9
+Main-Class: servicetesting.code.ServiceTesting_program.App
