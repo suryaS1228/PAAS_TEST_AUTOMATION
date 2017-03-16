@@ -46,7 +46,9 @@ public class App
 	public static void main( String[] args ) 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_12/Endrosement/configuration_file/config_json.properties");
+		//PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_12/Endrosement/configuration_file/config_json.properties");
+		PropertiesHandle config = new PropertiesHandle(args[0]);
+		
 		try                                      
 		{
 			logInfo.info("Connecting DataBase");
