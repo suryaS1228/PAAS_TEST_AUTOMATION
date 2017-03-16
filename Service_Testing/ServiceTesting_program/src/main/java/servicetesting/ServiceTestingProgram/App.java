@@ -1,4 +1,4 @@
-package servicetesting.code.ServiceTesting_program;
+package servicetesting.ServiceTestingProgram;
 
 import Supporting_Classes.DatabaseOperation;
 import apiPackage.API;
@@ -46,7 +46,7 @@ public class App
 	public static void main( String[] args ) 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_10/Quote/configuration_file/config_json.properties");
+		PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_12/Endrosement/configuration_file/config_json.properties");
 		try                                      
 		{
 			logInfo.info("Connecting DataBase");

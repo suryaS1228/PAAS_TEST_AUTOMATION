@@ -72,22 +72,40 @@
    </dependency>
     
   </dependencies>
-  
   <build>
-   <plugins>
-    <plugin>
-     <groupId>org.apache.maven.plugins</groupId>
-     <artifactId>maven_jar-plugin</artifactId>
-     <version>1.4.0</version>
-     <configuration>
-     <archive>
-      <manifestFile>src/main/resource/META-INF/MANIFEST.MF</manifestFile>
-      <manifest>
-      <mainClass>servicetesting.code.ServiceTesting_program.App</mainClass>
-      </manifest>
-      </archive>
-     </configuration>
-    </plugin> 
-   </plugins>
-  </build>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>servicetesting.ServiceTestingProgram.App</mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+  </plugins>
+</build>
 </project>
