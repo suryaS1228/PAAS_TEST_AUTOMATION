@@ -12,9 +12,9 @@ import Supporting_Classes.PropertiesHandle;
 
 
 
-public class DtcRatingService_old extends BaseClass implements API 
+public class DtcRatingServiceOld extends BaseClass implements API 
 {
- public DtcRatingService_old(PropertiesHandle config) throws SQLException
+ public DtcRatingServiceOld(PropertiesHandle config) throws SQLException
  {
   this.config = config;
   jsonElements = new DatabaseOperation();

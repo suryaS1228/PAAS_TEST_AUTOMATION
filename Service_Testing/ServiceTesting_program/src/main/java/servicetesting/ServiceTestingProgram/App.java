@@ -10,7 +10,7 @@ import apiPackage.DtcGetPolicy;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
-import apiPackage.DtcRatingService_old;
+import apiPackage.DtcRatingServiceOld;
 import apiPackage.DtcSaveDetails1;
 import apiPackage.DtcSaveDetails2;
 import apiPackage.DtcSaveDetails3;
@@ -193,9 +193,9 @@ public class App
   	           api = new DtcRatingService(config);
   	           break;
   	           
-          case "dtcratingservice_old":
+          case "dtcratingserviceold":
        	   	   logInfo.info("IsoBopQuote API Selected");
- 	           api = new DtcRatingService_old(config);
+ 	           api = new DtcRatingServiceOld(config);
  	           break;
   	        
           case "dtcsavedetails1":
