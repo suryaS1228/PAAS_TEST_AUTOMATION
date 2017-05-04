@@ -33,7 +33,7 @@ public class DatabaseOperation
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	
-	public static void ConnectionSetup(PropertiesHandle config) throws SQLException,ClassNotFoundException
+	public static void ConnectionSetup(PropertiesHandle config) throws SQLException,ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		
 		JDBC_DRIVER =config.getProperty("jdbc_driver");
@@ -44,7 +44,7 @@ public class DatabaseOperation
 		if(conn == null)
 		{
 				
-				Class.forName(JDBC_DRIVER);
+				Class.forName(JDBC_DRIVER).newInstance();
 			
 			
 				conn = DriverManager.getConnection(DB_URL,USER,PASS);
