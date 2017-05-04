@@ -18,6 +18,8 @@ import Supporting_Classes.PropertiesHandle;
 
 public class DtcRatingService extends BaseClass implements API 
 {
+	protected String Planname[] = null;
+	protected String Plancode[] = null;
 	public DtcRatingService(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
@@ -30,6 +32,30 @@ public class DtcRatingService extends BaseClass implements API
 		actualColumnSize = actualColumnCol.length;
 		inputColumnSize = inputColumnCol.length;	
 	}
+	
+	@Override
+	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
+	{
+		this.input = InputData;
+		input = InputData;
+		Planname=InputData.ReadData("Plan_name").split(";");
+		Plancode=InputData.ReadData("Plan_code").split(";");
+		int numofplan = Planname.length;
+		switch(numofplan)
+			
+			{
+				case 1:			sampleInput = new JsonHandle(config.getProperty("Sample_request_1")); break;
+				case 2:			sampleInput = new JsonHandle(config.getProperty("Sample_request_2")); break;
+				case 3:			sampleInput = new JsonHandle(config.getProperty("Sample_request_3")); break;
+				case 4:			sampleInput = new JsonHandle(config.getProperty("Sample_request_4")); break;
+				case 5:			sampleInput = new JsonHandle(config.getProperty("Sample_request_5")); break;
+				case 6:			sampleInput = new JsonHandle(config.getProperty("Sample_request_6")); break;
+				case 7:			sampleInput = new JsonHandle(config.getProperty("Sample_request_7")); break;
+			
+				default:
+			}
+			
+	}
 
     @Override
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
@@ -39,10 +65,30 @@ public class DtcRatingService extends BaseClass implements API
 		
 		for(int i=0;i<inputColumnSize;i++)
 		{
-			System.out.println(input.ReadData(inputColumnCol[i]));
+			//System.out.println(input.ReadData(inputColumnCol[i]));
 			if(!input.ReadData(inputColumnCol[i]).equals(""))
 			{
-			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+				if(inputColumnCol[i].equals("Plan_name"))
+				{
+					for(int j=0;j<Planname.length;j++)
+					{
+						String DynamicPlannameJson = jsonElements.ReadData("Plan_name");
+						String DynamicPlanCodeJson = jsonElements.ReadData("Plan_code");
+						String SplitPlanJson[] = DynamicPlannameJson.split("##");
+						String SplitCodeJson[] = DynamicPlanCodeJson.split("##");
+						/*System.out.println(DynamicPlannameJson);
+						System.out.println(DynamicPlanCodeJson);
+						System.out.println(SplitPlanJson[0]+j+SplitPlanJson[1]+" - "+Planname[j]);
+						System.out.println(SplitCodeJson[0]+j+SplitCodeJson[1]+" - "+Plancode[j]);*/
+						
+						request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
+						request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
+					}
+				}
+				else
+				{
+					request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
+				}
 			}
 		}
 		
@@ -106,7 +152,9 @@ public class DtcRatingService extends BaseClass implements API
 				try
 				{
 					String actual=null;
-					actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+					//System.out.println(jsonElements.ReadData(actualColumnCol[i]));
+					System.out.println((response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", ""));
+					actual = ((response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "")).replace("\\", "");
 					output.WriteData(actualColumnCol[i], actual);
 					output.WriteData("Flag_for_execution", StatusCode);
 				}

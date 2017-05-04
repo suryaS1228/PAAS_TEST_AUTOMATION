@@ -32,7 +32,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		input = InputData;
 			switch(InputData.ReadData("Plan_Type"))
 			{
-			 case "Annual Plan":			sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
+			 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
 			 									break;
 			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip"));
 												break;
