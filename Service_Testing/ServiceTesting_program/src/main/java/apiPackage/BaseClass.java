@@ -174,8 +174,8 @@ public class BaseClass
 			expected = expected.replaceAll("\\.[0-9]*", "");
 			actual = actual.replaceAll("\\.[0-9]*", "");
 			
-			System.out.println(actual);
-			System.out.println(expected);
+			//System.out.println(actual);
+			//System.out.println(expected);
 			if(expected.equals(actual))
 			{
 				status = true;

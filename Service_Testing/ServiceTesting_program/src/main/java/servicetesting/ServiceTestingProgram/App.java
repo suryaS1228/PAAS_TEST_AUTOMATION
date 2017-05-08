@@ -10,6 +10,7 @@ import apiPackage.DtcGetPolicy;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
+import apiPackage.DtcRatingServiceOld;
 import apiPackage.DtcSaveDetails1;
 import apiPackage.DtcSaveDetails2;
 import apiPackage.DtcSaveDetails3;
@@ -25,16 +26,24 @@ import apiPackage.IsoBoprating;
 import apiPackage.SolartisIsoBopRating;
 import apiPackage.StarrSearchRescueIssueCertificate;
 
+
+
+
+
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
+
 import Supporting_Classes.PropertiesHandle;
+
 import org.apache.log4j.Logger;
 
 /**
- * Hello world!
+ * Hello world!QUOTQUO
  *
  */
 public class App 
@@ -43,15 +52,16 @@ public class App
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) 
+	public static void main( String[] args ) throws InstantiationException, IllegalAccessException 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		//PropertiesHandle config = new PropertiesHandle("Q:/Automation Team/1 Projects/09 ISO/Release_12/Endrosement/configuration_file/config_json.properties");
-		PropertiesHandle config = new PropertiesHandle(args[0]);
+		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/08 DTC/Release16/RatingEnhancement/configuration_file/config_json_RatingEnhancement.properties");
+		//PropertiesHandle config = new PropertiesHandle(args[0]);
 		
 		try                                      
 		{
 			logInfo.info("Connecting DataBase");
+			
 			DatabaseOperation.ConnectionSetup(config);
 		} 
 		catch (ClassNotFoundException e) 
@@ -182,6 +192,11 @@ public class App
         	   logInfo.info("IsoBopQuote API Selected");
   	           api = new DtcRatingService(config);
   	           break;
+  	           
+          case "dtcratingserviceold":
+       	   	   logInfo.info("IsoBopQuote API Selected");
+ 	           api = new DtcRatingServiceOld(config);
+ 	           break;
   	        
           case "dtcsavedetails1":
         	    logInfo.info("IsoBopQuote API Selected");
@@ -314,6 +329,7 @@ public class App
 								try 
 							    {
 										logInfo.info("Storing Response--" + i + "Data into DB");
+										//System.out.println("Storing Response--" + i + "Data into DB");
 										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 
