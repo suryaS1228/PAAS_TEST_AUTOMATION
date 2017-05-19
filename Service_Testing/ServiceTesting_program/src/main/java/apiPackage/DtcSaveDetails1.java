@@ -5,12 +5,11 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-import Supporting_Classes.DatabaseOperation;
-import Supporting_Classes.HttpHandle;
-import Supporting_Classes.JsonHandle;
-import Supporting_Classes.PropertiesHandle;
 
+import com.jayway.jsonpath.PathNotFoundException;
 
+import util.api.*;
+import util.common.*;
 
 public class DtcSaveDetails1 extends BaseClass implements API 
 {
@@ -19,12 +18,9 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
-		actualColumnCol = config.getProperty("actual_column").split(";");
-		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
-		actualColumnSize = actualColumnCol.length;
-		inputColumnSize = inputColumnCol.length;	
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
 	@Override
@@ -34,7 +30,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		input = InputData;
 			switch(InputData.ReadData("Plan_Type"))
 			{
-			 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request_Annualplan"));
+			 case "Annual Plan":			sampleInput = new JsonHandle(config.getProperty("sample_request_Annualplan"));
 			 									break;
 			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("Sample_request_singletrip"));
 												break;
@@ -48,16 +44,20 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	@Override
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
+		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 		request.StringToFile(sampleInput.FileToString());
-		
-		for(int i=0;i<inputColumnSize;i++)
+		do
 		{
-			if(!input.ReadData(inputColumnCol[i]).equals(""))
+			if(InputColVerify.DbCol(input))
 			{
-			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
-			}
-		}
+				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+				{
+					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+				}
+			}	
+		}while(InputColVerify.MoveForward());
+		
 
 	}
 	
@@ -109,16 +109,21 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	@Override
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
 	{
+		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-		
-		for(int i=0;i<actualColumnSize;i++)
+		do 	
 		{
+		  if(OutputColVerify.DbCol(input))
+			{
+			try
+				{
 			
 			if(StatusCode.equals("SUCCESS"))
 			{
-				String actual=null;
-				actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData(actualColumnCol[i], actual);
+
+				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+				System.out.println(actual);
 				output.WriteData("Flag_for_execution", StatusCode);
 				
 			}
@@ -131,9 +136,17 @@ public class DtcSaveDetails1 extends BaseClass implements API
 				output.WriteData("User_maessage", UserMessage);
 				
 			}
+				}
+			catch(PathNotFoundException e)
+			{
+				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+			}
 		}
-		return output;
-	}
+	}while(OutputColVerify.MoveForward());
+
+	
+return output;
+}
 }
 
 

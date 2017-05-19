@@ -1,20 +1,22 @@
 package servicetesting.ServiceTestingProgram;
 
-import Supporting_Classes.DatabaseOperation;
+import util.common.DatabaseOperation;
 import apiPackage.API;
 import apiPackage.ChicForms;
 import apiPackage.ChicRating;
+import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
 import apiPackage.DtcGetPolicy;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
-import apiPackage.DtcRatingServiceOld;
+import apiPackage.DtcRatingServiceEnhancement;
 import apiPackage.DtcSaveDetails1;
 import apiPackage.DtcSaveDetails2;
 import apiPackage.DtcSaveDetails3;
 import apiPackage.DtcSaveDetails4;
+import apiPackage.IsoBopCancel;
 import apiPackage.IsoBopEndrosement;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
@@ -26,42 +28,36 @@ import apiPackage.IsoBoprating;
 import apiPackage.SolartisIsoBopRating;
 import apiPackage.StarrSearchRescueIssueCertificate;
 
-
-
-
-
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
 
-import Supporting_Classes.PropertiesHandle;
+import util.common.PropertiesHandle;
 
 import org.apache.log4j.Logger;
 
 /**
- * Hello world!QUOTQUO
+ * Hello world!
  *
  */
 public class App 
 {
+	
 	static Logger logError = Logger.getLogger("ERRORlog");
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) throws InstantiationException, IllegalAccessException 
+	public static void main( String[] args ) throws ClassNotFoundException 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/08 DTC/Release16/RatingEnhancement/configuration_file/config_json_RatingEnhancement.properties");
+		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/09 ISO/Release_27/Rating_UAT2/configuration_file/config_json.properties");
 		//PropertiesHandle config = new PropertiesHandle(args[0]);
 		
 		try                                      
 		{
 			logInfo.info("Connecting DataBase");
-			
 			DatabaseOperation.ConnectionSetup(config);
 		} 
 		catch (ClassNotFoundException e) 
@@ -77,6 +73,7 @@ public class App
 		String actualchoice = config.getProperty("actual");
 		String statuschoice = config.getProperty("status");
 		String outputtable = config.getProperty("output_in_same_table");
+		
 		DatabaseOperation input = new DatabaseOperation();
 		try 
 		{
@@ -88,11 +85,12 @@ public class App
 			logError.error("Failed Creating Instance for Input -- SQLError");
 			e1.printStackTrace();
 		}
+		
 		DatabaseOperation output = new DatabaseOperation();
 		try 
 		{
 			logInfo.info("Creating Instance for Output");
-			output.GetDataObjects(config.getProperty("output_query"));
+			output.GetDataObjects(config.getProperty("output_query"));	
 		} 
 		catch (SQLException e1) 
 		{
@@ -142,7 +140,13 @@ public class App
         	    logInfo.info("IsoBopQuote API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
-    	  
+          
+          case "isobopcancel":
+        	  	logInfo.info("IsoBopQuote API Selected");
+	      	    api = new IsoBopCancel(config);
+	  	        break;
+  	  
+    	        
           case "solartisisoboprating":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new SolartisIsoBopRating(config);	
@@ -192,12 +196,12 @@ public class App
         	   logInfo.info("IsoBopQuote API Selected");
   	           api = new DtcRatingService(config);
   	           break;
-  	           
-          case "dtcratingserviceold":
-       	   	   logInfo.info("IsoBopQuote API Selected");
- 	           api = new DtcRatingServiceOld(config);
+  	              
+          case "dtcratingserviceenhancement":               
+        	  logInfo.info("IsoBopQuote API Selected");
+ 	           api = new DtcRatingServiceEnhancement(config);
  	           break;
-  	        
+        	   	  
           case "dtcsavedetails1":
         	    logInfo.info("IsoBopQuote API Selected");
   	            api = new DtcSaveDetails1(config);
@@ -222,6 +226,11 @@ public class App
         	    logInfo.info("IsoBopQuote API Selected");
   	            api = new StarrSearchRescueIssueCertificate(config);
   	            break;
+  	            
+          case "dtccancelpolicy":
+      	    logInfo.info("IsoBopQuote API Selected");
+	            api = new DtcCancel(config);
+	            break;      
     	        
           default :
         	     logError.error("API Selected is Wrong");
@@ -245,11 +254,10 @@ public class App
 				do
 				{
 					logInfo.info("TestData" + i + "Running" );
-					System.out.println("TestData : " + i);  
-							
+					System.out.println("TestData : " + i);  	
 							if(input.ReadData("flag_for_execution").equals("Y"))
 							{
-								logInfo.info("TestData" + i + "flag_for_execution = Y" );	
+							    logInfo.info("TestData" + i + "flag_for_execution = Y" );	
 								
 									logInfo.info("Loading Sample Request for Testdata--" + i);
 									  api.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
@@ -302,7 +310,7 @@ public class App
 									{
 										logError.error("Failed Rquest For Testdata--" + i + "---IOException | ParseException | DocumentException e1");
 										e1.printStackTrace();
-									}							
+									}						
 								
 								if(actualchoice.equals("Y"))
 								{
@@ -329,7 +337,6 @@ public class App
 								try 
 							    {
 										logInfo.info("Storing Response--" + i + "Data into DB");
-										//System.out.println("Storing Response--" + i + "Data into DB");
 										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 

@@ -6,11 +6,8 @@ import java.sql.SQLException;
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
-import Supporting_Classes.DatabaseOperation;
-import Supporting_Classes.HttpHandle;
-import Supporting_Classes.JsonHandle;
-import Supporting_Classes.PropertiesHandle;
-import Supporting_Classes.RequestResponse;
+import util.api.*;
+import util.common.*;
 
 public class BaseClass 
 {
@@ -21,13 +18,10 @@ public class BaseClass
 	protected DatabaseOperation jsonElements = null;
 	protected PropertiesHandle config = null;
 	protected DatabaseOperation input = null;
-	protected String[] actualColumnCol = null;
-	protected String[] inputColumnCol = null;
-	protected String[] statusColumnCol = null;
-	protected int statusColumnSize;
-	protected int actualColumnSize;
-	protected int inputColumnSize;
 	protected HttpHandle http = null;
+	protected DBColoumnVerify InputColVerify = null;
+	protected DBColoumnVerify OutputColVerify = null;
+	protected DBColoumnVerify StatusColVerify = null;
 	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
@@ -37,18 +31,25 @@ public class BaseClass
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
+	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException, ClassNotFoundException
 	{
+		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
-		for(int i=0;i<inputColumnSize;i++)
+		
+		do
 		{
-			if(!input.ReadData(inputColumnCol[i]).equals(""))
+			if(InputColVerify.DbCol(input))
 			{
-			request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
-			}
-		}
+				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+				{
+					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+				}
+			}	
+		}while(InputColVerify.MoveForward());
+		
+		
 	}
 
 //------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
@@ -115,45 +116,59 @@ public class BaseClass
 	}
 	
 //-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException, ClassNotFoundException
 	{
-		for(int i=0;i<actualColumnSize;i++)
+		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+		do 	
 		{
+		  if(OutputColVerify.DbCol(input))
+			{
 			try
-			{
-			String actual = (response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-			output.WriteData(actualColumnCol[i], actual);
-			System.out.println(actual);
-			output.WriteData("flag_for_execution", "Completed");
+				{
+				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+				System.out.println(actual);
+				output.WriteData("flag_for_execution", "Completed");
+				}
+				catch(PathNotFoundException e)
+				{
+					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+				}
 			}
-			catch(PathNotFoundException e)
-			{
-				output.WriteData(actualColumnCol[i], "Path not Found");
-			}
-		}
+		}while(OutputColVerify.MoveForward());
+	
+		
 	return output;
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException
-	{
-		for(int i=0;i<statusColumnSize;i++)
-		{
-			String[] StatusIndividualColumn = statusColumnCol[i].split("-");
-			String ExpectedColumn = StatusIndividualColumn[0];
-			String ActualColumn = StatusIndividualColumn[1];
-			String StatusColumn = StatusIndividualColumn[2];
-			if(premium_comp(output.ReadData(ExpectedColumn),output.ReadData(ActualColumn)))
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws SQLException, ClassNotFoundException
+	{		
+		StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+		do 	
+		{	
+		  if(StatusColVerify.DbCol(input))
 			{
-				output.WriteData(StatusColumn, "Pass");
+				String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
+				String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));
+				String StatusColumn = StatusColVerify.ReadData(config.getProperty("StatusColumn"));
+				if(!(StatusColumn.equals("")) && !(ExpectedColumn.equals("")))
+				{
+					if(premium_comp(output.ReadData(ExpectedColumn),output.ReadData(ActualColumn)))
+					{
+						output.WriteData(StatusColumn, "Pass");
+					}
+					else
+					{
+						output.WriteData(StatusColumn, "Fail");
+					}
+				}
+				
 			}
-			else
-			{
-				output.WriteData(StatusColumn, "Fail");
-			}
-			
-		} return output;
-		
+		 }while(StatusColVerify.MoveForward());
+
+	return output;
 	}
 	
 //-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
@@ -174,8 +189,8 @@ public class BaseClass
 			expected = expected.replaceAll("\\.[0-9]*", "");
 			actual = actual.replaceAll("\\.[0-9]*", "");
 			
-			//System.out.println(actual);
-			//System.out.println(expected);
+			System.out.println(actual);
+			System.out.println(expected);
 			if(expected.equals(actual))
 			{
 				status = true;

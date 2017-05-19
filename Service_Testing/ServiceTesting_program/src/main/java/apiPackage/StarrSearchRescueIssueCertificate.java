@@ -2,9 +2,8 @@ package apiPackage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import Supporting_Classes.DatabaseOperation;
-import Supporting_Classes.HttpHandle;
-import Supporting_Classes.PropertiesHandle;
+import util.api.*;
+import util.common.*;
 
 public class StarrSearchRescueIssueCertificate extends BaseClass implements API
 {
@@ -13,10 +12,9 @@ public class StarrSearchRescueIssueCertificate extends BaseClass implements API
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
-		actualColumnCol = config.getProperty("actual_column").split(";");
-		inputColumnCol = config.getProperty("input_column").split(";");
-		actualColumnSize = actualColumnCol.length;
-		inputColumnSize = inputColumnCol.length;	
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 
 	@Override
