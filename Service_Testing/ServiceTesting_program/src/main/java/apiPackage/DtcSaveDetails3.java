@@ -9,16 +9,20 @@ import com.jayway.jsonpath.PathNotFoundException;
 import util.api.*;
 import util.common.*;
 
-public class DtcSaveDetails4 extends BaseClass implements API
+/**
+ * Hello world!
+ *
+ */
+public class DtcSaveDetails3 extends BaseClass implements API
 {
-	public DtcSaveDetails4(PropertiesHandle config) throws SQLException
+	public DtcSaveDetails3(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
 	@Override
@@ -26,33 +30,44 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	{
 		this.input = InputData;
 		input = InputData;
-		switch(InputData.ReadData("Plan_name"))
+		switch(InputData.ReadData("Plan_Type"))
 		{
-		 case "Annual":			sampleInput = new JsonHandle(config.getProperty("Sample_request_anual"));
-		 									break;
-		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request_tripplans"));
-											break;
-		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request_RC"));
-											break; 
+		 case "Annual":			
+			 sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
+		 	 break;
+		 	 
+		 case "Single Trip":
+			 String PlanName = InputData.ReadData("Plan_name");
+			 if(PlanName.equals("Air Ticket Protector"))
+			 {
+				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_ATP"));
+			 }
+			 else
+			 {
+				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_CP_P"));
+			 }
+			 
+			 break;
+			 
+		 case "Renter's Collision": 	
+			 sampleInput = new JsonHandle(config.getProperty("sample_request_RenterCollision"));
+			 break; 
 		 
 		 default:
 		}
 	}
-	
+
 	@Override
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
 		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
 		do
 		{
 			if(InputColVerify.DbCol(input))
 			{
-				//System.out.println(config.getProperty("InputColumn"));
-				//System.out.println(InputColVerify.ReadData(config.getProperty("InputColumn")));
-				//System.out.println(input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
 					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
@@ -60,7 +75,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			}	
 		}while(InputColVerify.MoveForward());
 	}
-	
+
 	@Override
 	public void AddHeaders() throws IOException 
 	{
@@ -69,7 +84,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		http.AddHeader("Token", config.getProperty("token"));
 		http.AddHeader("EventName", config.getProperty("EventName"));
 	}
-	
+
 	@Override
 	public void SendAndReceiveData() throws SQLException 
 	{
@@ -95,7 +110,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 		try {
 			response.StringToFile(response_string);
 		} catch (IOException | DocumentException e) {
@@ -103,10 +118,10 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
-			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
 		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
@@ -145,3 +160,4 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			return output;	
 		}
 }
+
