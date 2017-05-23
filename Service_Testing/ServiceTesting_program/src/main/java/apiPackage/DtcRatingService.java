@@ -3,94 +3,41 @@ package apiPackage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
 import com.jayway.jsonpath.PathNotFoundException;
-
-import Supporting_Classes.DatabaseOperation;
-import Supporting_Classes.HttpHandle;
-import Supporting_Classes.JsonHandle;
-import Supporting_Classes.PropertiesHandle;
-
-
+import util.api.*;
+import util.common.*;
 
 public class DtcRatingService extends BaseClass implements API 
 {
-	protected String Planname[] = null;
-	protected String Plancode[] = null;
 	public DtcRatingService(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		jsonElements.GetDataObjects(config.getProperty("json_query"));
-		actualColumnCol = config.getProperty("actual_column").split(";");
-		inputColumnCol = config.getProperty("input_column").split(";");
-		statusColumnCol = config.getProperty("status_column").split(";");
-		statusColumnSize = statusColumnCol.length;
-		actualColumnSize = actualColumnCol.length;
-		inputColumnSize = inputColumnCol.length;	
-	}
-	
-	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
-	{
-		this.input = InputData;
-		input = InputData;
-		Planname=InputData.ReadData("Plan_name").split(";");
-		Plancode=InputData.ReadData("Plan_code").split(";");
-		int numofplan = Planname.length;
-		switch(numofplan)
-			
-			{
-				case 1:			sampleInput = new JsonHandle(config.getProperty("Sample_request_1")); break;
-				case 2:			sampleInput = new JsonHandle(config.getProperty("Sample_request_2")); break;
-				case 3:			sampleInput = new JsonHandle(config.getProperty("Sample_request_3")); break;
-				case 4:			sampleInput = new JsonHandle(config.getProperty("Sample_request_4")); break;
-				case 5:			sampleInput = new JsonHandle(config.getProperty("Sample_request_5")); break;
-				case 6:			sampleInput = new JsonHandle(config.getProperty("Sample_request_6")); break;
-				case 7:			sampleInput = new JsonHandle(config.getProperty("Sample_request_7")); break;
-			
-				default:
-			}
-			
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 
     @Override
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
 	{
+    	InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_name")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
-		for(int i=0;i<inputColumnSize;i++)
+		do
 		{
-			//System.out.println(input.ReadData(inputColumnCol[i]));
-			if(!input.ReadData(inputColumnCol[i]).equals(""))
+			if(InputColVerify.DbCol(input))
 			{
-				if(inputColumnCol[i].equals("Plan_name"))
+				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					for(int j=0;j<Planname.length;j++)
-					{
-						String DynamicPlannameJson = jsonElements.ReadData("Plan_name");
-						String DynamicPlanCodeJson = jsonElements.ReadData("Plan_code");
-						String SplitPlanJson[] = DynamicPlannameJson.split("##");
-						String SplitCodeJson[] = DynamicPlanCodeJson.split("##");
-						/*System.out.println(DynamicPlannameJson);
-						System.out.println(DynamicPlanCodeJson);
-						System.out.println(SplitPlanJson[0]+j+SplitPlanJson[1]+" - "+Planname[j]);
-						System.out.println(SplitCodeJson[0]+j+SplitCodeJson[1]+" - "+Plancode[j]);*/
-						
-						request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
-						request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
-					}
+					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
-				else
-				{
-					request.write(jsonElements.ReadData(inputColumnCol[i]), input.ReadData(inputColumnCol[i]));
-				}
-			}
-		}
+			}	
+		}while(InputColVerify.MoveForward());
 		
 	}
 
@@ -143,24 +90,23 @@ public class DtcRatingService extends BaseClass implements API
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
      String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-		
-		for(int i=0;i<actualColumnSize;i++)
+ 	do 	
+	{
+	  if(OutputColVerify.DbCol(input))
 		{
-			
 			if(StatusCode.equals("SUCCESS"))
 			{
 				try
 				{
-					String actual=null;
-					//System.out.println(jsonElements.ReadData(actualColumnCol[i]));
-					System.out.println((response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", ""));
-					actual = ((response.read(jsonElements.ReadData(actualColumnCol[i])).replaceAll("\\[\"", "")).replaceAll("\"\\]", "")).replace("\\", "");
-					output.WriteData(actualColumnCol[i], actual);
+					
+					String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+					System.out.println(actual);
 					output.WriteData("Flag_for_execution", StatusCode);
 				}
 				catch(PathNotFoundException e)
 				{
-					output.WriteData(actualColumnCol[i], "Path Not Found");
+					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
 					
 				}
 				
@@ -175,6 +121,7 @@ public class DtcRatingService extends BaseClass implements API
 				
 			}
 		}
+	}while(OutputColVerify.MoveForward());
 		return output;
 		
 	}
