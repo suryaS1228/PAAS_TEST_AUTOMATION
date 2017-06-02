@@ -34,7 +34,7 @@ public class DatabaseOperation
 	public static void ConnectionSetup() throws SQLException,ClassNotFoundException
 	{
 		JDBC_DRIVER = "com.mysql.jdbc.Driver";
-		DB_URL = "jdbc:mysql://192.168.35.2:3391/Starr_ISO";
+		DB_URL = "jdbc:mysql://192.168.35.2:3391/STARR_Config";
 		USER="root";
 		PASS ="password";
 		if(conn == null)

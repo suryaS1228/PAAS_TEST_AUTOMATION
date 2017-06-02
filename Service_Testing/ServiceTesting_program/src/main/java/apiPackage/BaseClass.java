@@ -28,7 +28,7 @@ public class BaseClass
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	

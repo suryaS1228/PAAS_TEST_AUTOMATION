@@ -29,9 +29,12 @@ public class PropertiesHandle extends Properties
 			this.Env=Env;
 			this.AutualFlag=AutualFlag;
 			this.ComparisonFlag=ComparisonFlag;
+			
+			WriteProperty();
+			
 		}
 		
-		public PropertiesHandle WriteProperty() throws ClassNotFoundException, SQLException
+		protected PropertiesHandle WriteProperty() throws ClassNotFoundException, SQLException
 		{
 			DB.ConnectionSetup();
 			
@@ -54,9 +57,9 @@ public class PropertiesHandle extends Properties
 				this.put("status", "N");  
 			}
 			
-			this.put("sample_request", "A:/1 Projects/" + Project + "/" + Api + "/SampleRequest/request.json");
-			this.put("request_location", "A:/1 Projects/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", "A:/1 Projects/" + Project + "/" + Api + "/Response/");
+			this.put("sample_request", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("request_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
 			
 			this.put("test_url", this.QueryValue(Env,"CONFIG_URL"));
 			this.put("type", this.QueryValue("Type","CONFIG_ServiceType"));
