@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import Configuration.PropertiesHandle;
 
 public class DatabaseOperation
 {
@@ -23,6 +24,19 @@ public class DatabaseOperation
 		DB_URL = config.getProperty("db_url");
 		USER=config.getProperty("db_username");
 		PASS =config.getProperty("db_password");
+		if(conn == null)
+		{
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);	
+		}		
+	}
+	
+	public static void ConnectionSetup() throws SQLException,ClassNotFoundException
+	{
+		JDBC_DRIVER = "com.mysql.jdbc.Driver";
+		DB_URL = "jdbc:mysql://192.168.35.2:3391/STARR_Config";
+		USER="root";
+		PASS ="password";
 		if(conn == null)
 		{
 			Class.forName(JDBC_DRIVER);

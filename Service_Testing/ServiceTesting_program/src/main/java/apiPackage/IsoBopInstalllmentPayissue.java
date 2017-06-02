@@ -3,7 +3,7 @@ package apiPackage;
 import java.sql.SQLException;
 import util.api.*;
 import util.common.*;
-
+import Configuration.PropertiesHandle;
 
 public class IsoBopInstalllmentPayissue extends BaseClass implements API 
 {

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import util.api.DBColoumnVerify;
 import util.common.DatabaseOperation;
-import util.common.PropertiesHandle;
+import Configuration.PropertiesHandle;
 
 public class IsoBoprating extends BaseClass implements API 
 {

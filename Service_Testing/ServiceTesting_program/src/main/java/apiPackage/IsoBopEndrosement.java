@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import util.api.DBColoumnVerify;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class IsoBopEndrosement extends BaseClass implements API 
 {

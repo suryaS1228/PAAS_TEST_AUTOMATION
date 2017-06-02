@@ -2,6 +2,7 @@ package apiPackage;
 
 import java.sql.SQLException;
 
+import Configuration.PropertiesHandle;
 import util.api.DBColoumnVerify;
 import util.common.*;
 

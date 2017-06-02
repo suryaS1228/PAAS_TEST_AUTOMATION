@@ -9,6 +9,7 @@ import com.jayway.jsonpath.PathNotFoundException;
 
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class DtcCancel extends BaseClass implements API
 {

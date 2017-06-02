@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class BaseClass 
 {
@@ -27,7 +28,7 @@ public class BaseClass
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	

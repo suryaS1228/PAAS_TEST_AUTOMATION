@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import util.api.DBColoumnVerify;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class IsoBopPayissueCancel extends BaseClass implements API 
 {

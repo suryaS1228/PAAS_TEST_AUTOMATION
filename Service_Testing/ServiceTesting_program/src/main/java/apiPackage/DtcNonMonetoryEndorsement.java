@@ -10,8 +10,7 @@ import org.json.simple.parser.ParseException;
 import util.api.DBColoumnVerify;
 import util.api.HttpHandle;
 import util.common.DatabaseOperation;
-import util.common.PropertiesHandle;
-
+import Configuration.PropertiesHandle;
 import com.jayway.jsonpath.PathNotFoundException;
 
 public class DtcNonMonetoryEndorsement extends BaseClass implements API

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class StarrSearchRescueIssueCertificate extends BaseClass implements API
 {

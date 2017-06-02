@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import util.api.*;
 import util.common.*;
 import com.jayway.jsonpath.PathNotFoundException;
+import Configuration.PropertiesHandle;
 
 public class DtcRatingServiceEnhancement extends BaseClass implements API 
 {
