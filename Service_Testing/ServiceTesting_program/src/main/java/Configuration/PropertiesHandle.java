@@ -14,12 +14,12 @@ public class PropertiesHandle extends Properties
 {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
-	protected static String Project;
-	protected static String Api;
-	protected static String Env;
-	protected static String AutualFlag;
-	protected static String ComparisonFlag;
-	static DatabaseOperation DB = new DatabaseOperation();
+	protected String Project;
+	protected String Api;
+	protected String Env;
+	protected String AutualFlag;
+	protected String ComparisonFlag;
+	
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
 	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag) throws ClassNotFoundException, SQLException
@@ -34,9 +34,9 @@ public class PropertiesHandle extends Properties
 			
 		}
 		
-		protected PropertiesHandle WriteProperty() throws ClassNotFoundException, SQLException
+		protected void WriteProperty() throws ClassNotFoundException, SQLException
 		{
-			DB.ConnectionSetup();
+			DatabaseOperation.ConnectionSetup();
 			
 			this.put("output_in_same_table", this.QueryValue("SameTable","CONFIG_SameOutputTable"));
 			
@@ -52,7 +52,7 @@ public class PropertiesHandle extends Properties
 			{
 				this.put("status", "Y");
 			}
-			else if(ComparisonFlag.equalsIgnoreCase("comparisionneed"))
+			else if(ComparisonFlag.equalsIgnoreCase("comparisionnotneed"))
 			{
 				this.put("status", "N");  
 			}
@@ -83,7 +83,9 @@ public class PropertiesHandle extends Properties
 		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.QuerySingleValue("DB","CONFIG_DB"));
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
-		    return this;
+		    
+		    DatabaseOperation.CloseConn();
+		    
 		}
 		
 		protected String Query(String OutputColoumn, String TableName) throws SQLException 

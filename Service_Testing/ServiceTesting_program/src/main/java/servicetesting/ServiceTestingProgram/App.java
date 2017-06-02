@@ -54,7 +54,6 @@ public class App
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
 		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4]);
-
 		
 		try                                      
 		{
