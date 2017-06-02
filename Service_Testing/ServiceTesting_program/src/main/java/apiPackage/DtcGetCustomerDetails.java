@@ -10,6 +10,8 @@ import com.jayway.jsonpath.PathNotFoundException;
 
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
+
 public class DtcGetCustomerDetails  extends BaseClass implements API
 {
 	public DtcGetCustomerDetails(PropertiesHandle config) throws SQLException

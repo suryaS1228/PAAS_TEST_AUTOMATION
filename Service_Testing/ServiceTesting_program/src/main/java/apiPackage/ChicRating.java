@@ -10,6 +10,8 @@ import com.jayway.jsonpath.PathNotFoundException;
 
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
+
 public class ChicRating extends BaseClass implements API
 {
 	public ChicRating(PropertiesHandle config) throws SQLException

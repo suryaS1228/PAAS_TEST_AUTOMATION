@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
+
 public class DtcPayIssue extends BaseClass implements API 
 {
 	public DtcPayIssue(PropertiesHandle config) throws SQLException
