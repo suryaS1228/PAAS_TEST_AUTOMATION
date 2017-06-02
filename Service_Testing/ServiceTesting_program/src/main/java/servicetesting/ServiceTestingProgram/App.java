@@ -52,9 +52,10 @@ public class App
 	public static void main( String[] args ) throws ClassNotFoundException, SQLException 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		//PropertiesHandle config = new PropertiesHandle("A:/1 Projects/09 ISO/Release_27/Rating_UAT2/configuration_file/config_json.properties");
 		
 		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4]);
+		
+		config.WriteProperty();
 		
 		try                                      
 		{
@@ -99,7 +100,6 @@ public class App
 			e1.printStackTrace();
 		}
 		
-		//String ApiType = config.getProperty("ApiType");
 		String Project = args[0];
 		String Api = args[1];
 		String ApiType = Project + Api;
@@ -281,7 +281,6 @@ public class App
 								{
 									logInfo.info("REQUEST For Testdata--" + i);
 									  String req = api.RequestToString();//SHOWING REQUEST IN LOG 
-									logInfo.info(req);
 								} 
 								catch (IOException | ParseException | DocumentException e1) 
 								{
@@ -308,7 +307,6 @@ public class App
 									{
 										logInfo.info("REQUEST For Testdata--" + i);
 										  String res = api.ResponseToString();//SHOWING RESPONSE IN LOG 
-										logInfo.info(res);
 									} 
 									catch (IOException | ParseException | DocumentException e1) 
 									{

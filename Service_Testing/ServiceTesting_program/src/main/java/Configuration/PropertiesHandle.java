@@ -47,16 +47,16 @@ public class PropertiesHandle extends Properties
 		    }
 			if(ComparisonFlag.equalsIgnoreCase("comparisonneed"))
 			{
-				this.put("actual", "Y");
+				this.put("status", "Y");
 			}
 			else if(ComparisonFlag.equalsIgnoreCase("comparisionneed"))
 			{
-				this.put("actual", "N");  
+				this.put("status", "N");  
 			}
 			
-			this.put("sample_request", "A:/1 Projects/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("sample_request", "A:/1 Projects/" + Project + "/" + Api + "/SampleRequest/request.json");
 			this.put("request_location", "A:/1 Projects/" + Project + "/" + Api + "/Request/");
-			this.put("request_location", "A:/1 Projects/" + Project + "/" + Api + "/Response/");
+			this.put("response_location", "A:/1 Projects/" + Project + "/" + Api + "/Response/");
 			
 			this.put("test_url", this.QueryValue(Env,"CONFIG_URL"));
 			this.put("type", this.QueryValue("Type","CONFIG_ServiceType"));
@@ -66,9 +66,14 @@ public class PropertiesHandle extends Properties
 			this.put("json_query",   this.Query("CNFTable","CONFIG_Cnf"));
 			this.put("input_query",  this.Query("InputTable","CONFIG_Input"));
 			this.put("output_query", this.Query("OutputTable","CONFIG_Output"));
+			
 			this.put("InputColQuery",this.Query("ConditionInputTable","CONFIG_ConditionInput"));
-			this.put("InputColQuery",this.Query("ConditionOutputTable","CONFIG_ConditionOutput"));
-		    this.put("InputCondColumn", "InputColumnCondtn");
+			this.put("OutputColQuery",this.Query("ConditionOutputTable","CONFIG_ConditionOutput"));
+			
+			this.put("InputColumn", "InputColumn");
+		    this.put("OutputColumn", "OutputColumn");
+			
+			this.put("InputCondColumn", "InputColumnCondtn");
 		    this.put("OutputCondColumn", "OutputColumnCondtn");
 		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
