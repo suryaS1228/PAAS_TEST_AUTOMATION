@@ -57,9 +57,9 @@ public class PropertiesHandle extends Properties
 				this.put("status", "N");  
 			}
 			
-			this.put("sample_request", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
-			this.put("request_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
+			this.put("sample_request", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("request_location", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
 			
 			this.put("test_url", this.QueryValue(Env,"CONFIG_URL"));
 			this.put("type", this.QueryValue("Type","CONFIG_ServiceType"));
@@ -81,6 +81,7 @@ public class PropertiesHandle extends Properties
 		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
 		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.QuerySingleValue("DB","CONFIG_DB"));
+		    System.out.println(this.getProperty("db_url"));
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
 		    
