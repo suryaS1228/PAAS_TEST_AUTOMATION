@@ -19,16 +19,18 @@ public class PropertiesHandle extends Properties
 	protected String Env;
 	protected String AutualFlag;
 	protected String ComparisonFlag;
+	protected String MachineName;
 	
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag) throws ClassNotFoundException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag, String MachineName) throws ClassNotFoundException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
 			this.Env=Env;
 			this.AutualFlag=AutualFlag;
 			this.ComparisonFlag=ComparisonFlag;
+			this.MachineName = MachineName;
 			
 			WriteProperty();
 			
@@ -57,9 +59,9 @@ public class PropertiesHandle extends Properties
 				this.put("status", "N");  
 			}
 			
-			this.put("sample_request", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
-			this.put("request_location", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", "C:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
+			this.put("sample_request", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("request_location", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/Response/");
 			
 			this.put("test_url", this.RdmsValue("URL"));
 			this.put("type", this.RdmsValue("ServiceType"));
@@ -82,7 +84,7 @@ public class PropertiesHandle extends Properties
 		    this.put("OutputCondColumn", "OutputColumnCondtn");
 		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
-		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName"));
+		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName") + "_" + MachineName);
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
 		    
