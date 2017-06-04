@@ -118,32 +118,32 @@ public class App
     	        api = new IsoBoprating(config);
     	        break;
     	  
-          case "isobopendrosement":
+          case "isoendorsement":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
-          case "isobopinstalllmentpayissue":
+          case "isoinstalllmentpayissue":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
-          case "isobopissue":
+          case "isoissue":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new IsoBopissue(config);
     	        break;
     	  
-          case "isoboppayissue":
+          case "isopayissue":
         	    logInfo.info("IsoBopQuote API Selected");
         	    api = new IsoBopPayissue(config);
     	        break;
     	  
-          case "isoboppayissuecancel":
+          case "isopayissuecancel":
         	    logInfo.info("IsoBopQuote API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
           
-          case "isobopcancel":
+          case "isocancel":
         	  	logInfo.info("IsoBopQuote API Selected");
 	      	    api = new IsoBopCancel(config);
 	  	        break;
