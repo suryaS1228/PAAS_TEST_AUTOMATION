@@ -123,7 +123,7 @@ public class App
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
-          case "isoinstalllmentpayissue":
+          case "isoinstallmentpayissue":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
@@ -154,7 +154,7 @@ public class App
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
-          case "isobopratecancel":
+          case "isoratecancel":
         	    logInfo.info("IsoBopQuote API Selected");
     	        api = new IsoBopRateCancel(config);	  
     	        break;

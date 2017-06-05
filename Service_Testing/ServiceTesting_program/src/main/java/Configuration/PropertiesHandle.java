@@ -69,7 +69,7 @@ public class PropertiesHandle extends Properties
 			this.put("token", this.RdmsValue("Token"));
 
 			this.put("input_query",  this.RdmsQuery("InputTable"));
-			System.out.println(this.RdmsQuery("InputTable"));
+			System.out.println(this.RdmsValue("DBName") + "----" + this.RdmsQuery("InputTable"));
 			this.put("output_query", this.RdmsQuery("OutputTable"));
 			
 			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
