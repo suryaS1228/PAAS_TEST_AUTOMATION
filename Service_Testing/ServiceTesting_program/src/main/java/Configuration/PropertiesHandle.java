@@ -67,6 +67,7 @@ public class PropertiesHandle extends Properties
 			this.put("type", this.RdmsValue("ServiceType"));
 			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
 			this.put("token", this.RdmsValue("Token"));
+			this.put("EventName", this.RdmsValue("EventName"));
 
 			this.put("input_query",  this.RdmsQuery("InputTable"));
 			this.put("output_query", this.RdmsQuery("OutputTable"));
@@ -87,7 +88,7 @@ public class PropertiesHandle extends Properties
 		    this.put("StatusColumn", "StatusColumn");
 		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
-		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName"));
+		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName") + "_C1128");
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
 		    
@@ -97,13 +98,13 @@ public class PropertiesHandle extends Properties
 		
 		protected String RdmsQuery(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn);
 		}
 		
 		protected String RdmsValue(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return ConfigQuery.ReadData(OutputColoumn);
 		}
 		
