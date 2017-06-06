@@ -80,7 +80,6 @@ public class PropertiesHandle extends Properties
 			this.put("InputColumn", "InputColumn");
 		    this.put("OutputColumn", "OutputColumn");
 		    
-			
 			this.put("InputCondColumn", "InputColumnCondtn");
 		    this.put("OutputCondColumn", "OutputColumnCondtn");
 		    
