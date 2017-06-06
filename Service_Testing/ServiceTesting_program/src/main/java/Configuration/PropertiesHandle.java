@@ -23,7 +23,7 @@ public class PropertiesHandle extends Properties
 	
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag, String MachineName) throws ClassNotFoundException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag) throws ClassNotFoundException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -59,9 +59,9 @@ public class PropertiesHandle extends Properties
 				this.put("status", "N");  
 			}
 			
-			this.put("sample_request", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/SampleRequest/");
-			this.put("request_location", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", "E:/RestFullAPIDeliverable/" + MachineName + "/" + Project + "/" + Api + "/Response/");
+			this.put("sample_request", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("request_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
 			
 			this.put("test_url", this.RdmsValue("URL"));
 			this.put("type", this.RdmsValue("ServiceType"));
@@ -79,12 +79,16 @@ public class PropertiesHandle extends Properties
 			
 			this.put("InputColumn", "InputColumn");
 		    this.put("OutputColumn", "OutputColumn");
+		    
 			
 			this.put("InputCondColumn", "InputColumnCondtn");
 		    this.put("OutputCondColumn", "OutputColumnCondtn");
 		    
+		    this.put("ExpectedColumn", "ExpectedColumn");
+		    this.put("StatusColumn", "StatusColumn");
+		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
-		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName") + "_" + MachineName);
+		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName"));
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
 		    

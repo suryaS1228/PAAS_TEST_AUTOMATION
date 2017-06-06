@@ -35,13 +35,13 @@ public class DtcRatingServiceEnhancement extends BaseClass implements API
   switch(numofplan)
    
    {
-    case 1:   sampleInput = new JsonHandle(config.getProperty("Sample_request_1")); break;
-    case 2:   sampleInput = new JsonHandle(config.getProperty("Sample_request_2")); break;
-    case 3:   sampleInput = new JsonHandle(config.getProperty("Sample_request_3")); break;
-    case 4:   sampleInput = new JsonHandle(config.getProperty("Sample_request_4")); break;
-    case 5:   sampleInput = new JsonHandle(config.getProperty("Sample_request_5")); break;
-    case 6:   sampleInput = new JsonHandle(config.getProperty("Sample_request_6")); break;
-    case 7:   sampleInput = new JsonHandle(config.getProperty("Sample_request_7")); break;
+    case 1:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
+    case 2:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
+    case 3:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
+    case 4:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
+    case 5:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
+    case 6:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
+    case 7:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
    
     default:
    }
@@ -58,20 +58,26 @@ do
 {
 if(InputColVerify.DbCol(input))
 {
-   if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
-   {
-    if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_name"))
+  if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+  {
+	if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_name"))
     {
      for(int j=0;j<Planname.length;j++)
      {
-      String DynamicPlannameJson = jsonElements.ReadData("Plan_name");
-      String DynamicPlanCodeJson = jsonElements.ReadData("Plan_code");
+      String DynamicPlannameJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
       String SplitPlanJson[] = DynamicPlannameJson.split("##");
-      String SplitCodeJson[] = DynamicPlanCodeJson.split("##");     
       request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
-      request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
      }
     }
+    else if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_code"))
+    {
+        for(int j=0;j<Plancode.length;j++)
+        {
+         String DynamicPlanCodeJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
+         String SplitCodeJson[] = DynamicPlanCodeJson.split("##");     
+         request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
+        }
+     }
     else
     {
      request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
@@ -87,7 +93,7 @@ if(InputColVerify.DbCol(input))
   http = new HttpHandle(config.getProperty("test_url"),"POST");
   http.AddHeader("Content-Type", config.getProperty("content_type"));
   http.AddHeader("Token", config.getProperty("token"));
-  http.AddHeader("EventName", config.getProperty("EventName")); 
+  http.AddHeader("EventName", "InvokeRatingV4"); 
  }
 
  @Override

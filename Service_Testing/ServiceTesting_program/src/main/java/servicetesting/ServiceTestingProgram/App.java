@@ -53,7 +53,7 @@ public class App
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
-		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4], args[5]);
+		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4]);
 		
 		try                                      
 		{
@@ -199,8 +199,8 @@ public class App
   	           api = new DtcRatingService(config);
   	           break;
   	              
-          case "dtcratingserviceenhancement":               
-        	  logInfo.info("IsoBopQuote API Selected");
+          case "dtcratingenhancement":               
+        	  logInfo.info("DTC Rating Enhancement API Selected");
  	           api = new DtcRatingServiceEnhancement(config);
  	           break;
         	   	  
