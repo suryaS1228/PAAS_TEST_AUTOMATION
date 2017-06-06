@@ -34,24 +34,24 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		switch(InputData.ReadData("Plan_Type"))
 		{
 		 case "Annual":			
-			 sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
+			 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlan.json");
 		 	 break;
 		 	 
 		 case "Single Trip":
 			 String PlanName = InputData.ReadData("Plan_name");
 			 if(PlanName.equals("Air Ticket Protector"))
 			 {
-				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_ATP"));
+				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
 			 }
 			 else
 			 {
-				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_CP_P"));
+				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
 			 }
 			 
 			 break;
 			 
 		 case "Renter's Collision": 	
-			 sampleInput = new JsonHandle(config.getProperty("sample_request_RenterCollision"));
+			 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
 			 break; 
 		 
 		 default:
@@ -135,7 +135,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 				if(StatusCode.equals("SUCCESS"))
 				{
 					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(jsonElements.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
 					output.WriteData("Flag_for_execution", StatusCode);

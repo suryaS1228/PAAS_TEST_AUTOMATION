@@ -29,11 +29,11 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		input = InputData;
 		switch(InputData.ReadData("Plan_name"))
 		{
-		 case "Annual":			sampleInput = new JsonHandle(config.getProperty("Sample_request_anual"));
+		 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
 		 									break;
-		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request_tripplans"));
+		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
 											break;
-		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request_RC"));
+		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
 											break; 
 		 
 		 default:

@@ -8,6 +8,7 @@ import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
 import apiPackage.DtcGetPolicy;
+import apiPackage.DtcNonMonetoryEndorsement;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
@@ -230,9 +231,15 @@ public class App
   	            break;
   	            
           case "dtccancelpolicy":
-      	    logInfo.info("IsoBopQuote API Selected");
+      	        logInfo.info("dtc cancel API Selected");
 	            api = new DtcCancel(config);
-	            break;      
+	            break;
+	            
+          case "dtcnonmonetoryendorsement":
+        	     logInfo.info("dtc nonMonetory Endorsement API Selected");
+	            api = new DtcNonMonetoryEndorsement(config);
+	            break;
+        	  
     	        
           default :
         	     logError.error("API Selected is Wrong");
@@ -352,11 +359,22 @@ public class App
 								
 								if(statuschoice.equals("Y"))
 								{
-								 logInfo.info("Comparison is selected");
-								 logInfo.info("Starts Copmaring Expected and atual");
-							       output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
-							     logInfo.info("Updating DB For Comparison");
-								 output.UpdateRow();
+									if(outputtable.equals("Y"))
+									{
+										logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 input = api.CompareFunction(input);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+									     input.UpdateRow();
+									}
+									else
+									{
+										 logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+										 output.UpdateRow();
+									}
 								} 
 								
 								input.WriteData("Flag_for_execution", "Completed");

@@ -48,7 +48,7 @@ public class DtcRatingService extends BaseClass implements API
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
 		http.AddHeader("Token", config.getProperty("token"));
-		http.AddHeader("EventName", "InvokeRatingV2");	
+		http.AddHeader("EventName", config.getProperty("EventName"));	
 	}
 
 	@Override
@@ -91,6 +91,7 @@ public class DtcRatingService extends BaseClass implements API
 			throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException 
 	{
      String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+     OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
  	do 	
 	{
 	  if(OutputColVerify.DbCol(input))

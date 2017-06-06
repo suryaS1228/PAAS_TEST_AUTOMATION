@@ -34,10 +34,10 @@ public class DtcGetPolicy extends BaseClass implements API
 		switch(PolicyOrBatch)
 		{
 		case "Policy":
-				sampleInput = new JsonHandle(config.getProperty("sample_request_policy"));
+				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_policy.json");
 				break;
 		case "Batch":
-				sampleInput = new JsonHandle(config.getProperty("sample_request_batch"));
+				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_batch.json");
 				break;
 		default:
 			System.out.println("no sample request");

@@ -93,7 +93,7 @@ if(InputColVerify.DbCol(input))
   http = new HttpHandle(config.getProperty("test_url"),"POST");
   http.AddHeader("Content-Type", config.getProperty("content_type"));
   http.AddHeader("Token", config.getProperty("token"));
-  http.AddHeader("EventName", "InvokeRatingV4"); 
+  http.AddHeader("EventName", config.getProperty("EventName")); 
  }
 
  @Override

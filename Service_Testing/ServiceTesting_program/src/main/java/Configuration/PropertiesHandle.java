@@ -39,7 +39,7 @@ public class PropertiesHandle extends Properties
 		protected void WriteProperty() throws ClassNotFoundException, SQLException
 		{
 			DatabaseOperation.ConnectionSetup();
-		
+		System.out.println("same output table--->"+this.RdmsValue("OutputInInputTable"));
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 			
             if(AutualFlag.equalsIgnoreCase("responseneed"))
@@ -88,7 +88,7 @@ public class PropertiesHandle extends Properties
 		    this.put("StatusColumn", "StatusColumn");
 		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
-		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName") + "_C1128");
+		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName"));
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
 		    
