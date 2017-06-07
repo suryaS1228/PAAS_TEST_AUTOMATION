@@ -29,7 +29,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		input = InputData;
 		switch(InputData.ReadData("Plan_name"))
 		{
-		 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
+		 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
 		 									break;
 		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
 											break;
@@ -45,6 +45,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	{
 		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+		System.out.println(sampleInput);
 		request.StringToFile(sampleInput.FileToString());
 		
 		do

@@ -30,7 +30,6 @@ public class PropertiesHandle extends Properties
 			this.Env=Env;
 			this.AutualFlag=AutualFlag;
 			this.ComparisonFlag=ComparisonFlag;
-			this.MachineName = MachineName;
 			
 			WriteProperty();
 			
@@ -98,13 +97,13 @@ public class PropertiesHandle extends Properties
 		
 		protected String RdmsQuery(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,Environment_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn);
 		}
 		
 		protected String RdmsValue(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,API_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,Environment_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return ConfigQuery.ReadData(OutputColoumn);
 		}
 		
