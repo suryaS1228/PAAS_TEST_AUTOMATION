@@ -45,6 +45,7 @@ public class BaseClass
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
+
 					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
@@ -127,6 +128,7 @@ public class BaseClass
 			try
 				{
 				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputJsonPath")));
 				String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 				System.out.println(actual);

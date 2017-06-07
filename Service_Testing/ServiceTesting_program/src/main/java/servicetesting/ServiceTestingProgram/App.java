@@ -120,123 +120,124 @@ public class App
     	        break;
     	  
           case "isoendorsement":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopEndorsement API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
           case "isoinstallmentpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
           case "isoissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopIssue API Selected");
     	        api = new IsoBopissue(config);
     	        break;
     	  
           case "isopayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopPayIssue API Selected");
         	    api = new IsoBopPayissue(config);
     	        break;
     	  
           case "isopayissuecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopPayIssueCancel API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
           
           case "isocancel":
-        	  	logInfo.info("IsoBopQuote API Selected");
+        	  	logInfo.info("IsoBopCancel API Selected");
 	      	    api = new IsoBopCancel(config);
 	  	        break;
   	  
     	        
           case "solartisisoboprating":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("SolartisISORating API Selected");
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
           case "isoratecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("IsoBopRateCancel API Selected");
     	        api = new IsoBopRateCancel(config);	  
     	        break;
+    	       
     	        
           case "chicform":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicForm API Selected");
   	            api = new ChicForms(config);
   	            break;
   	        
           case "chicrating":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicRating API Selected");
   	            api = new ChicRating(config);
   	            break;
   	        
           case "dtcfindpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCFindPolicy API Selected");
   	            api = new DtcFindPolicy(config);
   	            break;
   	            
           case "dtcgetpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCGetPolicy API Selected");
         	    api = new DtcGetPolicy(config);
 	            break;
   	        
           case "dtcgetcustomerdetails":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCGetCustomerDetails API Selected");
   	            api = new DtcGetCustomerDetails(config);
   	            break;
   	        
           case "dtcpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCPayIssue API Selected");
   	            api = new DtcPayIssue(config);
   	            break;
   	        
           case "dtcpreviewpdf":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCPreviewPDF API Selected");
   	            api = new DtcPreviewPDF(config);
   	            break;
   	        
           case "dtcratingservice":
-        	   logInfo.info("IsoBopQuote API Selected");
+        	   logInfo.info("DTCRating API Selected");
   	           api = new DtcRatingService(config);
   	           break;
   	              
           case "dtcratingenhancement":               
-        	  logInfo.info("DTC Rating Enhancement API Selected");
+        	  logInfo.info("DTCRatingEnhancement API Selected");
  	           api = new DtcRatingServiceEnhancement(config);
  	           break;
         	   	  
           case "dtcsavedetails1":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCSave1 API Selected");
   	            api = new DtcSaveDetails1(config);
   	            break;
   	        
           case "dtcsavedetails2":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCSave2 API Selected");
         	    api = new DtcSaveDetails2(config);
   	            break;
   	        
           case "dtcsavedetails3":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCSave3 API Selected");
     	        api = new DtcSaveDetails3(config);
     	        break;
     	        
           case "dtcsavedetails4":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("DTCSave4 API Selected");
     	        api = new DtcSaveDetails4(config);
     	        break;
     	        
           case "starrsearchrescueissuecertificate":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("StarrSearch&RescueIssueCertificate API Selected");
   	            api = new StarrSearchRescueIssueCertificate(config);
   	            break;
   	            
           case "dtccancelpolicy":
-      	        logInfo.info("dtc cancel API Selected");
+      	        logInfo.info("DTCCancelPolicy API Selected");
 	            api = new DtcCancel(config);
 	            break;
 	            
           case "dtcnonmonetoryendorsement":
-        	     logInfo.info("dtc nonMonetory Endorsement API Selected");
+        	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
 	            api = new DtcNonMonetoryEndorsement(config);
 	            break;
         	  
