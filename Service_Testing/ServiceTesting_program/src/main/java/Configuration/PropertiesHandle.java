@@ -17,19 +17,16 @@ public class PropertiesHandle extends Properties
 	protected String Project;
 	protected String Api;
 	protected String Env;
-	protected String AutualFlag;
-	protected String ComparisonFlag;
-	protected String MachineName;
-	
+	protected String OutputChioce;
+
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag) throws ClassNotFoundException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce) throws ClassNotFoundException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
 			this.Env=Env;
-			this.AutualFlag=AutualFlag;
-			this.ComparisonFlag=ComparisonFlag;
+			this.OutputChioce=OutputChioce;
 			
 			WriteProperty();
 			
@@ -38,24 +35,22 @@ public class PropertiesHandle extends Properties
 		protected void WriteProperty() throws ClassNotFoundException, SQLException
 		{
 			DatabaseOperation.ConnectionSetup();
-		System.out.println("same output table--->"+this.RdmsValue("OutputInInputTable"));
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
-			
-            if(AutualFlag.equalsIgnoreCase("responseneed"))
+						
+            if(OutputChioce.equalsIgnoreCase("OutputNeeded"))
             {
 				      this.put("actual", "Y");
+				      this.put("status", "N");
             }
-		    else if(AutualFlag.equalsIgnoreCase("responsenotneed"))
+		    else if(OutputChioce.equalsIgnoreCase("OutputNotNeeded"))
 		    {
 				      this.put("actual", "N");
+				      this.put("status", "N");
 		    }
-			if(ComparisonFlag.equalsIgnoreCase("comparisonneed"))
+			if(OutputChioce.equalsIgnoreCase("ComparisionNeeded"))
 			{
-				this.put("status", "Y");
-			}
-			else if(ComparisonFlag.equalsIgnoreCase("comparisionnotneed"))
-			{
-				this.put("status", "N");  
+				      this.put("actual", "Y");
+				      this.put("status", "Y");
 			}
 			
 			this.put("sample_request", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
