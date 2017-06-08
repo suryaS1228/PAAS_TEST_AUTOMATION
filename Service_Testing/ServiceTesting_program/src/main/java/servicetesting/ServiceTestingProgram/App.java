@@ -19,7 +19,6 @@ import apiPackage.DtcSaveDetails3;
 import apiPackage.DtcSaveDetails4;
 import apiPackage.IsoBopCancel;
 import apiPackage.IsoBopEndrosement;
-import apiPackage.IsoBopEndrosementRate;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
 import apiPackage.IsoBopPayissueCancel;
