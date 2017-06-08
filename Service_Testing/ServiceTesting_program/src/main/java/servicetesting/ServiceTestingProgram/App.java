@@ -110,58 +110,58 @@ public class App
 		switch(ApiType.toLowerCase())//SELECTING API 
         {
       
-          case "isoquote":
+          case "starr-isoquote":
         	    logInfo.info("IsoBopQuote API Selected");
 				api = new IsoBopQuote(config);
     	        break;
       
-          case "isorate":
+          case "starr-isorate":
         	    logInfo.info("IsoBopRating API Selected");
     	        api = new IsoBoprating(config);
     	        break;
     	  
-          case "isoendorsement":
+          case "starr-isoendorsement":
         	    logInfo.info("IsoBopEndorsement API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
-          case "isoendorsementrate":
+          case "starr-isoendorsementrate":
 	      	    logInfo.info("IsoBopEndorsementRate API Selected");
 	  	        api = new IsoBopEndrosementRate(config);
 	  	        break;      
     	        
-          case "isoinstallmentpayissue":
+          case "starr-isoinstallmentpayissue":
         	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
-          case "isoissue":
+          case "starr-isoissue":
         	    logInfo.info("IsoBopIssue API Selected");
     	        api = new IsoBopissue(config);
     	        break;
     	  
-          case "isopayissue":
+          case "starr-isopayissue":
         	    logInfo.info("IsoBopPayIssue API Selected");
         	    api = new IsoBopPayissue(config);
     	        break;
     	  
-          case "isopayissuecancel":
+          case "starr-isopayissuecancel":
         	    logInfo.info("IsoBopPayIssueCancel API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
           
-          case "isocancel":
+          case "starr-isocancel":
         	  	logInfo.info("IsoBopCancel API Selected");
 	      	    api = new IsoBopCancel(config);
 	  	        break;
   	  
     	        
-          case "solartisisoboprating":
+          case "starr-solartisisoboprating":
         	    logInfo.info("SolartisISORating API Selected");
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
-          case "isoratecancel":
+          case "starr-isoratecancel":
         	    logInfo.info("IsoBopRateCancel API Selected");
     	        api = new IsoBopRateCancel(config);	  
     	        break;
@@ -177,57 +177,57 @@ public class App
   	            api = new ChicRating(config);
   	            break;
   	        
-          case "dtcfindpolicy":
+          case "starr-dtcfindpolicy":
         	    logInfo.info("DTCFindPolicy API Selected");
   	            api = new DtcFindPolicy(config);
   	            break;
   	            
-          case "dtcgetpolicy":
+          case "starr-dtcgetpolicy":
         	    logInfo.info("DTCGetPolicy API Selected");
         	    api = new DtcGetPolicy(config);
 	            break;
   	        
-          case "dtcgetcustomerdetails":
+          case "starr-dtcgetcustomerdetails":
         	    logInfo.info("DTCGetCustomerDetails API Selected");
   	            api = new DtcGetCustomerDetails(config);
   	            break;
   	        
-          case "dtcpayissue":
+          case "starr-dtcpayissue":
         	    logInfo.info("DTCPayIssue API Selected");
   	            api = new DtcPayIssue(config);
   	            break;
   	        
-          case "dtcpreviewpdf":
+          case "starr-dtcpreviewpdf":
         	    logInfo.info("DTCPreviewPDF API Selected");
   	            api = new DtcPreviewPDF(config);
   	            break;
   	        
-          case "dtcratingservice":
+          case "starr-dtcratingservice":
         	   logInfo.info("DTCRating API Selected");
   	           api = new DtcRatingService(config);
   	           break;
   	              
-          case "dtcratingenhancement":               
+          case "starr-dtcratingenhancement":               
         	  logInfo.info("DTCRatingEnhancement API Selected");
  	           api = new DtcRatingServiceEnhancement(config);
  	           break;
         	   	  
-          case "dtcsavedetails1":
+          case "starr-dtcsavedetails1":
         	    logInfo.info("DTCSave1 API Selected");
   	            api = new DtcSaveDetails1(config);
   	            break;
   	        
-          case "dtcsavedetails2":
+          case "starr-dtcsavedetails2":
         	    logInfo.info("DTCSave2 API Selected");
         	    api = new DtcSaveDetails2(config);
   	            break;
   	        
-          case "dtcsavedetails3":
+          case "starr-dtcsavedetails3":
         	    logInfo.info("DTCSave3 API Selected");
     	        api = new DtcSaveDetails3(config);
     	        break;
     	        
-          case "dtcsavedetails4":
+          case "starr-dtcsavedetails4":
         	    logInfo.info("DTCSave4 API Selected");
     	        api = new DtcSaveDetails4(config);
     	        break;
@@ -237,12 +237,12 @@ public class App
   	            api = new StarrSearchRescueIssueCertificate(config);
   	            break;
   	            
-          case "dtccancelpolicy":
+          case "starr-dtccancelpolicy":
       	        logInfo.info("DTCCancelPolicy API Selected");
 	            api = new DtcCancel(config);
 	            break;
 	            
-          case "dtcnonmonetoryendorsement":
+          case "starr-dtcnonmonetoryendorsement":
         	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
 	            api = new DtcNonMonetoryEndorsement(config);
 	            break;
