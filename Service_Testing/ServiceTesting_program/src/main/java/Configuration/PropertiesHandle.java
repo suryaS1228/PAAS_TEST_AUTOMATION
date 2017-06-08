@@ -37,17 +37,17 @@ public class PropertiesHandle extends Properties
 			DatabaseOperation.ConnectionSetup();
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 						
-            if(OutputChioce.equalsIgnoreCase("OutputIncluded"))
+            if(OutputChioce.equalsIgnoreCase("Output Saved in DB"))
             {
 				      this.put("actual", "Y");
 				      this.put("status", "N");
             }
-		    else if(OutputChioce.equalsIgnoreCase("OutputExcluded"))
+		    else if(OutputChioce.equalsIgnoreCase("Get Response Only"))
 		    {
 				      this.put("actual", "N");
 				      this.put("status", "N");
 		    }
-			if(OutputChioce.equalsIgnoreCase("ComparisionIncluded"))
+			if(OutputChioce.equalsIgnoreCase("Compared Results"))
 			{
 				      this.put("actual", "Y");
 				      this.put("status", "Y");

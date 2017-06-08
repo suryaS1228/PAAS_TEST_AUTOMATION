@@ -19,6 +19,7 @@ import apiPackage.DtcSaveDetails3;
 import apiPackage.DtcSaveDetails4;
 import apiPackage.IsoBopCancel;
 import apiPackage.IsoBopEndrosement;
+import apiPackage.IsoBopEndrosementRate;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
 import apiPackage.IsoBopPayissueCancel;
@@ -124,6 +125,11 @@ public class App
     	        api = new IsoBopEndrosement(config);
     	        break;
     	  
+          case "isoendorsementrate":
+	      	    logInfo.info("IsoBopEndorsementRate API Selected");
+	  	        api = new IsoBopEndrosementRate(config);
+	  	        break;      
+    	        
           case "isoinstallmentpayissue":
         	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
