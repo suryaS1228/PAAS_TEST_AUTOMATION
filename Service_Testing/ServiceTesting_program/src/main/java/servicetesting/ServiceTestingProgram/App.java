@@ -124,11 +124,6 @@ public class App
         	    logInfo.info("IsoBopEndorsement API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
-    	  
-          case "starr-isoendorsementrate":
-	      	    logInfo.info("IsoBopEndorsementRate API Selected");
-	  	        api = new IsoBopEndrosementRate(config);
-	  	        break;      
     	        
           case "starr-isoinstallmentpayissue":
         	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
