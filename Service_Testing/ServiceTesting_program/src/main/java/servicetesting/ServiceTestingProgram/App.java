@@ -8,6 +8,7 @@ import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
 import apiPackage.DtcGetPolicy;
+import apiPackage.DtcNonMonetoryEndorsement;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
@@ -53,8 +54,7 @@ public class App
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
-		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4]);
-
+		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3]);
 		
 		try                                      
 		{
@@ -109,131 +109,138 @@ public class App
 		switch(ApiType.toLowerCase())//SELECTING API 
         {
       
-          case "isoquote":
+          case "starr-isoquote":
         	    logInfo.info("IsoBopQuote API Selected");
 				api = new IsoBopQuote(config);
     	        break;
       
-          case "isorate":
+          case "starr-isorate":
         	    logInfo.info("IsoBopRating API Selected");
     	        api = new IsoBoprating(config);
     	        break;
     	  
-          case "isobopendrosement":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isoendorsement":
+        	    logInfo.info("IsoBopEndorsement API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
-    	  
-          case "isobopinstalllmentpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+    	        
+          case "starr-isoinstallmentpayissue":
+        	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
-          case "isobopissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isoissue":
+        	    logInfo.info("IsoBopIssue API Selected");
     	        api = new IsoBopissue(config);
     	        break;
     	  
-          case "isoboppayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isopayissue":
+        	    logInfo.info("IsoBopPayIssue API Selected");
         	    api = new IsoBopPayissue(config);
     	        break;
     	  
-          case "isoboppayissuecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isopayissuecancel":
+        	    logInfo.info("IsoBopPayIssueCancel API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
           
-          case "isobopcancel":
-        	  	logInfo.info("IsoBopQuote API Selected");
+          case "starr-isocancel":
+        	  	logInfo.info("IsoBopCancel API Selected");
 	      	    api = new IsoBopCancel(config);
 	  	        break;
   	  
     	        
-          case "solartisisoboprating":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-solartisisoboprating":
+        	    logInfo.info("SolartisISORating API Selected");
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
-          case "isobopratecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isoratecancel":
+        	    logInfo.info("IsoBopRateCancel API Selected");
     	        api = new IsoBopRateCancel(config);	  
     	        break;
+    	       
     	        
           case "chicform":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicForm API Selected");
   	            api = new ChicForms(config);
   	            break;
   	        
           case "chicrating":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicRating API Selected");
   	            api = new ChicRating(config);
   	            break;
   	        
-          case "dtcfindpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcfindpolicy":
+        	    logInfo.info("DTCFindPolicy API Selected");
   	            api = new DtcFindPolicy(config);
   	            break;
   	            
-          case "dtcgetpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcgetpolicy":
+        	    logInfo.info("DTCGetPolicy API Selected");
         	    api = new DtcGetPolicy(config);
 	            break;
   	        
-          case "dtcgetcustomerdetails":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcgetcustomerdetails":
+        	    logInfo.info("DTCGetCustomerDetails API Selected");
   	            api = new DtcGetCustomerDetails(config);
   	            break;
   	        
-          case "dtcpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcpayissue":
+        	    logInfo.info("DTCPayIssue API Selected");
   	            api = new DtcPayIssue(config);
   	            break;
   	        
-          case "dtcpreviewpdf":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcpreviewpdf":
+        	    logInfo.info("DTCPreviewPDF API Selected");
   	            api = new DtcPreviewPDF(config);
   	            break;
   	        
-          case "dtcratingservice":
-        	   logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcratingservice":
+        	   logInfo.info("DTCRating API Selected");
   	           api = new DtcRatingService(config);
   	           break;
   	              
-          case "dtcratingserviceenhancement":               
-        	  logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcratingenhancement":               
+        	  logInfo.info("DTCRatingEnhancement API Selected");
  	           api = new DtcRatingServiceEnhancement(config);
  	           break;
         	   	  
-          case "dtcsavedetails1":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails1":
+        	    logInfo.info("DTCSave1 API Selected");
   	            api = new DtcSaveDetails1(config);
   	            break;
   	        
-          case "dtcsavedetails2":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails2":
+        	    logInfo.info("DTCSave2 API Selected");
         	    api = new DtcSaveDetails2(config);
   	            break;
   	        
-          case "dtcsavedetails3":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails3":
+        	    logInfo.info("DTCSave3 API Selected");
     	        api = new DtcSaveDetails3(config);
     	        break;
     	        
-          case "dtcsavedetails4":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails4":
+        	    logInfo.info("DTCSave4 API Selected");
     	        api = new DtcSaveDetails4(config);
     	        break;
     	        
           case "starrsearchrescueissuecertificate":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("StarrSearch&RescueIssueCertificate API Selected");
   	            api = new StarrSearchRescueIssueCertificate(config);
   	            break;
   	            
-          case "dtccancelpolicy":
-      	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtccancelpolicy":
+      	        logInfo.info("DTCCancelPolicy API Selected");
 	            api = new DtcCancel(config);
-	            break;      
+	            break;
+	            
+          case "starr-dtcnonmonetoryendorsement":
+        	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
+	            api = new DtcNonMonetoryEndorsement(config);
+	            break;
+        	  
     	        
           default :
         	     logError.error("API Selected is Wrong");
@@ -353,11 +360,22 @@ public class App
 								
 								if(statuschoice.equals("Y"))
 								{
-								 logInfo.info("Comparison is selected");
-								 logInfo.info("Starts Copmaring Expected and atual");
-							       output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
-							     logInfo.info("Updating DB For Comparison");
-								 output.UpdateRow();
+									if(outputtable.equals("Y"))
+									{
+										logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 input = api.CompareFunction(input);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+									     input.UpdateRow();
+									}
+									else
+									{
+										 logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+										 output.UpdateRow();
+									}
 								} 
 								
 								input.WriteData("Flag_for_execution", "Completed");

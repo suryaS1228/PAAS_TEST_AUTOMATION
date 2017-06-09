@@ -18,7 +18,7 @@ public class DtcRatingServiceEnhancement extends BaseClass implements API
  {
   this.config = config;
   jsonElements = new DatabaseOperation();
-  jsonElements.GetDataObjects(config.getProperty("json_query"));
+  
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
@@ -35,13 +35,13 @@ public class DtcRatingServiceEnhancement extends BaseClass implements API
   switch(numofplan)
    
    {
-    case 1:   sampleInput = new JsonHandle(config.getProperty("Sample_request_1")); break;
-    case 2:   sampleInput = new JsonHandle(config.getProperty("Sample_request_2")); break;
-    case 3:   sampleInput = new JsonHandle(config.getProperty("Sample_request_3")); break;
-    case 4:   sampleInput = new JsonHandle(config.getProperty("Sample_request_4")); break;
-    case 5:   sampleInput = new JsonHandle(config.getProperty("Sample_request_5")); break;
-    case 6:   sampleInput = new JsonHandle(config.getProperty("Sample_request_6")); break;
-    case 7:   sampleInput = new JsonHandle(config.getProperty("Sample_request_7")); break;
+    case 1:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
+    case 2:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
+    case 3:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
+    case 4:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
+    case 5:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
+    case 6:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
+    case 7:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
    
     default:
    }
@@ -58,23 +58,29 @@ do
 {
 if(InputColVerify.DbCol(input))
 {
-   if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
-   {
-    if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_name"))
+  if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+  {
+	if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_name"))
     {
      for(int j=0;j<Planname.length;j++)
      {
-      String DynamicPlannameJson = jsonElements.ReadData("Plan_name");
-      String DynamicPlanCodeJson = jsonElements.ReadData("Plan_code");
+      String DynamicPlannameJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
       String SplitPlanJson[] = DynamicPlannameJson.split("##");
-      String SplitCodeJson[] = DynamicPlanCodeJson.split("##");     
       request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
-      request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
      }
     }
+    else if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_code"))
+    {
+        for(int j=0;j<Plancode.length;j++)
+        {
+         String DynamicPlanCodeJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
+         String SplitCodeJson[] = DynamicPlanCodeJson.split("##");     
+         request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
+        }
+     }
     else
     {
-     request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+     request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
     }
    }
   }
@@ -151,7 +157,7 @@ if(InputColVerify.DbCol(input))
 				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
 				System.out.println(config.getProperty("OutputColumn")); 
 				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 
 				System.out.println(actual);
 				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);

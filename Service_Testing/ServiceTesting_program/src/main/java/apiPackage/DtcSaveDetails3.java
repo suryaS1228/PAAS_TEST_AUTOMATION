@@ -20,7 +20,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
-		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -34,24 +34,24 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		switch(InputData.ReadData("Plan_Type"))
 		{
 		 case "Annual":			
-			 sampleInput = new JsonHandle(config.getProperty("sample_request_AnnualPlan"));
+			 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlan.json");
 		 	 break;
 		 	 
 		 case "Single Trip":
 			 String PlanName = InputData.ReadData("Plan_name");
 			 if(PlanName.equals("Air Ticket Protector"))
 			 {
-				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_ATP"));
+				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
 			 }
 			 else
 			 {
-				 sampleInput = new JsonHandle(config.getProperty("sample_request_SingleTrip_CP_P"));
+				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
 			 }
 			 
 			 break;
 			 
 		 case "Renter's Collision": 	
-			 sampleInput = new JsonHandle(config.getProperty("sample_request_RenterCollision"));
+			 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
 			 break; 
 		 
 		 default:
@@ -71,7 +71,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
 		}while(InputColVerify.MoveForward());
@@ -135,7 +135,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 				if(StatusCode.equals("SUCCESS"))
 				{
 					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
 					output.WriteData("Flag_for_execution", StatusCode);

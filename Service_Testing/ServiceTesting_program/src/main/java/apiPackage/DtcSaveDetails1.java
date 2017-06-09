@@ -18,7 +18,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
-		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
@@ -31,11 +31,11 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		input = InputData;
 			switch(InputData.ReadData("Plan_Type"))
 			{
-			 case "Annual Plan":			sampleInput = new JsonHandle(config.getProperty("sample_request_Annualplan"));
+			 case "Annual":			      sampleInput = new JsonHandle(config.getProperty("sample_request")+"First_Save_AnnualPlan.json");
 			 									break;
-			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("Sample_request_singletrip"));
+			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"First save_trip.json");
 												break;
-			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request_Rcplan"));
+			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"FirstSave_RC.json");
 												break; 
 			 
 			 default:
@@ -54,7 +54,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
 		}while(InputColVerify.MoveForward());
@@ -122,7 +122,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			if(StatusCode.equals("SUCCESS"))
 			{
 
-				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 				System.out.println(actual);
 				output.WriteData("Flag_for_execution", StatusCode);

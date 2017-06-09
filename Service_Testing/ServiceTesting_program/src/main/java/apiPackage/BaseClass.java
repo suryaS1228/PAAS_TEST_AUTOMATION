@@ -45,7 +45,8 @@ public class BaseClass
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+
+					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
 		}while(InputColVerify.MoveForward());
@@ -127,7 +128,7 @@ public class BaseClass
 			try
 				{
 				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 				System.out.println(actual);
 				output.WriteData("flag_for_execution", "Completed");

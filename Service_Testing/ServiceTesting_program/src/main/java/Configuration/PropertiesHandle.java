@@ -14,96 +14,94 @@ public class PropertiesHandle extends Properties
 {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
-	protected static String Project;
-	protected static String Api;
-	protected static String Env;
-	protected static String AutualFlag;
-	protected static String ComparisonFlag;
-	static DatabaseOperation DB = new DatabaseOperation();
+	protected String Project;
+	protected String Api;
+	protected String Env;
+	protected String OutputChioce;
+
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String AutualFlag, String ComparisonFlag) throws ClassNotFoundException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce) throws ClassNotFoundException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
 			this.Env=Env;
-			this.AutualFlag=AutualFlag;
-			this.ComparisonFlag=ComparisonFlag;
+			this.OutputChioce=OutputChioce;
 			
 			WriteProperty();
 			
 		}
 		
-		protected PropertiesHandle WriteProperty() throws ClassNotFoundException, SQLException
+		protected void WriteProperty() throws ClassNotFoundException, SQLException
 		{
-			DB.ConnectionSetup();
-			
-			this.put("output_in_same_table", this.QueryValue("SameTable","CONFIG_SameOutputTable"));
-			
-            if(AutualFlag.equalsIgnoreCase("responseneed"))
+			DatabaseOperation.ConnectionSetup();
+			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
+						
+            if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
 				      this.put("actual", "Y");
+				      this.put("status", "N");
             }
-		    else if(AutualFlag.equalsIgnoreCase("responsenotneed"))
+		    else if(OutputChioce.equalsIgnoreCase("Get_Response_Only"))
 		    {
 				      this.put("actual", "N");
+				      this.put("status", "N");
 		    }
-			if(ComparisonFlag.equalsIgnoreCase("comparisonneed"))
+			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
 			{
-				this.put("status", "Y");
-			}
-			else if(ComparisonFlag.equalsIgnoreCase("comparisionneed"))
-			{
-				this.put("status", "N");  
+				      this.put("actual", "Y");
+				      this.put("status", "Y");
 			}
 			
-			this.put("sample_request", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
-			this.put("request_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", "Q:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
+			this.put("sample_request", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/");
+			this.put("request_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
 			
-			this.put("test_url", this.QueryValue(Env,"CONFIG_URL"));
-			this.put("type", this.QueryValue("Type","CONFIG_ServiceType"));
-			this.put("content_type", "application/"+this.QueryValue("Type","CONFIG_ServiceType"));
-			this.put("token", this.QueryValue("Token","CONFIG_Token"));
+			this.put("test_url", this.RdmsValue("URL"));
+			this.put("type", this.RdmsValue("ServiceType"));
+			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
+			this.put("token", this.RdmsValue("Token"));
+			this.put("EventName", this.RdmsValue("EventName"));
+
+			this.put("input_query",  this.RdmsQuery("InputTable"));
+			this.put("output_query", this.RdmsQuery("OutputTable"));
 			
-			this.put("json_query",   this.Query("CNFTable","CONFIG_Cnf"));
-			this.put("input_query",  this.Query("InputTable","CONFIG_Input"));
-			this.put("output_query", this.Query("OutputTable","CONFIG_Output"));
+			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
+			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
 			
-			this.put("InputColQuery",this.Query("ConditionInputTable","CONFIG_ConditionInput"));
-			this.put("OutputColQuery",this.Query("ConditionOutputTable","CONFIG_ConditionOutput"));
+			this.put("InputJsonPath", "InputJsonPath");
+			this.put("OutputJsonPath", "OutputJsonPath");
 			
 			this.put("InputColumn", "InputColumn");
 		    this.put("OutputColumn", "OutputColumn");
-			
+		    
 			this.put("InputCondColumn", "InputColumnCondtn");
 		    this.put("OutputCondColumn", "OutputColumnCondtn");
 		    
+		    this.put("ExpectedColumn", "ExpectedColumn");
+		    this.put("StatusColumn", "StatusColumn");
+		    
 		    this.put("jdbc_driver", "com.mysql.jdbc.Driver");
-		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.QuerySingleValue("DB","CONFIG_DB"));
+		    this.put("db_url", "jdbc:mysql://192.168.35.2:3391/" + this.RdmsValue("DBName"));
 		    this.put("db_username", "root");
 		    this.put("db_password", "password");
-		    return this;
+		    
+		    DatabaseOperation.CloseConn();
+		    
 		}
 		
-		protected String Query(String OutputColoumn, String TableName) throws SQLException 
+		protected String RdmsQuery(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("Select " + OutputColoumn + " from " + TableName + " WHERE ProjectType = '" + Project + "'AND APiType = '" + Api + "'");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,Environment_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn);
 		}
 		
-		protected String QueryValue(String OutputColoumn, String TableName) throws SQLException 
+		protected String RdmsValue(String OutputColoumn) throws SQLException
 		{
-			ConfigQuery.GetDataObjects("Select " + OutputColoumn + " from " + TableName + " WHERE ProjectType = '" + Project + "'AND APiType = '" + Api + "'");
+			ConfigQuery.GetDataObjects("SELECT Version_CONFIG.Version,Project_CONFIG.DBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,Environment_CONFIG.EventName,API_CONFIG.OutputInInputTable,CredentialTable_CONFIG.InputConditonTable,CredentialTable_CONFIG.InputTable,CredentialTable_CONFIG.OutputConditionTable,CredentialTable_CONFIG.OutputTable FROM Project_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN CredentialTable_CONFIG ON (CredentialTable_CONFIG.Verision = Version_CONFIG.Version and CredentialTable_CONFIG.APIID = API_CONFIG.APIID) WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return ConfigQuery.ReadData(OutputColoumn);
 		}
 		
-		protected String QuerySingleValue(String OutputColoumn, String TableName) throws SQLException 
-		{
-			ConfigQuery.GetDataObjects("Select " + OutputColoumn + " from " + TableName + " WHERE ProjectType = '" + Project + "'");
-			return ConfigQuery.ReadData(OutputColoumn);
-		}
-			
 		public PropertiesHandle(String path)
 		{
 			this.path = path;
