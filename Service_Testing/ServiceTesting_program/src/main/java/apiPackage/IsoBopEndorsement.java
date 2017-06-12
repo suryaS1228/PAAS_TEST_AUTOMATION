@@ -6,9 +6,9 @@ import util.api.DBColoumnVerify;
 import util.common.*;
 import Configuration.PropertiesHandle;
 
-public class IsoBopEndrosement extends BaseClass implements API 
+public class IsoBopEndorsement extends BaseClass implements API 
 {
-		public IsoBopEndrosement(PropertiesHandle config) throws SQLException
+		public IsoBopEndorsement(PropertiesHandle config) throws SQLException
 		{
 			this.config = config;
 			jsonElements = new DatabaseOperation();
