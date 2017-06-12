@@ -106,7 +106,7 @@ public class App
 		logInfo.info("Selecting API");
 		try 
 		{
-		switch(ApiType.toLowerCase())//SELECTING API 
+		switch(ApiType.toLowerCase())//SELECTING API
         {
       
           case "starr-isoquote":
@@ -123,6 +123,11 @@ public class App
         	    logInfo.info("IsoBopEndorsement API Selected");
     	        api = new IsoBopEndrosement(config);
     	        break;
+    	        
+          case "starr-isoendorsementrate":
+	      	    logInfo.info("IsoBopEndorsementRate API Selected");
+	  	        api = new IsoBopEndrosement(config);
+	  	        break;      
     	        
           case "starr-isoinstallmentpayissue":
         	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
@@ -256,67 +261,65 @@ public class App
 			e.printStackTrace();
 		}
 
-		int i = 1;
-
 			try 
 			{
 
 				do
 				{
-					logInfo.info("TestData" + i + "Running" );
-					System.out.println("TestData : " + i);  	
+					logInfo.info("TestData" + input.ReadData("S.No") + "Running" );
+					System.out.println("TestData : " + input.ReadData("S.No"));  	
 							if(input.ReadData("flag_for_execution").equals("Y"))
 							{
-							    logInfo.info("TestData" + i + "flag_for_execution = Y" );	
+							    logInfo.info("TestData" + input.ReadData("S.No") + "flag_for_execution = Y" );	
 								
-									logInfo.info("Loading Sample Request for Testdata--" + i);
+									logInfo.info("Loading Sample Request for Testdata--" + input.ReadData("S.No"));
 									  api.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
 					
 								try 
 								{
-									logInfo.info("Pumping Testdata--" + i + "To Sample Request");
+									logInfo.info("Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request");
 								      api.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 
 								} 
 								catch (IOException | DocumentException | ParseException e)
 								{
-									logError.error("Failed Pumping Testdata--" + i + "To Sample Request---IOException | DocumentException | ParseException");
+									logError.error("Failed Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request---IOException | DocumentException | ParseException");
 									e.printStackTrace();
 								} 
 								
 								try 
 								{
-									logInfo.info("REQUEST For Testdata--" + i);
+									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									  String req = api.RequestToString();//SHOWING REQUEST IN LOG 
 								} 
 								catch (IOException | ParseException | DocumentException e1) 
 								{
-									logError.error("Failed Rquest For Testdata--" + i + "---IOException | ParseException | DocumentException");
+									logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException");
 									e1.printStackTrace();
 								} 
 								
 								try 
 								{
-									logInfo.info("Adding Header For Testdata--" + i);
+									logInfo.info("Adding Header For Testdata--" + input.ReadData("S.No"));
 									  api.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 								} 
 								catch (IOException e) 
 								{
-									logError.error("Failed Adding Header For Testdata--" + i + "---IOException");
+									logError.error("Failed Adding Header For Testdata--" + input.ReadData("S.No") + "---IOException");
 									e.printStackTrace();
 								}
 								
-									logInfo.info("Respone For Testdata--" + i + "is Received");
+									logInfo.info("Respone For Testdata--" + input.ReadData("S.No") + "is Received");
 									api.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 								
-									logInfo.info("REQUEST For Testdata--" + i);
+									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									try 
 									{
-										logInfo.info("REQUEST For Testdata--" + i);
+										logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 										  String res = api.ResponseToString();//SHOWING RESPONSE IN LOG 
 									} 
 									catch (IOException | ParseException | DocumentException e1) 
 									{
-										logError.error("Failed Rquest For Testdata--" + i + "---IOException | ParseException | DocumentException e1");
+										logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException e1");
 										e1.printStackTrace();
 									}						
 								
@@ -328,32 +331,32 @@ public class App
 								{	
 							    try 
 							    {
-										logInfo.info("Storing Response--" + i + "Data into DB");
+										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										input = api.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 
 								{
-										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
 										 e.printStackTrace();
 								}
 									 
-									     logInfo.info("Updating DB For Testdata--" + i);
+									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
 									     input.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{	
 								try 
 							    {
-										logInfo.info("Storing Response--" + i + "Data into DB");
+										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 
 							    {
-										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
 										 e.printStackTrace();
 								}
 									 
-									     logInfo.info("Updating DB For Testdata--" + i);
+									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
 									     output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								}
 								} 
@@ -383,10 +386,9 @@ public class App
 								}
 							else
 							{
-								logError.error("TestData" + i + "---flag_for_execution N");
-								logInfo.info("TestData" + i + "---flag_for_execution N" );
+								logError.error("TestData" + input.ReadData("S.No") + "---flag_for_execution N");
+								logInfo.info("TestData" + input.ReadData("S.No") + "---flag_for_execution N" );
 							}
-					 i++;
 					logInfo.info("Moving To Next TestData");
 					if(actualchoice.equals("Y") || statuschoice.equals("Y"))
 					{
