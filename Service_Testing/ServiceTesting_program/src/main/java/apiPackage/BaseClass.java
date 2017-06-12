@@ -41,7 +41,7 @@ public class BaseClass
 		
 		do
 		{
-			if(InputColVerify.DbCol(input))
+			if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag") == "Y"))
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
@@ -123,7 +123,7 @@ public class BaseClass
 		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 		do 	
 		{
-		  if(OutputColVerify.DbCol(input))
+		  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag") == "Y"))
 			{
 			try
 				{
@@ -150,7 +150,7 @@ public class BaseClass
 		StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		do 	
 		{	
-		  if(StatusColVerify.DbCol(input))
+		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData(config.getProperty("Comaparision_Flag")) == "Y"))
 			{
 				String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
 				String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));
