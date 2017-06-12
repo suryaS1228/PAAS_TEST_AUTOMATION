@@ -19,6 +19,7 @@ import apiPackage.DtcSaveDetails3;
 import apiPackage.DtcSaveDetails4;
 import apiPackage.IsoBopCancel;
 import apiPackage.IsoBopEndorsement;
+import apiPackage.IsoBopEndorsementRate;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
 import apiPackage.IsoBopPayissueCancel;
@@ -126,7 +127,7 @@ public class App
     	        
           case "starr-isoendorsementrate":
 	      	    logInfo.info("IsoBopEndorsementRate API Selected");
-	  	        api = new IsoBopEndorsement(config);
+	  	        api = new IsoBopEndorsementRate(config);
 	  	        break;      
     	        
           case "starr-isoinstallmentpayissue":
