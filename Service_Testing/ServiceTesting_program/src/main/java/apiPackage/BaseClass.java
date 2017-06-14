@@ -38,10 +38,9 @@ public class BaseClass
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
-		
 		do
 		{
-			if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag") == "Y"))
+			if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
@@ -123,7 +122,7 @@ public class BaseClass
 		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 		do 	
 		{
-		  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag") == "Y"))
+		  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 			{
 			try
 				{
@@ -150,7 +149,7 @@ public class BaseClass
 		StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		do 	
 		{	
-		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData(config.getProperty("Comaparision_Flag")) == "Y"))
+		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData("Comaparision_Flag").equalsIgnoreCase("Y")))
 			{
 				String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
 				String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));
