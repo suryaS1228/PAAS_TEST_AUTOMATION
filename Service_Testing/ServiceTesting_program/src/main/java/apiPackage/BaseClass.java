@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class BaseClass 
 {
@@ -27,7 +28,7 @@ public class BaseClass
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
 	{
 		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request"));
+		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
@@ -37,14 +38,14 @@ public class BaseClass
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
 		request.StringToFile(sampleInput.FileToString());
 		
-		
 		do
 		{
-			if(InputColVerify.DbCol(input))
+			if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 			{
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+
+					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
 		}while(InputColVerify.MoveForward());
@@ -121,12 +122,12 @@ public class BaseClass
 		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 		do 	
 		{
-		  if(OutputColVerify.DbCol(input))
+		  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 			{
 			try
 				{
 				System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-				String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 				System.out.println(actual);
 				output.WriteData("flag_for_execution", "Completed");
@@ -148,7 +149,7 @@ public class BaseClass
 		StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		do 	
 		{	
-		  if(StatusColVerify.DbCol(input))
+		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData("Comaparision_Flag").equalsIgnoreCase("Y")))
 			{
 				String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
 				String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));

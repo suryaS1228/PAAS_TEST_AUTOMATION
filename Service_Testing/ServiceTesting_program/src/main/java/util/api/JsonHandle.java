@@ -80,7 +80,6 @@ public class JsonHandle implements RequestResponse
 	public String FileToString() throws IOException, ParseException
 	{
 		doc.parse(enable_read());
-		//System.out.println(doc.jsonString());
 		return doc.jsonString();
 	}
 	

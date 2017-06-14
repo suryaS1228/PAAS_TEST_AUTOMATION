@@ -2,17 +2,18 @@ package apiPackage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import util.api.*;
-import util.common.*;
 import Configuration.PropertiesHandle;
+import util.api.DBColoumnVerify;
+import util.api.HttpHandle;
+import util.common.DatabaseOperation;
 
-public class DtcPreviewPDF extends BaseClass implements API
+public class IsoBopEndorsementRate extends BaseClass implements API 
 {
-	public DtcPreviewPDF(PropertiesHandle config) throws SQLException
+	public IsoBopEndorsementRate(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
-		
+
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
@@ -26,5 +27,5 @@ public class DtcPreviewPDF extends BaseClass implements API
 		http.AddHeader("Token", config.getProperty("token"));
 		http.AddHeader("EventName", config.getProperty("EventName"));
 	}
-	
 }
+

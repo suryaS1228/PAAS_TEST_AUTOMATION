@@ -8,6 +8,7 @@ import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
 import apiPackage.DtcGetPolicy;
+import apiPackage.DtcNonMonetoryEndorsement;
 import apiPackage.DtcPayIssue;
 import apiPackage.DtcPreviewPDF;
 import apiPackage.DtcRatingService;
@@ -17,7 +18,8 @@ import apiPackage.DtcSaveDetails2;
 import apiPackage.DtcSaveDetails3;
 import apiPackage.DtcSaveDetails4;
 import apiPackage.IsoBopCancel;
-import apiPackage.IsoBopEndrosement;
+import apiPackage.IsoBopEndorsement;
+import apiPackage.IsoBopEndorsementRate;
 import apiPackage.IsoBopInstalllmentPayissue;
 import apiPackage.IsoBopPayissue;
 import apiPackage.IsoBopPayissueCancel;
@@ -34,7 +36,7 @@ import java.sql.SQLException;
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
 
-import util.common.PropertiesHandle;
+import Configuration.PropertiesHandle;
 
 import org.apache.log4j.Logger;
 
@@ -49,11 +51,11 @@ public class App
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) throws ClassNotFoundException 
+	public static void main( String[] args ) throws ClassNotFoundException, SQLException 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-		PropertiesHandle config = new PropertiesHandle("A:/1 Projects/09 ISO/Release_27/Rating_UAT2/configuration_file/config_json.properties");
-		//PropertiesHandle config = new PropertiesHandle(args[0]);
+		
+		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3]);
 		
 		try                                      
 		{
@@ -98,139 +100,153 @@ public class App
 			e1.printStackTrace();
 		}
 		
-		String ApiType = config.getProperty("ApiType");
-	
+		String Project = args[0];
+		String Api = args[1];
+		String ApiType = Project + Api;
+		
 		logInfo.info("Selecting API");
 		try 
 		{
-		switch(ApiType.toLowerCase())//SELECTING API 
+		switch(ApiType.toLowerCase())//SELECTING API
         {
       
-          case "isoquote":
+          case "starr-isoquote":
         	    logInfo.info("IsoBopQuote API Selected");
 				api = new IsoBopQuote(config);
     	        break;
       
-          case "isorate":
+          case "starr-isorate":
         	    logInfo.info("IsoBopRating API Selected");
     	        api = new IsoBoprating(config);
     	        break;
     	  
-          case "isobopendrosement":
-        	    logInfo.info("IsoBopQuote API Selected");
-    	        api = new IsoBopEndrosement(config);
+          case "starr-isoendorsement":
+        	    logInfo.info("IsoBopEndorsement API Selected");
+    	        api = new IsoBopEndorsement(config);
     	        break;
-    	  
-          case "isobopinstalllmentpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+    	        
+          case "starr-isoendorsementrate":
+	      	    logInfo.info("IsoBopEndorsementRate API Selected");
+	  	        api = new IsoBopEndorsementRate(config);
+	  	        break;      
+    	        
+          case "starr-isoinstallmentpayissue":
+        	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
     	        api = new IsoBopInstalllmentPayissue(config);
     	        break;
     	  
-          case "isobopissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isoissue":
+        	    logInfo.info("IsoBopIssue API Selected");
     	        api = new IsoBopissue(config);
     	        break;
     	  
-          case "isoboppayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isopayissue":
+        	    logInfo.info("IsoBopPayIssue API Selected");
         	    api = new IsoBopPayissue(config);
     	        break;
     	  
-          case "isoboppayissuecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isopayissuecancel":
+        	    logInfo.info("IsoBopPayIssueCancel API Selected");
         	    api = new IsoBopPayissueCancel(config);
     	        break;
           
-          case "isobopcancel":
-        	  	logInfo.info("IsoBopQuote API Selected");
+          case "starr-isocancel":
+        	  	logInfo.info("IsoBopCancel API Selected");
 	      	    api = new IsoBopCancel(config);
 	  	        break;
   	  
     	        
-          case "solartisisoboprating":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-solartisisoboprating":
+        	    logInfo.info("SolartisISORating API Selected");
     	        api = new SolartisIsoBopRating(config);	
     	        break;
     	  
-          case "isobopratecancel":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-isoratecancel":
+        	    logInfo.info("IsoBopRateCancel API Selected");
     	        api = new IsoBopRateCancel(config);	  
     	        break;
+    	       
     	        
           case "chicform":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicForm API Selected");
   	            api = new ChicForms(config);
   	            break;
   	        
           case "chicrating":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("ChicRating API Selected");
   	            api = new ChicRating(config);
   	            break;
   	        
-          case "dtcfindpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcfindpolicy":
+        	    logInfo.info("DTCFindPolicy API Selected");
   	            api = new DtcFindPolicy(config);
   	            break;
   	            
-          case "dtcgetpolicy":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcgetpolicy":
+        	    logInfo.info("DTCGetPolicy API Selected");
         	    api = new DtcGetPolicy(config);
 	            break;
   	        
-          case "dtcgetcustomerdetails":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcgetcustomerdetails":
+        	    logInfo.info("DTCGetCustomerDetails API Selected");
   	            api = new DtcGetCustomerDetails(config);
   	            break;
   	        
-          case "dtcpayissue":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcpayissue":
+        	    logInfo.info("DTCPayIssue API Selected");
   	            api = new DtcPayIssue(config);
   	            break;
   	        
-          case "dtcpreviewpdf":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcpreviewpdf":
+        	    logInfo.info("DTCPreviewPDF API Selected");
   	            api = new DtcPreviewPDF(config);
   	            break;
   	        
-          case "dtcratingservice":
-        	   logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcratingservice":
+        	   logInfo.info("DTCRating API Selected");
   	           api = new DtcRatingService(config);
   	           break;
   	              
-          case "dtcratingserviceenhancement":               
-        	  logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcratingenhancement":               
+        	  logInfo.info("DTCRatingEnhancement API Selected");
  	           api = new DtcRatingServiceEnhancement(config);
  	           break;
         	   	  
-          case "dtcsavedetails1":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails1":
+        	    logInfo.info("DTCSave1 API Selected");
   	            api = new DtcSaveDetails1(config);
   	            break;
   	        
-          case "dtcsavedetails2":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails2":
+        	    logInfo.info("DTCSave2 API Selected");
         	    api = new DtcSaveDetails2(config);
   	            break;
   	        
-          case "dtcsavedetails3":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails3":
+        	    logInfo.info("DTCSave3 API Selected");
     	        api = new DtcSaveDetails3(config);
     	        break;
     	        
-          case "dtcsavedetails4":
-        	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtcsavedetails4":
+        	    logInfo.info("DTCSave4 API Selected");
     	        api = new DtcSaveDetails4(config);
     	        break;
     	        
           case "starrsearchrescueissuecertificate":
-        	    logInfo.info("IsoBopQuote API Selected");
+        	    logInfo.info("StarrSearch&RescueIssueCertificate API Selected");
   	            api = new StarrSearchRescueIssueCertificate(config);
   	            break;
   	            
-          case "dtccancelpolicy":
-      	    logInfo.info("IsoBopQuote API Selected");
+          case "starr-dtccancelpolicy":
+      	        logInfo.info("DTCCancelPolicy API Selected");
 	            api = new DtcCancel(config);
-	            break;      
+	            break;
+	            
+          case "starr-dtcnonmonetoryendorsement":
+        	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
+	            api = new DtcNonMonetoryEndorsement(config);
+	            break;
+        	  
     	        
           default :
         	     logError.error("API Selected is Wrong");
@@ -246,69 +262,65 @@ public class App
 			e.printStackTrace();
 		}
 
-		int i = 1;
-
 			try 
 			{
 
 				do
 				{
-					logInfo.info("TestData" + i + "Running" );
-					System.out.println("TestData : " + i);  	
+					logInfo.info("TestData" + input.ReadData("S.No") + "Running" );
+					System.out.println("TestData : " + input.ReadData("S.No"));  	
 							if(input.ReadData("flag_for_execution").equals("Y"))
 							{
-							    logInfo.info("TestData" + i + "flag_for_execution = Y" );	
+							    logInfo.info("TestData" + input.ReadData("S.No") + "flag_for_execution = Y" );	
 								
-									logInfo.info("Loading Sample Request for Testdata--" + i);
+									logInfo.info("Loading Sample Request for Testdata--" + input.ReadData("S.No"));
 									  api.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
 					
 								try 
 								{
-									logInfo.info("Pumping Testdata--" + i + "To Sample Request");
+									logInfo.info("Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request");
 								      api.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 
 								} 
 								catch (IOException | DocumentException | ParseException e)
 								{
-									logError.error("Failed Pumping Testdata--" + i + "To Sample Request---IOException | DocumentException | ParseException");
+									logError.error("Failed Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request---IOException | DocumentException | ParseException");
 									e.printStackTrace();
 								} 
 								
 								try 
 								{
-									logInfo.info("REQUEST For Testdata--" + i);
+									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									  String req = api.RequestToString();//SHOWING REQUEST IN LOG 
-									logInfo.info(req);
 								} 
 								catch (IOException | ParseException | DocumentException e1) 
 								{
-									logError.error("Failed Rquest For Testdata--" + i + "---IOException | ParseException | DocumentException");
+									logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException");
 									e1.printStackTrace();
 								} 
 								
 								try 
 								{
-									logInfo.info("Adding Header For Testdata--" + i);
+									logInfo.info("Adding Header For Testdata--" + input.ReadData("S.No"));
 									  api.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 								} 
 								catch (IOException e) 
 								{
-									logError.error("Failed Adding Header For Testdata--" + i + "---IOException");
+									logError.error("Failed Adding Header For Testdata--" + input.ReadData("S.No") + "---IOException");
 									e.printStackTrace();
 								}
 								
-									logInfo.info("Respone For Testdata--" + i + "is Received");
+									logInfo.info("Respone For Testdata--" + input.ReadData("S.No") + "is Received");
 									api.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 								
-									logInfo.info("REQUEST For Testdata--" + i);
+									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									try 
 									{
-										logInfo.info("REQUEST For Testdata--" + i);
+										logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 										  String res = api.ResponseToString();//SHOWING RESPONSE IN LOG 
-										logInfo.info(res);
 									} 
 									catch (IOException | ParseException | DocumentException e1) 
 									{
-										logError.error("Failed Rquest For Testdata--" + i + "---IOException | ParseException | DocumentException e1");
+										logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException e1");
 										e1.printStackTrace();
 									}						
 								
@@ -320,43 +332,54 @@ public class App
 								{	
 							    try 
 							    {
-										logInfo.info("Storing Response--" + i + "Data into DB");
+										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										input = api.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 
 								{
-										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
 										 e.printStackTrace();
 								}
 									 
-									     logInfo.info("Updating DB For Testdata--" + i);
+									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
 									     input.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{	
 								try 
 							    {
-										logInfo.info("Storing Response--" + i + "Data into DB");
+										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
 								catch (IOException | ParseException | DocumentException e) 
 							    {
-										 logError.error("Failed Storing Response--" + i + "Data into DB---IOException | ParseException | DocumentException e");
+										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
 										 e.printStackTrace();
 								}
 									 
-									     logInfo.info("Updating DB For Testdata--" + i);
+									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
 									     output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								}
 								} 
 								
 								if(statuschoice.equals("Y"))
 								{
-								 logInfo.info("Comparison is selected");
-								 logInfo.info("Starts Copmaring Expected and atual");
-							       output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
-							     logInfo.info("Updating DB For Comparison");
-								 output.UpdateRow();
+									if(outputtable.equals("Y"))
+									{
+										logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 input = api.CompareFunction(input);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+									     input.UpdateRow();
+									}
+									else
+									{
+										 logInfo.info("Comparison is selected");
+										 logInfo.info("Starts Copmaring Expected and atual");
+										 output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
+									     logInfo.info("Updating DB For Comparison");
+										 output.UpdateRow();
+									}
 								} 
 								
 								input.WriteData("Flag_for_execution", "Completed");
@@ -364,10 +387,9 @@ public class App
 								}
 							else
 							{
-								logError.error("TestData" + i + "---flag_for_execution N");
-								logInfo.info("TestData" + i + "---flag_for_execution N" );
+								logError.error("TestData" + input.ReadData("S.No") + "---flag_for_execution N");
+								logInfo.info("TestData" + input.ReadData("S.No") + "---flag_for_execution N" );
 							}
-					 i++;
 					logInfo.info("Moving To Next TestData");
 					if(actualchoice.equals("Y") || statuschoice.equals("Y"))
 					{
