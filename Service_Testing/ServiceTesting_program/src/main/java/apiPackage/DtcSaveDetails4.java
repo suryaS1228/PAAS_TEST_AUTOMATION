@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class DtcSaveDetails4 extends BaseClass implements API
 {
@@ -15,7 +16,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
-		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
@@ -28,11 +29,11 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		input = InputData;
 		switch(InputData.ReadData("Plan_name"))
 		{
-		 case "Annual":			sampleInput = new JsonHandle(config.getProperty("Sample_request_anual"));
+		 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
 		 									break;
-		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request_tripplans"));
+		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
 											break;
-		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request_RC"));
+		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
 											break; 
 		 
 		 default:
@@ -44,6 +45,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	{
 		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+		System.out.println(sampleInput);
 		request.StringToFile(sampleInput.FileToString());
 		
 		do
@@ -55,7 +57,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 				//System.out.println(input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 				{
-					request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+					request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 				}
 			}	
 		}while(InputColVerify.MoveForward());
@@ -119,7 +121,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 				if(StatusCode.equals("SUCCESS"))
 				{
 					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
 					output.WriteData("Flag_for_execution", StatusCode);

@@ -10,6 +10,7 @@ import com.jayway.jsonpath.PathNotFoundException;
 
 import util.api.*;
 import util.common.*;
+import Configuration.PropertiesHandle;
 
 public class DtcGetPolicy extends BaseClass implements API
 {
@@ -17,7 +18,7 @@ public class DtcGetPolicy extends BaseClass implements API
 	{
 		this.config=config;
 		jsonElements = new DatabaseOperation();
-		jsonElements.GetDataObjects(config.getProperty("json_query"));
+		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -33,10 +34,10 @@ public class DtcGetPolicy extends BaseClass implements API
 		switch(PolicyOrBatch)
 		{
 		case "Policy":
-				sampleInput = new JsonHandle(config.getProperty("sample_request_policy"));
+				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_policy.json");
 				break;
 		case "Batch":
-				sampleInput = new JsonHandle(config.getProperty("sample_request_batch"));
+				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_batch.json");
 				break;
 		default:
 			System.out.println("no sample request");
@@ -68,7 +69,7 @@ public class DtcGetPolicy extends BaseClass implements API
 				if(StatusCode.equals("SUCCESS"))
 				{
 					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(jsonElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
 					output.WriteData("Flag_for_execution", StatusCode);
