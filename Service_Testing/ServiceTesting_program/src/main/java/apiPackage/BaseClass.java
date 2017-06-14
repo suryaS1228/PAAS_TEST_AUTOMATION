@@ -149,7 +149,7 @@ public class BaseClass
 		StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		do 	
 		{	
-		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData(config.getProperty("Comaparision_Flag")).equalsIgnoreCase("Y")))
+		  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData("Comaparision_Flag").equalsIgnoreCase("Y")))
 			{
 				String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
 				String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));
