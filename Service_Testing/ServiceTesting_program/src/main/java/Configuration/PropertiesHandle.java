@@ -53,7 +53,7 @@ public class PropertiesHandle extends Properties
 				      this.put("status", "Y");
 			}
 			
-			this.put("sample_request", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/SampleRequest/" + this.RdmsValue("Verision"));
+			this.put("sample_request", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
 			this.put("request_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Request/");
 			this.put("response_location", "E:/RestFullAPIDeliverable/" + Project + "/" + Api + "/Response/");
 			
