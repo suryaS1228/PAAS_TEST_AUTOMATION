@@ -27,6 +27,7 @@ import apiPackage.IsoBopQuote;
 import apiPackage.IsoBopRateCancel;
 import apiPackage.IsoBopissue;
 import apiPackage.IsoBoprating;
+import apiPackage.LDWCRating;
 import apiPackage.SolartisIsoBopRating;
 import apiPackage.StarrSearchRescueIssueCertificate;
 
@@ -245,6 +246,11 @@ public class App
           case "starr-dtcnonmonetoryendorsement":
         	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
 	            api = new DtcNonMonetoryEndorsement(config);
+	            break;
+	            
+          case "starr-ldwcrating":
+      	    logInfo.info("LDWCRating API Selected");
+	            api = new LDWCRating(config);
 	            break;
         	  
     	        
