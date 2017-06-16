@@ -34,8 +34,9 @@ public class IsoBoprating extends BaseClass implements API
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException
 	{
-		macro.LoadSampleRatingmodel(config, input);
-		macro.GenerateExpected(input, config);
+	
+		macro.LoadSampleRatingmodel(config, InputData);
+		macro.GenerateExpected(InputData, config);
 		super.LoadSampleRequest(InputData);
 	}
 	

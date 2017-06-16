@@ -79,7 +79,10 @@ public class DtcMacro extends DBColoumnVerify implements MacroInterface
 		{
 		Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+planname.get(i)+".xls";
 		sampleexcel.Copy(Samplepath, Targetpath);
+		
 		sampleexcel.save();
+	
+		
 		System.out.println("generate expected rating over");
 		planpath.put(i, Targetpath);
 		}

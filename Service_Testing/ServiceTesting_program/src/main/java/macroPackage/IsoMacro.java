@@ -56,9 +56,14 @@ public class IsoMacro implements MacroInterface
 	}
 	public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws SQLException
 	{
+		if(inputData==(null))
+				{
+			       System.out.println("config null");
+				}
 		String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
-		System.out.println(inputData.ReadData("RatingModel_version"));
+		
 		Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+		System.out.println(inputData.ReadData("RatingModel_version")+"----------"+Samplepath);
 		sampleexcel= new ExcelOperationsPOI(Samplepath);
 	}
 	
@@ -66,7 +71,7 @@ public class IsoMacro implements MacroInterface
 	{
 		
 		Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
-		sampleexcel.Copy(configFile.getProperty("Samplepath"), Targetpath);
+		sampleexcel.Copy(Samplepath, Targetpath);
 		sampleexcel.save();
 		System.out.println("generate expected rating over");
 	}
@@ -232,6 +237,7 @@ public class IsoMacro implements MacroInterface
 			String LookupValue=Lookup.ReadData("LookupValue");
 			LookupMap.put(LookupData, LookupValue);
 		}while(Lookup.MoveForward());
+		System.out.println(LookupMap.get("new"));
 		if (LookupMap.get(Lookup1)==null)
 		{
 			return "Other";
