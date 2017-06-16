@@ -36,7 +36,7 @@ public class PropertiesHandle extends Properties
 		
 		protected void WriteProperty(String UserName) throws ClassNotFoundException, SQLException
 		{
-			DatabaseOperation.ConnectionSetup(UserName);
+			DatabaseOperation.ConnectionSetup();
 			
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 						
