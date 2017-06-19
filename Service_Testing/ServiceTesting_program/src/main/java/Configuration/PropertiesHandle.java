@@ -92,7 +92,7 @@ public class PropertiesHandle extends Properties
 		    this.put("StatusColumn", "StatusColumn");
 		    
 		    this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
-		    this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + Platform + "_" + this.RdmsValue("UserDBName"));
+		    this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
 		    this.put("db_username", this.RdmsValue("DB_UserName"));
 		    this.put("db_password", this.RdmsValue("DB_Password"));
 		    
