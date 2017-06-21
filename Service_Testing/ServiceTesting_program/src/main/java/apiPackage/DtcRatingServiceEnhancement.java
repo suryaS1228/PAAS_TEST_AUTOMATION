@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import jxl.read.biff.BiffException;
 import macroPackage.DtcMacro;
-import macroPackage.IsoMacro;
 import macroPackage.MacroInterface;
 
 import org.dom4j.DocumentException;
