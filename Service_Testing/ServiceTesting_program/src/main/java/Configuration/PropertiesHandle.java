@@ -129,7 +129,6 @@ public class PropertiesHandle extends Properties
 				configuration = new FileInputStream(path);
 			} catch (FileNotFoundException e) 
 			{
-				// TODO Auto-generated catch block
 				System.out.println("file not found");
 				e.printStackTrace();
 			}
@@ -138,7 +137,6 @@ public class PropertiesHandle extends Properties
 				this.load(configuration);
 			} catch (IOException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -146,16 +144,18 @@ public class PropertiesHandle extends Properties
 		public void store(String newpath)
 		{
 			Writer writer = null;
-			try {
+			try 
+			{
 				 writer = new FileWriter(newpath);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) 
+			{
 				e.printStackTrace();
 			}
-			try {
+			try 
+			{
 				this.store(writer, "File saved");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) 
+			{
 				e.printStackTrace();
 			};
 		}
