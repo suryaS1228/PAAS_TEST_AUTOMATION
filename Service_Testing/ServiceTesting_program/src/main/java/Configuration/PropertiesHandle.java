@@ -122,7 +122,9 @@ public class PropertiesHandle extends Properties
 		public PropertiesHandle(String path)
 		{
 			this.path = path;
+			
 			FileInputStream configuration = null;
+			
 			try 
 			{
 				
