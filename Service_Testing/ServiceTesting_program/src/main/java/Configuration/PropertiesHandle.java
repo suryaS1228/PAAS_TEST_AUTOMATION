@@ -127,9 +127,9 @@ public class PropertiesHandle extends Properties
 			
 			try 
 			{
-				
 				configuration = new FileInputStream(path);
-			} catch (FileNotFoundException e) 
+			} 
+			catch (FileNotFoundException e) 
 			{
 				System.out.println("file not found");
 				e.printStackTrace();
