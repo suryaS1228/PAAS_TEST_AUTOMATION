@@ -164,6 +164,10 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 			String LookupData = Lookup(Datatowrite, configFile);
 			outputdata = (T) LookupData;
 			break;
+		case "String":
+			String Stringdata = IntegertoString(Datatowrite);
+			outputdata = (T) Stringdata;
+			break;
 		}
 		System.out.println(outputdata.getClass().toString());
 		return outputdata;
@@ -235,6 +239,12 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		{
 			return LookupMap.get(Lookup1);
 		}
+	}
+	
+	protected String IntegertoString (String s)
+	{
+		return s;
+		
 	}
 	
 	protected boolean isInteger(String s) 
