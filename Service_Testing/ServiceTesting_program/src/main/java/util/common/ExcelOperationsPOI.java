@@ -253,7 +253,11 @@ public class ExcelOperationsPOI
 		}
 		else if (s.equals("class java.lang.Integer"))
 		{
-			cell.setCellValue((int) strData);;
+			cell.setCellValue((int) strData);
+		}
+		else if (s.equals("class java.lang.Float"))
+		{
+			cell.setCellValue((float) strData);
 		}
 		else
 		{
@@ -261,12 +265,12 @@ public class ExcelOperationsPOI
 		}
 	}
 	
-	public void write_data(int rownum,int columnnum,String strData)
+	/*public void write_data(int rownum,int columnnum,String strData)
 	{
 		
 		 cell = this.worksheet.getRow(rownum).getCell(columnnum);
 		 cell.setCellValue(strData);	
-	}
+	}*/
 	public void refresh()
 	{
 		 HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
