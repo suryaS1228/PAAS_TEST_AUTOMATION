@@ -4,6 +4,7 @@ import util.common.DatabaseOperation;
 import apiPackage.API;
 import apiPackage.ChicForms;
 import apiPackage.ChicRating;
+import apiPackage.CoverWalletRate;
 import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
@@ -58,7 +59,7 @@ public class App
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
-		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4]);
+		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
 		
 		try                                      
 		{
@@ -251,9 +252,14 @@ public class App
 	            break;
 	            
           case "starr-ldwcrating":
-      	    logInfo.info("LDWCRating API Selected");
+      	        logInfo.info("LDWCRating API Selected");
 	            api = new LDWCRating(config);
 	            break;
+	            
+          case "coverwalletrating":
+    	        logInfo.info("CoverWalletRate API Selected");
+	            api = new CoverWalletRate(config);
+	            break;      
         	  
     	        
           default :
