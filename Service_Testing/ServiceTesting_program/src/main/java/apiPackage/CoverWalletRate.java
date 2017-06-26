@@ -17,10 +17,10 @@ import util.api.HttpHandle;
 import util.api.JsonHandle;
 import util.common.DatabaseOperation;
 
-public class CoverWallet extends BaseClass implements API
+public class CoverWalletRate extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public CoverWallet(PropertiesHandle config) throws SQLException
+	public CoverWalletRate(PropertiesHandle config) throws SQLException
 	{
 	
 		this.config = config;
@@ -29,12 +29,16 @@ public class CoverWallet extends BaseClass implements API
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		if(config.getProperty("status").equals("Y"))
+		{
 		macro=new coverWalletMacro(config);	
+		}
 		
 	}
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException
 	{
+		this.input = InputData;
 		String numofprovider=InputData.ReadData("NumOfProviders");
 		switch(numofprovider)
 		   
@@ -52,18 +56,20 @@ public class CoverWallet extends BaseClass implements API
 		   
 		    default:
 		   }
-		  
-		macro.LoadSampleRatingmodel(config, InputData);
-		macro.GenerateExpected(InputData, config);
-		super.LoadSampleRequest(InputData);
+		if(config.getProperty("status").equals("Y"))
+		{
+	      macro.LoadSampleRatingmodel(config, InputData);
+		  macro.GenerateExpected(InputData, config);
+		}
 	}
 	
 	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException,ClassNotFoundException, NumberFormatException, java.text.ParseException, BiffException 
-	{			
-		macro.PumpinData(input, config);		
-		super.PumpDataToRequest();
-		
-		
+	{	
+		if(config.getProperty("status").equals("Y"))
+		{
+		macro.PumpinData(input, config);	
+		}
+		super.PumpDataToRequest();		
 	}
 	
 	@Override
@@ -78,7 +84,10 @@ public class CoverWallet extends BaseClass implements API
 	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException, ClassNotFoundException, NumberFormatException, java.text.ParseException
 	{
+		if(config.getProperty("status").equals("Y"))
+		{
 		macro.PumpoutData(output, input, config);
+		}
 		super.SendResponseDataToFile(output);
 		return output;		
 	}

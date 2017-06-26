@@ -4,6 +4,7 @@ import util.common.DatabaseOperation;
 import apiPackage.API;
 import apiPackage.ChicForms;
 import apiPackage.ChicRating;
+import apiPackage.CoverWalletRate;
 import apiPackage.DtcCancel;
 import apiPackage.DtcFindPolicy;
 import apiPackage.DtcGetCustomerDetails;
@@ -251,9 +252,14 @@ public class App
 	            break;
 	            
           case "starr-ldwcrating":
-      	    logInfo.info("LDWCRating API Selected");
+      	        logInfo.info("LDWCRating API Selected");
 	            api = new LDWCRating(config);
 	            break;
+	            
+          case "coverwalletrating":
+    	        logInfo.info("CoverWalletRate API Selected");
+	            api = new CoverWalletRate(config);
+	            break;      
         	  
     	        
           default :
