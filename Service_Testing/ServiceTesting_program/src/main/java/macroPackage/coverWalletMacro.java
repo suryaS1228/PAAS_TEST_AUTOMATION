@@ -3,6 +3,7 @@ package macroPackage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -157,15 +158,24 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		switch(configTable.ReadData("Translation_Function"))
 		{
 		case "Date": 
-			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.ReadData("Translation_Format"));
+			Date DateData = Date(Datatowrite,"mm/dd/yyyy",configTable.ReadData("Translation_Format"));
 			outputdata = (T) DateData;
 			break;
 		case "Lookup":
 			String LookupData = Lookup(Datatowrite, configFile);
 			outputdata = (T) LookupData;
 			break;
+		case "String":
+			String Stringdata = IntegertoString(Datatowrite);
+			outputdata = (T) Stringdata;
+			break;
+		case "percentage":
+			float percentagedata = percentage(Datatowrite);
+			Float percent = new Float(percentagedata);
+			//System.out.println(percent);
+			outputdata = (T) percent;
 		}
-		System.out.println(outputdata.getClass().toString());
+		//System.out.println(outputdata.getClass().toString());
 		return outputdata;
 		
 	}
@@ -237,6 +247,24 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		}
 	}
 	
+	
+	protected float percentage(String s)
+	{
+		float value = Float.valueOf(s)/100;
+		DecimalFormat df = new DecimalFormat("#.##");
+		String flo = df.format(value);		
+		float percentagevalue = Float.valueOf(flo);
+		return percentagevalue;
+		
+	}
+
+	
+	protected String IntegertoString (String s)
+	{
+		return s;
+		
+	}
+	
 	protected boolean isInteger(String s) 
 	{
 	    try 
@@ -289,6 +317,12 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		
 		DatabaseOperation.CloseConn();
 	}*/
-	
+	/*public static void main(String args[]) throws SQLException
+	{
+		coverWalletMacro cw = new coverWalletMacro(configFile);
+		cw.percentage();
+		
+	}
+	*/
 	
 }
