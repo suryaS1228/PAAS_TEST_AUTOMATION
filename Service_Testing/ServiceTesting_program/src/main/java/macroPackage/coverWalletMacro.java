@@ -158,7 +158,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		switch(configTable.ReadData("Translation_Function"))
 		{
 		case "Date": 
-			Date DateData = Date(Datatowrite,"mm/dd/yyyy",configTable.ReadData("Translation_Format"));
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.ReadData("Translation_Format"));
 			outputdata = (T) DateData;
 			break;
 		case "Lookup":
