@@ -145,6 +145,11 @@ public class DtcMacro extends DBColoumnVerify implements MacroInterface
 								int datadata =Integer.parseInt(Datatowrite);
 								excel.write_data(rowNum-1, columnNum, datadata);	
 							}
+							else if(trans.isFloat(Datatowrite))
+							{
+								float floatdata = Float.parseFloat(Datatowrite);
+								excel.write_data(rowNum-1, columnNum, floatdata);
+							}
 							else
 							{
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
@@ -310,6 +315,22 @@ public class DtcMacro extends DBColoumnVerify implements MacroInterface
 	    }
 	    // only got here if we didn't return false
 	    return true;
+	}
+	protected boolean isFloat(String s)
+	{
+		try
+		{
+			Float.parseFloat(s);
+		}
+		catch(NumberFormatException e) 
+	    { 
+	        return false; 
+	    } 
+	    catch(NullPointerException e) 
+	    {
+	        return false;
+	    }
+		 return true;
 	}
 	
 	/*public static void main(String args[]) throws Exception, SQLException
