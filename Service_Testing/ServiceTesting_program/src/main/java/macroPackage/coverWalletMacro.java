@@ -19,7 +19,7 @@ import util.common.ExcelOperationsPOI;
 import Configuration.PropertiesHandle;
 
 public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
-{
+{	
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
 	protected coverWalletMacro trans;
@@ -111,8 +111,11 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 						}
 						else if(trans.isFloat(Datatowrite))
 						{
-							float floatdata = Float.parseFloat(Datatowrite);
-							excel.write_data(rowNum-1, columnNum, floatdata);
+							float floatdata = Float.valueOf(Datatowrite);							
+							DecimalFormat df = new DecimalFormat("#.####");
+							String flo = df.format(floatdata);		
+							float floatvalue = Float.valueOf(flo);
+							excel.write_data(rowNum-1, columnNum, floatvalue);
 						}
 						else
 						{
@@ -256,7 +259,8 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	protected float percentage(String s)
 	{
 		float value = Float.valueOf(s)/100;
-		DecimalFormat df = new DecimalFormat("#.##");
+		
+		DecimalFormat df = new DecimalFormat("#.####");
 		String flo = df.format(value);		
 		float percentagevalue = Float.valueOf(flo);
 		return percentagevalue;
@@ -342,10 +346,10 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	}*/
 	/*public static void main(String args[]) throws SQLException
 	{
-		coverWalletMacro cw = new coverWalletMacro(configFile);
-		cw.percentage();
+		coverWalletMacro cw = new coverWalletMacro("");
+		System.out.println(cw.percentage("0.75"));
 		
-	}
-	*/
+	}*/
+	
 	
 }
