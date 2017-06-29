@@ -106,8 +106,13 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 					{
 						if(trans.isInteger(Datatowrite))
 						{
-							int datadata =Integer.parseInt(Datatowrite);
-							excel.write_data(rowNum-1, columnNum, datadata);	
+							int intdata =Integer.parseInt(Datatowrite);
+							excel.write_data(rowNum-1, columnNum, intdata);	
+						}
+						else if(trans.isFloat(Datatowrite))
+						{
+							float floatdata = Float.parseFloat(Datatowrite);
+							excel.write_data(rowNum-1, columnNum, floatdata);
 						}
 						else
 						{
@@ -168,7 +173,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		case "String":
 			String Stringdata = IntegertoString(Datatowrite);
 			outputdata = (T) Stringdata;
-			break;
+			break;		
 		case "percentage":
 			float percentagedata = percentage(Datatowrite);
 			Float percent = new Float(percentagedata);
@@ -265,6 +270,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		
 	}
 	
+	
 	protected boolean isInteger(String s) 
 	{
 	    try 
@@ -282,6 +288,23 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	    }
 	    // only got here if we didn't return false
 	    return true;
+	}
+	
+	protected boolean isFloat(String s)
+	{
+		try
+		{
+			Float.parseFloat(s);
+		}
+		catch(NumberFormatException e) 
+	    { 
+	        return false; 
+	    } 
+	    catch(NullPointerException e) 
+	    {
+	        return false;
+	    }
+		 return true;
 	}
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
