@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import jxl.read.biff.BiffException;
 import macroPackage.DtcMacro;
-import macroPackage.IsoMacro;
 import macroPackage.MacroInterface;
 
 import org.dom4j.DocumentException;
@@ -32,7 +31,10 @@ public class DtcRatingServiceEnhancement extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+	if(config.getProperty("status").equals("Y"))
+	{
 	macro=new DtcMacro(config);	
+	}
  }
  
  @Override
@@ -57,9 +59,11 @@ public class DtcRatingServiceEnhancement extends BaseClass implements API
    
     default:
    }
-  
-  macro.LoadSampleRatingmodel(config, InputData);  //Load sample rating model 
-  macro.GenerateExpected(InputData, config);        //Generate expected rating models  
+  if(config.getProperty("status").equals("Y"))
+	{
+		  macro.LoadSampleRatingmodel(config, InputData);  //Load sample rating model 
+		  macro.GenerateExpected(InputData, config);        //Generate expected rating models  
+	}
  }
 
     @Override
@@ -101,9 +105,10 @@ if(InputColVerify.DbCol(input)&& (InputColVerify.ReadData("Flag").equalsIgnoreCa
    }
   }
 }while(InputColVerify.MoveForward());
-
-macro.PumpinData(input, config);    //Data feed into Sample Rating model
-
+	if(config.getProperty("status").equals("Y"))
+	{
+		macro.PumpinData(input, config);    //Data feed into Sample Rating model
+	}
 }
 
  @Override
