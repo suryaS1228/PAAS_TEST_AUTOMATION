@@ -16,6 +16,8 @@ import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelOperationsPOI 
@@ -101,6 +103,14 @@ public class ExcelOperationsPOI
 			case Cell.CELL_TYPE_STRING	:		cellvalue= cell.getStringCellValue();					break;
 			case Cell.CELL_TYPE_ERROR	:		cellvalue= String.valueOf(cell.getErrorCellValue());	break;
 			case Cell.CELL_TYPE_BLANK	:		cellvalue="Blank";	break;
+			case 2                      :   try{
+								                	cellvalue =String.valueOf(cell.getNumericCellValue()); 
+								                } 
+								                catch(Exception e)
+								                {
+								                 	cellvalue="N/A";
+								                }
+								                break;
 			default						:	cellvalue="N/A"; break;
 		}
 		return cellvalue;
@@ -116,32 +126,56 @@ public class ExcelOperationsPOI
 			worksheet = (HSSFSheet) this.workbook.getSheet(this.sheet_name);
 		}
 		cell = this.worksheet.getRow(rowNumber).getCell(columnNumber);
-		switch(this.cell.getCellType()) 
+		System.out.println(this.cell.getCellType());
+		FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();		
+		evaluator.clearAllCachedResultValues();
+		//CellValue cellvalue1 =evaluator.evaluate(cell);
+		this.workbook.setForceFormulaRecalculation(true);
+		switch(this.cell.getCellType())
 		{
-			case Cell.CELL_TYPE_BOOLEAN	:	cellvalue= String.valueOf(cell.getBooleanCellValue());	break;
+			case Cell.CELL_TYPE_BOOLEAN	:	cellvalue= String.valueOf(cell.getBooleanCellValue());		break;
 			case Cell.CELL_TYPE_NUMERIC	:	
-					if(HSSFDateUtil.isCellDateFormatted(cell))
-					{
-						Date date5 = cell.getDateCellValue();
-						DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
-					    cellvalue = date1.format(date5);
-					}
-					else
-					{
-					cellvalue= String.valueOf(cell.getNumericCellValue());
-					}
-					break;
-			case Cell.CELL_TYPE_STRING	:	cellvalue= cell.getStringCellValue();					break;
-			case Cell.CELL_TYPE_ERROR	:	cellvalue= String.valueOf(cell.getErrorCellValue());	break;//String.valueOf(cell.getErrorCellValue());
+											if(HSSFDateUtil.isCellDateFormatted(cell))
+											{
+												Date date5 = cell.getDateCellValue();
+												DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
+											    cellvalue = date1.format(date5);
+											}
+											else
+											{
+												cellvalue= String.valueOf(cell.getNumericCellValue());
+											}
+											break;
+			case Cell.CELL_TYPE_STRING	:	cellvalue= cell.getStringCellValue();						break;
+			case Cell.CELL_TYPE_ERROR	:	cellvalue= String.valueOf(cell.getErrorCellValue())+"err";	break;//String.valueOf(cell.getErrorCellValue());
 			case Cell.CELL_TYPE_BLANK	:	cellvalue="Blank";break;
-			case 2                      :   try{
-				                           cellvalue =String.valueOf(cell.getNumericCellValue()); 
-			                                } 
-			                                catch(Exception e)
-			                                {
-			                                	cellvalue="N/A";
-			                                }
-			                                break;
+			case Cell.CELL_TYPE_FORMULA :   
+											switch(cell.getCachedFormulaResultType())
+											{
+												case Cell.CELL_TYPE_NUMERIC:
+													if(HSSFDateUtil.isCellDateFormatted(cell))
+													{
+														Date date5 = cell.getDateCellValue();
+														DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
+													    cellvalue = date1.format(date5);
+													}
+													else
+													{
+														cellvalue= String.valueOf(cell.getNumericCellValue());
+													}
+													break;
+													
+									            case Cell.CELL_TYPE_STRING:
+									            	cellvalue= cell.getStringCellValue(); 
+									            	 break;
+									            case Cell.CELL_TYPE_ERROR:
+									            	cellvalue= String.valueOf(cell.getErrorCellValue())+"err";
+									            	break;
+									            case Cell.CELL_TYPE_BLANK	:	cellvalue="Blank";break;
+									            case Cell.CELL_TYPE_BOOLEAN	:	cellvalue= String.valueOf(cell.getBooleanCellValue());		break;
+											}
+				                            break;
+			
 			default						:	cellvalue="N/A"; 										break;
 		}
 		return cellvalue;
@@ -369,23 +403,23 @@ public class ExcelOperationsPOI
 		this.workbook.setSheetName(sheetindex, newsheetnamee);
 		
 	}
-	/*public static ExcelOperationsPOI excel = null;
+	public static ExcelOperationsPOI excel = null;
 	public static void main(String args[]) throws BiffException, IOException
 	{
-		String path = "A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/Rating Model/Starr ISO BOP rating Calculator_16.xls";
+		String path = "E:/RestFullAPIDeliverable/Devolpement/admin/CoverWallet/Rating/RatingModelResult/phase1_rel1_8.xls";
 		 excel = new ExcelOperationsPOI(path);
-		excel.getsheets("Starr Rating Inputs");
-		excel.getcell(32, 26);
+		excel.getsheets("Individual PA Rater");
+		excel.getcell(28, 5);
 		System.out.println(excel.read_data());
-		excel.write_data(6, 11,"poya");
-		excel.write_data(7, 11,"poya");
+		//excel.write_data(6, 11,"poya");
+		//excel.write_data(7, 11,"poya");
 		System.out.println(excel.read_data());
 		excel.save();
 		//excel.getcell(6, 11);
 		//System.out.println(excel.read_data());
-		excel.Copy("A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/Rating Model/Starr ISO BOP rating Calculator_16.xls", "A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/Rating Model/Starr ISO BOP rating Calculator_2016.xls");
+		//excel.Copy("E:/RestFullAPIDeliverable/Devolpement/admin/CoverWallet/Rating/RatingModelResult/phase1_rel1_4.xls");
 		
-	}*/
+	}
 }
 
 
