@@ -184,30 +184,37 @@ public class BaseClass
 	{
 		
 		boolean status = false;
-		if(expected == null || actual == null ||expected.equals("") || actual.equals(""))
-		{
-			status = false;
-		}
-		else
-		{
-			expected = expected.replaceAll("\\[\"", "");
-			actual = actual.replaceAll("\\[\"", "");
-			expected = expected.replaceAll("\"\\]", "");
-			actual = actual.replaceAll("\"\\]", "");
-			expected = expected.replaceAll("\\.[0-9]*", "");
-			actual = actual.replaceAll("\\.[0-9]*", "");
-			
-			System.out.println(actual);
-			System.out.println(expected);
-			if(expected.equals(actual))
+		if(expected==null && actual.equals(""))
 			{
 				status = true;
 			}
-			else 
+			else if(expected.equals("")&& actual==null)
 			{
+				status = true;
+			}
+			else if(expected==null&& actual.equals("0"))
+			{
+				status = true;
+			}
+			else if(expected.equals("0")&& actual.equals(""))
+			{
+				status = true;
+			}	
+            else if(expected!=null && actual!=null)
+			{
+            	expected = expected.replaceAll("\\[\"", "");
+    			actual = actual.replaceAll("\\[\"", "");
+    			expected = expected.replaceAll("\"\\]", "");
+    			actual = actual.replaceAll("\"\\]", "");
+    			expected = expected.replaceAll("\\.[0-9]*", "");
+    			actual = actual.replaceAll("\\.[0-9]*", "");
+    			if(expected.equals(actual))
+    			{
+    				status = true;
+    			}
 				status = false;
 			}
-		}
+
 		return status;	
 		
 	}
