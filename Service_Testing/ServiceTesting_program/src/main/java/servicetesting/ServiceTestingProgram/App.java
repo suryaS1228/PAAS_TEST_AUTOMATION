@@ -2,46 +2,14 @@ package servicetesting.ServiceTestingProgram;
 
 import util.common.DatabaseOperation;
 import apiPackage.API;
-import apiPackage.ChicForms;
-import apiPackage.ChicRating;
-import apiPackage.CoverWalletRate;
-import apiPackage.DtcCancel;
-import apiPackage.DtcFindPolicy;
-import apiPackage.DtcGetCustomerDetails;
-import apiPackage.DtcGetPolicy;
-import apiPackage.DtcNonMonetoryEndorsement;
-import apiPackage.DtcPayIssue;
-import apiPackage.DtcPreviewPDF;
-import apiPackage.DtcRatingService;
-import apiPackage.DtcRatingServiceEnhancement;
-import apiPackage.DtcSaveDetails1;
-import apiPackage.DtcSaveDetails2;
-import apiPackage.DtcSaveDetails3;
-import apiPackage.DtcSaveDetails4;
-import apiPackage.IsoBopCancel;
-import apiPackage.IsoBopEndorsement;
-import apiPackage.IsoBopEndorsementRate;
-import apiPackage.IsoBopInstalllmentPayissue;
-import apiPackage.IsoBopPayissue;
-import apiPackage.IsoBopPayissueCancel;
-import apiPackage.IsoBopQuote;
-import apiPackage.IsoBopRateCancel;
-import apiPackage.IsoBopissue;
-import apiPackage.IsoBoprating;
-import apiPackage.LDWCRating;
-import apiPackage.SolartisIsoBopRating;
-import apiPackage.StarrSearchRescueIssueCertificate;
-
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
-
 import jxl.read.biff.BiffException;
-
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
-
 import Configuration.PropertiesHandle;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -79,6 +47,7 @@ public class App
 		String actualchoice = config.getProperty("actual");
 		String statuschoice = config.getProperty("status");
 		String outputtable = config.getProperty("output_in_same_table");
+		String classname = config.getProperty("ClassName");
 		
 		DatabaseOperation input = new DatabaseOperation();
 		try 
@@ -104,178 +73,19 @@ public class App
 			e1.printStackTrace();
 		}
 		
-		String Project = args[0];
-		String Api = args[1];
-		String ApiType = Project + Api;
-		
 		logInfo.info("Selecting API");
-		try 
-		{
-		switch(ApiType.toLowerCase())//SELECTING API
-        {
-      
-          case "starr-isoquote":
-        	    logInfo.info("IsoBopQuote API Selected");
-				api = new IsoBopQuote(config);
-    	        break;
-      
-          case "starr-isorate":
-        	    logInfo.info("IsoBopRating API Selected");
-    	        api = new IsoBoprating(config);
-    	        break;
-    	  
-          case "starr-isoendorsement":
-        	    logInfo.info("IsoBopEndorsement API Selected");
-    	        api = new IsoBopEndorsement(config);
-    	        break;
-    	        
-          case "starr-isoendorsementrate":
-	      	    logInfo.info("IsoBopEndorsementRate API Selected");
-	  	        api = new IsoBopEndorsementRate(config);
-	  	        break;      
-    	        
-          case "starr-isoinstallmentpayissue":
-        	    logInfo.info("IsoBopInstallmentPayIssue API Selected");
-    	        api = new IsoBopInstalllmentPayissue(config);
-    	        break;
-    	  
-          case "starr-isoissue":
-        	    logInfo.info("IsoBopIssue API Selected");
-    	        api = new IsoBopissue(config);
-    	        break;
-    	  
-          case "starr-isopayissue":
-        	    logInfo.info("IsoBopPayIssue API Selected");
-        	    api = new IsoBopPayissue(config);
-    	        break;
-    	  
-          case "starr-isopayissuecancel":
-        	    logInfo.info("IsoBopPayIssueCancel API Selected");
-        	    api = new IsoBopPayissueCancel(config);
-    	        break;
-          
-          case "starr-isocancel":
-        	  	logInfo.info("IsoBopCancel API Selected");
-	      	    api = new IsoBopCancel(config);
-	  	        break;
-  	  
-    	        
-          case "starr-solartisisoboprating":
-        	    logInfo.info("SolartisISORating API Selected");
-    	        api = new SolartisIsoBopRating(config);	
-    	        break;
-    	  
-          case "starr-isoratecancel":
-        	    logInfo.info("IsoBopRateCancel API Selected");
-    	        api = new IsoBopRateCancel(config);	  
-    	        break;
-    	       
-    	        
-          case "chicform":
-        	    logInfo.info("ChicForm API Selected");
-  	            api = new ChicForms(config);
-  	            break;
-  	        
-          case "chicrating":
-        	    logInfo.info("ChicRating API Selected");
-  	            api = new ChicRating(config);
-  	            break;
-  	        
-          case "starr-dtcfindpolicy":
-        	    logInfo.info("DTCFindPolicy API Selected");
-  	            api = new DtcFindPolicy(config);
-  	            break;
-  	            
-          case "starr-dtcgetpolicy":
-        	    logInfo.info("DTCGetPolicy API Selected");
-        	    api = new DtcGetPolicy(config);
-	            break;
-  	        
-          case "starr-dtcgetcustomerdetails":
-        	    logInfo.info("DTCGetCustomerDetails API Selected");
-  	            api = new DtcGetCustomerDetails(config);
-  	            break;
-  	        
-          case "starr-dtcpayissue":
-        	    logInfo.info("DTCPayIssue API Selected");
-  	            api = new DtcPayIssue(config);
-  	            break;
-  	        
-          case "starr-dtcpreviewpdf":
-        	    logInfo.info("DTCPreviewPDF API Selected");
-  	            api = new DtcPreviewPDF(config);
-  	            break;
-  	        
-          case "starr-dtcratingservice":
-        	   logInfo.info("DTCRating API Selected");
-  	           api = new DtcRatingService(config);
-  	           break;
-  	              
-          case "starr-dtcratingenhancement":               
-        	  logInfo.info("DTCRatingEnhancement API Selected");
- 	           api = new DtcRatingServiceEnhancement(config);
- 	           break;
-        	   	  
-          case "starr-dtcsavedetails1":
-        	    logInfo.info("DTCSave1 API Selected");
-  	            api = new DtcSaveDetails1(config);
-  	            break;
-  	        
-          case "starr-dtcsavedetails2":
-        	    logInfo.info("DTCSave2 API Selected");
-        	    api = new DtcSaveDetails2(config);
-  	            break;
-  	        
-          case "starr-dtcsavedetails3":
-        	    logInfo.info("DTCSave3 API Selected");
-    	        api = new DtcSaveDetails3(config);
-    	        break;
-    	        
-          case "starr-dtcsavedetails4":
-        	    logInfo.info("DTCSave4 API Selected");
-    	        api = new DtcSaveDetails4(config);
-    	        break;
-    	        
-          case "starrsearchrescueissuecertificate":
-        	    logInfo.info("StarrSearch&RescueIssueCertificate API Selected");
-  	            api = new StarrSearchRescueIssueCertificate(config);
-  	            break;
-  	            
-          case "starr-dtccancelpolicy":
-      	        logInfo.info("DTCCancelPolicy API Selected");
-	            api = new DtcCancel(config);
-	            break;
-	            
-          case "starr-dtcnonmonetoryendorsement":
-        	     logInfo.info("DTCNonMonetoryEndorsement API Selected");
-	            api = new DtcNonMonetoryEndorsement(config);
-	            break;
-	            
-          case "starr-ldwcrating":
-      	        logInfo.info("LDWCRating API Selected");
-	            api = new LDWCRating(config);
-	            break;
-	            
-          case "coverwalletrating":
-    	        logInfo.info("CoverWalletRate API Selected");
-	            api = new CoverWalletRate(config);
-	            break;      
-        	  
-    	        
-          default :
-        	     logError.error("API Selected is Wrong");
-        	     System.out.println("API is not coded"); 
-        	     System.exit(0);
-        	     break;
-    	  
-       }
-	   } 
-		catch (SQLException e) 
-		{
-			logError.error("Failed Failed Selecting API -- SQLError");
-			e.printStackTrace();
-		}
-
+			try 
+			{
+				Class<?> cl = Class.forName("apiPackage."+classname);
+	    	    Constructor<?> cons = cl.getConstructor(Configuration.PropertiesHandle.class);
+	    	    api = (API) cons.newInstance(config);
+			} 
+			catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+			{
+				logError.error("Failed Failed Selecting API -- SQLError");
+				e.printStackTrace();
+			}
+    	    
 			try 
 			{
 
