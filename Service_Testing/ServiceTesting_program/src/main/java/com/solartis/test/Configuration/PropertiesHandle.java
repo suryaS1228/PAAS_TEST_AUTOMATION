@@ -40,8 +40,6 @@ public class PropertiesHandle extends Properties
 			this.USER=USER;
 			this.password=password;
 			this.priority=priority;
-
-			System.out.println(System.getProperty(Project));
 			
 			WriteProperty(UserName);
 			

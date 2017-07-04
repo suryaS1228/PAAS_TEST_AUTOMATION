@@ -25,7 +25,7 @@ public class TestEngine
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) throws ClassNotFoundException, SQLException 
+	public static void main( String[] args ) throws Exception 
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
@@ -78,7 +78,7 @@ public class TestEngine
 		logInfo.info("Selecting API");
 			try 
 			{
-				Class<?> cl = Class.forName("apiPackage."+classname);
+				Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
 	    	    Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
 	    	    api = (API) cons.newInstance(config);
 			} 
@@ -139,7 +139,7 @@ public class TestEngine
 								catch (IOException e) 
 								{
 									logError.error("Failed Adding Header For Testdata--" + input.ReadData("S.No") + "---IOException");
-									e.printStackTrace();
+									throw new Exception("New"); 
 								}
 								
 									logInfo.info("Respone For Testdata--" + input.ReadData("S.No") + "is Received");
