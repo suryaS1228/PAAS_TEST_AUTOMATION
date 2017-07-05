@@ -116,7 +116,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>servicetesting.ServiceTestingProgram.App</mainClass>
+            <mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.App</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>
