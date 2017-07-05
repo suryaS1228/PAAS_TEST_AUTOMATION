@@ -24,11 +24,11 @@ public class PropertiesHandle extends Properties
 	protected String DB_URL;
 	protected String USER;
 	protected String password;
-	protected String priority;
+	//protected String priority;
 
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority) throws ClassNotFoundException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password) throws ClassNotFoundException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -39,7 +39,7 @@ public class PropertiesHandle extends Properties
 			this.DB_URL=DB_URL;
 			this.USER=USER;
 			this.password=password;
-			this.priority=priority;
+			//this.priority=priority;
 			
 			WriteProperty(UserName);
 			
@@ -111,11 +111,11 @@ public class PropertiesHandle extends Properties
 			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn);
 		}
 		
-		protected String RdmsQueryWithCondition(String OutputColoumn, String priority) throws SQLException
+		/*protected String RdmsQueryWithCondition(String OutputColoumn, String priority) throws SQLException
 		{
 			ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " WHERE " + ConfigQuery.ReadData(OutputColoumn) + ".Priority = '" + priority + "'";
-		}
+		}*/
 		
 		protected String RdmsValue(String OutputColoumn) throws SQLException
 		{
@@ -313,6 +313,16 @@ public class PropertiesHandle extends Properties
 		{
 			try 
 			{
+				this.put("input_query",  this.RdmsQuery("InputTable"));
+			} 
+			catch (SQLException e) 
+			{
+			    System.out.println("Error in InputQuery Function -- PropertiesHandle Class");
+				e.printStackTrace();
+			}
+			
+			/*try 
+			{
 				if(priority.equalsIgnoreCase("all"))
 				{
 					this.put("input_query",  this.RdmsQuery("InputTable"));
@@ -326,7 +336,7 @@ public class PropertiesHandle extends Properties
 			{
 			    System.out.println("Error in InputQuery Function -- PropertiesHandle Class");
 				e.printStackTrace();
-			}
+			}*/
 		}
 		
 		protected void OutputQuery()// FUNCTION FOR OUTPUTQUERY

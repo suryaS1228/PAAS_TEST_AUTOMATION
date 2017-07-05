@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.StarrISO;
+package com.solartis.test.apiPackage.StarrISOBOP;
 
 import java.sql.SQLException;
 
@@ -8,9 +8,9 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.*;
 
-public class IsoBopQuote extends BaseClass implements API 
+public class IsoBopissue extends BaseClass implements API 
 {
-	public IsoBopQuote(PropertiesHandle config) throws SQLException
+	public IsoBopissue(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();

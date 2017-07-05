@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.StarrISO;
+package com.solartis.test.apiPackage.StarrISOBOP;
 
 import java.sql.SQLException;
 
