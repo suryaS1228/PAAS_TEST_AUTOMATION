@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.Dtc;
+package com.solartis.test.apiPackage.DTC;
 
 import java.io.IOException;
 import java.sql.SQLException;
