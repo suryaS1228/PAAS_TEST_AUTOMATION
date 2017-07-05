@@ -199,8 +199,7 @@ public class BaseClass
 		}
 		if(actual!=null && expected!=null)
 		{
-			System.out.println("actual equal to expected");
-            expected = expected.replaceAll("\\[\"", "");
+			expected = expected.replaceAll("\\[\"", "");
     		actual = actual.replaceAll("\\[\"", "");
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
@@ -210,7 +209,6 @@ public class BaseClass
     		{
     			status = true;
     		}
-			//status = false;
 		}
 
 		return status;	
