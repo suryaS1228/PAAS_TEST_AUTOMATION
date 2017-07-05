@@ -29,7 +29,7 @@ public class TestEngine
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
-		PropertiesHandle config = new PropertiesHandle(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+		PropertiesHandle config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"));
 		
 		try                                      
 		{
