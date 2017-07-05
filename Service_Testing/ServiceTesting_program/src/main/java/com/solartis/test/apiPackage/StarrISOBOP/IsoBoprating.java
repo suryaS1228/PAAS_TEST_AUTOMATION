@@ -13,6 +13,7 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.macroPackage.IsoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
+import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.common.DatabaseOperation;
 
 public class IsoBoprating extends BaseClass implements API
@@ -32,6 +33,14 @@ public class IsoBoprating extends BaseClass implements API
 		macro=new IsoMacro(config);	
 		}
 		
+	}
+	
+	public void AddHeaders() throws IOException
+	{
+		http = new HttpHandle(config.getProperty("test_url"),"POST");
+		http.AddHeader("Content-Type", config.getProperty("content_type"));
+		http.AddHeader("Token", config.getProperty("token"));
+		http.AddHeader("EventName", config.getProperty("EventName"));	
 	}
 	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException

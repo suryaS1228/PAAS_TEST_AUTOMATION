@@ -34,14 +34,10 @@ public class DatabaseOperation
 	
 	public static void ConnectionSetup(String JDBC_DRIVER, String DB_URL, String USER, String password) throws SQLException,ClassNotFoundException
 	{
-		JDBC_DRIVER = JDBC_DRIVER;
-		DB_URL = DB_URL;
-		USER= USER;
-		PASS = password;
 		if(conn == null)
 		{
 			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL,USER,PASS);	
+			conn = DriverManager.getConnection(DB_URL,USER,password);	
 		}		
 	}
 	

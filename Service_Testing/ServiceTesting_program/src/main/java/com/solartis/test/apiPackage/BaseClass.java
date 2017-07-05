@@ -183,13 +183,6 @@ public class BaseClass
 	{
 		
 		boolean status = false;
-		if(expected == null)
-		{
-			if(actual.equals("")||actual.equals("0"))
-			{
-				status = true;
-			}
-		}
 		if(actual == null)
 		{
 			if((expected.equals("")||expected.equals("0")))
@@ -197,8 +190,16 @@ public class BaseClass
 				status = true;
 			}
 		}
-		if(expected!=null && actual!=null)
+		if(expected == null)
 		{
+			if(actual.equals("")||actual.equals("0"))
+			{
+				status = true;
+			}
+		}
+		if(actual!=null && expected!=null)
+		{
+			System.out.println("actual equal to expected");
             expected = expected.replaceAll("\\[\"", "");
     		actual = actual.replaceAll("\\[\"", "");
     		expected = expected.replaceAll("\"\\]", "");
@@ -209,7 +210,7 @@ public class BaseClass
     		{
     			status = true;
     		}
-			status = false;
+			//status = false;
 		}
 
 		return status;	
