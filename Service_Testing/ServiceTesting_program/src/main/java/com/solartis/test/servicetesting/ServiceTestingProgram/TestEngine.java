@@ -123,7 +123,7 @@ public class TestEngine
 								try 
 								{
 									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
-									  String req = api.RequestToString();//SHOWING REQUEST IN LOG 
+									  api.RequestToString();//SHOWING REQUEST IN LOG 
 								} 
 								catch (IOException | ParseException | DocumentException e1) 
 								{
@@ -149,7 +149,7 @@ public class TestEngine
 									try 
 									{
 										logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
-										  String res = api.ResponseToString();//SHOWING RESPONSE IN LOG 
+										api.ResponseToString();//SHOWING RESPONSE IN LOG 
 									} 
 									catch (IOException | ParseException | DocumentException e1) 
 									{
