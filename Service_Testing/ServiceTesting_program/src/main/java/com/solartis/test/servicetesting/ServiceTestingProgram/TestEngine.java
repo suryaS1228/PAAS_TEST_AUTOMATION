@@ -7,7 +7,6 @@ import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PropertiesHandleException;
-import com.solartis.test.exception.TestEngineException;
 import com.solartis.test.util.common.DatabaseOperation;
 
 import org.apache.log4j.Logger;
@@ -23,7 +22,7 @@ public class TestEngine
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) throws DatabaseException, PropertiesHandleException, TestEngineException, APIException
+	public static void main( String[] args ) throws DatabaseException, PropertiesHandleException, APIException
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		

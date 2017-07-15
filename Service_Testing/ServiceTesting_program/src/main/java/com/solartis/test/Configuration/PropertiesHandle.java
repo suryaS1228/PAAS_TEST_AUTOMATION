@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import com.solartis.test.exception.DatabaseException;
@@ -26,7 +25,7 @@ public class PropertiesHandle extends Properties
 	protected String DB_URL;
 	protected String USER;
 	protected String password;
-	//protected String priority;
+	protected String priority;
 
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
@@ -41,7 +40,7 @@ public class PropertiesHandle extends Properties
 			this.DB_URL=DB_URL;
 			this.USER=USER;
 			this.password=password;
-			//this.priority=priority;
+			this.priority=priority;
 			
 			WriteProperty(UserName);
 			
@@ -120,11 +119,31 @@ public class PropertiesHandle extends Properties
 			}
 		}
 		
-		/*protected String RdmsQueryWithCondition(String OutputColoumn, String priority) throws SQLException
+		protected String RdmsQueryWithPriority(String OutputColoumn, String priority) throws PropertiesHandleException
 		{
-			ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
-			return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " WHERE " + ConfigQuery.ReadData(OutputColoumn) + ".Priority = '" + priority + "'";
-		}*/
+			try 
+			{
+				ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+				return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " WHERE " + ConfigQuery.ReadData(OutputColoumn) + ".Priority = '" + priority + "'";	
+			} 
+			catch (DatabaseException e)
+			{
+				throw new PropertiesHandleException("ERROR IN SQL - PRIORITY QUERY -- " + OutputColoumn);
+			}
+		}
+		
+		protected String RdmsQueryWithCustomSortPriority(String OutputColoumn) throws PropertiesHandleException
+		{
+			try 
+			{
+				ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+				return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " ORDER BY FIELD( " + ConfigQuery.ReadData(OutputColoumn) + ".Priority ,'high','medium','low')";	
+			} 
+			catch (DatabaseException e)
+			{
+				throw new PropertiesHandleException("ERROR IN SQL - CUSTOM SORT PRIORITY QUERY -- " + OutputColoumn);
+			}
+		}
 		
 		protected String RdmsValue(String OutputColoumn) throws PropertiesHandleException
 		{
@@ -213,24 +232,14 @@ public class PropertiesHandle extends Properties
 	
 		protected void InputQuery() throws PropertiesHandleException// FUNCTION FOR INPUTQUERY
 		{
-			this.put("input_query",  this.RdmsQuery("InputTable"));
-			
-			/*try 
-			{
 				if(priority.equalsIgnoreCase("all"))
 				{
-					this.put("input_query",  this.RdmsQuery("InputTable"));
+					this.put("input_query",  this.RdmsQueryWithCustomSortPriority("InputTable") );
 				}
 				else if(priority.equalsIgnoreCase("high") || priority.equalsIgnoreCase("low"))
 				{
-					this.put("input_query",  this.RdmsQueryWithCondition("InputTable", priority));
+					this.put("input_query",  this.RdmsQueryWithPriority("InputTable", priority));
 				}		
-			} 
-			catch (SQLException e) 
-			{
-			    System.out.println("Error in InputQuery Function -- PropertiesHandle Class");
-				e.printStackTrace();
-			}*/
 		}
 		
 		protected void OutputQuery() throws PropertiesHandleException// FUNCTION FOR OUTPUTQUERY
