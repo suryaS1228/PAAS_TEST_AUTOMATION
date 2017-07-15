@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.solartis.test.Configuration.PropertiesHandle;
+import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.MacroException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
@@ -43,7 +45,7 @@ public class IsoEndorsementMacro implements MacroInterface
 		    }
 		}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-		public IsoEndorsementMacro(PropertiesHandle configFile) throws SQLException
+		public IsoEndorsementMacro(PropertiesHandle configFile) throws MacroException
 		{
 			configTable = new DatabaseOperation();
 			//configFile = new PropertiesHandle("A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/configuration_file/config_json.properties");
@@ -52,7 +54,14 @@ public class IsoEndorsementMacro implements MacroInterface
 				System.out.println("config file null");
 			}
 			System.out.println(configFile.getProperty("config_query"));
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			try 
+			{
+				configTable.GetDataObjects(configFile.getProperty("config_query"));
+			} 
+			catch (DatabaseException e) 
+			{
+				throw new MacroException("ERROR OCCUR WHILE READING HT IN ISO MACRO", e);
+			}
 			
 		}
 		public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws SQLException

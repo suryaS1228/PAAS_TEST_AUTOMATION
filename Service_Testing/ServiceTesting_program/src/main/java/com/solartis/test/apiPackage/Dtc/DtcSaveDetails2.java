@@ -1,20 +1,17 @@
 package com.solartis.test.apiPackage.Dtc;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
+import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.*;
 
 public class DtcSaveDetails2 extends BaseClass implements API
 {
-	public DtcSaveDetails2(PropertiesHandle config) throws SQLException
+	public DtcSaveDetails2(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
@@ -25,25 +22,32 @@ public class DtcSaveDetails2 extends BaseClass implements API
 	}
 
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException
+	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
-		this.input = InputData;
-		input = InputData;
-			switch(InputData.ReadData("Plan_Type"))
-			{
-			 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_AnnualPlans.json");
-			 									break;
-			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_trip.json");
-												break;
-			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_RC.json");
-												break; 
-			 
-			 default:
-			}
+		try
+    	{
+			this.input = InputData;
+			input = InputData;
+				switch(InputData.ReadData("Plan_Type"))
+				{
+				 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_AnnualPlans.json");
+				 									break;
+				 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_trip.json");
+													break;
+				 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_RC.json");
+													break; 
+				 
+				 default:
+				}
+    	}
+		catch(DatabaseException e)
+    	{
+    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
+    	}
 	  }
 
 	@Override
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException
+	public void PumpDataToRequest()
 	{
 		InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
@@ -62,7 +66,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 	}
 	
 	@Override
-	public void AddHeaders() throws IOException
+	public void AddHeaders()
 	{
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
@@ -71,41 +75,17 @@ public class DtcSaveDetails2 extends BaseClass implements API
 	}
 	
 	@Override
-	public void SendAndReceiveData() throws SQLException
+	public void SendAndReceiveData()
 	{
-		String input_data= null;
-		try {
-			input_data = request.FileToString();
-		} catch (IOException | ParseException | DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			http.SendData(input_data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String response_string = null;
-		
-		try {
-			response_string = http.ReceiveData();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String input_data = request.FileToString();
+		http.SendData(input_data);
+		String response_string = http.ReceiveData();
 		response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
-		try {
-			response.StringToFile(response_string);
-		} catch (IOException | DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		response.StringToFile(response_string);
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 	{
 		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 		do 	

@@ -1,15 +1,13 @@
 package com.solartis.test.servicetesting.ServiceTestingProgram;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
-import jxl.read.biff.BiffException;
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
+import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.PropertiesHandleException;
+import com.solartis.test.exception.TestEngineException;
 import com.solartis.test.util.common.DatabaseOperation;
 
 import org.apache.log4j.Logger;
@@ -25,55 +23,29 @@ public class TestEngine
 	static Logger logInfo = Logger.getLogger("INFOlog");
 	static API api=null;
 	
-	public static void main( String[] args ) throws Exception 
+	public static void main( String[] args ) throws DatabaseException, PropertiesHandleException, TestEngineException, APIException
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
 		PropertiesHandle config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"));
 		
-		try                                      
-		{
-			logInfo.info("Connecting DataBase");
-			DatabaseOperation.ConnectionSetup(config);
-		} 
-		catch (ClassNotFoundException e) 
-		{
-			logError.error("Failed DataBase Connection -- ClassNotFoundError");
-			e.printStackTrace();
-		} 
-		catch (SQLException e) 
-		{
-			logError.error("Failed DataBase Connection -- SQLError");
-			e.printStackTrace();
-		}
+		logInfo.info("Connecting DataBase");
+		DatabaseOperation.ConnectionSetup(config);
+		
 		String actualchoice = config.getProperty("actual");
 		String statuschoice = config.getProperty("status");
 		String outputtable = config.getProperty("output_in_same_table");
 		String classname = config.getProperty("ClassName");
 		
 		DatabaseOperation input = new DatabaseOperation();
-		try 
-		{
-			logInfo.info("Creating Instance for Input");
-			input.GetDataObjects(config.getProperty("input_query"));
-		}
-		catch (SQLException e1) 
-		{
-			logError.error("Failed Creating Instance for Input -- SQLError");
-			e1.printStackTrace();
-		}
+		logInfo.info("Creating Instance for Input");
+		
+		input.GetDataObjects(config.getProperty("input_query"));
 		
 		DatabaseOperation output = new DatabaseOperation();
-		try 
-		{
-			logInfo.info("Creating Instance for Output");
-			output.GetDataObjects(config.getProperty("output_query"));	
-		} 
-		catch (SQLException e1) 
-		{
-			logError.error("Failed Creating Instance for Output -- SQLError");
-			e1.printStackTrace();
-		}
+		logInfo.info("Creating Instance for Output");
+		
+		output.GetDataObjects(config.getProperty("output_query"));
 		
 		logInfo.info("Selecting API");
 			try 
@@ -82,10 +54,10 @@ public class TestEngine
 	    	    Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
 	    	    api = (API) cons.newInstance(config);
 			} 
-			catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+			catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) 
 			{
 				logError.error("Failed Failed Selecting API -- SQLError");
-				e.printStackTrace();
+				throw new TestEngineException("ERROR OCCUR IN SELECTING API");
 			}
     	    
 			try 
@@ -98,26 +70,18 @@ public class TestEngine
 							if(input.ReadData("flag_for_execution").equals("Y"))
 							{
 							    logInfo.info("TestData" + input.ReadData("S.No") + "flag_for_execution = Y" );	
-								try
-								{
-									logInfo.info("Loading Sample Request for Testdata--" + input.ReadData("S.No"));
-									
-									api.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
-								}
-								catch (SQLException| BiffException| IOException e)
-								{
-									logError.error("Failed to Load Sample; Testdata--" + input.ReadData("S.No") + "To Sample Request---SQLException | BiffException | IOException");
-									e.printStackTrace();
-								}
+							    
+								logInfo.info("Loading Sample Request for Testdata--" + input.ReadData("S.No"));
+								api.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
 								try 
 								{
 									logInfo.info("Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request");
-								      api.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 
+								     api.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 
 								} 
-								catch (IOException | DocumentException | ParseException |NumberFormatException | java.text.ParseException |BiffException e)
+								catch (APIException e)
 								{
 									logError.error("Failed Pumping Testdata--" + input.ReadData("S.No") + "To Sample Request---IOException | DocumentException | ParseException");
-									e.printStackTrace();
+									throw new TestEngineException("FAILED TO PUMP A TESTDATA INTO SAMPLE REQUEST");
 								} 
 								
 								try 
@@ -125,36 +89,35 @@ public class TestEngine
 									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									  api.RequestToString();//SHOWING REQUEST IN LOG 
 								} 
-								catch (IOException | ParseException | DocumentException e1) 
+								catch (APIException e1) 
 								{
 									logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException");
-									e1.printStackTrace();
+									throw new TestEngineException("FAILED TO CONVERT TEST DATA " + input.ReadData("S.No") + " INTO REQUEST");
 								} 
 								
 								try 
 								{
 									logInfo.info("Adding Header For Testdata--" + input.ReadData("S.No"));
-									  api.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+									api.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 								} 
-								catch (IOException e) 
+								catch (APIException e) 
 								{
 									logError.error("Failed Adding Header For Testdata--" + input.ReadData("S.No") + "---IOException");
-									throw new Exception("New"); 
+									throw new TestEngineException("FAILED TO ADDING HEADER , TOKEN , EVENT - NAME FOR HITTING");
 								}
 								
 									logInfo.info("Respone For Testdata--" + input.ReadData("S.No") + "is Received");
 									api.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 								
-									logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 									try 
 									{
 										logInfo.info("REQUEST For Testdata--" + input.ReadData("S.No"));
 										api.ResponseToString();//SHOWING RESPONSE IN LOG 
 									} 
-									catch (IOException | ParseException | DocumentException e1) 
+									catch (APIException e1) 
 									{
 										logError.error("Failed Rquest For Testdata--" + input.ReadData("S.No") + "---IOException | ParseException | DocumentException e1");
-										e1.printStackTrace();
+										throw new TestEngineException("FAILED TO CONVERT REQUEST " + input.ReadData("S.No") + " INTO RESPONSE");
 									}						
 								
 								if(actualchoice.equals("Y"))
@@ -168,10 +131,10 @@ public class TestEngine
 										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										input = api.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
-								catch (IOException | ParseException | DocumentException | NumberFormatException| java.text.ParseException e) 
+								catch (NumberFormatException| APIException e) 
 								{
 										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
-										 e.printStackTrace();
+										 throw new TestEngineException("FAILED TO STORE A RESPONSE");
 								}
 									 
 									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
@@ -184,10 +147,10 @@ public class TestEngine
 										logInfo.info("Storing Response--" + input.ReadData("S.No") + "Data into DB");
 										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								} 
-								catch (IOException | ParseException | DocumentException |NumberFormatException | java.text.ParseException e) 
+								catch (NumberFormatException | APIException e) 
 							    {
 										 logError.error("Failed Storing Response--" + input.ReadData("S.No") + "Data into DB---IOException | ParseException | DocumentException e");
-										 e.printStackTrace();
+										 throw new TestEngineException("FAILED TO WRITE A DATA FOR TESTDATA--" + input.ReadData("S.No") + " INTO DB");
 								}
 									 
 									     logInfo.info("Updating DB For Testdata--" + input.ReadData("S.No"));
@@ -230,24 +193,13 @@ public class TestEngine
 					}
 				}while(input.MoveForward());
 			} 
-			catch (SQLException e1)
+			catch (Exception e1)
 			{
-				e1.printStackTrace();
-				System.exit(0);
-				
+				System.exit(0);	
 
 			}
 
-		try 
-		{
-			logInfo.info("Closing DB Connection");
-			DatabaseOperation.CloseConn();
-		}
-		catch (SQLException e) 
-		{
-			logError.error("Failed DataBase Closing -- SQLError");
-			e.printStackTrace();
-			System.exit(0);
-		}
+		logInfo.info("Closing DB Connection");
+		DatabaseOperation.CloseConn();
    }
 }	

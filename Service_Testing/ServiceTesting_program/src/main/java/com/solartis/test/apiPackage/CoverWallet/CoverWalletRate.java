@@ -11,6 +11,9 @@ import jxl.read.biff.BiffException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
+import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
@@ -37,40 +40,55 @@ public class CoverWalletRate extends BaseClass implements API
 		
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException
+	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
-		this.input = InputData;
-		String numofprovider=InputData.ReadData("NumOfProviders");
-		switch(numofprovider)
-		   
-		   {
-		    case "1":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
-		    case "2":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
-		    case "3":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
-		    case "4":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
-		    case "5":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
-		    case "6":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
-		    case "7":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
-		    case "8":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request8.json"); break;
-		    case "9":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request9.json"); break;
-		    case "10":  sampleInput = new JsonHandle(config.getProperty("sample_request")+"request10.json"); break;
-		   
-		    default:
-		   }
-		if(config.getProperty("status").equals("Y"))
+		try
 		{
-	      macro.LoadSampleRatingmodel(config, InputData);
-		  macro.GenerateExpected(InputData, config);
+			this.input = InputData;
+			String numofprovider=InputData.ReadData("NumOfProviders");
+			switch(numofprovider)
+			   
+			   {
+			    case "1":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
+			    case "2":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
+			    case "3":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
+			    case "4":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
+			    case "5":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
+			    case "6":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
+			    case "7":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
+			    case "8":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request8.json"); break;
+			    case "9":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request9.json"); break;
+			    case "10":  sampleInput = new JsonHandle(config.getProperty("sample_request")+"request10.json"); break;
+			   
+			    default:
+			   }
+			if(config.getProperty("status").equals("Y"))
+			{
+		      macro.LoadSampleRatingmodel(config, InputData);
+			  macro.GenerateExpected(InputData, config);
+			}
 		}
+		catch(DatabaseException e)
+		{
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+		}
+		
 	}
 	
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException,ClassNotFoundException, NumberFormatException, java.text.ParseException, BiffException 
+	public void PumpDataToRequest()
 	{	
+		try
+		{
 		if(config.getProperty("status").equals("Y"))
 		{
 		macro.PumpinData(input, config);	
 		}
 		super.PumpDataToRequest();		
+		}
+		catch(RequestFormatException  e)
+		{
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+		}
 	}
 	
 	@Override
