@@ -33,7 +33,16 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeLoadSampleRequest();
-		api.LoadSampleRequest(InputData);
+		try
+		{
+			api.LoadSampleRequest(InputData);
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterLoadSampleRequest();
 	}
@@ -44,9 +53,40 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforePumpDataToRequest();
-		api.PumpDataToRequest();
+		try
+		{
+			api.PumpDataToRequest();
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterPumpDataToRequest();
+	}
+	
+	@Override
+	public String RequestToString() throws APIException 
+	{
+		// TODO Auto-generated method stub
+		for (Listener listen : listeners1)
+			listen.beforeRequestToString();
+		String requesttoString="";
+		try
+		{
+			api.RequestToString();
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
+		for (Listener listen : listeners1)
+			listen.afterRequestToString();
+		return requesttoString;
 	}
 
 	@Override
@@ -55,7 +95,16 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeAddHeaders();
-		api.AddHeaders();
+		try
+		{
+			api.AddHeaders();
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterAddHeaders();
 	}
@@ -66,7 +115,16 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeSendAndReceiveData();
-		api.SendAndReceiveData();
+		try
+		{
+			api.SendAndReceiveData();
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterSendAndReceiveData();
 	}
@@ -77,7 +135,17 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeSendResponseDataToFile();
-		output =  api.SendResponseDataToFile(output);
+		output = null;
+		try
+		{
+			output =api.SendResponseDataToFile(output);
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterSendResponseDataToFile();
 		return output;
@@ -89,23 +157,23 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
-		output= api.CompareFunction(output);
+		output = null;
+		try
+		{
+			output =api.CompareFunction(output);
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterCompareFunction();
 		return output;
 	}
 
-	@Override
-	public String RequestToString() throws APIException 
-	{
-		// TODO Auto-generated method stub
-		for (Listener listen : listeners1)
-			listen.beforeRequestToString();
-		String requesttoString= api.RequestToString();
-		for (Listener listen : listeners1)
-			listen.afterRequestToString();
-		return requesttoString;
-	}
+	
 
 	@Override
 	public String ResponseToString() throws APIException 
@@ -113,7 +181,17 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeResponseToString();
-		String ResponseToString = api.ResponseToString();
+		String ResponseToString = "";
+		try
+		{
+			ResponseToString=api.ResponseToString();
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
 		for (Listener listen : listeners1)
 			listen.afterResponseToString();
 		return ResponseToString;
