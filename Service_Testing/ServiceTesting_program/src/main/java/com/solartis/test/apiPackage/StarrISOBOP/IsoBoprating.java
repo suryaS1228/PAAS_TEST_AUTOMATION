@@ -1,12 +1,5 @@
 package com.solartis.test.apiPackage.StarrISOBOP;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import jxl.read.biff.BiffException;
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -19,7 +12,7 @@ import com.solartis.test.util.common.DatabaseOperation;
 public class IsoBoprating extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public IsoBoprating(PropertiesHandle config) throws SQLException
+	public IsoBoprating(PropertiesHandle config)
 	{
 	
 		this.config = config;
@@ -35,7 +28,7 @@ public class IsoBoprating extends BaseClass implements API
 		
 	}
 	
-	public void AddHeaders() throws IOException
+	public void AddHeaders()
 	{
 		http = new HttpHandle(config.getProperty("test_url"),"POST");
 		http.AddHeader("Content-Type", config.getProperty("content_type"));
@@ -43,7 +36,7 @@ public class IsoBoprating extends BaseClass implements API
 		http.AddHeader("EventName", config.getProperty("EventName"));	
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException
+	public void LoadSampleRequest(DatabaseOperation InputData)
 	{
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -53,7 +46,7 @@ public class IsoBoprating extends BaseClass implements API
 		super.LoadSampleRequest(InputData);
 	}
 	
-	public void PumpDataToRequest() throws SQLException, IOException, DocumentException, ParseException,ClassNotFoundException, NumberFormatException, java.text.ParseException, BiffException 
+	public void PumpDataToRequest()
 	{			
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -62,7 +55,7 @@ public class IsoBoprating extends BaseClass implements API
 		super.PumpDataToRequest();
 	}
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException, ClassNotFoundException, NumberFormatException, java.text.ParseException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
 	{
 		if(config.getProperty("status").equals("Y"))
 		{

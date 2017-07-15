@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
@@ -49,10 +50,6 @@ public class IsoEndorsementMacro implements MacroInterface
 		{
 			configTable = new DatabaseOperation();
 			//configFile = new PropertiesHandle("A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/configuration_file/config_json.properties");
-			if(configFile.equals(null))
-			{
-				System.out.println("config file null");
-			}
 			System.out.println(configFile.getProperty("config_query"));
 			try 
 			{
@@ -60,35 +57,46 @@ public class IsoEndorsementMacro implements MacroInterface
 			} 
 			catch (DatabaseException e) 
 			{
-				throw new MacroException("ERROR OCCUR WHILE READING HT IN ISO MACRO", e);
+				throw new MacroException("ERROR OCCUR WHILE READING HT IN ISO ENDORSEMENT MACRO", e);
 			}
 			
 		}
-		public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws SQLException
+		public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws MacroException
 		{
-			if(inputData==(null))
-					{
-				       System.out.println("config null");
-					}
-			String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
+			try
+			{
+				String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
+				
+				Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+				System.out.println(inputData.ReadData("RatingModel_version")+"----------"+Samplepath);
+				sampleexcel= new ExcelOperationsPOI(Samplepath);
+			}
+			catch (DatabaseException | POIException e)
+			{
+				throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL ISO ENDORSEMENTMACRO", e);
+			}
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-			System.out.println(inputData.ReadData("RatingModel_version")+"----------"+Samplepath);
-			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		
-		public void GenerateExpected(DatabaseOperation inputData,PropertiesHandle configFile) throws SQLException, BiffException, IOException
+		public void GenerateExpected(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
 		{
-			
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
-			sampleexcel.Copy(Samplepath, Targetpath);
-			sampleexcel.save();
-			System.out.println("generate expected rating over");
+			try
+			{
+				Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
+				sampleexcel.Copy(Samplepath, Targetpath);
+				sampleexcel.save();
+				System.out.println("generate expected rating over");
+			}
+			catch(DatabaseException | POIException e)
+			{
+				throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
+			}
 		}
 		
-		public void PumpinData(DatabaseOperation inputData,PropertiesHandle configFile) throws NumberFormatException, BiffException, SQLException, IOException, ParseException
+		public void PumpinData(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException 
 		{
-			
+			try
+			{
 			//DatabaseOperation configTable = new DatabaseOperation();
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
@@ -135,11 +143,22 @@ public class IsoEndorsementMacro implements MacroInterface
 				}
 			}while(configTable.MoveForward());
 			excel.refresh();
-			excel.save();		
+			excel.save();	
+		}
+		catch(DatabaseException e)
+		{
+			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF ISO ENDORSEMENTMACRO", e);
+		}
+		catch(POIException e)
+		{
+			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF ISO ENDORSEMENTMACRO", e);
+		}
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws NumberFormatException, SQLException, ParseException 
+		public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
 		{
+			try
+			{
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 			excel.refresh();
@@ -167,11 +186,22 @@ public class IsoEndorsementMacro implements MacroInterface
 			}while(configTable.MoveForward());
 			excel.save();
 		}
+		catch(DatabaseException e)
+		{
+			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO ENDORSEMENTMACRO", e);
+		}
+		catch (POIException e)
+		{
+			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF ISO ENDORSEMENTMACRO", e);
+		}
+		}
 		
 		@SuppressWarnings("unchecked")
-		protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws SQLException, ParseException
+		protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws MacroException 
 		{
 			T outputdata = null;
+			try
+			{
 			switch(configTable.ReadData("Translation_Function"))
 			{
 			case "Date": 
@@ -187,13 +217,17 @@ public class IsoEndorsementMacro implements MacroInterface
 				outputdata =  (T) ISOBOPWindhail;
 				break;
 			}
-			System.out.println(outputdata.getClass().toString());
+		}
+		catch (DatabaseException e)
+		{
+			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF ISOENDORSEMENTMACRO", e);
+		}
 			return outputdata;
 			
 		}
 		
 		
-		protected  Date Date(String Date,String InputFormat,String ExpectedFormat) throws ParseException
+		protected  Date Date(String Date,String InputFormat,String ExpectedFormat) throws MacroException
 		{
 			String value ="";
 			Date Date1=null;
@@ -228,27 +262,44 @@ public class IsoEndorsementMacro implements MacroInterface
 			   // System.out.println(value+"\t"+Date1);  						
 			}
 			
-			catch (NumberFormatException e) 
+			catch (NumberFormatException | ParseException e) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new MacroException("ERROR OCCURS DATE TRANSLATION OF ISOENDORSEMENTMACRO", e);
 			}
 			return Date1;
 			
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-		protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws SQLException
+		protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws MacroException
 		{
 			DatabaseOperation Lookup = new DatabaseOperation();
-			Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
-			HashMap<String,String> LookupMap = new HashMap<String,String>();
-			do
+			try 
 			{
-				String LookupData=Lookup.ReadData("LookupData");
-				String LookupValue=Lookup.ReadData("LookupValue");
-				LookupMap.put(LookupData, LookupValue);
-			}while(Lookup.MoveForward());
-			System.out.println(LookupMap.get("new"));
+				Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			} 
+			catch (DatabaseException e) 
+			{
+				throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF ISOENDORSEMENTMACRO", e);
+			}
+			HashMap<String,String> LookupMap = new HashMap<String,String>();
+			try {
+				do
+				{
+					try 
+					{
+						LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
+					} catch (DatabaseException e) 
+					{
+						// TODO Auto-generated catch block
+						throw new MacroException("ERROR OCCURS 	IN LOOKUP QUERY OF ISOENDORSEMENTMACRO", e);
+					}
+				}while(Lookup.MoveForward());
+			} catch (DatabaseException e) 
+			{
+				// TODO Auto-generated catch block
+				throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISOENDORSEMENTMACRO", e);
+			}
+		
 			if (LookupMap.get(Lookup1)==null)
 			{
 				return "Other";
