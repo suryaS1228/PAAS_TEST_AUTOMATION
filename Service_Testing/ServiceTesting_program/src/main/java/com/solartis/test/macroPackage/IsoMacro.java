@@ -3,6 +3,7 @@ package com.solartis.test.macroPackage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class IsoMacro implements MacroInterface
 		configTable.GetDataObjects(configFile.getProperty("config_query"));
 		
 	}
+	
 	public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws SQLException
 	{
 		if(inputData==(null))
@@ -178,7 +180,7 @@ public class IsoMacro implements MacroInterface
 			outputdata = (T) PaddingZeros;
 			break;
 		case "ISOBOPWindhail":
-			Integer ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
+			Float ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
 			outputdata =  (T) ISOBOPWindhail;
 			break;
 		}
@@ -264,9 +266,9 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	
-	protected int ISOBOPWindhail(String Data)
+	protected float ISOBOPWindhail(String Data)
 	{
-		int percentageData=0;
+		float percentageData=0;
 		if(Data.equals("Not Applicable"))
 		{
 			percentageData = 0;
@@ -274,7 +276,11 @@ public class IsoMacro implements MacroInterface
 		else
 		{
 			String[] windhail = Data.split("%");
-			percentageData = Integer.parseInt(windhail[0])/100;
+			percentageData = Float.valueOf(windhail[0])/100;			
+			DecimalFormat df = new DecimalFormat("#.####");
+			String flo = df.format(percentageData);		
+			float percentagevalue = Float.valueOf(flo);
+			return percentagevalue;
 		}
 		return percentageData;		
 	}
@@ -314,39 +320,6 @@ public class IsoMacro implements MacroInterface
 		 return true;
 	}
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
-	
-	
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	/*public static void main(String args[]) throws Exception, SQLException
-	{
-		System.setProperty("jsse.enableSNIExtension", "false");	
-		configFile = new propertiesHandle("A:/1 Projects/09 ISO/Release_24_UAT/RatingTrial/configuration_file/config_exp_json.properties");
-	
-		DatabaseOperation inputData = new DatabaseOperation();
-		DatabaseOperation outputData = new DatabaseOperation();
-		DatabaseOperation.ConnectionSetup(configFile);
-		inputData.GetDataObjects(configFile.getProperty("input_query"));
-		outputData.GetDataObjects(configFile.getProperty("output_query"));
-		IsoMacro rating = new IsoMacro();
-		do
-		{			
-			if (inputData.ReadData("Flag_for_execution").equals("Y"))
-			{
-				rating.LoadSampleRatingmodel(configFile, inputData);
-				rating.GenerateExpected(inputData,configFile);
-				rating.PumpinData(inputData,configFile);
-				rating.PumpoutData(configTable,outputData,inputData);
-			}
-			else
-			{
-				//inputData.move_next();
-			}
-			
-		}while (inputData.MoveForward()&& outputData.MoveForward());
-		
-		DatabaseOperation.CloseConn();
-	}*/
 	
 	
 }
