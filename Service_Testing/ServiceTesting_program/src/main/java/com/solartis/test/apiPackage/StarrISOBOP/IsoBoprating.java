@@ -3,6 +3,11 @@ package com.solartis.test.apiPackage.StarrISOBOP;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
+import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.macroPackage.IsoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
@@ -12,7 +17,7 @@ import com.solartis.test.util.common.DatabaseOperation;
 public class IsoBoprating extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public IsoBoprating(PropertiesHandle config)
+	public IsoBoprating(PropertiesHandle config) throws MacroException
 	{
 	
 		this.config = config;
@@ -28,38 +33,65 @@ public class IsoBoprating extends BaseClass implements API
 		
 	}
 	
-	public void AddHeaders()
+	public void AddHeaders() throws APIException
 	{
-		http = new HttpHandle(config.getProperty("test_url"),"POST");
-		http.AddHeader("Content-Type", config.getProperty("content_type"));
-		http.AddHeader("Token", config.getProperty("token"));
-		http.AddHeader("EventName", config.getProperty("EventName"));	
+		try
+		{
+			http = new HttpHandle(config.getProperty("test_url"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			http.AddHeader("Token", config.getProperty("token"));
+			http.AddHeader("EventName", config.getProperty("EventName"));
+		}
+    	catch (HTTPHandleException e) 
+		{
+			throw new APIException("ERROR ADD HEADER FUNCTION -- ISO-RATING CLASS", e);
+		}
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData)
+	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
 		if(config.getProperty("status").equals("Y"))
 		{
-		macro.LoadSampleRatingmodel(config, InputData);
-		macro.GenerateExpected(InputData, config);
+			try 
+			{
+				macro.LoadSampleRatingmodel(config, InputData);		
+				macro.GenerateExpected(InputData, config);
+			} catch (MacroException e) 
+			{
+				throw new APIException("ERROR LoadSampleRequest FUNCTION -- ISO-RATING CLASS", e);
+			}
 		}
 		super.LoadSampleRequest(InputData);
 	}
 	
-	public void PumpDataToRequest()
+	public void PumpDataToRequest() throws  APIException
 	{			
 		if(config.getProperty("status").equals("Y"))
 		{
-		macro.PumpinData(input, config);
+			try 
+			{
+				macro.PumpinData(input, config);
+			} 
+			catch (DatabaseException | POIException | MacroException e) 
+			{
+				throw new APIException("ERROR PumpDataToRequest FUNCTION -- ISO-RATING CLASS", e);
+			}
 		}
 		super.PumpDataToRequest();
 	}
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
 	{
 		if(config.getProperty("status").equals("Y"))
 		{
-		macro.PumpoutData(output, input, config);
+			try 
+			{
+				macro.PumpoutData(output, input, config);
+			} 
+			catch (POIException | MacroException | DatabaseException e) 
+			{
+				throw new APIException("ERROR SendResponseDataToFile FUNCTION -- ISO-RATING CLASS", e);
+			}
 		}
 		super.SendResponseDataToFile(output);
 		return output;		

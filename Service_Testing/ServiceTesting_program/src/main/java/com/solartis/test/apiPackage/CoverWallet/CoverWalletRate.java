@@ -1,19 +1,13 @@
 package com.solartis.test.apiPackage.CoverWallet;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
-
-import jxl.read.biff.BiffException;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
-import com.solartis.test.exception.RequestFormatException;
+import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
@@ -24,7 +18,7 @@ import com.solartis.test.util.common.DatabaseOperation;
 public class CoverWalletRate extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public CoverWalletRate(PropertiesHandle config) throws SQLException
+	public CoverWalletRate(PropertiesHandle config) throws MacroException
 	{
 	
 		this.config = config;
@@ -68,46 +62,60 @@ public class CoverWalletRate extends BaseClass implements API
 			  macro.GenerateExpected(InputData, config);
 			}
 		}
-		catch(DatabaseException e)
+		catch(DatabaseException | MacroException e)
 		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+			throw new APIException("ERROR OCCURS IN LoadSampleRequest FUNCTION -- CoverWallet CLASS", e);
 		}
 		
 	}
 	
-	public void PumpDataToRequest()
+	public void PumpDataToRequest() throws APIException
 	{	
 		try
 		{
-		if(config.getProperty("status").equals("Y"))
-		{
-		macro.PumpinData(input, config);	
+			if(config.getProperty("status").equals("Y"))
+			{
+			macro.PumpinData(input, config);	
+			}
+			super.PumpDataToRequest();		
 		}
-		super.PumpDataToRequest();		
-		}
-		catch(RequestFormatException  e)
+		catch(DatabaseException | POIException | MacroException  e)
 		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- Coverwallet CLASS", e);
 		}
 	}
 	
 	@Override
-	 public void AddHeaders() throws IOException 
+	 public void AddHeaders() throws APIException 
 	 {
-	  http = new HttpHandle(config.getProperty("test_url"),"POST");
-	  http.AddHeader("Content-Type", config.getProperty("content_type"));
-	  http.AddHeader("Token", config.getProperty("token"));
-	  http.AddHeader("EventName", config.getProperty("EventName")); 
-	  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
+		try
+		{
+		  http = new HttpHandle(config.getProperty("test_url"),"POST");
+		  http.AddHeader("Content-Type", config.getProperty("content_type"));
+		  http.AddHeader("Token", config.getProperty("token"));
+		  http.AddHeader("EventName", config.getProperty("EventName")); 
+		  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
+		 }
+		catch(HTTPHandleException e)
+		{
+			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
+		}
 	 }
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException, ClassNotFoundException, NumberFormatException, java.text.ParseException
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
 	{
-		if(config.getProperty("status").equals("Y"))
+		try
 		{
-		macro.PumpoutData(output, input, config);
+			if(config.getProperty("status").equals("Y"))
+			{
+			macro.PumpoutData(output, input, config);
+			}
+			super.SendResponseDataToFile(output);
 		}
-		super.SendResponseDataToFile(output);
+		catch( POIException | MacroException| DatabaseException e)
+		{
+			throw new APIException("ERROR OCCURS IN SendResponseDataToFile FUNCTION -- Coverwallet CLASS", e);
+		}
 		return output;		
 	}
 }
