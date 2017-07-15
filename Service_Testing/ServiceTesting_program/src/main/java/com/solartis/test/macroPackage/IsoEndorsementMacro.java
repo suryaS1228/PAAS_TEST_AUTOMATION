@@ -1,7 +1,5 @@
 package com.solartis.test.macroPackage;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,8 +15,6 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
-
-import jxl.read.biff.BiffException;
 
 public class IsoEndorsementMacro implements MacroInterface
 {

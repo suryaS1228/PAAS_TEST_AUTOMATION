@@ -1,7 +1,5 @@
 package com.solartis.test.macroPackage;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -13,14 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.solartis.test.Configuration.PropertiesHandle;
-import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
-
-import jxl.read.biff.BiffException;
 
 public class IsoMacro implements MacroInterface
 {
@@ -280,7 +275,7 @@ public class IsoMacro implements MacroInterface
 		
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws DatabaseException, MacroException
+	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws  MacroException
 	{
 		
 		DatabaseOperation Lookup = new DatabaseOperation();
@@ -294,18 +289,19 @@ public class IsoMacro implements MacroInterface
 			throw new MacroException("ERROR OCCURS 	IN LOOKUP QUERY OF ISO MACRO", e);
 		}
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
-		do
-		{
-			try 
+		try {
+			do
 			{
 				LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
-			} 
-			catch (DatabaseException e) 
-			{
-				// TODO Auto-generated catch block
-				throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
-			}
-		}while(Lookup.MoveForward());
+				
+				
+			}while(Lookup.MoveForward());
+		} 
+		catch (DatabaseException e) 
+		{
+			// TODO Auto-generated catch block
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+		}
 		
 		if (LookupMap.get(Lookup1)==null)
 		{

@@ -1,16 +1,9 @@
 package com.solartis.test.listener;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.LinkedList;
 
-import jxl.read.biff.BiffException;
-
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
-
 import com.solartis.test.apiPackage.API;
+import com.solartis.test.exception.APIException;
 import com.solartis.test.util.common.DatabaseOperation;
 
 public class FireEventAPI implements API
@@ -35,7 +28,7 @@ public class FireEventAPI implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData) throws SQLException, BiffException, IOException 
+	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -46,7 +39,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public void PumpDataToRequest() throws SQLException, IOException,DocumentException, ParseException, ClassNotFoundException,NumberFormatException, java.text.ParseException, BiffException 
+	public void PumpDataToRequest() throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -57,7 +50,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public void AddHeaders() throws IOException 
+	public void AddHeaders() throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -68,7 +61,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public void SendAndReceiveData() throws SQLException 
+	public void SendAndReceiveData() throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -79,7 +72,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)throws UnsupportedEncodingException, IOException, ParseException,DocumentException, SQLException, ClassNotFoundException,	NumberFormatException, java.text.ParseException 
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -91,7 +84,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public DatabaseOperation CompareFunction(DatabaseOperation output)throws SQLException, ClassNotFoundException 
+	public DatabaseOperation CompareFunction(DatabaseOperation output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -103,7 +96,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public String RequestToString() throws IOException, ParseException,DocumentException 
+	public String RequestToString() throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -115,7 +108,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public String ResponseToString() throws IOException, ParseException,DocumentException 
+	public String ResponseToString() throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
