@@ -94,8 +94,7 @@ public class BaseClass
 			String input_data= null;
 			input_data = request.FileToString();
 		    http.SendData(input_data);
-			String response_string = null;
-			response_string = http.ReceiveData();	
+			String response_string = http.ReceiveData();	
 			response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+".json");
 			response.StringToFile(response_string);
 		}
