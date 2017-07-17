@@ -41,7 +41,8 @@ public class ExcelOperationsPOI
 		 } 
 		 catch (IOException e) 
 		 {
-			throw new POIException("ERROR OCCURS IN RATING MODEL FILE PATH -- " + path, e);
+			System.out.println("error in opening excel");
+			 throw new POIException("ERROR OCCURS IN RATING MODEL FILE PATH -- " + path, e);
 		}
 	}
 	public void openWorkbook() throws POIException
