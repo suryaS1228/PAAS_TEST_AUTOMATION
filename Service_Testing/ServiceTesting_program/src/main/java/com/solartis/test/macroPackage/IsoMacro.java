@@ -334,10 +334,10 @@ public class IsoMacro implements MacroInterface
 		{
 			String[] windhail = Data.split("%");
 			percentageData = Float.valueOf(windhail[0])/100;			
-			DecimalFormat df = new DecimalFormat("#.####");
-			String flo = df.format(percentageData);		
-			float percentagevalue = Float.valueOf(flo);
-			return percentagevalue;
+			//DecimalFormat df = new DecimalFormat("#.####");
+			//String flo = df.format(percentageData);		
+			//float percentagevalue = Float.valueOf(flo);
+			return percentageData;
 		}
 		return percentageData;		
 	}

@@ -107,7 +107,8 @@ public class LogListener implements Listener
 	@Override
 	public void onError(Throwable e)
 	{
-		
+		System.out.println("Printed by Listener");
+		System.out.println(e.getMessage());
 	}
 
 	
