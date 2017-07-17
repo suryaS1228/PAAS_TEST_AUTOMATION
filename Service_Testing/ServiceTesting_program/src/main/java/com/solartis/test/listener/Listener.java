@@ -1,6 +1,5 @@
 package com.solartis.test.listener;
 
-
 public interface Listener 
 {
 	public void beforeLoadSampleRequest();

@@ -3,7 +3,6 @@ package com.solartis.test.util.api;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import org.dom4j.Document;

@@ -17,19 +17,25 @@ import com.solartis.test.util.common.DatabaseOperation;
 public class IsoBoprating extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public IsoBoprating(PropertiesHandle config) throws MacroException
+	public IsoBoprating(PropertiesHandle config) throws APIException
 	{
-	
-		this.config = config;
-		jsonElements = new DatabaseOperation();
-	
-		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		if(config.getProperty("status").equals("Y"))
-		{
-		macro=new IsoMacro(config);	
-		}
+	    try
+	    {
+			this.config = config;
+			jsonElements = new DatabaseOperation();
+		
+			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+			if(config.getProperty("status").equals("Y"))
+			{
+			macro=new IsoMacro(config);	
+			}
+	    }
+	    catch(MacroException e)
+	    {
+	    	throw new APIException("ERROR INITATING MACRO- ISO CLASS", e);
+	    }
 		
 	}
 	

@@ -29,7 +29,7 @@ public class PropertiesHandle extends Properties
 
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password) throws DatabaseException, PropertiesHandleException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority) throws DatabaseException, PropertiesHandleException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -115,7 +115,7 @@ public class PropertiesHandle extends Properties
 			}
 			catch(DatabaseException e)
 			{
-				throw new PropertiesHandleException("ERROR IN SQL - QUERY -- " + OutputColoumn);
+				throw new PropertiesHandleException("ERROR IN SQL - QUERY -- " + OutputColoumn, e);
 			}
 		}
 		
@@ -128,7 +128,7 @@ public class PropertiesHandle extends Properties
 			} 
 			catch (DatabaseException e)
 			{
-				throw new PropertiesHandleException("ERROR IN SQL - PRIORITY QUERY -- " + OutputColoumn);
+				throw new PropertiesHandleException("ERROR IN SQL - PRIORITY QUERY -- " + OutputColoumn, e);
 			}
 		}
 		
@@ -137,11 +137,11 @@ public class PropertiesHandle extends Properties
 			try 
 			{
 				ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
-				return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " ORDER BY FIELD( " + ConfigQuery.ReadData(OutputColoumn) + ".Priority ,'high','medium','low')";	
+				return "SELECT * FROM " + ConfigQuery.ReadData(OutputColoumn) + " WHERE (INPUT_Rating_ISO.Priority = 'high' OR INPUT_Rating_ISO.Priority = 'low' or INPUT_Rating_ISO.Priority = 'medium') ORDER BY FIELD( " + ConfigQuery.ReadData(OutputColoumn) + ".Priority ,'high','medium','low')";	
 			} 
 			catch (DatabaseException e)
 			{
-				throw new PropertiesHandleException("ERROR IN SQL - CUSTOM SORT PRIORITY QUERY -- " + OutputColoumn);
+				throw new PropertiesHandleException("ERROR IN SQL - CUSTOM SORT PRIORITY QUERY -- " + OutputColoumn, e);
 			}
 		}
 		
@@ -154,7 +154,7 @@ public class PropertiesHandle extends Properties
 			}
 			catch(DatabaseException e)
 			{
-				throw new PropertiesHandleException("ERROR IN RETRIVING DATA FROM -- " + OutputColoumn);
+				throw new PropertiesHandleException("ERROR IN RETRIVING DATA FROM -- " + OutputColoumn, e);
 			}
 		}
 
@@ -322,7 +322,7 @@ public class PropertiesHandle extends Properties
 			} 
 			catch (FileNotFoundException e) 
 			{
-				throw new PropertiesHandleException("CONFIGURATION FILE PATH DOES NOT CONTAINS CONFIG FILE");
+				throw new PropertiesHandleException("CONFIGURATION FILE PATH DOES NOT CONTAINS CONFIG FILE", e);
 			}
 			try 
 			{
@@ -330,7 +330,7 @@ public class PropertiesHandle extends Properties
 			} 
 			catch (IOException e) 
 			{
-				throw new PropertiesHandleException("ERROR IN LOADING A CONFIG FILE");
+				throw new PropertiesHandleException("ERROR IN LOADING A CONFIG FILE", e);
 			}
 		}
 		
@@ -343,7 +343,7 @@ public class PropertiesHandle extends Properties
 			} 
 			catch (IOException e) 
 			{
-				throw new PropertiesHandleException("ERROR IN WRITING A CONFIG FILE");
+				throw new PropertiesHandleException("ERROR IN WRITING A CONFIG FILE", e);
 			}
 			try 
 			{
@@ -351,7 +351,7 @@ public class PropertiesHandle extends Properties
 			} 
 			catch (IOException e) 
 			{
-				throw new PropertiesHandleException("ERROR IN STORING A CONFIG FILE");
+				throw new PropertiesHandleException("ERROR IN STORING A CONFIG FILE", e);
 			};
 		}
 		

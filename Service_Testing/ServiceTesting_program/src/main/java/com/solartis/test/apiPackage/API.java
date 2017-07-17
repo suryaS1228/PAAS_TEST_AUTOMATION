@@ -1,7 +1,6 @@
 package com.solartis.test.apiPackage;
 
 import com.solartis.test.exception.APIException;
-import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.util.common.*;
 
 public interface API 

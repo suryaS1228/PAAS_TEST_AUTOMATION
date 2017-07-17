@@ -51,6 +51,7 @@ public class DatabaseOperation
 	{
 		if(conn == null)
 		{
+			
 			try 
 			{
 				Class.forName(JDBC_DRIVER);
@@ -61,7 +62,7 @@ public class DatabaseOperation
 			}
 			try 
 			{
-				conn = DriverManager.getConnection(DB_URL,USER,PASS);
+				conn = DriverManager.getConnection(DB_URL,USER,password);
 			} 
 			catch (SQLException e) 
 			{
