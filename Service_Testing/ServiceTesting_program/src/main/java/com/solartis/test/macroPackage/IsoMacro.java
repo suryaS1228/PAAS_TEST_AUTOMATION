@@ -214,8 +214,10 @@ public class IsoMacro implements MacroInterface
 				outputdata = (T) PaddingZeros;
 				break;
 			case "ISOBOPWindhail":
-				Float ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
-				outputdata =  (T) ISOBOPWindhail;
+				int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
+				Integer windhail = new Integer(ISOBOPWindhail);
+				//Float windhail = new Float(ISOBOPWindhail);
+				outputdata =  (T) windhail;
 				break;
 			}
 		}
@@ -323,9 +325,9 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	
-	protected float ISOBOPWindhail(String Data)
+	protected int ISOBOPWindhail(String Data)
 	{
-		float percentageData=0;
+		int percentageData=0;
 		if(Data.equals("Not Applicable"))
 		{
 			percentageData = 0;
@@ -333,7 +335,7 @@ public class IsoMacro implements MacroInterface
 		else
 		{
 			String[] windhail = Data.split("%");
-			percentageData = Float.valueOf(windhail[0])/100;			
+			percentageData = Integer.valueOf(windhail[0]);			
 			//DecimalFormat df = new DecimalFormat("#.####");
 			//String flo = df.format(percentageData);		
 			//float percentagevalue = Float.valueOf(flo);
