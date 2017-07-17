@@ -95,7 +95,7 @@ public class DatabaseOperation
 		} 
 		catch (SQLException e) 
 		{
-			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB");
+			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB",e);
 		}
 	}
 	
