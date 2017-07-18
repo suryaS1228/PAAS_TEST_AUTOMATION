@@ -243,7 +243,7 @@ public class BaseClass
 
 	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
 	{		
-		
+		boolean flag = false;
 		if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Pass"))
 		{		
 
@@ -258,9 +258,14 @@ public class BaseClass
 				if(!this.ifexist(Conditiontable.ReadData("NodeName")))
 				{
 					errorParentname.add(Parentname[i]);
+					if(flag == false)
+					{
+						errorMessage.add(Conditiontable.ReadData("Message"));
+						flag = true;
+					}
 				}
 			}
-			errorMessage.add(Conditiontable.ReadData("Message"));			
+						
 		}
 
 	}
