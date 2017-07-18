@@ -209,16 +209,16 @@ public class BaseClass
 	{
 		
 		boolean status = false;
-		if(actual == null)
+		if(actual == null||actual.equals(""))
 		{
-			if((expected.equals("")||expected.equals("0")))
+			if((expected == null || expected.equals("")||expected.equals("0") || expected.equals("0.0")))
 			{
 				status = true;
 			}
 		}
-		if(expected == null)
+		if(expected == null||expected.equals(""))
 		{
-			if(actual.equals("")||actual.equals("0"))
+			if(actual == null|| actual.equals("")||actual.equals("0") || actual.equals("0.0"))
 			{
 				status = true;
 			}
