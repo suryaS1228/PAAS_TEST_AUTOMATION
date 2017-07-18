@@ -1,18 +1,25 @@
 package com.solartis.test.listener;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import com.solartis.test.servicetesting.ServiceTestingProgram.TestEngine;
 
 
 public class LogListener implements Listener
 {
-	static Logger logError = Logger.getLogger("ERRORlog");
-	static Logger logInfo = Logger.getLogger("INFOlog");
-	
+	private static Logger Log;
+	static
+	{
+		String log4jConfigFile = "src/main/java/log4j.properties";
+		PropertyConfigurator.configure(log4jConfigFile);
+		Log = Logger.getLogger(TestEngine.class);
+	}
 	
 	@Override
 	public void beforeLoadSampleRequest()
 	{
-		
+		Log.debug("Success");
 	}
 
 	@Override
