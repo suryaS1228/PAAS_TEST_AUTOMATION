@@ -8,6 +8,8 @@ import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.listener.FireEventAPI;
+import com.solartis.test.listener.Listener;
+import com.solartis.test.listener.LogListener;
 import com.solartis.test.util.common.DatabaseOperation;
 
 public class TestEngine 
@@ -42,6 +44,9 @@ public class TestEngine
 			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
 		    api = (API) cons.newInstance(config);
 		    fireEventAPI = new FireEventAPI(api);
+		    Listener listener = new LogListener();
+		    fireEventAPI.addListener(listener);
+		    
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
