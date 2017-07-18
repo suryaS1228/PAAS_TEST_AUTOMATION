@@ -1,5 +1,9 @@
 package com.solartis.test.apiPackage;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
@@ -23,6 +27,8 @@ public class BaseClass
 	protected DBColoumnVerify InputColVerify = null;
 	protected DBColoumnVerify OutputColVerify = null;
 	protected DBColoumnVerify StatusColVerify = null;
+	protected LinkedHashMap<String,String> hMap = new LinkedHashMap<String,String>();
+	
 	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
@@ -174,16 +180,26 @@ public class BaseClass
 						else
 						{
 							output.WriteData(StatusColumn, "Fail");
+							analyse(StatusColVerify,output);
 						}
 					}
 					
 				}
 			 }while(StatusColVerify.MoveForward());
-	
+			String message = "";
+			for(Map.Entry m:hMap.entrySet())
+			{
+				System.out.println("12-----------------------------------------");
+				message=message+m.getValue()+"; ";
+			}
+				output.WriteData("AnalyserResult", message);
+			System.out.println(message);
+			hMap.clear();
 			return output;
 	    }
 	    catch(DatabaseException e)
 	    {
+	    	System.out.println(e);
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
@@ -223,6 +239,44 @@ public class BaseClass
 
 		return status;	
 		
+	}
+	
+	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
+	{
+
+		
+		if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Pass"))
+		{		
+
+		}
+
+		else if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Fail"))
+		{	
+			String[] Parentname =Conditiontable.ReadData("ParentName").split(";");
+			int noOfParentname=Parentname.length;
+			for(int i=0;i<noOfParentname;i++)
+			{
+				if(!this.ifexist(Parentname[i]))
+				hMap.put(Conditiontable.ReadData("ParentName"), Conditiontable.ReadData("Message"));
+			}
+		}
+
+	}
+
+	protected boolean ifexist (String NewParentName)
+	{
+		boolean exist = false;
+		for(Map.Entry m:hMap.entrySet())
+		{
+			String existParentName =(String) m.getKey();
+			if(existParentName.equals(NewParentName))
+			{
+				exist = true;
+				break;
+			}
+		}
+		return exist;	
+
 	}
 	
 }
