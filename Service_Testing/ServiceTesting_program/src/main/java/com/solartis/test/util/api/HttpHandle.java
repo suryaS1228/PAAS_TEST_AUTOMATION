@@ -110,7 +110,8 @@ public class HttpHandle
 		
 		if (output2 == null)
 		{
-			throw new HTTPHandleException("RETURNS EMPTY RESPONSE");
+			
+			throw new HTTPHandleException("RETURNS EMPTY RESPONSE",new Exception("Empty Response"));
 		}
 		
 		return output2;
