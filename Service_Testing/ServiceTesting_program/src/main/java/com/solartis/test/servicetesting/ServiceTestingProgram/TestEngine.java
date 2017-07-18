@@ -81,13 +81,13 @@ public class TestEngine
 									  
 									if(outputtable.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
 									{	
-								    	input = api.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+								    	input = fireEventAPI.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									
 								    	input.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 									}
 									else//INPUT AND OUT DB TABLE ARE DIFFERENT
 									{	
-										output = api.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+										output = fireEventAPI.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									
 										output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 									}
@@ -97,13 +97,13 @@ public class TestEngine
 								{
 									if(outputtable.equals("Y"))
 									{
-										 input = api.CompareFunction(input);//CALLING COMPARING FUNCTION
+										 input = fireEventAPI.CompareFunction(input);//CALLING COMPARING FUNCTION
 									     
 										 input.UpdateRow();
 									}
 									else
 									{
-										output = api.CompareFunction(output);//CALLING COMPARING FUNCTION
+										output = fireEventAPI.CompareFunction(output);//CALLING COMPARING FUNCTION
 									    
 										output.UpdateRow();
 									}
