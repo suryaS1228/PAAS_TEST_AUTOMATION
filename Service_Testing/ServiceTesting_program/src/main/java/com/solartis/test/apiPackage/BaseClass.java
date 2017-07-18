@@ -179,20 +179,20 @@ public class BaseClass
 						else
 						{
 							output.WriteData(StatusColumn, "Fail");
+							output.UpdateRow();
 							analyse(StatusColVerify,output);
 						}
 					}
 					
 				}
 			 }while(StatusColVerify.MoveForward());
-			String message = "";
 			
+			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
 				message=message+errorMessage.get(i)+"; ";
 			}
-				output.WriteData("AnalyserResult", message);
-			System.out.println(message);
+			output.WriteData("AnalyserResult", message);
 			errorMessage.clear();
 			errorParentname.clear();
 			return output;
@@ -243,6 +243,7 @@ public class BaseClass
 
 	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
 	{		
+		
 		if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Pass"))
 		{		
 
