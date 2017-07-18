@@ -1,9 +1,6 @@
 package com.solartis.test.apiPackage;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import java.util.ArrayList;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
@@ -27,7 +24,9 @@ public class BaseClass
 	protected DBColoumnVerify InputColVerify = null;
 	protected DBColoumnVerify OutputColVerify = null;
 	protected DBColoumnVerify StatusColVerify = null;
-	protected LinkedHashMap<String,String> hMap = new LinkedHashMap<String,String>();
+	protected ArrayList<String> errorParentname = new ArrayList<String>();
+	protected ArrayList<String> errorMessage=new ArrayList<String>();
+	
 	
 	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
@@ -187,14 +186,15 @@ public class BaseClass
 				}
 			 }while(StatusColVerify.MoveForward());
 			String message = "";
-			for(Map.Entry m:hMap.entrySet())
+			
+			for(int i=0;i<errorMessage.size();i++)
 			{
-				System.out.println("12-----------------------------------------");
-				message=message+m.getValue()+"; ";
+				message=message+errorMessage.get(i)+"; ";
 			}
 				output.WriteData("AnalyserResult", message);
 			System.out.println(message);
-			hMap.clear();
+			errorMessage.clear();
+			errorParentname.clear();
 			return output;
 	    }
 	    catch(DatabaseException e)
@@ -240,11 +240,9 @@ public class BaseClass
 		return status;	
 		
 	}
-	
-	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
-	{
 
-		
+	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
+	{		
 		if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Pass"))
 		{		
 
@@ -255,21 +253,25 @@ public class BaseClass
 			String[] Parentname =Conditiontable.ReadData("ParentName").split(";");
 			int noOfParentname=Parentname.length;
 			for(int i=0;i<noOfParentname;i++)
-			{
-				if(!this.ifexist(Parentname[i]))
-				hMap.put(Conditiontable.ReadData("ParentName"), Conditiontable.ReadData("Message"));
+			{								
+				if(!this.ifexist(Conditiontable.ReadData("NodeName")))
+				{
+					errorParentname.add(Parentname[i]);
+				}
 			}
+			errorMessage.add(Conditiontable.ReadData("Message"));			
 		}
 
 	}
 
-	protected boolean ifexist (String NewParentName)
+	protected boolean ifexist (String NodeName)
 	{
 		boolean exist = false;
-		for(Map.Entry m:hMap.entrySet())
+		int arraylength =errorParentname.size();
+		for(int i = 0; i<arraylength;i++)
 		{
-			String existParentName =(String) m.getKey();
-			if(existParentName.equals(NewParentName))
+			String existParentName =errorParentname.get(i);
+			if(existParentName.equals(NodeName))
 			{
 				exist = true;
 				break;
