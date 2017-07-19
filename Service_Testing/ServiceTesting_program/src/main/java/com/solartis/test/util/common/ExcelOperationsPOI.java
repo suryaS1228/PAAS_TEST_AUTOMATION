@@ -124,7 +124,6 @@ public class ExcelOperationsPOI
 			worksheet = (HSSFSheet) this.workbook.getSheet(this.sheet_name);
 		}
 		cell = this.worksheet.getRow(rowNumber).getCell(columnNumber);
-		System.out.println(this.cell.getCellType());
 		FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();		
 		evaluator.clearAllCachedResultValues();
 		//CellValue cellvalue1 =evaluator.evaluate(cell);
