@@ -135,7 +135,7 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeSendResponseDataToFile();
-		
+
 		try
 		{
 			output =api.SendResponseDataToFile(output);
@@ -157,7 +157,7 @@ public class FireEventAPI implements API
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
-		
+
 		try
 		{
 			output =api.CompareFunction(output);
