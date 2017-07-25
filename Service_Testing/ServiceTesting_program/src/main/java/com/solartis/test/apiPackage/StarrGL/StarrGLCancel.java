@@ -11,9 +11,9 @@ import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.common.*;
 
-public class StarrGLPolicyIssuance extends BaseClass implements API 
+public class StarrGLCancel extends BaseClass implements API 
 {
-	public StarrGLPolicyIssuance(PropertiesHandle config) throws SQLException
+	public StarrGLCancel(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
