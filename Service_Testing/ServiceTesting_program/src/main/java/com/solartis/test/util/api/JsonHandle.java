@@ -128,6 +128,12 @@ public class JsonHandle implements RequestResponse
 		{
 			doc.parse(enable_read());
 			path = JsonPath.compile(json_path);
+			if(doc.read(path).toString().equals("[]"))
+			{
+				
+				throw new PathNotFoundException("----> path not found in json file");
+				
+			}
 			return doc.read(path).toString();
 			
 		} 
@@ -136,6 +142,7 @@ public class JsonHandle implements RequestResponse
 		catch (PathNotFoundException |RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE READING STRING OPERATION", e);
+			
 		}
 	}
 	
@@ -159,7 +166,12 @@ public class JsonHandle implements RequestResponse
 		{
 			doc.parse(enable_read());
 			path = JsonPath.compile(json_path);
+			if(doc.read(path).toString().equals("[]"))
+			{
+				throw new PathNotFoundException("path not found in json file");
+			}
 			doc.set(path, new_value);
+			
 			enable_write(doc.jsonString());
 		} 
 		catch (PathNotFoundException | RequestFormatException e) 
@@ -168,10 +180,5 @@ public class JsonHandle implements RequestResponse
 		}
 		
 	}
-
-
-	
-
-	
 	
 }
