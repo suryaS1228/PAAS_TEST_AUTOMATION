@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import com.jayway.jsonpath.internal.JsonReader;
 import com.solartis.test.exception.RequestFormatException;
 
@@ -126,14 +127,23 @@ public class JsonHandle implements RequestResponse
 		try 
 		{
 			doc.parse(enable_read());
+			path = JsonPath.compile(json_path);
+			if(doc.read(path).toString().equals("[]"))
+			{
+				
+				throw new PathNotFoundException("----> path not found in json file");
+				
+			}
+			return doc.read(path).toString();
+			
 		} 
-		catch (RequestFormatException e) 
+		
+		
+		catch (PathNotFoundException |RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE READING STRING OPERATION", e);
+			
 		}
-		
-		path = JsonPath.compile(json_path);
-		return doc.read(path).toString();	
 	}
 	
 	public String FileToString() throws RequestFormatException
@@ -155,20 +165,20 @@ public class JsonHandle implements RequestResponse
 		try 
 		{
 			doc.parse(enable_read());
+			path = JsonPath.compile(json_path);
+			if(doc.read(path).toString().equals("[]"))
+			{
+				throw new PathNotFoundException("path not found in json file");
+			}
+			doc.set(path, new_value);
+			
+			enable_write(doc.jsonString());
 		} 
-		catch (RequestFormatException e) 
+		catch (PathNotFoundException | RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE ENABLE WRITING OPERATION", e);
 		}
-		path = JsonPath.compile(json_path);
-		doc.set(path, new_value);
-		enable_write(doc.jsonString());
 		
 	}
-
-
-	
-
-	
 	
 }
