@@ -2,11 +2,14 @@ package com.solartis.test.apiPackage.StarrGL;
 
 import java.sql.SQLException;
 
+import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.common.*;
@@ -39,4 +42,59 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
 		}
 	 }
+	
+	//=========================================================================================================================================
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	{
+		try
+		{
+			this.output=output;
+			OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			do 	
+			{
+			  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
+				{
+				try
+					{
+					String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+					//System.out.println(responseStatus);
+					if(responseStatus.equals("SUCCESS"))
+					{
+					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+					System.out.println(actual);
+					output.WriteData("flag_for_execution", "Completed");
+					}
+					else
+					{
+						output.WriteData("flag_for_execution",responseStatus);
+					}
+					}
+					catch(PathNotFoundException e)
+					{
+						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+					}
+				}
+			}while(OutputColVerify.MoveForward());
+		
+			
+			return output;
+		}
+		catch(DatabaseException | RequestFormatException e)
+		{
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
