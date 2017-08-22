@@ -228,7 +228,7 @@ public class BaseClass
 		if(actual!=null && expected!=null)
 		{
 			expected = expected.replaceAll("\\[\"", "");
-    		actual = actual.replaceAll("\\[\"", "");
+    		actual = actual.replaceAll("\\[\"", "");	
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
     		expected = expected.replaceAll("\\.[0-9]*", "");

@@ -1,5 +1,7 @@
 package com.solartis.test.apiPackage.Dtc;
 
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -9,14 +11,13 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class DtcSaveDetails4 extends BaseClass implements API
 {
 	public DtcSaveDetails4(PropertiesHandle config)
 	{
 		this.config = config;
-		jsonElements = new DatabaseOperation();
+		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -24,28 +25,21 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-		try
-    	{
-			this.input = InputData;
-			input = InputData;
-			switch(InputData.ReadData("Plan_name"))
-			{
-			 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
-			 									break;
-			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
-												break;
-			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
-												break; 
-			 
-			 default:
-			}
-    	}
-		catch(DatabaseException e)
-    	{
-    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS4 CLASS", e);
-    	}
+		this.input = InputData;
+		input = InputData;
+		switch(InputData.get("Plan_name"))
+		{
+		 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
+		 									break;
+		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
+											break;
+		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
+											break; 
+		 
+		 default:
+		}
 	}
 	
 	@Override
@@ -53,18 +47,19 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	{
 		try
 		{
-			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("StateCode1")+"_"+input.get("Plan_name")+".json");
 			System.out.println(sampleInput);
 			request.StringToFile(sampleInput.FileToString());
 			
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				if(InputColVerify.DbCol(input))
 				{
-					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
 					{
-						request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
 			}while(InputColVerify.MoveForward());
@@ -99,50 +94,51 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("StateCode1")+"_"+input.get("Plan_name")+".json");
 			response.StringToFile(response_string);
 		}
-		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
+		catch(RequestFormatException | HTTPHandleException e)
 		{
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
 		}
 	}
 	
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
 		{
 			String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-			OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-				do 	
-				{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+			{
+				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
 				if(OutputColVerify.DbCol(input))
 				{
 					 try
 				      {	
 							if(StatusCode.equals("SUCCESS"))
 							{
-								System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-								String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-								output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+								System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 								System.out.println(actual);
-								output.WriteData("Flag_for_execution", StatusCode);
+								output.put("Flag_for_execution", StatusCode);
 								
 							}
 							else
 							{
 								String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 								String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-								output.WriteData("Flag_for_execution", "Error response");
-								output.WriteData("Message_code", MessageCode);
-								output.WriteData("User_message", UserMessage);
+								output.put("Flag_for_execution", "Error response");
+								output.put("Message_code", MessageCode);
+								output.put("User_message", UserMessage);
 								
 							}
 				      }
 					catch(PathNotFoundException e)
 					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 					}
 				}while(OutputColVerify.MoveForward());

@@ -1,7 +1,8 @@
 package com.solartis.test.apiPackage.Dtc;
 
 import java.sql.SQLException;
-
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -15,7 +16,6 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.DtcMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class DtcRatingService extends BaseClass implements API 
 {
@@ -25,7 +25,7 @@ public class DtcRatingService extends BaseClass implements API
  public DtcRatingService(PropertiesHandle config) throws SQLException, MacroException
  {
   this.config = config;
-  jsonElements = new DatabaseOperation();
+  jsonElements = new LinkedHashMap<String, String>();
   
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -37,15 +37,15 @@ public class DtcRatingService extends BaseClass implements API
  }
  
  @Override
- public void LoadSampleRequest(DatabaseOperation InputData) throws  APIException
+ public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws  APIException
  {
 	try
 	{
 	 	  this.input = InputData;
 		  input = InputData;
 		  
-		  Planname=InputData.ReadData("Plan_name").split(";");
-		  Plancode=InputData.ReadData("Plan_code").split(";");
+		  Planname=InputData.get("Plan_name").split(";");
+		  Plancode=InputData.get("Plan_code").split(";");
 		  int numofplan = Planname.length;
 		  switch(numofplan)
 		   
@@ -66,7 +66,7 @@ public class DtcRatingService extends BaseClass implements API
 				  macro.GenerateExpected(InputData, config);        //Generate expected rating models  
 			}
 	}
-	catch(DatabaseException | MacroException e)
+	catch(MacroException e)
 	{
 		 throw new APIException("ERROR LoadSampleRequest FUNCTION -- DTC-RatingService CLASS", e);
 	}
@@ -77,43 +77,44 @@ public class DtcRatingService extends BaseClass implements API
  {
 	  try
 	  {
-    	InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-	  request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_name")+".json");
-	  request.StringToFile(sampleInput.FileToString());
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+		 request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_name")+".json");
+		 request.StringToFile(sampleInput.FileToString());
 	  
-		do
-		{
-		if(InputColVerify.DbCol(input)&& (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
-		{
-		  if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
-		  {
-			if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_name"))
-		    {
-		     for(int j=0;j<Planname.length;j++)
-		     {
-		      String DynamicPlannameJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
-		      String SplitPlanJson[] = DynamicPlannameJson.split("##");
-		      request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
-		     }
-		    }
-		    else if(InputColVerify.ReadData(config.getProperty("InputColumn")).equals("Plan_code"))
-		    {
-		    	System.out.println(Plancode.length);
-		        for(int j=0;j<Plancode.length;j++)
-		        {
-		         String DynamicPlanCodeJson = InputColVerify.ReadData(config.getProperty("InputJsonPath"));
-		         String SplitCodeJson[] = DynamicPlanCodeJson.split("##"); 
-		         System.out.println(SplitCodeJson[0]+j+SplitCodeJson[1]);
-		         request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
-		        }
-		     }
-		    else
-		    {
-		     request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
-		    }
-		   }
-		  }
-		}while(InputColVerify.MoveForward());
+		 for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
+			{
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+				if(InputColVerify.DbCol(rowInputColVerify)&& (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				{
+				  if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
+				  {
+					if(rowInputColVerify.get(config.getProperty("InputColumn")).equals("Plan_name"))
+				    {
+				     for(int j=0;j<Planname.length;j++)
+				     {
+				      String DynamicPlannameJson = rowInputColVerify.get(config.getProperty("InputJsonPath"));
+				      String SplitPlanJson[] = DynamicPlannameJson.split("##");
+				      request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
+				     }
+				    }
+				    else if(rowInputColVerify.get(config.getProperty("InputColumn")).equals("Plan_code"))
+				    {
+				    	System.out.println(Plancode.length);
+				        for(int j=0;j<Plancode.length;j++)
+				        {
+				         String DynamicPlanCodeJson = rowInputColVerify.get(config.getProperty("InputJsonPath"));
+				         String SplitCodeJson[] = DynamicPlanCodeJson.split("##"); 
+				         System.out.println(SplitCodeJson[0]+j+SplitCodeJson[1]);
+				         request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
+				        }
+				     }
+				    else
+				    {
+				     request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
+				    }
+				   }
+				  }
+				}
 			if(config.getProperty("status").equals("Y"))
 			{
 				macro.PumpinData(input, config);    //Data feed into Sample Rating model
@@ -153,10 +154,10 @@ public class DtcRatingService extends BaseClass implements API
     http.SendData(input_data);  
     String response_string = null; 
     response_string = http.ReceiveData();  
-    response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_name")+".json");  
+    response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_name")+".json");  
     response.StringToFile(response_string);
   }
-  catch(HTTPHandleException | RequestFormatException | DatabaseException e)
+  catch(HTTPHandleException | RequestFormatException e)
   {
 	  throw new APIException("ERROR SendAndReceiveData FUNCTION -- DTC-RatingService CLASS", e);
   }
@@ -165,33 +166,34 @@ public class DtcRatingService extends BaseClass implements API
  }
 
  @Override
- public DatabaseOperation SendResponseDataToFile(DatabaseOperation output)   throws APIException
+ public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
  {
 	try
 	{
-		OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-			do 	
-			{
-			  if(OutputColVerify.DbCol(input)&& (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+		{
+			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			  if(OutputColVerify.DbCol(rowOutputColVerify)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 				try
 					{
-					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 					System.out.println(config.getProperty("OutputColumn")); 
-					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 	
 					System.out.println(actual);
-					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
-					output.WriteData("flag_for_execution", "Completed");
+					output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException | RequestFormatException e)
 					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 				}
-			}while(OutputColVerify.MoveForward());
+			}
 		
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 	}

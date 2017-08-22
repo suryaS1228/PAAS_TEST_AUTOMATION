@@ -1,19 +1,19 @@
 package com.solartis.test.apiPackage.Dtc;
 
+import java.util.LinkedHashMap;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class DtcPreviewPDF extends BaseClass implements API
 {
 	public DtcPreviewPDF(PropertiesHandle config)
 	{
 		this.config = config;
-		jsonElements = new DatabaseOperation();
+		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	

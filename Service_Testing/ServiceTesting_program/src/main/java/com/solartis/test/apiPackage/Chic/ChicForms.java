@@ -1,6 +1,7 @@
 package com.solartis.test.apiPackage.Chic;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -17,19 +18,12 @@ public class ChicForms extends BaseClass implements API
 {	
 	public ChicForms(PropertiesHandle config) throws APIException 
 	{
-		try
-		{
-			this.config = config;
-			XmlElements = new LinkedHashMap<String, String>();
-			XmlElements.GetDataObjects(config.getProperty("json_query"));
-			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		}
-		catch(DatabaseException e)
-		{
-			throw new APIException("ERROR IN CONSTRUCTOR -- CHIC FORM CLASS", e);
-		}
+		this.config = config;
+		XmlElements = new LinkedHashMap<String, String>();
+        
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
 	@Override
@@ -45,17 +39,18 @@ public class ChicForms extends BaseClass implements API
 	{
 		try
 		{
-			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
 			request.StringToFile(sampleInput.FileToString());
 			
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				if(InputColVerify.DbCol(input))
 				{
-					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
 					{
-						request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+						request.write(rowInputColVerify.get(config.getProperty("InputColumn")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
 			}while(InputColVerify.MoveForward());
@@ -76,17 +71,17 @@ public class ChicForms extends BaseClass implements API
 			http.SendData(input_data);
 			String response_string = null;
 			response_string = http.ReceiveData();
-			response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
+			response = new XmlHandle(config.getProperty("response_location")+input.get("testdata")+"_response"+".xml");
 			response.StringToFile(response_string);
 		}
-		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
+		catch(RequestFormatException | HTTPHandleException e)
 		{
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- CHIC FORM CLASS", e);
 		}
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
 		{

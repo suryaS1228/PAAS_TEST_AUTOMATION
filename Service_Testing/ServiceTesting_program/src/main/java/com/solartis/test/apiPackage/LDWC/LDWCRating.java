@@ -3,7 +3,10 @@ package com.solartis.test.apiPackage.LDWC;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.Random;
+import java.util.Map.Entry;
+
 import org.dom4j.DocumentException;
 import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -25,7 +28,7 @@ public class LDWCRating extends BaseClass implements API
 	public LDWCRating(PropertiesHandle config)
 	{
 		this.config = config;
-		XmlElements = new DatabaseOperation();
+		XmlElements = new LinkedHashMap<String, String>();
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
@@ -33,7 +36,7 @@ public class LDWCRating extends BaseClass implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData)
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
 	{	 
 		this.input = InputData;	
 		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
@@ -44,24 +47,25 @@ public class LDWCRating extends BaseClass implements API
 	{
 		try
 		{
-			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
 			request.StringToFile(sampleInput.FileToString());
 			String Reqid = this.RqUID();
 			System.out.println(Reqid);
 			request.write("//InsuranceSvcRq/RqUID",Reqid);
-			input.WriteData("RequestUID", Reqid);
+			input.put("RequestUID", Reqid);
 			
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
-				if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
-					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
 					{
-						request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
-			}while(InputColVerify.MoveForward());
+			}
 		}
 		catch(DatabaseException | RequestFormatException e)
 		{
@@ -92,38 +96,39 @@ public class LDWCRating extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
+			response = new XmlHandle(config.getProperty("response_location")+input.get("testdata")+"_response"+".xml");
 			response.StringToFile(response_string);
 		}
-		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
+		catch(RequestFormatException | HTTPHandleException e)
 		{
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
 		{ 
-			OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-			do 	
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
-			if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
-			{
-				 try
-			      {	
-				   System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-				   String actual = (response.read((OutputColVerify.ReadData(config.getProperty("OutputJsonPath")))).replaceAll("\\[\"","")).replaceAll("\"\\]","").replaceAll("\\\\","");
-				   output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
-				   output.WriteData("flag_for_execution", "Completed");
-			      }
-					catch(PathNotFoundException e)
-					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				{
+					 try
+				      {	
+					   System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+					   String actual = (response.read((rowOutputColVerify.get(config.getProperty("OutputJsonPath")))).replaceAll("\\[\"","")).replaceAll("\"\\]","").replaceAll("\\\\","");
+					   output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+					   output.put("flag_for_execution", "Completed");
+				      }
+						catch(PathNotFoundException e)
+						{
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+						}
 					}
-				}
-			}while(OutputColVerify.MoveForward());
+			}
 	
 				return output;	
 		}
