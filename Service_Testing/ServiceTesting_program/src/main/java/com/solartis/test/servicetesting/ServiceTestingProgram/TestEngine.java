@@ -2,6 +2,10 @@ package com.solartis.test.servicetesting.ServiceTestingProgram;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
@@ -21,22 +25,27 @@ public class TestEngine
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
-		PropertiesHandle config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));
-
+		//PropertiesHandle config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));
+		PropertiesHandle config = new PropertiesHandle(args[0],args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+		
 		DatabaseOperation.ConnectionSetup(config);
 		
 		String actualchoice = config.getProperty("actual");
 		String statuschoice = config.getProperty("status");
-		String outputtable = config.getProperty("output_in_same_table");
+		String outputtablechoice = config.getProperty("output_in_same_table");
 		String classname = config.getProperty("ClassName");
 		
 		DatabaseOperation input = new DatabaseOperation();
 		
-		input.GetDataObjects(config.getProperty("input_query"));
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects(config.getProperty("input_query"));
+		
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
 		
 		DatabaseOperation output = new DatabaseOperation();
 		
-		output.GetDataObjects(config.getProperty("output_query"));
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable = output.GetDataObjects(config.getProperty("output_query"));
+		
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
 		
 		try 
 		{
@@ -57,16 +66,22 @@ public class TestEngine
 			try 
 			{
 
-				do
+				//for (Entry<Integer, LinkedHashMap<String, String>> entry : inputtable.entrySet())
+				while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
 				{
-					System.out.println("TestData : " + input.ReadData("S.No"));  	
-							if(input.ReadData("flag_for_execution").equals("Y"))
+					Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+					Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+					Integer inputtablekey = inputentry.getKey();
+			        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			        LinkedHashMap<String, String> outputrow = outputentry.getValue();	
+					System.out.println("TestData : " + inputrow.get("S.No"));  	
+							if(inputrow.get("Flag_for_execution").equals("Y"))
 							{
-							    System.out.println("TestData" + input.ReadData("S.No") + "flag_for_execution = Y" );					 
+							    System.out.println("TestData" + inputrow.get("S.No") + "flag_for_execution = Y" );					 
 								
-							    fireEventAPI.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
+							    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                                 
-							    fireEventAPI.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 
+							    fireEventAPI.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST s
 							    
 							    fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
 							
@@ -79,49 +94,53 @@ public class TestEngine
 								if(actualchoice.equals("Y"))
 								{
 									  
-									if(outputtable.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
+									if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
 									{	
-								    	input = fireEventAPI.SendResponseDataToFile(input);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+										inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									
-								    	input.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+										input.UpdateRow(inputtablekey, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 									}
 									else//INPUT AND OUT DB TABLE ARE DIFFERENT
 									{	
-										output = fireEventAPI.SendResponseDataToFile(output);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-									
-										output.UpdateRow();//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+										
+										outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+										
+										output.UpdateRow(inputtablekey, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+										
 									}
 								} 
 								
 								if(statuschoice.equals("Y"))
 								{
-									if(outputtable.equals("Y"))
+									if(outputtablechoice.equals("Y"))
 									{
-										 input = fireEventAPI.CompareFunction(input);//CALLING COMPARING FUNCTION
+										inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
 									     
-										 input.UpdateRow();
+										input.UpdateRow(inputtablekey, inputrow);
 									}
 									else
 									{
-										output = fireEventAPI.CompareFunction(output);//CALLING COMPARING FUNCTION
+										outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
 									    
-										output.UpdateRow();
+										output.UpdateRow(inputtablekey, outputrow);
+										
+										output.UpdateTable(outputtable);
 									}
 								} 
 								
-								input.WriteData("Flag_for_execution", "Completed");
-								input.UpdateRow();//UPDATE DB TABLE ROWS AFTER COMPARSION
+								inputrow.put("Flag_for_execution", "Completed");
+								input.UpdateRow(inputtablekey, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 								}
 							else
 							{
-								System.out.println("TestData" + input.ReadData("S.No") + "---flag_for_execution N");
+								System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
 							}
 					
 					if(actualchoice.equals("Y") || statuschoice.equals("Y"))
 					{
 						output.MoveForward();
 					}
-				}while(input.MoveForward());
+				}
 			} 
 			catch (APIException e1)
 			{

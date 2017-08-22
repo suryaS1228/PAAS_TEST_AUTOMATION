@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,61 +58,62 @@ public class IsoMacro implements MacroInterface
 		
 	}
 	
-	public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws MacroException
+	public void LoadSampleRatingmodel(PropertiesHandle configFile,LinkedHashMap<String, String> inputData) throws MacroException
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
+			String RateingModelName = Lookup(inputData.get("RatingModel_version"),configFile);
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
-		catch (DatabaseException | POIException e)
+		catch (POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL", e);
 		}
 	}
 	
-	public void GenerateExpected(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	public void GenerateExpected(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
-		catch(DatabaseException | POIException e)
+		catch(POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
 		}
 	}
 	
-	public void PumpinData(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	public void PumpinData(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 			trans= new IsoMacro(configFile);
-			do
-			{								
-				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y"))
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
+			{		
+				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
+				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
 				{
-					if (configTable.ReadData("Type").equals("input"))
+					if (rowPumpinData.get("Type").equals("input"))
 					{
-						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-						String CellAddress = configTable.ReadData("Cell_Address");
+						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
+						String CellAddress = rowPumpinData.get("Cell_Address");
 						
-						String  Datatowrite = inputData.ReadData(Datacolumntowrite);
+						String  Datatowrite = inputData.get(Datacolumntowrite);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						excel.getsheets(configTable.ReadData("Sheet_Name"));
+						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
-						if(configTable.ReadData("Translation_Flag").equals("Y"))
+						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, configTable, configFile));
+							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
 						{
@@ -131,7 +134,7 @@ public class IsoMacro implements MacroInterface
 						}
 					}
 				}
-			}while(configTable.MoveForward());
+			}
 			excel.refresh();
 			excel.save();
 		}
@@ -145,32 +148,32 @@ public class IsoMacro implements MacroInterface
 		}
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException    
+	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException    
 	{
 		try
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-		configTable.GetDataObjects(configFile.getProperty("config_query"));
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		excel.refresh();
-		do
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 		{
-			
-			if (configTable.ReadData("flag_for_execution").equals("Y"))
+			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
+			if (rowPumpoutData.get("flag_for_execution").equals("Y"))
 			{
-				if (configTable.ReadData("Type").equals("output"))
+				if (rowPumpoutData.get("Type").equals("output"))
 				{
-					String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-					String CellAddress = configTable.ReadData("Cell_Address");
+					String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
+					String CellAddress = rowPumpoutData.get("Cell_Address");
 					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 					int columnNum=Alphabet.getNum(part[0].toUpperCase());
 					int rowNum = Integer.parseInt(part[1]);
-					excel.getsheets(configTable.ReadData("Sheet_Name"));
+					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
-					outputData.WriteData(Datacolumntowrite, Datatowrite);
+					outputData.put(Datacolumntowrite, Datatowrite);
 				}
 			}
-			outputData.UpdateRow();
+			//outputData.UpdateRow();
 		}while(configTable.MoveForward());
 		excel.save();
 		}
@@ -185,36 +188,28 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws   MacroException
+	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws   MacroException
 	{
 		T outputdata = null;
-		try
+		switch(configTable.get("Translation_Function"))
 		{
-		
-			switch(configTable.ReadData("Translation_Function"))
-			{
-			case "Date": 
-				Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.ReadData("Translation_Format"));
-				outputdata = (T) DateData;
-				break;
-			case "Lookup":
-				String LookupData = Lookup(Datatowrite, configFile);
-				outputdata = (T) LookupData;
-				break;
-			case "PaddingZeros":
-				String PaddingZeros = PaddingZeros(Datatowrite);
-				outputdata = (T) PaddingZeros;
-				break;
-			case "ISOBOPWindhail":
-				int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
-				Integer windhail = new Integer(ISOBOPWindhail);
-				outputdata =  (T) windhail;
-				break;
-			}
-		}
-		catch (DatabaseException e)
-		{
-			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF ISO MACRO", e);
+		case "Date": 
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
+			outputdata = (T) DateData;
+			break;
+		case "Lookup":
+			String LookupData = Lookup(Datatowrite, configFile);
+			outputdata = (T) LookupData;
+			break;
+		case "PaddingZeros":
+			String PaddingZeros = PaddingZeros(Datatowrite);
+			outputdata = (T) PaddingZeros;
+			break;
+		case "ISOBOPWindhail":
+			int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
+			Integer windhail = new Integer(ISOBOPWindhail);
+			outputdata =  (T) windhail;
+			break;
 		}
 		return outputdata;
 		
@@ -268,22 +263,16 @@ public class IsoMacro implements MacroInterface
 	{
 		
 		DatabaseOperation Lookup = new DatabaseOperation();
+		
+		HashMap<String,String> LookupMap = new HashMap<String,String>();
 		try 
 		{
-			Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
-		} 
-		catch (DatabaseException e) 
-		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP QUERY OF ISO MACRO", e);
-		}
-		HashMap<String,String> LookupMap = new HashMap<String,String>();
-		try {
-			do
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
 			{
-				LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
-				
-				
-			}while(Lookup.MoveForward());
+				LinkedHashMap<String, String> rowLookup = entry.getValue();
+				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));	
+			}
 		} 
 		catch (DatabaseException e) 
 		{

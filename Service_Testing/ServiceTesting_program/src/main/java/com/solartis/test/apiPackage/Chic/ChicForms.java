@@ -1,5 +1,7 @@
 package com.solartis.test.apiPackage.Chic;
 
+import java.util.LinkedHashMap;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -18,7 +20,7 @@ public class ChicForms extends BaseClass implements API
 		try
 		{
 			this.config = config;
-			XmlElements = new DatabaseOperation();
+			XmlElements = new LinkedHashMap<String, String>();
 			XmlElements.GetDataObjects(config.getProperty("json_query"));
 			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -31,7 +33,7 @@ public class ChicForms extends BaseClass implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData)
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
 	{
 		this.input = InputData;
 		sampleInput = new XmlHandle(config.getProperty("sample_request"));

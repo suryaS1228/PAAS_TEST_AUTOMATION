@@ -1,6 +1,9 @@
 package com.solartis.test.apiPackage;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
@@ -8,29 +11,26 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class BaseClass 
 {
 	protected RequestResponse sampleInput = null;
 	protected RequestResponse request = null;
 	protected RequestResponse response = null;
-	protected DatabaseOperation XmlElements = null;
-	protected DatabaseOperation jsonElements = null;
+	protected LinkedHashMap<String, String> XmlElements = null;
+	protected LinkedHashMap<String, String> jsonElements = null;
 	protected PropertiesHandle config = null;
-	protected DatabaseOperation input = null;
-	protected DatabaseOperation output = null;
+	protected LinkedHashMap<String, String> input = null;
+	protected LinkedHashMap<String, String> output = null;
 	protected HttpHandle http = null;
 	protected DBColoumnVerify InputColVerify = null;
 	protected DBColoumnVerify OutputColVerify = null;
 	protected DBColoumnVerify StatusColVerify = null;
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
-	
-	
-	
+
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
@@ -41,22 +41,23 @@ public class BaseClass
 	{
 		try
 		{
-			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+".json");
-			request.StringToFile(sampleInput.FileToString());
-			
-			do
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+					
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
-				if(InputColVerify.DbCol(input) && (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
+				request.StringToFile(sampleInput.FileToString());
+				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
-					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
 					{
-	
-						request.write(InputColVerify.ReadData(config.getProperty("InputJsonPath")), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+	                  	request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
-			}while(InputColVerify.MoveForward());
+			}
 		}
+			
 		catch(DatabaseException | RequestFormatException  e)
 		{
 			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
@@ -100,10 +101,10 @@ public class BaseClass
 			input_data = request.FileToString();
 		    http.SendData(input_data);
 			String response_string = http.ReceiveData();	
-			response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+".json");
 			response.StringToFile(response_string);
 		}
-		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
+		catch(RequestFormatException | HTTPHandleException e)
 		{
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
@@ -123,31 +124,31 @@ public class BaseClass
 	}
 	
 //-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
 		{
-			this.output=output;
-			OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-			do 	
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
-			  if(OutputColVerify.DbCol(input) && (OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
+				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 				try
-					{
-					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+				{
+					System.out.println("Writing Response to Table");
+					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
-					output.WriteData("flag_for_execution", "Completed");
-					}
-					catch(PathNotFoundException e)
-					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
-					}
+					output.put("flag_for_execution", "Completed");
 				}
-			}while(OutputColVerify.MoveForward());
-		
+				catch(PathNotFoundException e)
+				{
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+				}
+				}
+			}
 			
 			return output;
 		}
@@ -158,45 +159,46 @@ public class BaseClass
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public DatabaseOperation CompareFunction(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> outputrow) throws APIException
 	{		
 	    try
 	    {
-			StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-			do 	
+	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
 			{	
-			  if(StatusColVerify.DbCol(input) && (StatusColVerify.ReadData("Comaparision_Flag").equalsIgnoreCase("Y")))
+			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();	
+			    if(StatusColVerify.DbCol(rowStatusColVerify) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
-					String ExpectedColumn = StatusColVerify.ReadData(config.getProperty("ExpectedColumn"));
-					String ActualColumn = StatusColVerify.ReadData(config.getProperty("OutputColumn"));
-					String StatusColumn = StatusColVerify.ReadData(config.getProperty("StatusColumn"));
+					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
+					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
+					String StatusColumn = rowStatusColVerify.get(config.getProperty("StatusColumn"));
 					if(!(StatusColumn.equals("")) && !(ExpectedColumn.equals("")))
 					{
-						if(premium_comp(output.ReadData(ExpectedColumn),output.ReadData(ActualColumn)))
+						if(premium_comp(outputrow.get(ExpectedColumn),outputrow.get(ActualColumn)))
 						{
-							output.WriteData(StatusColumn, "Pass");
+							outputrow.put(StatusColumn, "Pass");
 						}
 						else
 						{
-							output.WriteData(StatusColumn, "Fail");
-							output.UpdateRow();
-							analyse(StatusColVerify,output);
+							outputrow.put(StatusColumn, "Fail");
+							//outputrow.UpdateRow();
+							analyse(rowStatusColVerify,outputrow);
 						}
 					}
-					
 				}
-			 }while(StatusColVerify.MoveForward());
-			
+			}
+			 			
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
 				message=message+errorMessage.get(i)+"; ";
 			}
-			output.WriteData("AnalyserResult", message);
+			outputrow.put("AnalyserResult", message);
 			errorMessage.clear();
 			errorParentname.clear();
-			return output;
-	    }
+			return outputrow;
+
+	    }	
 	    catch(DatabaseException e)
 	    {
 	    	System.out.println(e);
@@ -241,26 +243,27 @@ public class BaseClass
 		
 	}
 
-	protected void analyse(DatabaseOperation Conditiontable,DatabaseOperation output ) throws DatabaseException 
+	protected void analyse(LinkedHashMap<String, String> Conditiontablerow,LinkedHashMap<String, String> outputrow ) throws DatabaseException 
 	{		
 		boolean flag = false;
-		if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Pass"))
+		
+		if(outputrow.get(Conditiontablerow.get("StatusColumn")).equals("Pass"))
 		{		
 
 		}
 
-		else if(output.ReadData(Conditiontable.ReadData("StatusColumn")).equals("Fail"))
+		else if(outputrow.get(Conditiontablerow.get("StatusColumn")).equals("Fail"))
 		{	
-			String[] Parentname =Conditiontable.ReadData("ParentName").split(";");
+			String[] Parentname =Conditiontablerow.get("ParentName").split(";");
 			int noOfParentname=Parentname.length;
 			for(int i=0;i<noOfParentname;i++)
 			{								
-				if(!this.ifexist(Conditiontable.ReadData("NodeName")))
+				if(!this.ifexist(Conditiontablerow.get("NodeName")))
 				{
 					errorParentname.add(Parentname[i]);
 					if(flag == false)
 					{
-						errorMessage.add(Conditiontable.ReadData("Message"));
+						errorMessage.add(Conditiontablerow.get("Message"));
 						flag = true;
 					}
 				}

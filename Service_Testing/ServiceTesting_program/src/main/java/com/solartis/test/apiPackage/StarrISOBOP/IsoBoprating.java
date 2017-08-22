@@ -1,5 +1,7 @@
 package com.solartis.test.apiPackage.StarrISOBOP;
 
+import java.util.LinkedHashMap;
+
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -22,7 +24,7 @@ public class IsoBoprating extends BaseClass implements API
 	    try
 	    {
 			this.config = config;
-			jsonElements = new DatabaseOperation();
+			jsonElements = new LinkedHashMap<String, String>();
 		
 			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -54,7 +56,7 @@ public class IsoBoprating extends BaseClass implements API
 		}
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -86,7 +88,7 @@ public class IsoBoprating extends BaseClass implements API
 		super.PumpDataToRequest();
 	}
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -99,8 +101,8 @@ public class IsoBoprating extends BaseClass implements API
 				throw new APIException("ERROR SendResponseDataToFile FUNCTION -- ISO-RATING CLASS", e);
 			}
 		}
-		super.SendResponseDataToFile(output);
-		return output;		
+		return super.SendResponseDataToFile(output);
+				
 	}
 	
 }

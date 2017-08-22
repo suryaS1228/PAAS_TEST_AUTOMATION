@@ -6,7 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,7 +62,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		}
 		
 	}
-	public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws MacroException
+	public void LoadSampleRatingmodel(PropertiesHandle configFile,LinkedHashMap<String, String> inputData) throws MacroException
 	{
 		try
 		{
@@ -75,51 +77,51 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		}
 	}
 	
-	public void GenerateExpected(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	public void GenerateExpected(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
 		}
-		catch(DatabaseException | POIException e)
+		catch(POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL OF COVERWALLET MACRO", e);
 		}
 	}
 	
-	public void PumpinData(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	public void PumpinData(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
-			//DatabaseOperation configTable = new DatabaseOperation();
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 			trans= new coverWalletMacro(configFile);
 			MacroCondVerify = new DBColoumnVerify("conditionChecking");
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{	
-				String condition = configTable.ReadData("Condition");
-				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
+				LinkedHashMap<String, String> rowtablePumpinData = entry.getValue();
+				String condition = rowtablePumpinData.get("Condition");
+				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,rowtablePumpinData))
 				{
-					if (configTable.ReadData("Type").equals("input"))
+					if (rowtablePumpinData.get("Type").equals("input"))
 					{
-						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-						String CellAddress = configTable.ReadData("Cell_Address");
+						String Datacolumntowrite = rowtablePumpinData.get("Input_DB_column");
+						String CellAddress = rowtablePumpinData.get("Cell_Address");
 						
-						String  Datatowrite = inputData.ReadData(Datacolumntowrite);
+						String  Datatowrite = inputData.get(Datacolumntowrite);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+configTable.ReadData("Sheet_Name")+"-----"+Datatowrite);
-						excel.getsheets(configTable.ReadData("Sheet_Name"));
+						//System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
+						excel.getsheets(rowtablePumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
-						if(configTable.ReadData("Translation_Flag").equals("Y"))
+						if(rowtablePumpinData.get("Translation_Flag").equals("Y"))
 						{
-							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, configTable, configFile));
+							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowtablePumpinData, configFile));
 						}
 						else
 						{
@@ -143,7 +145,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 						}
 					}
 				}
-			}while(configTable.MoveForward());
+			}
 			excel.refresh();
 			excel.save();	
 		}
@@ -157,35 +159,36 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		} 
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			excel.refresh();
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 			{
-				String condition = configTable.ReadData("Condition");
-				if (configTable.ReadData("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
+				LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
+				String condition = rowPumpoutData.get("Condition");
+				if (rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 				{
-					if (configTable.ReadData("Type").equals("output"))
+					if (rowPumpoutData.get("Type").equals("output"))
 					{
-						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-						String CellAddress = configTable.ReadData("Cell_Address");
+						String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
+						String CellAddress = rowPumpoutData.get("Cell_Address");
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						excel.getsheets(configTable.ReadData("Sheet_Name"));
+						excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 						excel.getcell(rowNum-1, columnNum);
 						String Datatowrite = excel.read_data(rowNum-1, columnNum);
 						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
-						outputData.WriteData(Datacolumntowrite, Datatowrite);
+						outputData.put(Datacolumntowrite, Datatowrite);
 						//outputData.WriteData(Datacolumntowrite, "poda");
 					}
 				}
-				outputData.UpdateRow();
-			}while(configTable.MoveForward());
+				//vickyoutputData.UpdateRow();
+			}
 			excel.save();
 		}
 		catch(DatabaseException e)
@@ -200,34 +203,27 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws MacroException
+	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws MacroException
 	{
 		T outputdata = null;
-		try
+		switch(configTable.get("Translation_Function"))
 		{
-			switch(configTable.ReadData("Translation_Function"))
-			{
-			case "Date": 
-				Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.ReadData("Translation_Format"));
-				outputdata = (T) DateData;
-				break;
-			case "Lookup":
-				String LookupData = Lookup(Datatowrite, configFile);
-				outputdata = (T) LookupData;
-				break;
-			case "String":
-				String Stringdata = IntegertoString(Datatowrite);
-				outputdata = (T) Stringdata;
-				break;		
-			case "percentage":
-				float percentagedata = percentage(Datatowrite);
-				Float percent = new Float(percentagedata);
-				outputdata = (T) percent;
-			}
-		}
-		catch (DatabaseException e)
-		{
-			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF COVERWALLET MACRO", e);
+		case "Date": 
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
+			outputdata = (T) DateData;
+			break;
+		case "Lookup":
+			String LookupData = Lookup(Datatowrite, configFile);
+			outputdata = (T) LookupData;
+			break;
+		case "String":
+			String Stringdata = IntegertoString(Datatowrite);
+			outputdata = (T) Stringdata;
+			break;		
+		case "percentage":
+			float percentagedata = percentage(Datatowrite);
+			Float percent = new Float(percentagedata);
+			outputdata = (T) percent;
 		}
 		return outputdata;
 		
@@ -280,22 +276,15 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws MacroException
 	{
 		DatabaseOperation Lookup = new DatabaseOperation();
-		try 
-		{
-			Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
-		} 
-		catch (DatabaseException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
 		try 
 		{
-			do
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
 			{
-				
-				LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
+				LinkedHashMap<String, String> rowLookup = entry.getValue();
+				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));
 				
 			}while(Lookup.MoveForward());
 		} 
