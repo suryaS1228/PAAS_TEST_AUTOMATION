@@ -1,7 +1,6 @@
 package com.solartis.test.apiPackage.CoverWallet;
 
 import java.util.LinkedHashMap;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -15,7 +14,6 @@ import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class CoverWalletRate extends BaseClass implements API
 {

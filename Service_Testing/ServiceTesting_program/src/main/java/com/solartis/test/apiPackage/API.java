@@ -1,9 +1,7 @@
 package com.solartis.test.apiPackage;
 
 import java.util.LinkedHashMap;
-
 import com.solartis.test.exception.APIException;
-import com.solartis.test.util.common.*;
 
 public interface API 
 {

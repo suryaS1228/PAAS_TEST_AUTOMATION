@@ -1,14 +1,8 @@
 package com.solartis.test.apiPackage.LDWC;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Random;
 import java.util.Map.Entry;
-
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -18,7 +12,6 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 
 public class LDWCRating extends BaseClass implements API
@@ -146,7 +139,8 @@ public class LDWCRating extends BaseClass implements API
 	        for(int i=0; i<RANDOM_STRING_LENGTH; i++){
 	            int number = getRandomNumber();
 	            char ch = CHAR_LIST.charAt(number);
-	            StringBuffer s = randStr.append(ch);
+	            @SuppressWarnings("unused")
+				StringBuffer s = randStr.append(ch);
 	            }
 	        return randStr.toString();
 	  }

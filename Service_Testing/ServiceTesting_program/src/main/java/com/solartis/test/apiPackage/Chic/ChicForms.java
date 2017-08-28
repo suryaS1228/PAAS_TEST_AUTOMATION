@@ -2,7 +2,6 @@ package com.solartis.test.apiPackage.Chic;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -12,7 +11,6 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class ChicForms extends BaseClass implements API
 {	
@@ -84,23 +82,25 @@ public class ChicForms extends BaseClass implements API
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
-		{
-			do 	
+		{   
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+		    for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
-			if(OutputColVerify.DbCol(input))
+			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			if(OutputColVerify.DbCol(rowOutputColVerify))
 			{
 				 try
 			      {	
 				
-				String actual = (response.read(XmlElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+				String actual = (response.read(XmlElements.get(rowOutputColVerify.get(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 			      }
 					catch(PathNotFoundException e)
 					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 					}
-				}while(OutputColVerify.MoveForward());
+				}
 	
 				return output;	
 		}

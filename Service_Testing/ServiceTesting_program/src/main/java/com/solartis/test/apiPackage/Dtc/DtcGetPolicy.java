@@ -2,7 +2,6 @@ package com.solartis.test.apiPackage.Dtc;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -12,7 +11,6 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class DtcGetPolicy extends BaseClass implements API
 {

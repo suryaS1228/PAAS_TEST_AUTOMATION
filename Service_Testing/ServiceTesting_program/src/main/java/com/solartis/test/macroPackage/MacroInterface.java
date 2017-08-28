@@ -1,12 +1,10 @@
 package com.solartis.test.macroPackage;
 
 import java.util.LinkedHashMap;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public interface MacroInterface 
 {

@@ -2,10 +2,8 @@ package com.solartis.test.listener;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class FireEventAPI implements API
 {
