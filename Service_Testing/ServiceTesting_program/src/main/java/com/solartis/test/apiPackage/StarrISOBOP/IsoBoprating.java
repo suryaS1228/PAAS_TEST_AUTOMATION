@@ -1,7 +1,6 @@
 package com.solartis.test.apiPackage.StarrISOBOP;
 
 import java.util.LinkedHashMap;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -14,7 +13,6 @@ import com.solartis.test.macroPackage.IsoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class IsoBoprating extends BaseClass implements API
 {
