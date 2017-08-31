@@ -2,13 +2,17 @@ package com.solartis.test.servicetesting.ServiceTestingProgram;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import org.testng.internal.collections.Pair;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
@@ -31,17 +35,20 @@ public class MainClass
 	public static DatabaseOperation output;
 	public static LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
 	public static LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable;
-	
-	
+	public static Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator;
+	public static Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator;
+	public static ObjectMapper inputtableobjectMapper;
+	public static ObjectMapper outputtableobjectMapper;
+	public static LinkedHashMap<String, String> inputrow;
+	public static LinkedHashMap<String, String> outputrow;
+	public static HashMap<Object,Object> result;
 	
 	@BeforeTest
 	public void loadconfig() throws DatabaseException, PropertiesHandleException
 	{
-		System.out.println("vicky");
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
 		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));
-		//config = new PropertiesHandle(args[0],args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
 		
 		DatabaseOperation.ConnectionSetup(config);
 		
@@ -66,20 +73,16 @@ public class MainClass
 		}
 	} 
 	
-	@Test(dataProvider="inputtableiterator,outputtableiterator")
-	public static void apiTest(Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator, Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator)throws InterruptedException, DatabaseException, InterruptedException
+	@SuppressWarnings("unchecked")
+	@Test(dataProvider="PaaSTest")
+	public static void apiTest(Integer RowIterator, Object inputtablerowobj, Object outputtablerowobj)throws InterruptedException, DatabaseException, InterruptedException
     {   
-		System.out.println("main");
+		LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+		LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
+	
 		try 
 		{
 			//for (Entry<Integer, LinkedHashMap<String, String>> entry : inputtable.entrySet())
-			while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
-			{
-				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
-				Integer inputtablekey = inputentry.getKey();
-		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
-		        LinkedHashMap<String, String> outputrow = outputentry.getValue();	
 				System.out.println("TestData : " + inputrow.get("S.No"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
 						{
@@ -104,14 +107,14 @@ public class MainClass
 								{	
 									inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								
-									input.UpdateRow(inputtablekey, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{	
 									
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									
-									output.UpdateRow(inputtablekey, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 									
 								}
 							} 
@@ -122,31 +125,30 @@ public class MainClass
 								{
 									inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
 								     
-									input.UpdateRow(inputtablekey, inputrow);
+									input.UpdateRow(RowIterator, inputrow);
 								}
 								else
 								{
 									outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
 								    
-									output.UpdateRow(inputtablekey, outputrow);
+									output.UpdateRow(RowIterator, outputrow);
 									
 									output.UpdateTable(outputtable);
 								}
 							} 
 							
 							inputrow.put("Flag_for_execution", "Completed");
-							input.UpdateRow(inputtablekey, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+							input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 							}
 						else
 						{
 							System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
 						}
 				
-				if(actualchoice.equals("Y") || statuschoice.equals("Y"))
+				/*if(actualchoice.equals("Y") || statuschoice.equals("Y"))
 				{
 					output.MoveForward();
-				}
-			}
+				}*/
 		} 
 		catch (APIException e1)
 		{
@@ -154,59 +156,52 @@ public class MainClass
 			System.exit(0);	
 
 		}
-
-	DatabaseOperation.CloseConn();
 		
     }	
 	
-	/*@Test
-	public void vicky()
+	@AfterTest
+	public void connectionclose() throws DatabaseException
 	{
-		System.out.println("vicky");
-		
-	}*/
-	
-	@DataProvider(name="inputtableiterator")
-	public Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator() throws DatabaseException
-	{
-		input = new DatabaseOperation();
-		 
-		inputtable = input.GetDataObjects(config.getProperty("input_query"));
-			
-		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
-		
-		return inputtableiterator;
+		DatabaseOperation.CloseConn();
 	}
 	
-	@DataProvider(name="outputtableiterator")
-	public Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator() throws DatabaseException
-	{
-		output = new DatabaseOperation();
-		 
-		outputtable = input.GetDataObjects(config.getProperty("output_query"));
-			
-		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
-		
-		return outputtableiterator;
-	}
-	
-	
+	@SuppressWarnings("unused")
 	@DataProvider(name="PaaSTest")
-	 public Pair<Iterator<Entry<Integer, LinkedHashMap<String, String>>>, Iterator<Entry<Integer, LinkedHashMap<String, String>>>> getDataFromDataprovider() throws DatabaseException
+	 public Object[][] getDataFromDataprovider() throws DatabaseException
 	 {
 		 input = new DatabaseOperation();
-	 
 		 inputtable = input.GetDataObjects(config.getProperty("input_query"));
-			
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
-			
-		 DatabaseOperation output = new DatabaseOperation();
-			
+
+		 output = new DatabaseOperation();
 		 outputtable = output.GetDataObjects(config.getProperty("output_query"));
-			
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+	
+		 int rowIterator = 0;
+		 Object[][] combined = new Object[inputtable.size()][3];
+		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+				Integer inputtablekey = inputentry.getKey();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
+		         
+		         inputtableobjectMapper = new ObjectMapper();
+				 Object inputtablerowobject = inputtableobjectMapper.convertValue(inputrow, Object.class);
+				 
+				 outputtableobjectMapper = new ObjectMapper();
+				 Object outputtablerowobject = outputtableobjectMapper.convertValue(outputrow, Object.class);
+				 
+				 combined[rowIterator][0] = rowIterator+1;
+				 combined[rowIterator][1] = inputtablerowobject;
+				 combined[rowIterator][2] = outputtablerowobject;
+				 
+				 rowIterator++;
+			}  
 		 
-		 System.out.println("data");
-		 return new Pair<>(inputtableiterator, outputtableiterator);
+		 
+		 return combined;
 	 }
+	
 }
