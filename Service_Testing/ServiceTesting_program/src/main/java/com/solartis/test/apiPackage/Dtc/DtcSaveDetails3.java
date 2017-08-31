@@ -154,7 +154,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 					}
-				}while(OutputColVerify.MoveForward());
+				}
 	
 			return output;	
 			}

@@ -22,7 +22,6 @@ public class DatabaseOperation
 	protected ResultSet rs = null;
 	protected int rs_row = 1;
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
-	protected LinkedHashMap<String, String> row = null;
 	protected ResultSetMetaData meta = null;
 	
 	public static void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
@@ -92,6 +91,7 @@ public class DatabaseOperation
 	public LinkedHashMap<Integer, LinkedHashMap<String, String>> GetDataObjects(String query) throws DatabaseException
 	{
 		this.query = query;
+		LinkedHashMap<String, String> row = null;
 		try 
 		{
 			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
@@ -119,18 +119,6 @@ public class DatabaseOperation
 		
 	}
 	
-	public boolean MoveForward() throws DatabaseException
-	{
-		try 
-		{
-			return rs.next();
-		} 
-		catch (SQLException e) 
-		{
-			throw new DatabaseException("PROBLEM WITH MOVING NEXT IN DB - RESULTSET", e);
-		}
-	}
-	
 	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException
 	{
 		
@@ -144,12 +132,11 @@ public class DatabaseOperation
 			    {
 					for (int i = 1; i <= meta.getColumnCount(); i++) 
 					{  
-				       row = table.get(rowIterator);
-				       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));    
+				       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
 				    }
+					rs.updateRow();
 			    } 
 			 
-			    rs.updateRow();
 			    rowIterator++;
 			 }while (rs.next());	
 		}	
@@ -165,6 +152,7 @@ public class DatabaseOperation
 	public void UpdateTable(LinkedHashMap<Integer, LinkedHashMap<String, String>> table) throws DatabaseException
 	{
 		this.table = table;
+		LinkedHashMap<String, String> row = null;
 		try 
 		{
 			rs.first();

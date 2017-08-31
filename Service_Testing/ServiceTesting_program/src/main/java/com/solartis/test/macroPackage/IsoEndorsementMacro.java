@@ -180,7 +180,7 @@ public class IsoEndorsementMacro implements MacroInterface
 					}
 				}
 				//outputData.UpdateRow();
-			}while(configTable.MoveForward());
+			}
 			excel.save();
 		}
 		catch(DatabaseException e)

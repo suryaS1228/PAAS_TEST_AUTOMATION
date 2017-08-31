@@ -60,7 +60,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
-			}while(InputColVerify.MoveForward());
+			}
 		}
 		catch(DatabaseException | RequestFormatException  e)
 		{
@@ -140,7 +140,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 				}
 			}
-		}while(OutputColVerify.MoveForward());
+		}
 	
 		
 		return output;

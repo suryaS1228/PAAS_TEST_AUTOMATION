@@ -104,18 +104,19 @@ public class MainClass
 							{
 								  
 								if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
-								{	
+								{
+
 									inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								
 									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{	
-									
+								
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-									
+									System.out.println("Quote_rs"+"----"+outputrow.get("Quote_rs"));
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
-									
+								
 								}
 							} 
 							
@@ -123,6 +124,7 @@ public class MainClass
 							{
 								if(outputtablechoice.equals("Y"))
 								{
+									
 									inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
 								     
 									input.UpdateRow(RowIterator, inputrow);
@@ -133,7 +135,6 @@ public class MainClass
 								    
 									output.UpdateRow(RowIterator, outputrow);
 									
-									output.UpdateTable(outputtable);
 								}
 							} 
 							

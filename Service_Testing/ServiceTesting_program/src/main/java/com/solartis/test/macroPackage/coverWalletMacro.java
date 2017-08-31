@@ -286,7 +286,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 				LinkedHashMap<String, String> rowLookup = entry.getValue();
 				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));
 				
-			}while(Lookup.MoveForward());
+			}
 		} 
 		catch (DatabaseException e) 
 		{

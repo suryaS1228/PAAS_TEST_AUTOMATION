@@ -51,7 +51,7 @@ public class ChicForms extends BaseClass implements API
 						request.write(rowInputColVerify.get(config.getProperty("InputColumn")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
-			}while(InputColVerify.MoveForward());
+			}
 		}
 		catch(DatabaseException | RequestFormatException  e)
 		{
