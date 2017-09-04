@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -111,8 +109,7 @@ public class MainClass
 									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
-								{	
-								
+								{
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									System.out.println("Quote_rs"+"----"+outputrow.get("Quote_rs"));
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
@@ -167,7 +164,7 @@ public class MainClass
 	}
 	
 	@SuppressWarnings("unused")
-	@DataProvider(name="PaaSTest")
+	@DataProvider(name="PaaSTest", parallel=true)
 	 public Object[][] getDataFromDataprovider() throws DatabaseException
 	 {
 		 input = new DatabaseOperation();
