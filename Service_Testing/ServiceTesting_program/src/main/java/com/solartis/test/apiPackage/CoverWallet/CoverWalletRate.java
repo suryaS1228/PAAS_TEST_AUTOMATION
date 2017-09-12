@@ -82,7 +82,7 @@ public class CoverWalletRate extends BaseClass implements API
 	  http.AddHeader("EventName", config.getProperty("EventName")); 
 	  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
 	 }
-	
+
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws UnsupportedEncodingException, IOException, ParseException, DocumentException, SQLException, ClassNotFoundException, NumberFormatException, java.text.ParseException
 	{
 		if(config.getProperty("status").equals("Y"))
