@@ -101,6 +101,7 @@ public class CoverWalletRate extends BaseClass implements API
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
 		}
 	 }
+
 	
 	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
 	{
