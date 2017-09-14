@@ -144,13 +144,13 @@ public class TestEngine
 								
 									logInfo.info("Respone For Testdata--" + input.ReadData("S.No") + "is Received");
 									//===========================================temporary change in production for CW=========================================
-									long startTime = System.currentTimeMillis();
+									//long startTime = System.currentTimeMillis();
 									api.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 								
-									long elapsedTime = System.currentTimeMillis() - startTime;
+									//long elapsedTime = System.currentTimeMillis() - startTime;
 									
-									 System.out.println("Total elapsed http request/response time in milliseconds: " + elapsedTime);
-									 output.WriteData("LatencyTime", String.valueOf(elapsedTime));
+									// System.out.println("Total elapsed http request/response time in milliseconds: " + elapsedTime);
+									// output.WriteData("LatencyTime", String.valueOf(elapsedTime));
 									 
 									 //====================================================================================
 									
