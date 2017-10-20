@@ -13,6 +13,7 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
@@ -140,7 +141,7 @@ public class StarrGLMacro implements MacroInterface
 					}
 				}
 			}while(configTable.MoveForward());
-			//excel.refresh();
+			excel.refresh();
 			excel.save();
 		}
 		catch(DatabaseException e)
@@ -165,7 +166,7 @@ public class StarrGLMacro implements MacroInterface
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 		configTable.GetDataObjects(configFile.getProperty("config_query"));
-		//excel.refresh();
+		excel.refresh();
 		do
 		{
 			
@@ -403,10 +404,29 @@ public class StarrGLMacro implements MacroInterface
 		
 	}
 	
-	public static void main(String args[])
+	public static void main(String args[]) throws  DatabaseException, MacroException, PropertiesHandleException
 	{
-		StarrGLMacro mac = new StarrGLMacro();
-		System.out.println(mac.ReplaceComma("100000"));
+	 DatabaseOperation objectInput = new DatabaseOperation();
+	 DatabaseOperation objectOutput = new DatabaseOperation();
+	 StarrGLMacro sm;
+	 PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/STARR-GL/Rating/config/config.properties");
+	 
+	 DatabaseOperation.ConnectionSetup(configFile);
+	 objectInput.GetDataObjects(configFile.getProperty("input_query"));
+	 objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+	 do
+	 {
+	  System.out.println("TestData : " + objectInput.ReadData("S.No"));   
+	    if(objectInput.ReadData("Flag_for_execution").equals("Y"))
+	    {
+	     sm=new StarrGLMacro(configFile);
+	     sm.LoadSampleRatingmodel(configFile, objectInput);
+	     sm.GenerateExpected(objectInput, configFile);
+	     sm.PumpinData(objectInput, configFile);
+	     sm.PumpoutData(objectOutput,objectInput, configFile);
+	    }
+	    objectInput.WriteData("Flag_for_execution", "Completed"); 
+	    objectInput.UpdateRow();
+	 }while(objectInput.MoveForward()&&objectOutput.MoveForward());
 	}
-
 }
