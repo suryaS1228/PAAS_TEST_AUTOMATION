@@ -352,7 +352,6 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	DatabaseOperation.ConnectionSetup(configFile);
 	objectInput.GetDataObjects(configFile.getProperty("input_query"));
 	objectOutput.GetDataObjects(configFile.getProperty("output_query"));
-	
 	do
 	{
 		System.out.println("TestData : " + objectInput.ReadData("S.No"));  	

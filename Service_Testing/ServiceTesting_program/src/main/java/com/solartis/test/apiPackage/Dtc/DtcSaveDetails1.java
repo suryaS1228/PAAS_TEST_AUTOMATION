@@ -58,7 +58,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			request.StringToFile(sampleInput.FileToString());
 			do
 			{
-				if(InputColVerify.DbCol(input))
+				if(InputColVerify.DbCol(input)&& (InputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 				{
 					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
 					{
@@ -115,7 +115,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 			do 	
 			{
-			  if(OutputColVerify.DbCol(input))
+			  if(OutputColVerify.DbCol(input)&&(OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 				{
 				try
 					{
