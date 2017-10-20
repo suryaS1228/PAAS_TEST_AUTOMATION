@@ -140,7 +140,7 @@ public class StarrGLMacro implements MacroInterface
 					}
 				}
 			}while(configTable.MoveForward());
-			excel.refresh();
+			//excel.refresh();
 			excel.save();
 		}
 		catch(DatabaseException e)
@@ -165,7 +165,7 @@ public class StarrGLMacro implements MacroInterface
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 		configTable.GetDataObjects(configFile.getProperty("config_query"));
-		excel.refresh();
+		//excel.refresh();
 		do
 		{
 			
