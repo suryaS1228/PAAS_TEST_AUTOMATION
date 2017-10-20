@@ -347,7 +347,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
 	SquareMouth sm;
-	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/STARR-DTC/PayMent/Config/config.properties");
+	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/SquareMouth/SMPayment/Config/config.properties");
 	
 	DatabaseOperation.ConnectionSetup(configFile);
 	objectInput.GetDataObjects(configFile.getProperty("input_query"));
@@ -355,16 +355,18 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	do
 	{
 		System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
-				if(objectInput.ReadData("FlagforExecution").equals("Y"))
+				if(objectInput.ReadData("Flag_for_execution").equals("Y"))
 				{
+					System.out.println("coming to flow");
 					sm=new SquareMouth(configFile);
 					sm.LoadSampleRatingmodel(configFile, objectInput);
 					sm.GenerateExpected(objectInput, configFile);
 					sm.PumpinData(objectInput, configFile);
 					sm.PumpoutData(objectOutput,objectInput, configFile);
 				}
-				objectInput.WriteData("FlagforExecution", "Completed");	
+				objectInput.WriteData("Flag_for_execution", "Completed");	
 				objectInput.UpdateRow();
+				objectOutput.UpdateRow();
 	}while(objectInput.MoveForward()&&objectOutput.MoveForward());
 }
 	
