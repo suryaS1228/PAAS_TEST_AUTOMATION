@@ -111,9 +111,8 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target><compilerArgs>
-            		<arg>-Xmx2048m</arg>
-            		<arg>-Xmx4192m</arg>
-            		<arg>-XX:-UseGCOverheadLimit</arg>
+            		<meminitial>1024m</meminitial>
+            		<maxmem>2024m</maxmem>
        				</compilerArgs>
                 </configuration>
             </plugin>
