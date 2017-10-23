@@ -125,7 +125,7 @@
                 </executions>
                 <configuration>
                     <mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.TestEngine</mainClass>
-                    <argLine>-Xmx4192m</argLine>
+                    <argLine>-Xmx2048m</argLine>
                      <argLine>-XX:-UseGCOverheadLimit</argLine>
                     <systemPropertyVariables>
 					            <Project>${Project}</Project>
