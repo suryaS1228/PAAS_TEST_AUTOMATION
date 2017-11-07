@@ -164,7 +164,7 @@ public class MainClass
 	}
 	
 	@SuppressWarnings("unused")
-	@DataProvider(name="PaaSTest", parallel=true)
+	@DataProvider(name="PaaSTest", parallel=false)
 	 public Object[][] getDataFromDataprovider() throws DatabaseException
 	 {
 		 input = new DatabaseOperation();
