@@ -15,9 +15,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class StarrGLPolicyIssuance extends BaseClass implements API 
+public class StarrGLCancel extends BaseClass implements API 
 {
-	public StarrGLPolicyIssuance(PropertiesHandle config) throws SQLException
+	public StarrGLCancel(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -35,8 +35,8 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		  http = new HttpHandle(config.getProperty("test_url"),"POST");
 		  http.AddHeader("Content-Type", config.getProperty("content_type"));
 		  http.AddHeader("Token", config.getProperty("token"));
-		  http.AddHeader("EventName", config.getProperty("EventName")); 
-		  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
+		  http.AddHeader("EventName", config.getProperty("EventName"));
+		  http.AddHeader("EventVersion", config.getProperty("EventVersion"));
 		 }
 		catch(HTTPHandleException e)
 		{
@@ -44,7 +44,6 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		}
 	 }
 	
-	//=========================================================================================================================================
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try

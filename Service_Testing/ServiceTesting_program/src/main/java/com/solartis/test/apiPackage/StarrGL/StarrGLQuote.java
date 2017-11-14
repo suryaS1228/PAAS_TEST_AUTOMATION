@@ -15,9 +15,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class StarrGLPolicyIssuance extends BaseClass implements API 
+public class StarrGLQuote extends BaseClass implements API 
 {
-	public StarrGLPolicyIssuance(PropertiesHandle config) throws SQLException
+	public StarrGLQuote(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -27,24 +27,23 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	@Override
-	 public void AddHeaders() throws APIException 
-	 {
+	public void AddHeaders() throws APIException
+	{
 		try
 		{
-		  http = new HttpHandle(config.getProperty("test_url"),"POST");
-		  http.AddHeader("Content-Type", config.getProperty("content_type"));
-		  http.AddHeader("Token", config.getProperty("token"));
-		  http.AddHeader("EventName", config.getProperty("EventName")); 
-		  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
-		 }
-		catch(HTTPHandleException e)
-		{
-			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
+			http = new HttpHandle(config.getProperty("test_url"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			http.AddHeader("Token", config.getProperty("token"));
+			http.AddHeader("EventName", config.getProperty("EventName"));
+			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
 		}
-	 }
+    	catch (HTTPHandleException e) 
+		{
+			throw new APIException("ERROR ADD HEADER FUNCTION -- GL-QUOTE CLASS", e);
+		}
+	}
 	
-	//=========================================================================================================================================
+	
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
@@ -90,4 +89,6 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
 	}
+	
+	
 }
