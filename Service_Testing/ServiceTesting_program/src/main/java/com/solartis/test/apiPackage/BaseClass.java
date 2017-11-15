@@ -1,5 +1,7 @@
 package com.solartis.test.apiPackage;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -12,9 +14,14 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
+import freemarker.core.ParseException;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateNotFoundException;
+
 public class BaseClass 
 {
-	protected RequestResponse sampleInput = null;
+	protected RequestHandler sampleInput = null;
 	protected RequestResponse request = null;
 	protected RequestResponse response = null;
 	protected LinkedHashMap<String, String> XmlElements = null;
@@ -33,7 +40,17 @@ public class BaseClass
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
+		try
+		{
+		sampleInput = new RequestHandler(config);
+		sampleInput.openTemplate();
+		}
+		
+		catch(DatabaseException | IOException | ClassNotFoundException e)
+		{
+			throw new APIException("ERROR OCCURS IN load Template FUNCTION -- BASE CLASS", e);
+		}
+		
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
@@ -42,23 +59,12 @@ public class BaseClass
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-					
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
-				request.StringToFile(sampleInput.FileToString());
-				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-	                  	request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}	
-			}
+			sampleInput.LoadData(tableInputColVerify);
+			sampleInput.PumpinDatatoRequest(tableInputColVerify);			
+			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata"));
 		}
 			
-		catch(DatabaseException | RequestFormatException  e)
+		catch(DatabaseException | TemplateException | IOException  e)
 		{
 			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
 		}
@@ -69,6 +75,7 @@ public class BaseClass
 	{
 	  try 
 	  {
+		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)
@@ -106,6 +113,7 @@ public class BaseClass
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{
+			System.out.println(e);
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
 	}

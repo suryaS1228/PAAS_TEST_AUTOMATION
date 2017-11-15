@@ -104,6 +104,7 @@ public class PropertiesHandle extends Properties
 		    this.StatusColumn();
 		    		    
 		    this.DBdetails();
+		    this.RequestQuery();
 		    
 		    DatabaseOperation.CloseConn();
 		 
@@ -323,6 +324,11 @@ public class PropertiesHandle extends Properties
 		protected void StatusColumn() // FUNCTION TO GET STATUS-COLUMN
 		{
 			this.put("StatusColumn", "StatusColumn");
+		}
+		
+		protected void RequestQuery()
+		{
+			this.put("request_query", "SELECT * FROM RateJsonConfig");
 		}
 		
 	    protected void DBdetails() throws PropertiesHandleException// FUNCTION FOR DB-DETAILS

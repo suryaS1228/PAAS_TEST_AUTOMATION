@@ -13,10 +13,11 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.StarrGLMacro;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.StarrGLMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+
 
 public class StarrGLRate extends BaseClass implements API
 {
@@ -68,7 +69,7 @@ public class StarrGLRate extends BaseClass implements API
 			} 
 			catch (DatabaseException | POIException | MacroException e) 
 			{
-				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS", e);
+				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
 		super.PumpDataToRequest();
@@ -107,6 +108,8 @@ public class StarrGLRate extends BaseClass implements API
 		
 		try
 		{
+			String responseStatus = response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			System.out.println(responseStatus);
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
@@ -115,11 +118,9 @@ public class StarrGLRate extends BaseClass implements API
 				{
 				try
 				{
-					System.out.println("Writing Response to Table");
-					String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-					System.out.println(responseStatus);
 					if(responseStatus.equals("SUCCESS"))
 					{
+					System.out.println("Writing Response to Table");
 					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
@@ -128,9 +129,8 @@ public class StarrGLRate extends BaseClass implements API
 					}
 					else
 					{
-						output.put("flag_for_execution",responseStatus);
-						output.put("RuleName",response.read("..RuleName"));
-						output.put("User_message",response.read("..Message"));
+						output.put("flag_for_execution", responseStatus);
+						output.put("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
 					}
 				}
 				catch(PathNotFoundException e)
@@ -141,12 +141,12 @@ public class StarrGLRate extends BaseClass implements API
 			}
 			
 			return output;
-		
 		}
 		catch(DatabaseException | RequestFormatException e)
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
+			
 		
 				
 	}

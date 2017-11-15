@@ -7,6 +7,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
+
+import SupportingClasses.propertiesHandle;
+
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 
@@ -91,6 +94,7 @@ public class DatabaseOperation
 	public LinkedHashMap<Integer, LinkedHashMap<String, String>> GetDataObjects(String query) throws DatabaseException
 	{
 		this.query = query;
+		System.out.println(this.query);
 		LinkedHashMap<String, String> row = null;
 		try 
 		{
@@ -114,9 +118,10 @@ public class DatabaseOperation
 		} 
 		catch (SQLException e) 
 		{
+			System.out.println(e);
 			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB",e);
-		}
-		
+			
+		}		
 	}
 	
 	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException
