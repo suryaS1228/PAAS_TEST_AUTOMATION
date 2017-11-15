@@ -82,7 +82,7 @@ public class RequestHandler
 		}	
 	}
 	@SuppressWarnings("unchecked")
-	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig)
+	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData)
 	{
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
@@ -92,7 +92,7 @@ public class RequestHandler
 				String parentName=rowInputColVerify.get("Parent");
 				String atributeName=rowInputColVerify.get("AtributeName");
 				String atributeStaticValue=rowInputColVerify.get("AttributeStaticValue");
-				String atributeDynamicValue="";
+				String atributeDynamicValue=InputData.get(rowInputColVerify.get("DBColumnName"));
 				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue);
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));

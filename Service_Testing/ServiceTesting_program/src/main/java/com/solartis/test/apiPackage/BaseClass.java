@@ -54,13 +54,13 @@ public class BaseClass
 	}
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
-	public void PumpDataToRequest() throws APIException 
+	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException 
 	{
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			sampleInput.LoadData(tableInputColVerify);
-			sampleInput.PumpinDatatoRequest(tableInputColVerify);			
+			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);			
 			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata"));
 		}
 			

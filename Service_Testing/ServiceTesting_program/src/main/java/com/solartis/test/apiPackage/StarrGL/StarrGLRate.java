@@ -59,7 +59,7 @@ public class StarrGLRate extends BaseClass implements API
 		super.LoadSampleRequest(InputData);
 	}
 	
-	public void PumpDataToRequest() throws  APIException
+	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -72,7 +72,7 @@ public class StarrGLRate extends BaseClass implements API
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
-		super.PumpDataToRequest();
+		super.PumpDataToRequest(InputData);
 	}
 	
 	@Override

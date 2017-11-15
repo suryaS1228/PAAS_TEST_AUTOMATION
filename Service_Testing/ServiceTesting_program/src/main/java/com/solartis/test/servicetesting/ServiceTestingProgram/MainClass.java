@@ -88,7 +88,7 @@ public class MainClass
 							
 						    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
-						    fireEventAPI.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST s
+						    fireEventAPI.PumpDataToRequest(inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
 						    
 						    fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
 						

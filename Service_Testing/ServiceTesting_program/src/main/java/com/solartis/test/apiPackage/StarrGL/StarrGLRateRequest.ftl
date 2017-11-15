@@ -1,4 +1,5 @@
 {
+  "Policy": {
   "AdditionalInsuredList": [
       <#list additionalInsuredtype as result>{
         "${result.atrib}":"${result.value}",
@@ -27,7 +28,6 @@
         }
         ]
       },
-   "Policy": {
   <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
   </#list>
    },
