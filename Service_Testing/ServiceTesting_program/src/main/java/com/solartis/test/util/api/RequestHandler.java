@@ -4,15 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import SupportingClasses.propertiesHandle;
 
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
@@ -31,6 +28,7 @@ public class RequestHandler
 	public DatabaseOperation requestconfigDB;
 	public LinkedHashMap<Integer, LinkedHashMap<String, String>> requestconfig;
 	public Template template;
+	public DBColoumnVerify condition = new DBColoumnVerify();
 	Map<String, Object> root = new HashMap<String, Object>();
 	
 	public RequestHandler(PropertiesHandle config) throws ClassNotFoundException, DatabaseException
@@ -49,10 +47,10 @@ public class RequestHandler
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		//cfg.setTemplateLoader(templateLoader);
-		template = cfg.getTemplate("src/main/java/com/solartis/test/apiPackage/StarrGL/StarrGLRateRequest.ftl");
+		template = cfg.getTemplate(path);
 	}
 	
-	public void LoadData(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig)
+	public void LoadData(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData) throws DatabaseException
 	{
 		
 		List <String> parentlist = new ArrayList<String>();
@@ -60,7 +58,7 @@ public class RequestHandler
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 			System.out.println(rowInputColVerify);
-			if(rowInputColVerify.get("flagforexecution").equals("Y"))
+			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
 				String parentName = rowInputColVerify.get("Parent");
 				boolean flag=false;
@@ -69,7 +67,7 @@ public class RequestHandler
 				{
 				    if(str.trim().contains(parentName))
 				       flag=true;
-				    //System.out.println(parentName);
+				    System.out.println(parentName);
 				}
 				if(flag==false)
 				{
@@ -82,18 +80,18 @@ public class RequestHandler
 		}	
 	}
 	@SuppressWarnings("unchecked")
-	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData)
+	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData) throws DatabaseException
 	{
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-			if(rowInputColVerify.get("flagforexecution").equals("Y"))
+			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
 				String parentName=rowInputColVerify.get("Parent");
 				String atributeName=rowInputColVerify.get("AtributeName");
 				String atributeStaticValue=rowInputColVerify.get("AttributeStaticValue");
 				String atributeDynamicValue=InputData.get(rowInputColVerify.get("DBColumnName"));
-				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue);
+				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
 				else

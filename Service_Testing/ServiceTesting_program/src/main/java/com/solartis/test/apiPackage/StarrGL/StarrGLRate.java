@@ -2,7 +2,6 @@ package com.solartis.test.apiPackage.StarrGL;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;

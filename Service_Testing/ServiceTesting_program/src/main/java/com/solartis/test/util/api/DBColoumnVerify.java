@@ -8,6 +8,11 @@ public class DBColoumnVerify extends DatabaseOperation
 {
 	protected String CondColName;
 	
+	public DBColoumnVerify()
+	{
+		
+	}
+	
 	public DBColoumnVerify(String CondColName)
 	{
 		this.CondColName = CondColName;

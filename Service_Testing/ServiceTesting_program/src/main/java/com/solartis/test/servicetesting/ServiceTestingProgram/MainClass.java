@@ -150,6 +150,7 @@ public class MainClass
 		} 
 		catch (APIException e1)
 		{
+			System.out.println(e1);
 			e1.getCause().getMessage();
 			System.exit(0);	
 

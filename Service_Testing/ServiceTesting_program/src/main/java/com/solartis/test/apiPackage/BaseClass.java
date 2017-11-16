@@ -1,7 +1,6 @@
 package com.solartis.test.apiPackage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -14,10 +13,7 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
-import freemarker.core.ParseException;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateNotFoundException;
 
 public class BaseClass 
 {
@@ -59,7 +55,7 @@ public class BaseClass
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			sampleInput.LoadData(tableInputColVerify);
+			sampleInput.LoadData(tableInputColVerify, InputData);
 			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);			
 			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata"));
 		}
@@ -142,19 +138,19 @@ public class BaseClass
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
 				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
-				try
-				{
-					System.out.println("Writing Response to Table");
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
-					output.put("flag_for_execution", "Completed");
-				}
-				catch(PathNotFoundException e)
-				{
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-				}
+					try
+					{
+						System.out.println("Writing Response to Table");
+						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						System.out.println(actual);
+						output.put("flag_for_execution", "Completed");
+					}
+					catch(PathNotFoundException e)
+					{
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+					}
 				}
 			}
 			
