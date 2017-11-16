@@ -30,24 +30,24 @@ public class RequestHandler
 	public Template template;
 	public DBColoumnVerify condition = new DBColoumnVerify();
 	Map<String, Object> root = new HashMap<String, Object>();
+	protected String Requesttemplatepath="";
 	
 	public RequestHandler(PropertiesHandle config) throws ClassNotFoundException, DatabaseException
 	{
 		requestconfigDB = new DatabaseOperation();
-		//DatabaseOperation.ConnectionSetup(config);
 		requestconfig=requestconfigDB.GetDataObjects(config.getProperty("request_query"));
+		Requesttemplatepath="src/main/java/com/solartis/test/apiPackage/"+config.getProperty("ClassName").replace(".", "/")+"Request.ftl";
 	}
 	
 	@SuppressWarnings("deprecation")
 	public void openTemplate() throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException
 	{
 		System.setProperty("org.freemarker.loggerLibrary", "none");
-		String path="src/main/java/com/solartis/test/apiPackage/StarrGL/StarrGLRateRequest.ftl";
+		System.out.println(Requesttemplatepath);
 		Configuration cfg = new Configuration();
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-		//cfg.setTemplateLoader(templateLoader);
-		template = cfg.getTemplate(path);
+		template = cfg.getTemplate(Requesttemplatepath);
 	}
 	
 	public void LoadData(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData) throws DatabaseException
@@ -102,9 +102,6 @@ public class RequestHandler
 
 	public void saveJsontoPath(String filepath) throws TemplateException, IOException
 	{
-		/*Writer out = new OutputStreamWriter(System.out);
-		template.process(root, out);
-		out.flush();*/
 		File file= new File(filepath+".json");
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
