@@ -43,7 +43,6 @@ public class RequestHandler
 	public void openTemplate() throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException
 	{
 		System.setProperty("org.freemarker.loggerLibrary", "none");
-		System.out.println(Requesttemplatepath);
 		Configuration cfg = new Configuration();
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
@@ -57,17 +56,16 @@ public class RequestHandler
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-			System.out.println(rowInputColVerify);
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
 				String parentName = rowInputColVerify.get("Parent");
 				boolean flag=false;
-				System.out.println(parentName);
+				//System.out.println(parentName);
 				for(String str: parentlist) 
 				{
 				    if(str.trim().contains(parentName))
 				       flag=true;
-				    System.out.println(parentName);
+				    //System.out.println(parentName);
 				}
 				if(flag==false)
 				{
@@ -91,7 +89,7 @@ public class RequestHandler
 				String atributeName=rowInputColVerify.get("AtributeName");
 				String atributeStaticValue=rowInputColVerify.get("AttributeStaticValue");
 				String atributeDynamicValue=InputData.get(rowInputColVerify.get("DBColumnName"));
-				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
+				//System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
 				else
@@ -105,7 +103,7 @@ public class RequestHandler
 		File file= new File(filepath+".json");
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
-		System.out.println(file.toString());
+		//System.out.println(file.toString());
 		writer.flush();
 		writer.close();
 		

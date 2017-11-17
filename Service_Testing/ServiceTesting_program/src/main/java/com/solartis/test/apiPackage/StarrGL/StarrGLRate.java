@@ -2,6 +2,7 @@ package com.solartis.test.apiPackage.StarrGL;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -28,8 +29,9 @@ public class StarrGLRate extends BaseClass implements API
 			this.config = config;
 			jsonElements = new LinkedHashMap<String, String>();
 			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+			OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+			
 			if(config.getProperty("status").equals("Y"))
 			{
 			macro=new StarrGLMacro(config);	
@@ -113,17 +115,17 @@ public class StarrGLRate extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				
+				
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 				try
 				{
 					if(responseStatus.equals("SUCCESS"))
 					{
-					System.out.println("Writing Response to Table");
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+					//System.out.println("Writing Response to Table");
 					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
 					output.put("flag_for_execution", "Completed");
 					}
 					else

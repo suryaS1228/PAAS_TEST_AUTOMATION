@@ -22,11 +22,11 @@ public class DBColoumnVerify extends DatabaseOperation
 			return ConditionReading(row.get(CondColName),row);
 	}
 
-	protected boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
+	public boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
 	{
-		boolean ConditionReading=false;
+		boolean ConditionReading=false;	
 		
-			if(condition.equals(""))
+			if(condition.equals(null)||condition==null||condition.equals(""))
 			{
 				ConditionReading=true;
 				return ConditionReading;
@@ -79,7 +79,7 @@ public class DBColoumnVerify extends DatabaseOperation
 						String[] individualValue = value.split("\\|");
 			
 							for(int j=0;j<individualValue.length;j++)
-							{
+							{								
 								switch(operator)
 								{
 								case "=": if((row.get(cond).equals(individualValue[j])))

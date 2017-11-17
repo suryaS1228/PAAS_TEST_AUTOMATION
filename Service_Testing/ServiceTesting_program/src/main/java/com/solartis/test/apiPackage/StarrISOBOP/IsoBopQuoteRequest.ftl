@@ -1,45 +1,4 @@
 {
-  "Policy": {
-  "AdditionalInsuredList": [
-      <#list additionalInsuredtype as result>{
-        "${result.atrib}":"${result.value}",
-        "AdditionalInsuredDetail": [
-          {
-          <#list additionalInsureddetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-          </#list>
-          }
-        ]
-      }<#if result?is_last><#else>,</#if>
-      </#list>
-    ],
-  "Location": {
-      "LocationDetail": [
-        {        
-        "Classification": {
-            "ClassificationDetail": [
-              {
-              <#list classification as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-              </#list>
-              }
-            ]
-          },
-        <#list location as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-        }
-        ]
-      },
-  <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  </#list>
-   },
-   "OwnerId": "30",
-   "ServiceRequestDetail": {
-   <#list servicedetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  </#list>
-  },
-  "EndClientUserUniqueSessionId": "Uniquesession"
-}        
-
-{
     "ClientUniqueRequestID": "1",
     "EndClientUserBrowserInformation": "Mozilla/...",
     "EndClientUserBrowserSessionId": "7Eadfad4444",
@@ -95,3 +54,74 @@
      <#list servicedetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
   		</#list>
   	}
+  	
+ {
+    "AttributeListDetail": {
+        "AttributeDetail": [
+        <#list policy as result>{
+          "Key": "${result.atrib}",
+          "Value":"${result.value}"
+          }<#if result?is_last><#else>,</#if>
+  		</#list>
+  		]
+  	},
+  	    "RepeatedAttributeListDetail": [
+        {
+            "AttributeDetailList": [
+                {
+                    "AttributeDetail": [
+                        {
+                            "Key": "ISO::BOP::AmountPaidForClaim",
+                            "Value": "10000"
+                        },
+                        {
+                            "Key": "ISO::BOP::ClaimOccurenceDate",
+                            "Value": "2012-01-16"
+                        },
+                        {
+                            "Key": "ISO::BOP::IsClaimClosed",
+                            "Value": "N"
+                        },
+                        {
+                            "Key": "ISO::BOP::LossCause",
+                            "Value": "test"
+                        }
+                    ]
+                },
+                {
+                    "AttributeDetail": [
+                        {
+                            "Key": "ISO::BOP::AmountPaidForClaim",
+                            "Value": "10000"
+                        },
+                        {
+                            "Key": "ISO::BOP::ClaimOccurenceDate",
+                            "Value": "2012-01-16"
+                        },
+                        {
+                            "Key": "ISO::BOP::IsClaimClosed",
+                            "Value": "N"
+                        },
+                        {
+                            "Key": "ISO::BOP::LossCause",
+                            "Value": "test"
+                        }
+                    ]
+                }
+            ],
+            "Key": "ISO::BOP::ClaimsList"
+        },
+        {
+            "AttributeDetailList": [
+            
+              {
+                "AttributeDetail": [
+                <#list policy as result>{
+          "Key": "${result.atrib}",
+          "Value":"${result.value}"
+          }<#if result?is_last><#else>,</#if>
+  		</#list>
+  		]
+  	},
+  	
+  	

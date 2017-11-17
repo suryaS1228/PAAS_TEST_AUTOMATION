@@ -140,11 +140,11 @@ public class BaseClass
 				{
 					try
 					{
-						System.out.println("Writing Response to Table");
-						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+						//System.out.println("Writing Response to Table");
+						//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						System.out.println(actual);
+						//System.out.println(actual);
 						output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)

@@ -111,7 +111,6 @@ public class MainClass
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-									System.out.println("Quote_rs"+"----"+outputrow.get("Quote_rs"));
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
@@ -148,10 +147,10 @@ public class MainClass
 					output.MoveForward();
 				}*/
 		} 
-		catch (APIException e1)
+		catch (Exception e1)
 		{
-			System.out.println(e1);
-			e1.getCause().getMessage();
+			e1.printStackTrace();
+			//e1.getCause().getMessage();
 			System.exit(0);	
 
 		}
