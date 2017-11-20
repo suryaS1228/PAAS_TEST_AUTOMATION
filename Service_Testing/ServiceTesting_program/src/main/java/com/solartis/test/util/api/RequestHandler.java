@@ -85,11 +85,15 @@ public class RequestHandler
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
-				String parentName=rowInputColVerify.get("Parent");
-				String atributeName=rowInputColVerify.get("AtributeName");
-				String atributeStaticValue=rowInputColVerify.get("AttributeStaticValue");
-				String atributeDynamicValue=InputData.get(rowInputColVerify.get("DBColumnName"));
-				//System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
+				String parentName = rowInputColVerify.get("Parent");
+				String atributeName = rowInputColVerify.get("AtributeName");
+				String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
+				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
+				if (this.isInteger(atributeDynamicValue))
+				{
+					atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
+				}
+				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
 				else
@@ -103,10 +107,29 @@ public class RequestHandler
 		File file= new File(filepath+".json");
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
-		//System.out.println(file.toString());
+		System.out.println(writer.toString());
 		writer.flush();
 		writer.close();
 		
+	}
+	
+	protected boolean isInteger(Object s) 
+	{
+	    try 
+	    { 
+	    	
+	        Integer.parseInt((String) s); 
+	    } 
+	    catch(NumberFormatException e) 
+	    { 
+	        return false; 
+	    } 
+	    catch(NullPointerException e) 
+	    {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
 	}
 	
 	/*public static void main(String args[]) throws ClassNotFoundException, SQLException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException, DatabaseException

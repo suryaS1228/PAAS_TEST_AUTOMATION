@@ -3,8 +3,8 @@ package com.solartis.test.util.api;
 public class Attribute 
 {
 	private String Atrib;
-	private String value;
-	public Attribute(String Attrib, String value) 
+	private Object value;
+	public Attribute(String Attrib, Object value) 
 	{
 		this.Atrib = Attrib;
 		this.value = value;
@@ -17,7 +17,7 @@ public class Attribute
 	{
 		Atrib = atrib;
 	}
-	public String getValue() 
+	public Object getValue() 
 	{
 		return value;
 	}
@@ -25,4 +25,24 @@ public class Attribute
 	{
 		this.value = value;
 	}	
+	
+	
+	protected boolean isInteger(String s) 
+	{
+	    try 
+	    { 
+	    	
+	        Integer.parseInt(s); 
+	    } 
+	    catch(NumberFormatException e) 
+	    { 
+	        return false; 
+	    } 
+	    catch(NullPointerException e) 
+	    {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
 }

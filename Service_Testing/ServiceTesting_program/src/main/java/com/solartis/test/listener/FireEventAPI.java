@@ -61,6 +61,7 @@ public class FireEventAPI implements API
 		{
 			for (Listener listen : listeners1)
 				listen.onError(e);
+			e.printStackTrace();
 			throw new APIException(e);
 		}
 		for (Listener listen : listeners1)
