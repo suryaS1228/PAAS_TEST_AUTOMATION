@@ -21,13 +21,13 @@ import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
 
-public class SquareMouth extends DBColoumnVerify implements MacroInterface
+public class AssistCard extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
 	protected String Samplepath;
 	protected int numofplans;
-	protected SquareMouth trans;
+	protected AssistCard trans;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
 	protected LinkedHashMap<Integer,String> planname;
@@ -48,7 +48,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 	
-	public SquareMouth(PropertiesHandle configFile) throws MacroException
+	public AssistCard(PropertiesHandle configFile) throws MacroException
 	{
 		super(" ");
 		configTable = new DatabaseOperation();
@@ -101,7 +101,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 		{
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new SquareMouth(configFile);
+			trans= new AssistCard(configFile);
 			do
 			{			
 				String condition = configTable.ReadData("Condition");
@@ -189,8 +189,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 					excel.getcell(rowNum-1, columnNum);
 					System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite);
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
-					//outputData.WriteData(Datacolumntowrite, Datatowrite);
-					inputData.WriteData(Datacolumntowrite, Datatowrite);
+					outputData.WriteData(Datacolumntowrite, Datatowrite);
 				}
 			}
 			outputData.UpdateRow();
@@ -347,8 +346,8 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 {
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
-	SquareMouth sm;
-	PropertiesHandle configFile = new PropertiesHandle(System.getProperty("path"));
+	AssistCard sm;
+	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/SquareMouth/SMPayment/Config/config.properties");
 	
 	DatabaseOperation.ConnectionSetup(configFile);
 	objectInput.GetDataObjects(configFile.getProperty("input_query"));
@@ -359,14 +358,13 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 				if(objectInput.ReadData("Flag_for_execution").equals("Y"))
 				{
 					System.out.println("coming to flow");
-					sm=new SquareMouth(configFile);
+					sm=new AssistCard(configFile);
 					sm.LoadSampleRatingmodel(configFile, objectInput);
 					sm.GenerateExpected(objectInput, configFile);
 					sm.PumpinData(objectInput, configFile);
 					sm.PumpoutData(objectOutput,objectInput, configFile);
 				}
-				//objectInput.WriteData("Flag_for_execution", "Completed");
-				System.out.println("rating model completed");
+				objectInput.WriteData("Flag_for_execution", "Completed");	
 				objectInput.UpdateRow();
 				objectOutput.UpdateRow();
 	}while(objectInput.MoveForward()&&objectOutput.MoveForward());
