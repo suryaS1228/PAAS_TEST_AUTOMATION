@@ -1,8 +1,10 @@
 package com.solartis.test.apiPackage.LDWC;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.UUID;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -13,11 +15,11 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
+import freemarker.template.TemplateException;
+
 
 public class LDWCRating extends BaseClass implements API
 {
-	final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=";
-	final int RANDOM_STRING_LENGTH = 10;
 	public LDWCRating(PropertiesHandle config)
 	{
 		this.config = config;
@@ -26,45 +28,42 @@ public class LDWCRating extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 		
-	}
-	
-	@Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
-	{	 
-		this.input = InputData;	
-		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
-	}
+	}	
 		
 	@Override
-	public void PumpDataToRequest() throws APIException
+	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		try
 		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
-			request.StringToFile(sampleInput.FileToString());
-			String Reqid = this.RqUID();
+			/*String Reqid = UUID.randomUUID().toString();
 			System.out.println(Reqid);
 			request.write("//InsuranceSvcRq/RqUID",Reqid);
-			input.put("RequestUID", Reqid);
+			input.put("RequestUID", Reqid);*/
 			
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}	
-			}
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			sampleInput.LoadData(tableInputColVerify, InputData);
+			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);	
+			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".xml");
 		}
-		catch(DatabaseException | RequestFormatException e)
+			
+		catch(DatabaseException | TemplateException | IOException  e)
 		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- LDWC RATING CLASS", e);
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
 		}
 		
+	}
+	
+	public String RequestToString() throws APIException
+	{
+	  try 
+	  {
+		  request = new XmlHandle(config.getProperty("request_location")+input.get("Testdata")+".xml");
+		  return request.FileToString();
+	  } 
+	  catch (RequestFormatException e)
+	  {
+		  throw new APIException("ERROR OCCURS IN REQUEST TO STRING FUNCTION -- BASE CLASS", e);
+	   }
 	}
 	
 	@Override
@@ -131,29 +130,5 @@ public class LDWCRating extends BaseClass implements API
 		}
 		
 	}
-	
-	  public String RqUID()
-	  {
-	         
-	        StringBuffer randStr = new StringBuffer();
-	        for(int i=0; i<RANDOM_STRING_LENGTH; i++){
-	            int number = getRandomNumber();
-	            char ch = CHAR_LIST.charAt(number);
-	            @SuppressWarnings("unused")
-				StringBuffer s = randStr.append(ch);
-	            }
-	        return randStr.toString();
-	  }
-	     
-	  private int getRandomNumber() {
-	        int randomInt = 0;
-	        Random randomGenerator = new Random();
-	        randomInt = randomGenerator.nextInt(CHAR_LIST.length());
-	        if (randomInt - 1 == -1) {
-	            return randomInt;
-	        }else {
-	            return randomInt - 1;
-	             }
-	  }
 }
 

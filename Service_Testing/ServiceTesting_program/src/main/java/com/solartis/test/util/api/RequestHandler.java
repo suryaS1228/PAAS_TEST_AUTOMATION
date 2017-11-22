@@ -35,7 +35,7 @@ public class RequestHandler
 	public RequestHandler(PropertiesHandle config) throws ClassNotFoundException, DatabaseException
 	{
 		requestconfigDB = new DatabaseOperation();
-		requestconfig=requestconfigDB.GetDataObjects(config.getProperty("request_query"));
+		requestconfig=requestconfigDB.GetDataObjects(config.getProperty("InputColQuery"));
 		Requesttemplatepath="src/main/java/com/solartis/test/apiPackage/"+config.getProperty("ClassName").replace(".", "/")+"Request.ftl";
 	}
 	
@@ -46,6 +46,7 @@ public class RequestHandler
 		Configuration cfg = new Configuration();
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+		System.out.println(Requesttemplatepath);
 		template = cfg.getTemplate(Requesttemplatepath);
 	}
 	
@@ -104,7 +105,7 @@ public class RequestHandler
 
 	public void saveJsontoPath(String filepath) throws TemplateException, IOException
 	{
-		File file= new File(filepath+".json");
+		File file= new File(filepath);
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
 		System.out.println(writer.toString());

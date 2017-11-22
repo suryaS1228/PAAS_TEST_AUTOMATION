@@ -328,7 +328,7 @@ public class PropertiesHandle extends Properties
 		
 		protected void RequestQuery()
 		{
-			this.put("request_query", "SELECT * FROM RateJsonConfig");
+			this.put("request_query", "SELECT * FROM ConditionInputTable_LDWC_Rating");
 		}
 		
 	    protected void DBdetails() throws PropertiesHandleException// FUNCTION FOR DB-DETAILS
