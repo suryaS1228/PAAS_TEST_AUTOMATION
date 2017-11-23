@@ -347,7 +347,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
 	AssistCard sm;
-	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/SquareMouth/SMPayment/Config/config.properties");
+	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/STARR-DTC/RatingServiceSinglePlan/Config/config.properties");
 	
 	DatabaseOperation.ConnectionSetup(configFile);
 	objectInput.GetDataObjects(configFile.getProperty("input_query"));
@@ -364,7 +364,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 					sm.PumpinData(objectInput, configFile);
 					sm.PumpoutData(objectOutput,objectInput, configFile);
 				}
-				objectInput.WriteData("Flag_for_execution", "Completed");	
+				//objectInput.WriteData("Flag_for_execution", "Completed");	
 				objectInput.UpdateRow();
 				objectOutput.UpdateRow();
 	}while(objectInput.MoveForward()&&objectOutput.MoveForward());
