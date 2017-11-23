@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
-import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.listener.FireEventAPI;
@@ -74,12 +73,11 @@ public class MainClass
 	@SuppressWarnings("unchecked")
 	@Test(dataProvider="PaaSTest")
 	public static void apiTest(Integer RowIterator, Object inputtablerowobj, Object outputtablerowobj)throws InterruptedException, DatabaseException, InterruptedException
-    {   
-		LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-		LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-	
+    {   		
 		try 
 		{
+			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
 			//for (Entry<Integer, LinkedHashMap<String, String>> entry : inputtable.entrySet())
 				System.out.println("TestData : " + inputrow.get("S.No"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
@@ -170,7 +168,6 @@ public class MainClass
 		 input = new DatabaseOperation();
 		 inputtable = input.GetDataObjects(config.getProperty("input_query"));
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
-
 		 output = new DatabaseOperation();
 		 outputtable = output.GetDataObjects(config.getProperty("output_query"));
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
@@ -197,7 +194,6 @@ public class MainClass
 				 
 				 rowIterator++;
 			}  
-		 
 		 
 		 return combined;
 	 }

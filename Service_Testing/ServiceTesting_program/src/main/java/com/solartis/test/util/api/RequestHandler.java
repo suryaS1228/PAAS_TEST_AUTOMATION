@@ -45,6 +45,7 @@ public class RequestHandler
 		System.setProperty("org.freemarker.loggerLibrary", "none");
 		Configuration cfg = new Configuration();
 		cfg.setDefaultEncoding("UTF-8");
+		cfg.setNumberFormat("0.######");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		System.out.println(Requesttemplatepath);
 		template = cfg.getTemplate(Requesttemplatepath);

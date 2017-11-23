@@ -26,7 +26,7 @@ public class DBColoumnVerify extends DatabaseOperation
 	{
 		boolean ConditionReading=false;	
 		
-			if(condition.equals(null)||condition==null||condition.equals(""))
+			if(condition.equals(""))
 			{
 				ConditionReading=true;
 				return ConditionReading;
@@ -84,6 +84,7 @@ public class DBColoumnVerify extends DatabaseOperation
 								{
 								case "=": if((row.get(cond).equals(individualValue[j])))
 										   {
+												System.out.println((row.get(cond)+"-----------------------------------------------------"+(individualValue[j])));
 												ConditionReading=true;
 											}
 											break;
