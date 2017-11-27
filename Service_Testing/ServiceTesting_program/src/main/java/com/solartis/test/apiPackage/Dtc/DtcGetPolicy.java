@@ -23,27 +23,6 @@ public class DtcGetPolicy extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
-
-    @Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-    	this.input = InputData;
-		
-		String PolicyOrBatch=InputData.get("Policy_or_Batch");
-		System.out.println(PolicyOrBatch);
-		switch(PolicyOrBatch)
-		{
-		case "Policy":
-				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_policy.json");
-				break;
-		case "Batch":
-				sampleInput = new JsonHandle(config.getProperty("sample_request")+"request_batch.json");
-				break;
-		default:
-			System.out.println("no sample request");
-			break;
-		}
-	}
 	
     @Override
 	public void AddHeaders() throws APIException

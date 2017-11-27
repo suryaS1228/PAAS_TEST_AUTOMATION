@@ -36,50 +36,15 @@ public class DtcRatingService extends BaseClass implements API
 	}
  }
  
- @Override
- public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws  APIException
- {
-	try
-	{
-	 	  this.input = InputData;
-		  input = InputData;
-		  
-		  Planname=InputData.get("Plan_name").split(";");
-		  Plancode=InputData.get("Plan_code").split(";");
-		  int numofplan = Planname.length;
-		  switch(numofplan)
-		   
-		   {
-		    case 1:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
-		    case 2:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
-		    case 3:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
-		    case 4:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
-		    case 5:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
-		    case 6:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
-		    case 7:   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
-		   
-		    default:
-		   }
-		  if(config.getProperty("status").equals("Y"))
-			{
-				  macro.LoadSampleRatingmodel(config, InputData);  //Load sample rating model 
-				  macro.GenerateExpected(InputData, config);        //Generate expected rating models  
-			}
-	}
-	catch(MacroException e)
-	{
-		 throw new APIException("ERROR LoadSampleRequest FUNCTION -- DTC-RatingService CLASS", e);
-	}
- }
 
-    @Override
+
  public void PumpDataToRequest() throws APIException
  {
 	  try
 	  {
 		 LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 		 request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_name")+".json");
-		 request.StringToFile(sampleInput.FileToString());
+		 //request.StringToFile(sampleInput.FileToString());
 	  
 		 for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{

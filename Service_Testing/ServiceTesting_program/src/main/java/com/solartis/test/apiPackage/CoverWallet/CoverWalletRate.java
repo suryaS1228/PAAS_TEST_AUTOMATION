@@ -34,40 +34,7 @@ public class CoverWalletRate extends BaseClass implements API
 		
 	}
 	
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-		try
-		{
-			this.input = InputData;
-			String numofprovider=InputData.get("NumOfProviders");
-			switch(numofprovider)
-			   
-			   {
-			    case "1":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
-			    case "2":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
-			    case "3":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
-			    case "4":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
-			    case "5":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
-			    case "6":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
-			    case "7":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
-			    case "8":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request8.json"); break;
-			    case "9":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request9.json"); break;
-			    case "10":  sampleInput = new JsonHandle(config.getProperty("sample_request")+"request10.json"); break;
-			   
-			    default:
-			   }
-			if(config.getProperty("status").equals("Y"))
-			{
-		      macro.LoadSampleRatingmodel(config, InputData);
-			  macro.GenerateExpected(InputData, config);
-			}
-		}
-		catch(MacroException e)
-		{
-			throw new APIException("ERROR OCCURS IN LoadSampleRequest FUNCTION -- CoverWallet CLASS", e);
-		}
-		
-	}
+	
 	
 	public void PumpDataToRequest() throws APIException
 	{	
@@ -77,7 +44,7 @@ public class CoverWalletRate extends BaseClass implements API
 			{
 			macro.PumpinData(input, config);	
 			}
-			super.PumpDataToRequest();		
+			//super.PumpDataToRequest();		
 		}
 		catch(DatabaseException | POIException | MacroException  e)
 		{

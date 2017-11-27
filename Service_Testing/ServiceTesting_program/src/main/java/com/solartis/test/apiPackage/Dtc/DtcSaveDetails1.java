@@ -22,51 +22,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	}
-	
-	@Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-		this.input = InputData;
-		input = InputData;
-			switch(InputData.get("Plan_Type"))
-			{
-			 case "Annual":			      sampleInput = new JsonHandle(config.getProperty("sample_request")+"First_Save_AnnualPlan.json");
-			 									break;
-			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"First save_trip.json");
-												break;
-			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"FirstSave_RC.json");
-												break; 
-			 
-			 default:
-			}
-	}
-	
-	@Override
-	public void PumpDataToRequest() throws APIException
-	{
-		try
-		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
-			request.StringToFile(sampleInput.FileToString());
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				if(InputColVerify.DbCol(rowInputColVerify))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}	
-			}
-		}
-		catch(DatabaseException | RequestFormatException  e)
-		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
-		}
-	}
+	}	
 	
 	@Override
 	public void AddHeaders() throws APIException
