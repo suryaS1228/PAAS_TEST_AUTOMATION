@@ -73,7 +73,15 @@ public class RequestHandler
 				{
 					parentlist.add(parentName);				
 					List <Object> atribParent = new ArrayList<Object>();
-					root.put(parentName, atribParent);
+					if(rowInputColVerify.get("AttributeNature").equals("dynamic"))
+					{
+						if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
+							root.put(parentName, atribParent);
+					}
+					else
+					{
+						root.put(parentName, atribParent);
+					}
 					//System.out.println(parentName);
 				}
 			}
@@ -89,17 +97,27 @@ public class RequestHandler
 			{
 				String parentName = rowInputColVerify.get("Parent");
 				String atributeName = rowInputColVerify.get("AtributeName");
-				String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
-				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
-				if (this.isInteger(atributeDynamicValue))
-				{
-					atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
-				}
-				System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue+"---------"+atributeDynamicValue);
+				
+				
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
+				{
+					String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
+					System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue);
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
+				}
 				else
-					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
+				{
+					if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
+					{
+						Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
+						if (this.isInteger(atributeDynamicValue))
+						{
+							atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
+						}
+						System.out.println(parentName+"---------"+atributeName+"---------"+atributeDynamicValue);
+						((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
+					}
+				}
 			}
 		}
 	}

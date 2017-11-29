@@ -48,7 +48,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+"_Save1_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
 			response.StringToFile(response_string);	
 		}
 		catch(RequestFormatException | HTTPHandleException e)
