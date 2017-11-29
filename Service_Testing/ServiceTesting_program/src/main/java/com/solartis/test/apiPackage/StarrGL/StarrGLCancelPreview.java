@@ -52,7 +52,7 @@ public class StarrGLCancelPreview extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 				try
 				{
@@ -61,15 +61,17 @@ public class StarrGLCancelPreview extends BaseClass implements API
 					System.out.println(responseStatus);
 					if(responseStatus.equals("SUCCESS"))
 					{
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
-					output.put("flag_for_execution", "Completed");
+						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						System.out.println(actual);
+						output.put("Flag_for_execution", "Completed");
+						output.put("RuleName","");
+						output.put("User_message","");
 					}
 					else
 					{
-						output.put("flag_for_execution",responseStatus);
+						output.put("Flag_for_execution",responseStatus);
 						output.put("RuleName",response.read("..RuleName"));
 						output.put("User_message",response.read("..Message"));
 					}
