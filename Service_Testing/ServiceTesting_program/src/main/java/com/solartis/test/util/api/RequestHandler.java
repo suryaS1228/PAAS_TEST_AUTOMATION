@@ -110,7 +110,8 @@ public class RequestHandler
 					if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 					{
 						Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
-						if (this.isInteger(atributeDynamicValue))
+						//if (this.isInteger(atributeDynamicValue))
+						if(rowInputColVerify.get("iteration").equals("loop"))
 						{
 							atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 						}

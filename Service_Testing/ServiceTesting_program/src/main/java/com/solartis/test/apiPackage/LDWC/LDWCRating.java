@@ -3,8 +3,6 @@ package com.solartis.test.apiPackage.LDWC;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.UUID;
-
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;

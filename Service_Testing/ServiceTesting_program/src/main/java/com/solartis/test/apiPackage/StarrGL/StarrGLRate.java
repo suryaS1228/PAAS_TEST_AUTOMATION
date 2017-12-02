@@ -126,11 +126,11 @@ public class StarrGLRate extends BaseClass implements API
 					//System.out.println("Writing Response to Table");
 					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					output.put("flag_for_execution", "Completed");
+					output.put("Flag_for_execution", "Completed");
 					}
 					else
 					{
-						output.put("flag_for_execution", responseStatus);
+						output.put("Flag_for_execution", responseStatus);
 						output.put("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
 					}
 				}
