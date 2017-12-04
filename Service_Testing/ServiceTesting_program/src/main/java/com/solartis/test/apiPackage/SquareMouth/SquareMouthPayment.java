@@ -29,12 +29,13 @@ public class SquareMouthPayment extends BaseClass implements API
 	@Override
 	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
+		
 			
-		try
+		//try
     	{
 			SquareMouth sm=new SquareMouth(config);
-			do
-			{
+			//do
+			//{
 				System.out.println("TestData : " + InputData.ReadData("S.No"));  	
 						if(InputData.ReadData("Flag_for_execution").equals("Y"))
 						{
@@ -44,10 +45,10 @@ public class SquareMouthPayment extends BaseClass implements API
 							sm.PumpinData(InputData, config);
 							sm.PumpoutData(InputData,InputData, config);
 						}
-						System.out.println("rating model completed");
-						InputData.UpdateRow();
+						//System.out.println("rating model completed");
+						//InputData.UpdateRow();
 						
-			}while(InputData.MoveForward());
+			//}while(InputData.MoveForward());
 			
 			
 			
