@@ -33,9 +33,8 @@ public class SquareMouthPayment extends BaseClass implements API
 			
 		try
     	{
+		 //====================rating model generation===============================================
 			SquareMouth sm=new SquareMouth(config);
-			//do
-			//{
 				System.out.println("TestData : " + InputData.ReadData("S.No"));  	
 						if(InputData.ReadData("Flag_for_execution").equals("Y"))
 						{
@@ -45,14 +44,8 @@ public class SquareMouthPayment extends BaseClass implements API
 							sm.PumpinData(InputData, config);
 							sm.PumpoutData(InputData,InputData, config);
 						}
-						//System.out.println("rating model completed");
-						//InputData.UpdateRow();
-						
-			//}while(InputData.MoveForward());
-			
-			
-			
-			
+		//============================================================================================		
+				
 			this.input = InputData;
 			input = InputData;
 			System.out.println(config.getProperty("sample_request"));
