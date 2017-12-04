@@ -7,6 +7,7 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.SquareMouth;
 import com.solartis.test.util.api.*;
@@ -14,21 +15,43 @@ import com.solartis.test.util.common.*;
 
 public class SquareMouthPayment extends BaseClass implements API 
 {
-	public SquareMouthPayment(PropertiesHandle config)
+	public SquareMouthPayment(PropertiesHandle config) throws MacroException
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		
 	
 	}
 	
 	@Override
 	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
+			
 		try
     	{
+			SquareMouth sm=new SquareMouth(config);
+			do
+			{
+				System.out.println("TestData : " + InputData.ReadData("S.No"));  	
+						if(InputData.ReadData("Flag_for_execution").equals("Y"))
+						{
+							System.out.println("coming to flow");
+							sm.LoadSampleRatingmodel(config, InputData);
+							sm.GenerateExpected(InputData, config);
+							sm.PumpinData(InputData, config);
+							sm.PumpoutData(InputData,InputData, config);
+						}
+						System.out.println("rating model completed");
+						InputData.UpdateRow();
+						
+			}while(InputData.MoveForward());
+			
+			
+			
+			
 			this.input = InputData;
 			input = InputData;
 			System.out.println(config.getProperty("sample_request"));
@@ -57,7 +80,7 @@ public class SquareMouthPayment extends BaseClass implements API
 					 break;
 				}
     	}
-		catch(DatabaseException e)
+		catch(DatabaseException|MacroException e)
     	{
     		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SMPayIssue CLASS", e);
     	}
@@ -101,7 +124,7 @@ public class SquareMouthPayment extends BaseClass implements API
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SMPayIssue CLASS", e);
 		}
 	}
 	

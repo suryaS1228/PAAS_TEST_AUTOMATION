@@ -263,7 +263,9 @@ public class AssistCard extends DBColoumnVerify implements MacroInterface
 			DateMaping.put(DateInputFormat[2].toLowerCase(), date[2]);
 			value =  DateMaping.get(DateOutputFormat[0].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[1].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[2].toLowerCase());     
 			DateFormat format = new SimpleDateFormat(ExpectedFormat, Locale.ENGLISH);
-			Date1=format.parse(value);  			
+			
+			Date1=format.parse(value);  
+			System.out.println("dateis---"+Date1);
 		   // System.out.println(value+"\t"+Date1);  						
 		}
 		
