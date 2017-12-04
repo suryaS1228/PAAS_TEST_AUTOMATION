@@ -31,7 +31,7 @@ public class SquareMouthPayment extends BaseClass implements API
 	{
 		
 			
-		//try
+		try
     	{
 			SquareMouth sm=new SquareMouth(config);
 			//do
