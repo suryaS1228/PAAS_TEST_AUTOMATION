@@ -119,25 +119,25 @@ public class StarrGLRate extends BaseClass implements API
 				
 				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
-				try
-				{
-					if(responseStatus.equals("SUCCESS"))
+					try
 					{
-					//System.out.println("Writing Response to Table");
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					output.put("Flag_for_execution", "Completed");
+						if(responseStatus.equals("SUCCESS"))
+						{
+							//System.out.println("Writing Response to Table");
+							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+							output.put("Flag_for_execution", "Completed");
+						}
+						else
+						{
+							output.put("Flag_for_execution", responseStatus);
+							output.put("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
+						}
 					}
-					else
+					catch(PathNotFoundException e)
 					{
-						output.put("Flag_for_execution", responseStatus);
-						output.put("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
-				}
-				catch(PathNotFoundException e)
-				{
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-				}
 				}
 			}
 			

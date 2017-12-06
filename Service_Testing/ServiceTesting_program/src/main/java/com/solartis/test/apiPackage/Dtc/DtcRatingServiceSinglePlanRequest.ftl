@@ -1,5 +1,5 @@
 <#assign TravelerDOBarray=[]><#list TravelerDOB as x><#assign TravelerDOBarray=TravelerDOBarray+[x.value]></#list>
-<#assign TravelCostarray=[]><#list TravelCost as x><#assign TravelCostarray=TravelCostarray+[x.value]></#list>
+<#--<#if TravelCost??><#else><#assign TravelCostarray=[]><#list TravelCost as x><#assign TravelCostarray=TravelCostarray+[x.value]></#list></#if> -->
 <#assign TravelIndexarray=[]><#list TravelerIndex as x><#assign TravelIndexarray=TravelIndexarray+[x.value]></#list>
 {    "EndClientUserUniqueSessionId" : "1",
      "EndClientUserBrowserSessionId" : "12",
@@ -16,7 +16,7 @@
         <#list 1..numoftravelers[0] as result>
         {
          "TravelerDOB":"${TravelerDOBarray[i]}",
-          "TravelCost" : "${TravelCostarray[i]}",
+         <#-- <#if TravelCost??><#else> "TravelCost" : "${TravelCostarray[i]}", </#if> -->
           "TravelerIndex":"${TravelIndexarray[i]}"
         }<#if result?is_last><#else>,</#if><#assign i=i+1>
         </#list>
