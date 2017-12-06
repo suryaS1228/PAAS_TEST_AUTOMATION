@@ -320,7 +320,7 @@ public class IsoMacro implements MacroInterface
 		{
 			String[] windhail = Data.split("%");
 			percentageData = Integer.valueOf(windhail[0]);			
-			return percentageData/100;
+			return percentageData/100; //Changes in Macr iso
 		}
 		return percentageData;		
 	}
