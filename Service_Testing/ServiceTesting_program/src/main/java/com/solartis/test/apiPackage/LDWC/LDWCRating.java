@@ -1,11 +1,5 @@
 package com.solartis.test.apiPackage.LDWC;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import java.util.Random;
-import org.dom4j.DocumentException;
-import org.json.simple.parser.ParseException;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -17,11 +11,13 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.*;
 
+import java.util.UUID;
+
+
 
 public class LDWCRating extends BaseClass implements API
 {
-	final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=";
-	final int RANDOM_STRING_LENGTH = 10;
+	protected String numofclasscode;
 	public LDWCRating(PropertiesHandle config)
 	{
 		this.config = config;
@@ -33,10 +29,32 @@ public class LDWCRating extends BaseClass implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData)
+	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{	 
 		this.input = InputData;	
-		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
+		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");
+		
+		//classcode=InputData.ReadData("Class_code");
+		try
+		{
+		 numofclasscode = InputData.ReadData("classcode");
+		}
+		catch(Exception e)
+		{
+			
+		}
+		//int numofclasscode=numclasscode.length;
+		switch(numofclasscode)
+		   
+		 {
+		    case "1":   sampleInput = new XmlHandle(config.getProperty("sample_request")+"request1.xml"); break;
+		    case "2":   sampleInput = new XmlHandle(config.getProperty("sample_request")+"request2.xml"); break;
+		    case "3":   sampleInput = new XmlHandle(config.getProperty("sample_request")+"request3.xml"); break;
+		    case "4":   sampleInput = new XmlHandle(config.getProperty("sample_request")+"request4.xml"); break;
+		    case "5":   sampleInput = new XmlHandle(config.getProperty("sample_request")+"request5.xml"); break;
+		    
+		    default:
+		 }
 	}
 		
 	@Override
@@ -47,10 +65,11 @@ public class LDWCRating extends BaseClass implements API
 			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
 			request.StringToFile(sampleInput.FileToString());
-			String Reqid = this.RqUID();
-			System.out.println(Reqid);
+			String Reqid = UUID.randomUUID().toString();
+		    System.out.println(Reqid);
 			request.write("//InsuranceSvcRq/RqUID",Reqid);
 			input.WriteData("RequestUID", Reqid);
+			System.out.println(InputColVerify.ReadData(config.getProperty("InputJsonPath")));//+".............."+ input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
 			
 			do
 			{
@@ -134,27 +153,5 @@ public class LDWCRating extends BaseClass implements API
 		
 	}
 	
-	  public String RqUID()
-	  {
-	         
-	        StringBuffer randStr = new StringBuffer();
-	        for(int i=0; i<RANDOM_STRING_LENGTH; i++){
-	            int number = getRandomNumber();
-	            char ch = CHAR_LIST.charAt(number);
-	            StringBuffer s = randStr.append(ch);
-	            }
-	        return randStr.toString();
-	  }
-	     
-	  private int getRandomNumber() {
-	        int randomInt = 0;
-	        Random randomGenerator = new Random();
-	        randomInt = randomGenerator.nextInt(CHAR_LIST.length());
-	        if (randomInt - 1 == -1) {
-	            return randomInt;
-	        }else {
-	            return randomInt - 1;
-	             }
-	  }
 }
 
