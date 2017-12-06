@@ -146,7 +146,7 @@ public class TestEngine
 		DatabaseOperation.CloseConn();
    }
 	
-	private static void disableSslVerification() {
+	public static void disableSslVerification() {
         try
         {
             // Create a trust manager that does not validate certificate chains
@@ -169,13 +169,10 @@ public class TestEngine
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             // Create all-trusting host name verifier
             HostnameVerifier allHostsValid = new HostnameVerifier() {
-                
-
-				@Override
-				public boolean verify(String hostname, SSLSession session) {
-					// TODO Auto-generated method stub
-					return true;
-				}
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
             };
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
