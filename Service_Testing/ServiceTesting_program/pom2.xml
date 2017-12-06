@@ -124,18 +124,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.TestEngine</mainClass>
+                    <mainClass>com.solartis.test.macroPackage.SquareMouth</mainClass>
                     <systemPropertyVariables>
-					            <Project>${Project}</Project>
-		                        <Api>${Api}</Api>
-		                        <Env>${Env}</Env>
-		                        <OutputChioce>${OutputChioce}</OutputChioce>
-		                        <UserName>${UserName}</UserName>
-		                        <JDBC_DRIVER>${JDBC_DRIVER}</JDBC_DRIVER>
-		                        <DB_URL>${DB_URL}</DB_URL>
-		                        <USER>${USER}</USER>
-		                        <password>${password}</password>
-		                        <Priority>${Priority}</Priority>
+					            <path>${path}</path>
 					</systemPropertyVariables>
                 </configuration>
             </plugin>

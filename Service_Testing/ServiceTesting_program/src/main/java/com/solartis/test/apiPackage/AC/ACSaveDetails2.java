@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.Dtc;
+package com.solartis.test.apiPackage.AC;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -11,18 +11,18 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.*;
 
-public class DtcSaveDetails3 extends BaseClass implements API
+public class ACSaveDetails2 extends BaseClass implements API
 {
-	public DtcSaveDetails3(PropertiesHandle config)
+	public ACSaveDetails2(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
-	
+
 	@Override
 	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
 	{
@@ -30,43 +30,29 @@ public class DtcSaveDetails3 extends BaseClass implements API
     	{
 			this.input = InputData;
 			input = InputData;
-			switch(InputData.ReadData("Plan_Type"))
-			{
-			 case "Annual":			
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
-			 	 break;
-			 	 
-			 case "Single Trip":
-				 String PlanName = InputData.ReadData("Plan_name");
-				 if(PlanName.equals("Air Ticket Protector"))
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
-				 }
-				 else
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
-				 }
+				switch(InputData.ReadData("Plan_Type"))
+				{
+				 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_AnnualPlans.json");
+				 									break;
+				 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_trip.json");
+													break;
+				 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_RC.json");
+													break; 
 				 
-				 break;
-				 
-			 case "Renter's Collision": 	
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
-				 break; 
-			 
-			 default:
-			}
+				 default:
+				}
     	}
 		catch(DatabaseException e)
     	{
-    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
     	}
-	}
+	  }
 
 	@Override
 	public void PumpDataToRequest() throws APIException
 	{
 		try
-		{
+    	{
 			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
 			request.StringToFile(sampleInput.FileToString());
@@ -81,13 +67,13 @@ public class DtcSaveDetails3 extends BaseClass implements API
 					}
 				}	
 			}while(InputColVerify.MoveForward());
-		}
+    	}	
 		catch(DatabaseException | RequestFormatException  e)
 		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
 		}
 	}
-
+	
 	@Override
 	public void AddHeaders() throws APIException
 	{
@@ -100,10 +86,10 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
 		}
 	}
-
+	
 	@Override
 	public void SendAndReceiveData() throws APIException
 	{
@@ -117,55 +103,42 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		}
 		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
 		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
 		}
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException 
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
 	{
 		try
 		{
-			String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 			OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-				do 	
+			do 	
+			{
+			  if(OutputColVerify.DbCol(input)&&(OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
 				{
-				if(OutputColVerify.DbCol(input)&&(OutputColVerify.ReadData("Flag").equalsIgnoreCase("Y")))
-				{
-					 try
-				      {	
-							if(StatusCode.equals("SUCCESS"))
-							{
-								System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
-								String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-								output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
-								System.out.println(actual);
-								output.WriteData("Flag_for_execution", StatusCode);
-								
-							}
-							else
-							{
-								String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-								String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-								output.WriteData("Flag_for_execution", "Error response");
-								output.WriteData("Message_code", MessageCode);
-								output.WriteData("User_message", UserMessage);
-								
-							}
-				      }
+				try
+					{
+					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+					System.out.println(actual);
+					output.WriteData("flag_for_execution", "Completed");
+					}
 					catch(PathNotFoundException e)
 					{
 						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
 					}
-					}
-				}while(OutputColVerify.MoveForward());
-	
-			return output;	
-			}
+				}
+			}while(OutputColVerify.MoveForward());
+		
+			
+			return output;
+		}
 		catch(DatabaseException | RequestFormatException e)
 		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS2 CLASS", e);
 		}
-}
-}
-
+	}
+}	
+	

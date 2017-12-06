@@ -68,6 +68,7 @@ public class BaseClass
 	{
 	  try 
 	  {
+		  System.out.println(request.FileToString());
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)

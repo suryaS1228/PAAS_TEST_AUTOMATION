@@ -152,12 +152,20 @@ public class excel_operation
 		
 			wwbCopy = null;
 			shSheet = null;
-			
+		
+	}
+	
+	public static void main(String args[])
+	{
+		
+		
+		
+		
+		
 		
 		
 		
 	}
-	
 	
 	
 	

@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.Dtc;
+package com.solartis.test.apiPackage.AC;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -11,9 +11,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.*;
 
-public class DtcSaveDetails3 extends BaseClass implements API
+public class ACSaveDetails3 extends BaseClass implements API
 {
-	public DtcSaveDetails3(PropertiesHandle config)
+	public ACSaveDetails3(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
@@ -33,7 +33,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			switch(InputData.ReadData("Plan_Type"))
 			{
 			 case "Annual":			
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
+				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlan.json");
 			 	 break;
 			 	 
 			 case "Single Trip":

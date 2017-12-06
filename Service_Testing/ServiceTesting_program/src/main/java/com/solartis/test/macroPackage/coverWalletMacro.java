@@ -301,7 +301,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		} 
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS IN LOOKUP TABLE OF ISO MACRO", e);
 		}
 		System.out.println(LookupMap.get("new"));
 		if (LookupMap.get(Lookup1)==null)

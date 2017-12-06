@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.Dtc;
+package com.solartis.test.apiPackage.AC;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -11,16 +11,16 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.*;
 
-public class DtcSaveDetails3 extends BaseClass implements API
+public class ACSaveDetails4 extends BaseClass implements API
 {
-	public DtcSaveDetails3(PropertiesHandle config)
+	public ACSaveDetails4(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new DatabaseOperation();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
 	@Override
@@ -30,45 +30,32 @@ public class DtcSaveDetails3 extends BaseClass implements API
     	{
 			this.input = InputData;
 			input = InputData;
-			switch(InputData.ReadData("Plan_Type"))
+			switch(InputData.ReadData("Plan_name"))
 			{
-			 case "Annual":			
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
-			 	 break;
-			 	 
-			 case "Single Trip":
-				 String PlanName = InputData.ReadData("Plan_name");
-				 if(PlanName.equals("Air Ticket Protector"))
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
-				 }
-				 else
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
-				 }
-				 
-				 break;
-				 
-			 case "Renter's Collision": 	
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
-				 break; 
+			 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
+			 									break;
+			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
+												break;
+			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
+												break; 
 			 
 			 default:
 			}
     	}
 		catch(DatabaseException e)
     	{
-    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+    		throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS4 CLASS", e);
     	}
 	}
-
+	
 	@Override
 	public void PumpDataToRequest() throws APIException
 	{
 		try
 		{
 			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
+			request = new JsonHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
+			System.out.println(sampleInput);
 			request.StringToFile(sampleInput.FileToString());
 			
 			do
@@ -84,10 +71,10 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		}
 		catch(DatabaseException | RequestFormatException  e)
 		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS4 CLASS", e);
 		}
 	}
-
+	
 	@Override
 	public void AddHeaders() throws APIException
 	{
@@ -100,10 +87,10 @@ public class DtcSaveDetails3 extends BaseClass implements API
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
 		}
 	}
-
+	
 	@Override
 	public void SendAndReceiveData() throws APIException
 	{
@@ -112,17 +99,17 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("State_code")+"_"+input.ReadData("Plan_type")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response_"+input.ReadData("StateCode1")+"_"+input.ReadData("Plan_name")+".json");
 			response.StringToFile(response_string);
 		}
 		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
 		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
 		}
 	}
-
+	
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException 
+	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
 	{
 		try
 		{
@@ -162,10 +149,9 @@ public class DtcSaveDetails3 extends BaseClass implements API
 	
 			return output;	
 			}
-		catch(DatabaseException | RequestFormatException e)
-		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS3 CLASS", e);
-		}
+			catch(DatabaseException | RequestFormatException e)
+			{
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS4 CLASS", e);
+			}
 }
 }
-
