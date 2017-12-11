@@ -13,14 +13,13 @@
 <#assign Emailarray=[]><#list Email as x><#assign Emailarray=Emailarray+[x.value]></#list>
 <#assign TravelerIndexarray=[]><#list TravelerIndex as x><#assign TravelerIndexarray=TravelerIndexarray+[x.value]></#list>
 <#assign OFACLicenseNumberarray=[]><#list OFACLicenseNumber as x><#assign OFACLicenseNumberarray=OFACLicenseNumberarray+[x.value]></#list>
- <#assign i=0>
+<#assign numofTravelerarray=[]><#list numofTraveler as x><#assign numofTravelerarray=numofTravelerarray+[x.value]></#list>
+<#assign i=0>
 {
   "PolicyInformation": {
   	"TravelerList": [
-       
-  	<#list 1..numofTraveler[0] as result>
-      {
-      	"ProviderDetail": {
+      	<#list 1..numofTravelerarray[0] as result>
+      	{
       	  "TravelerDOB": "${TravelerDOBarray[i]}",
           "TravelCost": "${TravelCostarray[i]}",
           "FirstName": "${FirstNamearray[i]}",
@@ -37,8 +36,9 @@
 	  "TravelerIndex": "${TravelerIndexarray[i]}",
 	  "OFACLicenseNumber": "${OFACLicenseNumberarray[i]}",
       	}
-      }<#assign i=i+1>
+      <#assign i=i+1><#if i=numofTravelerarray[0]><#else>,</#if>
          </#list>
+]
         "PaymentInformation": 
               {
               <#list PaymentInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
