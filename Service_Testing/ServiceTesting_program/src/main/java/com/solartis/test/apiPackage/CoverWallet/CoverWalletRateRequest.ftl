@@ -8,10 +8,12 @@
 <#assign LastNamearray=[]><#list LastName as x><#assign LastNamearray=LastNamearray+[x.value]></#list>
 <#assign ScheduleRatingFactorarray=[]><#list ScheduleRatingFactor as x><#assign ScheduleRatingFactorarray=ScheduleRatingFactorarray+[x.value]></#list>
 <#assign ProviderClassarray=[]><#list ProviderClass as x><#assign ProviderClassarray=ProviderClassarray+[x.value]></#list>
+<#assign numofProviderarray=[]><#list numofProvider as x><#assign numofProviderarray=numofProviderarray+[x.value]></#list>
+<#assign i=0>
 {
   "Policy": {
   	"Provider": [
-  	<#list 1..numofProvider[0] as result>
+  	<#list 1..numofProviderarray[0] as result>
       {
       	"ProviderDetail": {
       	  "HoursWorkPerWeek": "${HoursWorkPerWeekarray[i]}",
@@ -26,7 +28,9 @@
           "ProviderClass": "${ProviderClassarray[i]}"
       	}
       }
+      <#assign i=i+1><#if i=numofProviderarray[0]><#else>,</#if>
       </#list>
+],
      <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         </#list> 
     },
