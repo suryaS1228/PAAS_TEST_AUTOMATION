@@ -65,7 +65,8 @@ public class IsoBopEndorsementRate extends BaseClass implements API
 					else
 					{
 						output.WriteData("flag_for_execution",responseStatus);
-						String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+						//String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+						String UserMessage=(response.read("..RuleName").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 						output.WriteData("User_message", UserMessage);
 					}
 					}
