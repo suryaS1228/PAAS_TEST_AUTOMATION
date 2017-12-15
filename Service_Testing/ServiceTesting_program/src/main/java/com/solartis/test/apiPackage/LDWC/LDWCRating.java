@@ -82,8 +82,8 @@ public class LDWCRating extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new XmlHandle(config.getProperty("response_location")+input.get("testdata")+"_response"+".xml");
-			response.StringToFile(response_string.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""));
+			response = new XmlHandle(config.getProperty("response_location")+input.get("Testdata")+"_response"+".xml");
+			response.StringToFile(response_string);
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{

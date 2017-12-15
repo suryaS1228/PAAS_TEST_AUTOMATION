@@ -118,15 +118,15 @@
 					</CreditOrSurcharge>
                                    <#list 1..numofClassarray[0] as result>
 					<WorkCompRateClass> 
-                                                <Exposure>${Exposurearray[j]}</Exposure> 
-                                                <RatingClassificationCd>${RatingClassificationCdarray[j]}</RatingClassificationCd>
-                                                <com.csc_GoverningClassInd>${GoverningClassIndarray[j]}</com.csc_GoverningClassInd>
+                                                <Exposure> <#if Exposurearray[j]?has_content>${Exposurearray[j]}<#else></#if> </Exposure> 
+                                                <RatingClassificationCd><#if RatingClassificationCdarray[j]?has_content>${RatingClassificationCdarray[j]}<#else></#if></RatingClassificationCd>
+                                                <com.csc_GoverningClassInd><#if GoverningClassIndarray[j]?has_content>${GoverningClassIndarray[j]}<#else></#if></com.csc_GoverningClassInd>
                              
           </WorkCompRateClass> 
-                                   <#assign j=j+1><#if j=numofClassarray[0]></#if>
+                                   <#assign j=j+1>
          </#list>
 				</WorkCompRateState>
-				<#assign i=i+1><#if i=numofStatearray[0]></#if>
+				<#assign i=i+1>
          </#list>
 			</WorkCompLineBusiness>
 			 </LargeDeductibleCreditCalculationRq> 
