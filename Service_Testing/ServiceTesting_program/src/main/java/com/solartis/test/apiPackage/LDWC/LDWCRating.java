@@ -33,10 +33,6 @@ public class LDWCRating extends BaseClass implements API
 	{
 		try
 		{
-			/*String Reqid = UUID.randomUUID().toString();
-			System.out.println(Reqid);
-			request.write("//InsuranceSvcRq/RqUID",Reqid);
-			input.put("RequestUID", Reqid);*/
 			
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			sampleInput.LoadData(tableInputColVerify, InputData);
@@ -87,7 +83,7 @@ public class LDWCRating extends BaseClass implements API
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
 			response = new XmlHandle(config.getProperty("response_location")+input.get("testdata")+"_response"+".xml");
-			response.StringToFile(response_string);
+			response.StringToFile(response_string.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""));
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{
