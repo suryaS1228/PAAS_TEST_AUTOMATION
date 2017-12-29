@@ -60,7 +60,7 @@ public class DatabaseOperation
 			{
 				throw new DatabaseException("ERROR IN JDBC_DRIVER : " + JDBC_DRIVER, e);
 			}
-			try 
+			try
 			{
 				conn = DriverManager.getConnection(DB_URL,USER,password);
 			} 
