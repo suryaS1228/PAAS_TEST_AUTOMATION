@@ -8,8 +8,8 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
-import com.solartis.test.macroPackage.IsoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.MicroBopMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.common.DatabaseOperation;
@@ -29,7 +29,7 @@ public class MicroBOP extends BaseClass implements API
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 			if(config.getProperty("status").equals("Y"))
 			{
-			macro=new IsoMacro(config);	
+				macro=new MicroBopMacro(config);	
 			}
 	    }
 	    catch(MacroException e)
