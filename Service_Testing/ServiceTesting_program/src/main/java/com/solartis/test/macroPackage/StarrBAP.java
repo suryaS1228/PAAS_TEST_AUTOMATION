@@ -67,10 +67,10 @@ public class StarrBAP extends DBColoumnVerify implements MacroInterface
 		try
 		{
 		// TODO Auto-generated method stub
-			String RateingModelName = Lookup(inputData.ReadData("StateName"),configFile);
+			String RateingModelName = "BAPRatingModel";
 			System.out.println(inputData.ReadData("StateName"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-			System.out.println("Sample rating mosel"+Samplepath);
+			System.out.println("Sample rating model....."+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (DatabaseException | POIException e)
@@ -350,7 +350,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
 	StarrBAP sm;
-	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/SquareMouth/SMPayment/Config/config.properties");
+	PropertiesHandle configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\Starr-BAP\\Config\\config.properties");
 	
 	DatabaseOperation.ConnectionSetup(configFile);
 	objectInput.GetDataObjects(configFile.getProperty("input_query"));
