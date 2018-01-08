@@ -137,7 +137,6 @@ public class DBColoumnVerify extends DatabaseOperation
 								case "<=": if(Integer.parseInt(DataTable.ReadData(cond)) <= Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
-						 						
 											}
 											else
 											{

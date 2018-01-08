@@ -36,6 +36,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
 			 	 break;
 			 	 
+			 case "Air Ticket":	 
 			 case "Single Trip":
 				 String PlanName = InputData.ReadData("Plan_name");
 				 if(PlanName.equals("Air Ticket Protector"))

@@ -68,12 +68,12 @@ public class StarrBAP extends DBColoumnVerify implements MacroInterface
 		{
 		// TODO Auto-generated method stub
 			String RateingModelName = "BAPRatingModel";
-			System.out.println(inputData.ReadData("StateName"));
+			//System.out.println(inputData.ReadData("StateName"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			System.out.println("Sample rating model....."+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
-		catch (DatabaseException | POIException e)
+		catch ( POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF DTC MACRO", e);
 		}
@@ -357,7 +357,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	objectOutput.GetDataObjects(configFile.getProperty("output_query"));
 	do
 	{
-		System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
+		//System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
 				if(objectInput.ReadData("Flag_for_execution").equals("Y"))
 				{
 					System.out.println("coming to flow");
