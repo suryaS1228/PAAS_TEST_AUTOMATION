@@ -1,6 +1,7 @@
 package com.solartis.test.macroPackage;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,17 +14,19 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class IsoMacro implements MacroInterface
-{
+public class MicroBopMacro extends DBColoumnVerify implements MacroInterface
+{	
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected IsoMacro trans;
+	protected MicroBopMacro trans;
 	protected String Samplepath;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
+	protected DBColoumnVerify MacroCondVerify;
 	
 	
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,32 +45,33 @@ public class IsoMacro implements MacroInterface
 	    }
 	}
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	public IsoMacro(PropertiesHandle configFile) throws MacroException
+	public MicroBopMacro(PropertiesHandle configFile) throws MacroException
 	{
-		configTable = new DatabaseOperation();
-		try 
+		super(" ");
+			configTable = new DatabaseOperation();
+			//configFile = new PropertiesHandle("A:/1 Projects/18 CoverWallet/Rating/configuration_file/config_rating.properties");
+		try
 		{
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 		}
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF ISOMACRO", e);
+			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF  COVERWALLET MACOR", e);
 		}
 		
 	}
-	
 	public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws MacroException
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
+			String RateingModelName ="Micro BOP Rating Model";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
-		catch (DatabaseException | POIException e)
+		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL", e);
+			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF COVERWALLET MACRO", e);
 		}
 	}
 	
@@ -78,10 +82,11 @@ public class IsoMacro implements MacroInterface
 			Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
+			System.out.println("generate expected rating over");
 		}
 		catch(DatabaseException | POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
+			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL OF COVERWALLET MACRO", e);
 		}
 	}
 	
@@ -89,12 +94,15 @@ public class IsoMacro implements MacroInterface
 	{
 		try
 		{
+			//DatabaseOperation configTable = new DatabaseOperation();
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new IsoMacro(configFile);
+			trans= new MicroBopMacro(configFile);
+			MacroCondVerify = new DBColoumnVerify("conditionChecking");
 			do
-			{								
-				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y"))
+			{	
+				String condition = configTable.ReadData("Condition");
+				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
 					if (configTable.ReadData("Type").equals("input"))
 					{
@@ -105,6 +113,7 @@ public class IsoMacro implements MacroInterface
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
+						System.out.println(columnNum+"----"+rowNum+"-----"+configTable.ReadData("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(configTable.ReadData("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
@@ -116,13 +125,16 @@ public class IsoMacro implements MacroInterface
 						{
 							if(trans.isInteger(Datatowrite))
 							{
-								int datadata =Integer.parseInt(Datatowrite);
-								excel.write_data(rowNum-1, columnNum, datadata);	
+								int intdata =Integer.parseInt(Datatowrite);
+								excel.write_data(rowNum-1, columnNum, intdata);	
 							}
 							else if(trans.isFloat(Datatowrite))
 							{
-								float floatdata = Float.parseFloat(Datatowrite);
-								excel.write_data(rowNum-1, columnNum, floatdata);
+								float floatdata = Float.valueOf(Datatowrite);							
+								DecimalFormat df = new DecimalFormat("#.####");
+								String flo = df.format(floatdata);		
+								float floatvalue = Float.valueOf(flo);
+								excel.write_data(rowNum-1, columnNum, floatvalue);
 							}
 							else
 							{
@@ -133,64 +145,66 @@ public class IsoMacro implements MacroInterface
 				}
 			}while(configTable.MoveForward());
 			excel.refresh();
+			excel.save();	
+		}
+		catch(DatabaseException e)
+		{
+			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF COVERWALLET MACRO", e);
+		}
+		catch(POIException e)
+		{
+			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF COVERWALLET MACRO", e);
+		} 
+	}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+	{
+		try
+		{
+			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			excel.refresh();
+			do
+			{
+				String condition = configTable.ReadData("Condition");
+				if (configTable.ReadData("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
+				{
+					if (configTable.ReadData("Type").equals("output"))
+					{
+						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
+						String CellAddress = configTable.ReadData("Cell_Address");
+						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
+						int columnNum=Alphabet.getNum(part[0].toUpperCase());
+						int rowNum = Integer.parseInt(part[1]);
+						excel.getsheets(configTable.ReadData("Sheet_Name"));
+						excel.getcell(rowNum-1, columnNum);
+						String Datatowrite = excel.read_data(rowNum-1, columnNum);
+						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
+						outputData.WriteData(Datacolumntowrite, Datatowrite);
+						//outputData.WriteData(Datacolumntowrite, "poda");
+					}
+				}
+				outputData.UpdateRow();
+			}while(configTable.MoveForward());
 			excel.save();
 		}
 		catch(DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF ISO MACRO", e);
-		}
-		catch(POIException e)
-		{
-			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF ISO MACRO", e);
-		}
-	}
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException    
-	{
-		try
-		{
-		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-		configTable.GetDataObjects(configFile.getProperty("config_query"));
-		excel.refresh();
-		do
-		{
-			
-			if (configTable.ReadData("flag_for_execution").equals("Y"))
-			{
-				if (configTable.ReadData("Type").equals("output"))
-				{
-					String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-					String CellAddress = configTable.ReadData("Cell_Address");
-					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
-					int columnNum=Alphabet.getNum(part[0].toUpperCase());
-					int rowNum = Integer.parseInt(part[1]);
-					excel.getsheets(configTable.ReadData("Sheet_Name"));
-					excel.getcell(rowNum-1, columnNum);
-					String Datatowrite = excel.read_data(rowNum-1, columnNum);
-					outputData.WriteData(Datacolumntowrite, Datatowrite);
-				}
-			}
-			outputData.UpdateRow();
-		}while(configTable.MoveForward());
-		excel.save();
-		}
-		catch(DatabaseException e)
-		{
-			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF COVERWALLET MACRO", e);
 		}
 		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF COVERWALLET MACRO", e);
 		}
+	
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws   MacroException
+	protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws MacroException
 	{
 		T outputdata = null;
 		try
 		{
-		
 			switch(configTable.ReadData("Translation_Function"))
 			{
 			case "Date": 
@@ -201,20 +215,19 @@ public class IsoMacro implements MacroInterface
 				String LookupData = Lookup(Datatowrite, configFile);
 				outputdata = (T) LookupData;
 				break;
-			case "PaddingZeros":
-				String PaddingZeros = PaddingZeros(Datatowrite);
-				outputdata = (T) PaddingZeros;
-				break;
-			case "ISOBOPWindhail":
-				int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
-				Integer windhail = new Integer(ISOBOPWindhail);
-				outputdata =  (T) windhail;
-				break;
+			case "String":
+				String Stringdata = IntegertoString(Datatowrite);
+				outputdata = (T) Stringdata;
+				break;		
+			case "percentage":
+				float percentagedata = percentage(Datatowrite);
+				Float percent = new Float(percentagedata);
+				outputdata = (T) percent;
 			}
 		}
 		catch (DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF COVERWALLET MACRO", e);
 		}
 		return outputdata;
 		
@@ -225,8 +238,8 @@ public class IsoMacro implements MacroInterface
 	{
 		String value ="";
 		Date Date1=null;
-		
-		
+		try 
+		{
 			Pattern p = Pattern.compile("[^A-Za-z0-9 ]", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(InputFormat);
 			String InputDelimiter="";
@@ -252,21 +265,20 @@ public class IsoMacro implements MacroInterface
 			DateMaping.put(DateInputFormat[2].toLowerCase(), date[2]);
 			value =  DateMaping.get(DateOutputFormat[0].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[1].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[2].toLowerCase());     
 			DateFormat format = new SimpleDateFormat(ExpectedFormat, Locale.ENGLISH);
-			try 
-			{
-				Date1=format.parse(value);
-			} 
-			catch (NumberFormatException | ParseException e) 
-			{
-				throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF ISO MACRO", e);
-			}  			
+			Date1=format.parse(value);  			
+		   // System.out.println(value+"\t"+Date1);  						
+		}
+		
+		catch (NumberFormatException | ParseException e) 
+		{
+			throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF COVERWALLET MACRO", e);
+		}
 		return Date1;
 		
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws  MacroException
+	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws MacroException
 	{
-		
 		DatabaseOperation Lookup = new DatabaseOperation();
 		try 
 		{
@@ -274,22 +286,24 @@ public class IsoMacro implements MacroInterface
 		} 
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP QUERY OF ISO MACRO", e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
-		try {
+		try 
+		{
 			do
 			{
-				LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
 				
+				LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
 				
 			}while(Lookup.MoveForward());
 		} 
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS IN LOOKUP TABLE OF ISO MACRO", e);
 		}
-		
+		System.out.println(LookupMap.get("new"));
 		if (LookupMap.get(Lookup1)==null)
 		{
 			return "Other";
@@ -300,30 +314,25 @@ public class IsoMacro implements MacroInterface
 		}
 	}
 	
-	protected String PaddingZeros(String Data)
+	
+	protected float percentage(String s)
 	{
-		String s = String.format("%%0%dd", 3);
-		String f =String.format(s, Integer.valueOf(Data));
-		return f;
+		float value = Float.valueOf(s)/100;
+		
+		DecimalFormat df = new DecimalFormat("#.####");
+		String flo = df.format(value);		
+		float percentagevalue = Float.valueOf(flo);
+		return percentagevalue;
+		
+	}
+
+	
+	protected String IntegertoString (String s)
+	{
+		return s;
 		
 	}
 	
-	
-	protected int ISOBOPWindhail(String Data)
-	{
-		int percentageData=0;
-		if(Data.equals("Not Applicable"))
-		{
-			percentageData = 0;
-		}
-		else
-		{
-			String[] windhail = Data.split("%");
-			percentageData = Integer.valueOf(windhail[0]);			
-			return percentageData/100; //Changes in Macr iso
-		}
-		return percentageData;		
-	}
 	
 	protected boolean isInteger(String s) 
 	{
@@ -340,8 +349,10 @@ public class IsoMacro implements MacroInterface
 	    {
 	        return false;
 	    }
+	    // only got here if we didn't return false
 	    return true;
 	}
+	
 	protected boolean isFloat(String s)
 	{
 		try
@@ -359,6 +370,5 @@ public class IsoMacro implements MacroInterface
 		 return true;
 	}
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
 	
 }
