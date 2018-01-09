@@ -35,8 +35,9 @@ public class DtcSaveDetails1 extends BaseClass implements API
 				 case "Annual":			      sampleInput = new JsonHandle(config.getProperty("sample_request")+"First_Save_AnnualPlan.json");
 				 									break;
 				 case "Air Ticket":									
-				 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"First save_trip.json");
-													break;
+				 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"First save_trip.json");break;
+				 
+				 case "Car Rental":
 				 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"FirstSave_RC.json");
 													break; 
 				 

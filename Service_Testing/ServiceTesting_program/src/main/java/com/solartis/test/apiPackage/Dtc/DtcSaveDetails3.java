@@ -50,6 +50,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 				 
 				 break;
 				 
+			 case "Car Rental":		 
 			 case "Renter's Collision": 	
 				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
 				 break; 

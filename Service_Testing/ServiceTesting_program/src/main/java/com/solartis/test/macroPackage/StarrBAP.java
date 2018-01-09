@@ -105,6 +105,7 @@ public class StarrBAP extends DBColoumnVerify implements MacroInterface
 			do
 			{			
 				String condition = configTable.ReadData("Condition");
+				System.out.println("Condition---"+condition);
 				if (configTable.ReadData("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 				{
 					if (configTable.ReadData("Type").equals("input"))

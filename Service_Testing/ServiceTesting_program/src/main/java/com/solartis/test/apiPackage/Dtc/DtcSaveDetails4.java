@@ -37,6 +37,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			 case "Air Ticket":									
 			 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
 												break;
+			 case "Car Rental":									
 			 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
 												break; 
 			 
