@@ -23,15 +23,22 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 	MacroInterface macro = null;
 	public DtcRatingServiceSinglePlan(PropertiesHandle config) throws APIException
 	{
-	    this.config = config;
-		jsonElements = new DatabaseOperation();
-		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		if(config.getProperty("status").equals("Y"))
-		{
-		//macro=new AssistCard(config);	
-		}
+	    try
+	    {
+			this.config = config;
+			jsonElements = new DatabaseOperation();
+			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+			if(config.getProperty("status").equals("Y"))
+			{
+			macro=new AssistCard(config);	
+			}
+	    }
+	    catch(MacroException e)
+	    {
+	    	throw new APIException("ERROR INITATING MACRO- GL CLASS", e);
+	    }
 		
 	}
 	
