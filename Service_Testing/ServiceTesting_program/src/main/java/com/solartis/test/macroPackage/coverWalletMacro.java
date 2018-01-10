@@ -317,6 +317,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	
 	protected float percentage(String s)
 	{
+		if(!(s.equals("")))
 		{
 		float value = Float.valueOf(s)/100;
 		
