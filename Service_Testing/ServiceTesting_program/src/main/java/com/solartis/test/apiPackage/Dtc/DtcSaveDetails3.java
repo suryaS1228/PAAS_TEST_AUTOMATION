@@ -33,27 +33,26 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			switch(InputData.ReadData("Plan_Type"))
 			{
 			 case "Annual":			
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
-			 	 break;
+				              sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_AnnualPlans.json");
+			 	              break;
 			 	 
 			 case "Air Ticket":	 
 			 case "Single Trip":
-				 String PlanName = InputData.ReadData("Plan_name");
-				 if(PlanName.equals("Air Ticket Protector"))
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
-				 }
-				 else
-				 {
-					 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
-				 }
-				 
-				 break;
+				            String PlanName = InputData.ReadData("Plan_name");
+				            if(PlanName.equals("Air Ticket Protector"))
+				            {
+				            	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_ATP.json");
+				            }
+				            else
+				            {
+				            	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_Singletrip_Premier_CP.json");
+				            }
+				            break;
 				 
 			 case "Car Rental":		 
 			 case "Renter's Collision": 	
-				 sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
-				 break; 
+				          sampleInput = new JsonHandle(config.getProperty("sample_request")+"ThirdSave_RC.json");
+				          break; 
 			 
 			 default:
 			}

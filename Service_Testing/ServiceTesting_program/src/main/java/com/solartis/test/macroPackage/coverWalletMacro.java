@@ -317,13 +317,19 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	
 	protected float percentage(String s)
 	{
+		if(!(s.equals("")))
+		{
 		float value = Float.valueOf(s)/100;
 		
 		DecimalFormat df = new DecimalFormat("#.####");
 		String flo = df.format(value);		
 		float percentagevalue = Float.valueOf(flo);
 		return percentagevalue;
-		
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	
