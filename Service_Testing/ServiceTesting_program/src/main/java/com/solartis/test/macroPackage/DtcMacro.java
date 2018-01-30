@@ -14,6 +14,7 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
@@ -386,5 +387,36 @@ public class DtcMacro extends DBColoumnVerify implements MacroInterface
 	        return false;
 	    }
 		 return true;
+	}
+	
+	
+	
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+	{
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		DtcMacro sm;
+		PropertiesHandle configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Config\\config.properties");
+		
+		DatabaseOperation.ConnectionSetup(configFile);
+		objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		do
+		{
+			System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
+					if(objectInput.ReadData("Flag_for_execution").equals("Y"))
+					{
+						System.out.println("coming to flow");
+						sm=new DtcMacro(configFile);
+						sm.LoadSampleRatingmodel(configFile, objectInput);
+						sm.GenerateExpected(objectInput, configFile);
+						sm.PumpinData(objectInput, configFile);
+						sm.PumpoutData(objectOutput,objectInput, configFile);
+					}
+					objectInput.WriteData("Flag_for_execution", "Completed");
+					System.out.println("rating model completed");
+					objectInput.UpdateRow();
+					objectOutput.UpdateRow();
+		}while(objectInput.MoveForward()&&objectOutput.MoveForward());
 	}
 }

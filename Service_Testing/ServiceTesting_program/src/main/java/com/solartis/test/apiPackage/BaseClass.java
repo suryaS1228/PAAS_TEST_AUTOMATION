@@ -138,7 +138,11 @@ public class BaseClass
 				try
 					{
 					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+					
 					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					
+				
+					
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 					System.out.println(actual);
 					output.WriteData("flag_for_execution", "Completed");
@@ -231,8 +235,8 @@ public class BaseClass
     		actual = actual.replaceAll("\\[\"", "");
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
-    		//expected = expected.replaceAll("\\.[0-9]*", "");
-    		//actual = actual.replaceAll("\\.[0-9]*", "");
+    		expected = expected.replaceAll("\\.[0-9]*", "");
+    		actual = actual.replaceAll("\\.[0-9]*", "");
     		if(expected.equals(actual))
     		{
     			status = true;

@@ -12,6 +12,7 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.StarrGLMacro;
 import com.solartis.test.macroPackage.AssistCard;
+import com.solartis.test.macroPackage.DtcMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -32,7 +33,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 			if(config.getProperty("status").equals("Y"))
 			{
-			macro=new AssistCard(config);	
+			macro=new DtcMacro(config);	
 			}
 	    }
 	    catch(MacroException e)
@@ -48,8 +49,6 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 		{
 		 	  this.input = InputData;
 			  input = InputData;
-			  
-			 
 			 
 			  switch(InputData.ReadData("No_of_travelers"))
 			   
@@ -127,7 +126,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 		
 			try
 			{
-				String responseStatus = response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String responseStatus = response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				System.out.println(responseStatus);
 				this.output=output;
 				OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
@@ -141,6 +140,10 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 						{
 						System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
 						String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						
+						System.out.println(".......column to update..."+OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+						System.out.println("....value to update...."+actual);
+						
 						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 						System.out.println(actual);
 						output.WriteData("flag_for_execution", "Completed");
@@ -149,7 +152,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 					else
 					{
 						output.WriteData("flag_for_execution", responseStatus);
-						output.WriteData("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
+						//output.WriteData("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
 					}
 						}
 						catch(PathNotFoundException e)

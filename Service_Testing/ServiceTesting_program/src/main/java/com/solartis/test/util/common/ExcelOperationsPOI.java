@@ -348,7 +348,6 @@ public class ExcelOperationsPOI
 
 		try 
 		{
-
 			source = new FileInputStream(Sampleexcelpath).getChannel();
 
 			destination = new FileOutputStream(Targetexpectedpath).getChannel();
@@ -386,8 +385,7 @@ public class ExcelOperationsPOI
 			{
 				e.printStackTrace();
 			}
-		}
-			
+		}	
 	}
 	
 	public void RenameSheet(String Sheetnamee, String  newsheetnamee)
@@ -395,7 +393,6 @@ public class ExcelOperationsPOI
 		this.workbook.getSheet(Sheetnamee);
 		int sheetindex =this.workbook.getSheetIndex(this.worksheet);
 		this.workbook.setSheetName(sheetindex, newsheetnamee);
-		
 	}
 	
 	@SuppressWarnings("deprecation")
