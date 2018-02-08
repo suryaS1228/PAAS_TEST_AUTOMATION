@@ -70,7 +70,7 @@ public class IsoBoprating extends BaseClass implements API
 		super.LoadSampleRequest(InputData);
 	}
 	
-	public void PumpDataToRequest() throws  APIException
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws  APIException
 	{			
 		if(config.getProperty("status").equals("Y"))
 		{
@@ -83,7 +83,7 @@ public class IsoBoprating extends BaseClass implements API
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- ISO-RATING CLASS", e);
 			}
 		}
-		super.PumpDataToRequest();
+		super.PumpDataToRequest(commonmap);
 	}
 	
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException

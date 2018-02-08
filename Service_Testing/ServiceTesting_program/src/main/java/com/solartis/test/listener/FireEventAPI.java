@@ -47,14 +47,14 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public void PumpDataToRequest() throws APIException 
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforePumpDataToRequest();
 		try
 		{
-			api.PumpDataToRequest();
+			api.PumpDataToRequest(commonmap);
 		}
 		catch(APIException e)
 		{

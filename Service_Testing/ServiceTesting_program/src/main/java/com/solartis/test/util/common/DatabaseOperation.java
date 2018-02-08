@@ -17,11 +17,11 @@ public class DatabaseOperation
 	private static String DB_URL =null;
 	private static String USER=null;
 	private static String PASS =null;
-	protected String query = null;
-	protected Statement stmt = null;
-	protected ResultSet rs = null;
-	protected int rs_row = 1;
-	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
+	protected  String query = null;
+	protected  Statement stmt = null;
+	protected  ResultSet rs = null;
+	protected  int rs_row = 1;
+	protected   LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
 	protected ResultSetMetaData meta = null;
 	
 	public static void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
@@ -92,6 +92,7 @@ public class DatabaseOperation
 	{
 		this.query = query;
 		LinkedHashMap<String, String> row = null;
+		System.out.println("Query"+this.query);
 		try 
 		{
 			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
@@ -119,12 +120,21 @@ public class DatabaseOperation
 		
 	}
 	
-	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException
+	/*public void ExecuteQuery(String query) throws SQLException
 	{
+		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+	    rs =    stmt.executeQuery(query);
+	}*/
+	
+	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException, SQLException
+	{
+		System.out.println("row in --------dbop"+row);
 		
+		System.out.println("Metadata in --------dbop"+rs.getMetaData());
 		try 
 		{
 			rs.first();
+			ResultSetMetaData meta = rs.getMetaData();
 		    int rowIterator = 1;
 			do
 			{
@@ -132,6 +142,7 @@ public class DatabaseOperation
 			    {
 					for (int i = 1; i <= meta.getColumnCount(); i++) 
 					{  
+						
 				       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
 				    }
 					rs.updateRow();
@@ -149,10 +160,11 @@ public class DatabaseOperation
 	
 	
 	
-	public void UpdateTable(LinkedHashMap<Integer, LinkedHashMap<String, String>> table) throws DatabaseException
+	public void UpdateTable(LinkedHashMap<Integer, LinkedHashMap<String, String>> table) throws DatabaseException, SQLException
 	{
 		this.table = table;
 		LinkedHashMap<String, String> row = null;
+		ResultSetMetaData meta = rs.getMetaData();
 		try 
 		{
 			rs.first();

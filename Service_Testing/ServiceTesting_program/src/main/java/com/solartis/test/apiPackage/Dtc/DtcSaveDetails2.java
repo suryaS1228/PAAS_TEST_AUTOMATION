@@ -29,7 +29,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 	{
 		this.input = InputData;
 		input = InputData;
-			switch(InputData.get("Plan_Type"))
+			switch(InputData.get("Plan_type"))
 			{
 			 case "Annual":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"SecondSave_AnnualPlans.json");
 			 									break;
@@ -42,7 +42,6 @@ public class DtcSaveDetails2 extends BaseClass implements API
 			}
 	  }
 
-	@Override
 	public void PumpDataToRequest() throws APIException
 	{
 		try

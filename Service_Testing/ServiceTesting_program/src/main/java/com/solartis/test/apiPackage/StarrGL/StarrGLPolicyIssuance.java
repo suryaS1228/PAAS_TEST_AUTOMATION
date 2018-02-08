@@ -18,4 +18,6 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
+
+	
 }

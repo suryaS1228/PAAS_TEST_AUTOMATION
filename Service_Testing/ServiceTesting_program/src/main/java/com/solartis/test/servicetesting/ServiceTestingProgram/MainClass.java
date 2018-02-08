@@ -1,4 +1,4 @@
-package com.solartis.test.servicetesting.ServiceTestingProgram;
+/*package com.solartis.test.servicetesting.ServiceTestingProgram;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -40,8 +40,9 @@ public class MainClass
 	public static LinkedHashMap<String, String> inputrow;
 	public static LinkedHashMap<String, String> outputrow;
 	public static HashMap<Object,Object> result;
+	public static LinkedHashMap<String, String> commonMap = new LinkedHashMap<String, String>();
 	
-	@BeforeTest
+	@BeforeTest()
 	public void loadconfig() throws DatabaseException, PropertiesHandleException
 	{
 		System.setProperty("jsse.enableSNIExtension", "false");
@@ -72,7 +73,7 @@ public class MainClass
 	} 
 	
 	@SuppressWarnings("unchecked")
-	@Test(dataProvider="PaaSTest")
+	@Test(testName="api1",dataProvider="PaaSTest")
 	public static void apiTest(Integer RowIterator, Object inputtablerowobj, Object outputtablerowobj)throws InterruptedException, DatabaseException, InterruptedException
     {   
 		LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
@@ -88,7 +89,7 @@ public class MainClass
 							
 						    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
-						    fireEventAPI.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST s
+						    fireEventAPI.PumpDataToRequest(commonMap);//PUMPING TESTDATA TO SAMPLEREQUEST s
 						    
 						    fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
 						
@@ -106,13 +107,13 @@ public class MainClass
 
 									inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								
-									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+									//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									System.out.println("Quote_rs"+"----"+outputrow.get("Quote_rs"));
-									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+									//output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
 							} 
@@ -124,29 +125,29 @@ public class MainClass
 									
 									inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
 								     
-									input.UpdateRow(RowIterator, inputrow);
+									//input.UpdateRow(RowIterator, inputrow);
 								}
 								else
 								{
 									outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
 								    
-									output.UpdateRow(RowIterator, outputrow);
+									//output.UpdateRow(RowIterator, outputrow);
 									
 								}
 							} 
 							
 							inputrow.put("Flag_for_execution", "Completed");
-							input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+							//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 							}
 						else
 						{
 							System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
 						}
 				
-				/*if(actualchoice.equals("Y") || statuschoice.equals("Y"))
+				if(actualchoice.equals("Y") || statuschoice.equals("Y"))
 				{
 					output.MoveForward();
-				}*/
+				}
 		} 
 		catch (APIException e1)
 		{
@@ -203,3 +204,4 @@ public class MainClass
 	 }
 	
 }
+*/

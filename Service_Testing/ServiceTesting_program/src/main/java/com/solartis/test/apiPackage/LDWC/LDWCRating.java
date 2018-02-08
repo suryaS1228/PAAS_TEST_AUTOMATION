@@ -35,7 +35,6 @@ public class LDWCRating extends BaseClass implements API
 		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
 	}
 		
-	@Override
 	public void PumpDataToRequest() throws APIException
 	{
 		try

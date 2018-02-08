@@ -29,7 +29,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	{
 		this.input = InputData;
 		input = InputData;
-			switch(InputData.get("Plan_Type"))
+			switch(InputData.get("Plan_type"))
 			{
 			 case "Annual":			      sampleInput = new JsonHandle(config.getProperty("sample_request")+"First_Save_AnnualPlan.json");
 			 									break;
@@ -42,13 +42,12 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			}
 	}
 	
-	@Override
 	public void PumpDataToRequest() throws APIException
 	{
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
+			request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
 			request.StringToFile(sampleInput.FileToString());
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
@@ -92,7 +91,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
 			response.StringToFile(response_string);	
 		}
 		catch(RequestFormatException | HTTPHandleException e)

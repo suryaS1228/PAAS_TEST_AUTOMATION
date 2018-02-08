@@ -33,7 +33,7 @@ public class ChicRating extends BaseClass implements API
 	}
 	
 	@Override
-	public void PumpDataToRequest() throws APIException 
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
 	{
 		try
 		{

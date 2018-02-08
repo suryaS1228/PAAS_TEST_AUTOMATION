@@ -69,7 +69,7 @@ public class CoverWalletRate extends BaseClass implements API
 		
 	}
 	
-	public void PumpDataToRequest() throws APIException
+	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{	
 		try
 		{
@@ -77,7 +77,7 @@ public class CoverWalletRate extends BaseClass implements API
 			{
 			macro.PumpinData(input, config);	
 			}
-			super.PumpDataToRequest();		
+			super.PumpDataToRequest( InputData);		
 		}
 		catch(DatabaseException | POIException | MacroException  e)
 		{
