@@ -3,9 +3,10 @@ package com.solartis.test.util.common;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.LinkedHashMap;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 
@@ -19,6 +20,9 @@ public class DatabaseOperation
 	protected String query = null;
 	protected Statement stmt = null;
 	protected ResultSet rs = null;
+	protected int rs_row = 1;
+	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
+	protected ResultSetMetaData meta = null;
 	
 	public static void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
 	{
@@ -84,63 +88,88 @@ public class DatabaseOperation
 		conn = null;
 	}
 	
-	public void GetDataObjects(String query) throws DatabaseException
+	public LinkedHashMap<Integer, LinkedHashMap<String, String>> GetDataObjects(String query) throws DatabaseException
 	{
 		this.query = query;
+		LinkedHashMap<String, String> row = null;
 		try 
 		{
 			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
 		    rs =    stmt.executeQuery(this.query);
-		    rs.first();
+		    table = new LinkedHashMap<Integer, LinkedHashMap<String, String>>();
+	        meta = rs.getMetaData();        
+	        while (rs.next())
+	        {
+	        	row = new LinkedHashMap<String, String>();
+	            for (int columnIterator = 1; columnIterator <= meta.getColumnCount(); columnIterator++) 
+	            {
+	                String key = meta.getColumnName(columnIterator);
+	                String value = rs.getString(key);
+	                row.put(key, value);
+	            }
+	            table.put(rs_row, row);
+	            rs_row = rs_row + 1;   
+	        } 
+	        return table;  
 		} 
 		catch (SQLException e) 
 		{
 			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB",e);
 		}
+		
 	}
 	
-	public boolean MoveForward() throws DatabaseException
+	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException
 	{
+		
 		try 
 		{
-			return rs.next();
-		} 
+			rs.first();
+		    int rowIterator = 1;
+			do
+			{
+				if(rowNumber == rowIterator)
+			    {
+					for (int i = 1; i <= meta.getColumnCount(); i++) 
+					{  
+				       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
+				    }
+					rs.updateRow();
+			    } 
+			 
+			    rowIterator++;
+			 }while (rs.next());	
+		}	
+		
 		catch (SQLException e) 
 		{
-			throw new DatabaseException("PROBLEM WITH MOVING NEXT IN DB - RESULTSET", e);
+			throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);
 		}
 	}
 	
-	public String ReadData(String column_name) throws DatabaseException
-	{
-		try 
-		{
-			return rs.getString(column_name);
-		} 
-		catch (SQLException e) 
-		{
-			throw new DatabaseException("PROBLEM WITH READING DATA FROM " + column_name, e);
-		}
-	}
 	
-	public void WriteData(String column_name,String value) throws DatabaseException
-	{
-		try 
-		{
-			rs.updateString(column_name, value);
-		} 
-		catch (SQLException e) 
-		{
-			throw new DatabaseException("PROBLEM WITH WRITING DATA FROM DB", e);
-		}
-	}
 	
-	public void UpdateRow() throws DatabaseException
+	public void UpdateTable(LinkedHashMap<Integer, LinkedHashMap<String, String>> table) throws DatabaseException
 	{
+		this.table = table;
+		LinkedHashMap<String, String> row = null;
 		try 
 		{
-			rs.updateRow();
-		} 
+			rs.first();
+		    int rowIterator = 1;
+			do
+			{
+				for (int columnIterator = 1; columnIterator <= meta.getColumnCount(); columnIterator++) 
+				{  
+			       row = table.get(rowIterator);
+			       rs.updateString(meta.getColumnName(columnIterator), row.get(meta.getColumnName(columnIterator)));
+			    }
+			 
+			    rs.updateRow();
+			    rowIterator++;
+			 }while (rs.next());
+		}	
+		
 		catch (SQLException e) 
 		{
 			throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);

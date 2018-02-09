@@ -1,8 +1,12 @@
 package com.solartis.test.apiPackage.StarrGL;
 
 import java.sql.SQLException;
+<<<<<<< HEAD
 
 import com.jayway.jsonpath.PathNotFoundException;
+=======
+import java.util.LinkedHashMap;
+>>>>>>> refs/remotes/origin/Testng
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -11,15 +15,18 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
+<<<<<<< HEAD
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.common.*;
+=======
+>>>>>>> refs/remotes/origin/Testng
 
 public class StarrGLPolicyIssuance extends BaseClass implements API 
 {
 	public StarrGLPolicyIssuance(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
-		jsonElements = new DatabaseOperation();
+		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	

@@ -15,20 +15,22 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class IsoMacro implements MacroInterface
+public class DtcRatingSinglePlanMacro extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected IsoMacro trans;
 	protected String Samplepath;
+	protected int numofplans;
+	protected DtcRatingSinglePlanMacro trans;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
+	protected LinkedHashMap<Integer,String> planname;
+	protected LinkedHashMap<Integer,String> planpath;
 	
-	
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public enum Alphabet 
 	{
 	    A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ;
@@ -43,41 +45,44 @@ public class IsoMacro implements MacroInterface
 	        return valueOf(String.valueOf(targ)).ordinal();
 	    }
 	}
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	public IsoMacro(PropertiesHandle configFile) throws MacroException
+	
+	public DtcRatingSinglePlanMacro(PropertiesHandle configFile) throws MacroException
 	{
+		super(" ");
 		configTable = new DatabaseOperation();
 		try 
 		{
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
-		}
-		catch (DatabaseException e) 
+		} catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF ISOMACRO", e);
+			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF DTCMACOR", e);
 		}
 		
 	}
-	
-	public void LoadSampleRatingmodel(PropertiesHandle configFile,LinkedHashMap<String, String> inputData) throws MacroException
+	@Override
+	public void LoadSampleRatingmodel(PropertiesHandle configFile,LinkedHashMap<String, String> InputData) throws MacroException
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.get("RatingModel_version"),configFile);
-			
+		// TODO Auto-generated method stub
+			String RateingModelName = Lookup(InputData.get("StateName"),configFile);
+			System.out.println(InputData.get("StateName"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			System.out.println("Sample rating mosel"+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL", e);
+			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF DTC MACRO", e);
 		}
 	}
-	
-	public void GenerateExpected(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
+
+	@Override
+	public void GenerateExpected(LinkedHashMap<String, String> InputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -86,33 +91,37 @@ public class IsoMacro implements MacroInterface
 			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
 		}
 	}
-	
-	public void PumpinData(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
+
+	@Override
+	public void PumpinData(LinkedHashMap<String, String> InputData,	PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new IsoMacro(configFile);
+			trans= new DtcRatingSinglePlanMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
-			{		
+			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
+				if (rowPumpinData.get("flag_for_execution").equals("Y"))//&&ConditionReading(condition,inputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
 					{
 						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
 						String CellAddress = rowPumpinData.get("Cell_Address");
 						
-						String  Datatowrite = inputData.get(Datacolumntowrite);
+						String  Datatowrite = InputData.get(Datacolumntowrite);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
+						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
+							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
+							System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
@@ -132,6 +141,7 @@ public class IsoMacro implements MacroInterface
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}
+						
 					}
 				}
 			}
@@ -147,8 +157,9 @@ public class IsoMacro implements MacroInterface
 			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF ISO MACRO", e);
 		}
 	}
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException    
+
+	@Override
+	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
 		try
 		{
@@ -158,10 +169,12 @@ public class IsoMacro implements MacroInterface
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
-			if (rowPumpoutData.get("flag_for_execution").equals("Y"))
+			String condition = rowPumpoutData.get("Condition");
+			if(rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 			{
 				if (rowPumpoutData.get("Type").equals("output"))
 				{
+					
 					String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
 					String CellAddress = rowPumpoutData.get("Cell_Address");
 					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
@@ -169,6 +182,7 @@ public class IsoMacro implements MacroInterface
 					int rowNum = Integer.parseInt(part[1]);
 					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
+					System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite+"--------"+CellAddress+"--------------"+condition+"------------"+ConditionReading(condition,inputData));
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
 					outputData.put(Datacolumntowrite, Datatowrite);
 				}
@@ -188,40 +202,30 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws   MacroException
+	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws MacroException 
 	{
 		T outputdata = null;
 		switch(configTable.get("Translation_Function"))
 		{
 		case "Date": 
-			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
+			Date DateData = Date(Datatowrite,"mm/dd/yyyy",configTable.get("Translation_Format"));
 			outputdata = (T) DateData;
 			break;
 		case "Lookup":
 			String LookupData = Lookup(Datatowrite, configFile);
 			outputdata = (T) LookupData;
 			break;
-		case "PaddingZeros":
-			String PaddingZeros = PaddingZeros(Datatowrite);
-			outputdata = (T) PaddingZeros;
-			break;
-		case "ISOBOPWindhail":
-			int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
-			Integer windhail = new Integer(ISOBOPWindhail);
-			outputdata =  (T) windhail;
-			break;
 		}
-		return outputdata;
-		
+			return outputdata;
+			
 	}
 	
-	
-	protected  Date Date(String Date,String InputFormat,String ExpectedFormat) throws MacroException
+	protected  Date Date(String Date,String InputFormat,String ExpectedFormat) throws  MacroException
 	{
 		String value ="";
 		Date Date1=null;
-		
-		
+		try 
+		{
 			Pattern p = Pattern.compile("[^A-Za-z0-9 ]", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(InputFormat);
 			String InputDelimiter="";
@@ -247,23 +251,21 @@ public class IsoMacro implements MacroInterface
 			DateMaping.put(DateInputFormat[2].toLowerCase(), date[2]);
 			value =  DateMaping.get(DateOutputFormat[0].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[1].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[2].toLowerCase());     
 			DateFormat format = new SimpleDateFormat(ExpectedFormat, Locale.ENGLISH);
-			try 
-			{
-				Date1=format.parse(value);
-			} 
-			catch (NumberFormatException | ParseException e) 
-			{
-				throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF ISO MACRO", e);
-			}  			
+			Date1=format.parse(value);  			
+		   // System.out.println(value+"\t"+Date1);  						
+		}
+		
+		catch (NumberFormatException | ParseException e) 
+		{
+			throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF DTC MACRO", e);
+		}
 		return Date1;
 		
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws  MacroException
+	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws MacroException
 	{
-		
 		DatabaseOperation Lookup = new DatabaseOperation();
-		
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
 		try 
 		{
@@ -271,14 +273,13 @@ public class IsoMacro implements MacroInterface
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
 			{
 				LinkedHashMap<String, String> rowLookup = entry.getValue();
-				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));	
+				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));
 			}
 		} 
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF DTC MACRO", e);
 		}
-		
 		if (LookupMap.get(Lookup1)==null)
 		{
 			return "Other";
@@ -287,31 +288,6 @@ public class IsoMacro implements MacroInterface
 		{
 			return LookupMap.get(Lookup1);
 		}
-	}
-	
-	protected String PaddingZeros(String Data)
-	{
-		String s = String.format("%%0%dd", 3);
-		String f =String.format(s, Integer.valueOf(Data));
-		return f;
-		
-	}
-	
-	
-	protected int ISOBOPWindhail(String Data)
-	{
-		int percentageData=0;
-		if(Data.equals("Not Applicable"))
-		{
-			percentageData = 0;
-		}
-		else
-		{
-			String[] windhail = Data.split("%");
-			percentageData = Integer.valueOf(windhail[0]);			
-			return percentageData/100; //Changes in Macr iso
-		}
-		return percentageData;		
 	}
 	
 	protected boolean isInteger(String s) 
@@ -329,6 +305,7 @@ public class IsoMacro implements MacroInterface
 	    {
 	        return false;
 	    }
+	    // only got here if we didn't return false
 	    return true;
 	}
 	protected boolean isFloat(String s)
@@ -346,8 +323,6 @@ public class IsoMacro implements MacroInterface
 	        return false;
 	    }
 		 return true;
-	}
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
-	
+}
+
 }

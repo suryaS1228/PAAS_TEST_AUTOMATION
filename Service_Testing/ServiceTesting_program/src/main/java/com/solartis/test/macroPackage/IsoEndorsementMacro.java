@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,89 +59,88 @@ public class IsoEndorsementMacro implements MacroInterface
 			}
 			
 		}
-		public void LoadSampleRatingmodel(PropertiesHandle configFile,DatabaseOperation inputData) throws MacroException
+		public void LoadSampleRatingmodel(PropertiesHandle configFile,LinkedHashMap<String, String> inputData) throws MacroException
 		{
 			try
 			{
-				String RateingModelName = Lookup(inputData.ReadData("RatingModel_version"),configFile);
+				String RateingModelName = Lookup(inputData.get("RatingModel_version"),configFile);
 				
 				Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-				System.out.println(inputData.ReadData("RatingModel_version")+"----------"+Samplepath);
+				System.out.println(inputData.get("RatingModel_version")+"----------"+Samplepath);
 				sampleexcel= new ExcelOperationsPOI(Samplepath);
 			}
-			catch (DatabaseException | POIException e)
+			catch (POIException e)
 			{
 				throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL ISO ENDORSEMENTMACRO", e);
 			}
 			
 		}
 		
-		public void GenerateExpected(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+		public void GenerateExpected(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 		{
 			try
 			{
-				Targetpath =  configFile.getProperty("TargetPath")+inputData.ReadData("testdata")+".xls";
+				Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
 				sampleexcel.Copy(Samplepath, Targetpath);
 				sampleexcel.save();
 				System.out.println("generate expected rating over");
 			}
-			catch(DatabaseException | POIException e)
+			catch(POIException e)
 			{
 				throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
 			}
 		}
 		
-		public void PumpinData(DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException 
+		public void PumpinData(LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException 
 		{
 			try
 			{
-			//DatabaseOperation configTable = new DatabaseOperation();
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new IsoEndorsementMacro(configFile);
-			do
-			{								
-				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y"))
-				{
-					if (configTable.ReadData("Type").equals("input"))
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
+				ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+				trans= new IsoEndorsementMacro(configFile);
+				for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
+				{		
+					LinkedHashMap<String, String> rowPumpinData = entry.getValue();								
+					if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
 					{
-						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-						String CellAddress = configTable.ReadData("Cell_Address");
-						
-						String  Datatowrite = inputData.ReadData(Datacolumntowrite);
-						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
-						int columnNum=Alphabet.getNum(part[0].toUpperCase());
-						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+configTable.ReadData("Sheet_Name")+"-----"+Datatowrite);
-						excel.getsheets(configTable.ReadData("Sheet_Name"));
-						excel.getcell(rowNum, columnNum);
-						
-						if(configTable.ReadData("Translation_Flag").equals("Y"))
+						if (rowPumpinData.get("Type").equals("input"))
 						{
-							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, configTable, configFile));
-						}
-						else
-						{
-							if(trans.isInteger(Datatowrite))
+							String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
+							String CellAddress = rowPumpinData.get("Cell_Address");
+							
+							String  Datatowrite = inputData.get(Datacolumntowrite);
+							String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
+							int columnNum=Alphabet.getNum(part[0].toUpperCase());
+							int rowNum = Integer.parseInt(part[1]);
+							excel.getsheets(rowPumpinData.get("Sheet_Name"));
+							excel.getcell(rowNum, columnNum);
+							
+							if(rowPumpinData.get("Translation_Flag").equals("Y"))
 							{
-								int datadata =Integer.parseInt(Datatowrite);
-								excel.write_data(rowNum-1, columnNum, datadata);	
-							}
-							else if(trans.isFloat(Datatowrite))
-							{
-								float floatdata = Float.parseFloat(Datatowrite);
-								excel.write_data(rowNum-1, columnNum, floatdata);
+								excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 							}
 							else
 							{
-								excel.write_data(rowNum-1, columnNum, Datatowrite);
+								if(trans.isInteger(Datatowrite))
+								{
+									int datadata =Integer.parseInt(Datatowrite);
+									excel.write_data(rowNum-1, columnNum, datadata);	
+								}
+								else if(trans.isFloat(Datatowrite))
+								{
+									float floatdata = Float.parseFloat(Datatowrite);
+									excel.write_data(rowNum-1, columnNum, floatdata);
+								}
+								else
+								{
+									excel.write_data(rowNum-1, columnNum, Datatowrite);
+								}
 							}
 						}
 					}
 				}
-			}while(configTable.MoveForward());
-			excel.refresh();
-			excel.save();	
+				excel.refresh();
+				excel.save();	
 		}
 		catch(DatabaseException e)
 		{
@@ -151,35 +152,35 @@ public class IsoEndorsementMacro implements MacroInterface
 		}
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		public void PumpoutData(DatabaseOperation outputData,DatabaseOperation inputData,PropertiesHandle configFile) throws MacroException
+		public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 		{
 			try
 			{
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			configTable.GetDataObjects(configFile.getProperty("config_query"));
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			excel.refresh();
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 			{
-				
-				if (configTable.ReadData("flag_for_execution").equals("Y"))
+				LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
+				if (rowPumpoutData.get("flag_for_execution").equals("Y"))
 				{
-					if (configTable.ReadData("Type").equals("output"))
+					if (rowPumpoutData.get("Type").equals("output"))
 					{
-						String Datacolumntowrite = configTable.ReadData("Input_DB_column");
-						String CellAddress = configTable.ReadData("Cell_Address");
+						String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
+						String CellAddress = rowPumpoutData.get("Cell_Address");
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						excel.getsheets(configTable.ReadData("Sheet_Name"));
+						excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 						excel.getcell(rowNum-1, columnNum);
 						String Datatowrite = excel.read_data(rowNum-1, columnNum);
 						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
-						outputData.WriteData(Datacolumntowrite, Datatowrite);
+						outputData.put(Datacolumntowrite, Datatowrite);
 						//outputData.WriteData(Datacolumntowrite, "poda");
 					}
 				}
-				outputData.UpdateRow();
-			}while(configTable.MoveForward());
+				//outputData.UpdateRow();
+			}
 			excel.save();
 		}
 		catch(DatabaseException e)
@@ -193,15 +194,13 @@ public class IsoEndorsementMacro implements MacroInterface
 		}
 		
 		@SuppressWarnings("unchecked")
-		protected <T> T Translation1(String Datatowrite, DatabaseOperation configTable,  PropertiesHandle configFile) throws MacroException 
+		protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws MacroException 
 		{
 			T outputdata = null;
-			try
-			{
-			switch(configTable.ReadData("Translation_Function"))
+			switch(configTable.get("Translation_Function"))
 			{
 			case "Date": 
-				Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.ReadData("Translation_Format"));
+				Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
 				outputdata = (T) DateData;
 				break;
 			case "Lookup":
@@ -213,11 +212,6 @@ public class IsoEndorsementMacro implements MacroInterface
 				outputdata =  (T) ISOBOPWindhail;
 				break;
 			}
-		}
-		catch (DatabaseException e)
-		{
-			throw new MacroException("ERROR OCCURS 	IN TRANSLATION OF ISOENDORSEMENTMACRO", e);
-		}
 			return outputdata;
 			
 		}
@@ -269,30 +263,19 @@ public class IsoEndorsementMacro implements MacroInterface
 		protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws MacroException
 		{
 			DatabaseOperation Lookup = new DatabaseOperation();
+			
+			HashMap<String,String> LookupMap = new HashMap<String,String>();
 			try 
 			{
-				Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
+				{
+					LinkedHashMap<String, String> rowLookup = entry.getValue();
+					LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));
+				}
 			} 
 			catch (DatabaseException e) 
 			{
-				throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF ISOENDORSEMENTMACRO", e);
-			}
-			HashMap<String,String> LookupMap = new HashMap<String,String>();
-			try {
-				do
-				{
-					try 
-					{
-						LookupMap.put(Lookup.ReadData("LookupData"), Lookup.ReadData("LookupValue"));
-					} catch (DatabaseException e) 
-					{
-						// TODO Auto-generated catch block
-						throw new MacroException("ERROR OCCURS 	IN LOOKUP QUERY OF ISOENDORSEMENTMACRO", e);
-					}
-				}while(Lookup.MoveForward());
-			} catch (DatabaseException e) 
-			{
-				// TODO Auto-generated catch block
 				throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISOENDORSEMENTMACRO", e);
 			}
 		

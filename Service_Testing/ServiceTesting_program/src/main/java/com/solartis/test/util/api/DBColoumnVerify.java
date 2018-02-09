@@ -1,7 +1,6 @@
 package com.solartis.test.util.api;
 
-import java.sql.SQLException;
-
+import java.util.LinkedHashMap;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.util.common.DatabaseOperation;
 
@@ -13,19 +12,12 @@ public class DBColoumnVerify extends DatabaseOperation
 	{
 		this.CondColName = CondColName;
 	}
-	public boolean DbCol(DatabaseOperation DataTable) throws DatabaseException
+	public boolean DbCol(LinkedHashMap<String, String> row) throws DatabaseException
 	{
-			try 
-			{
-				return ConditionReading(this.rs.getString(CondColName),DataTable);
-			}
-			catch (SQLException e) 
-			{
-				throw new DatabaseException("ERROR IN DB CONDITION COLOUMN", e);
-			}
+			return ConditionReading(row.get(CondColName),row);
 	}
 
-	protected boolean ConditionReading(String condition,DatabaseOperation DataTable) throws DatabaseException
+	public boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
 	{
 		boolean ConditionReading=false;
 		
@@ -85,13 +77,13 @@ public class DBColoumnVerify extends DatabaseOperation
 							{
 								switch(operator)
 								{
-								case "=": if((DataTable.ReadData(cond).equals(individualValue[j])))
+								case "=": if((row.get(cond).equals(individualValue[j])))
 										   {
 												
 												ConditionReading=true;
 											}
 											break;
-								case "<>": if((DataTable.ReadData(cond).equals(individualValue[j])))
+								case "<>": if((row.get(cond).equals(individualValue[j])))
 											{
 												ConditionReading=false;
 						 						return ConditionReading;
@@ -101,7 +93,7 @@ public class DBColoumnVerify extends DatabaseOperation
 												ConditionReading=true;
 											}
 											break;	
-								case ">": if(Integer.parseInt(DataTable.ReadData(cond)) > Integer.parseInt(individualValue[j]))
+								case ">": if(Integer.parseInt(row.get(cond)) > Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
 						 						
@@ -112,7 +104,7 @@ public class DBColoumnVerify extends DatabaseOperation
 												return ConditionReading;
 											}
 											break;	
-								case "<": if(Integer.parseInt(DataTable.ReadData(cond)) < Integer.parseInt(individualValue[j]))
+								case "<": if(Integer.parseInt(row.get(cond)) < Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
 						 						
@@ -123,7 +115,7 @@ public class DBColoumnVerify extends DatabaseOperation
 												return ConditionReading;
 											}
 											break;
-								case ">=": if(Integer.parseInt(DataTable.ReadData(cond)) >= Integer.parseInt(individualValue[j]))
+								case ">=": if(Integer.parseInt(row.get(cond)) >= Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
 						 						
@@ -134,7 +126,7 @@ public class DBColoumnVerify extends DatabaseOperation
 												return ConditionReading;
 											}
 											break;
-								case "<=": if(Integer.parseInt(DataTable.ReadData(cond)) <= Integer.parseInt(individualValue[j]))
+								case "<=": if(Integer.parseInt(row.get(cond)) <= Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
 											}

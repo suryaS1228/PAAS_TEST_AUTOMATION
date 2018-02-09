@@ -1,6 +1,10 @@
 package com.solartis.test.apiPackage.CoverWallet;
 
+<<<<<<< HEAD
 import com.jayway.jsonpath.PathNotFoundException;
+=======
+import java.util.LinkedHashMap;
+>>>>>>> refs/remotes/origin/Testng
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -15,7 +19,6 @@ import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class CoverWalletRate extends BaseClass implements API
 {
@@ -24,7 +27,7 @@ public class CoverWalletRate extends BaseClass implements API
 	{
 	
 		this.config = config;
-		jsonElements = new DatabaseOperation();
+		jsonElements = new LinkedHashMap<String, String>();
 	
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
@@ -36,12 +39,12 @@ public class CoverWalletRate extends BaseClass implements API
 		
 	}
 	
-	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		try
 		{
 			this.input = InputData;
-			String numofprovider=InputData.ReadData("NumOfProviders");
+			String numofprovider=InputData.get("NumOfProviders");
 			switch(numofprovider)
 			   
 			   {
@@ -64,7 +67,7 @@ public class CoverWalletRate extends BaseClass implements API
 			  macro.GenerateExpected(InputData, config);
 			}
 		}
-		catch(DatabaseException | MacroException e)
+		catch(MacroException e)
 		{
 			throw new APIException("ERROR OCCURS IN LoadSampleRequest FUNCTION -- CoverWallet CLASS", e);
 		}
@@ -105,7 +108,7 @@ public class CoverWalletRate extends BaseClass implements API
 	 }
 
 	
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		if(config.getProperty("status").equals("Y"))
 		{

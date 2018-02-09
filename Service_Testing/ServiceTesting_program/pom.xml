@@ -17,12 +17,13 @@
   </properties>
 	
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-    </dependency>
-    
+  
+	<dependency>
+	  <groupId>org.testng</groupId>
+	  <artifactId>testng</artifactId>
+	  <version>6.8</version>
+	</dependency>
+	
     <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 	<dependency>
     	<groupId>mysql</groupId>
@@ -99,34 +100,51 @@
 		  <artifactId>xmlbeans</artifactId>
 		  <version>2.4.0</version>
      </dependency>
+     <dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.7.5</version>
+	</dependency>
   </dependencies>
   
   <build>
         <sourceDirectory>src/main/java</sourceDirectory>
         <plugins>
+            
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-assembly-plugin</artifactId>
+  				<executions>
+    				<execution>
+      					<phase>package</phase>
+      					<goals>
+       				    	<goal>single</goal>
+    				    </goals>
+      					<configuration>
+        					<archive>
+          						<manifest>
+            						<mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.MainClass</mainClass>
+          						</manifest>
+        					</archive>
+        					<descriptorRefs>
+          						<descriptorRef>jar-with-dependencies</descriptorRef>
+        					</descriptorRefs>
+      					</configuration>
+    				</execution>
+  				</executions>
+			</plugin>
+            
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.TestEngine</mainClass>
-                    <systemPropertyVariables>
-					            <Project>${Project}</Project>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>
+		        <version>2.20</version>
+		        <configuration>
+		          <suiteXmlFiles>
+		            <suiteXmlFile>testng.xml</suiteXmlFile>
+		          </suiteXmlFiles>
+		          
+		          <systemPropertyVariables>
+		                       <Project>${Project}</Project>
 		                        <Api>${Api}</Api>
 		                        <Env>${Env}</Env>
 		                        <OutputChioce>${OutputChioce}</OutputChioce>
@@ -136,10 +154,16 @@
 		                        <USER>${USER}</USER>
 		                        <password>${password}</password>
 		                        <Priority>${Priority}</Priority>
+<<<<<<< HEAD
 					</systemPropertyVariables>
                 </configuration>
             </plugin>
             
+=======
+		          </systemPropertyVariables>
+		        </configuration>
+			</plugin>
+>>>>>>> refs/remotes/origin/Testng
         </plugins>
     </build>
 </project>

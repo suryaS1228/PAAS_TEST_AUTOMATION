@@ -1,5 +1,7 @@
 package com.solartis.test.apiPackage.Chic;
 
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -9,29 +11,21 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.util.common.*;
 
 public class ChicForms extends BaseClass implements API
 {	
 	public ChicForms(PropertiesHandle config) throws APIException 
 	{
-		try
-		{
-			this.config = config;
-			XmlElements = new DatabaseOperation();
-			XmlElements.GetDataObjects(config.getProperty("json_query"));
-			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		}
-		catch(DatabaseException e)
-		{
-			throw new APIException("ERROR IN CONSTRUCTOR -- CHIC FORM CLASS", e);
-		}
+		this.config = config;
+		XmlElements = new LinkedHashMap<String, String>();
+        
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData)
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
 	{
 		this.input = InputData;
 		sampleInput = new XmlHandle(config.getProperty("sample_request"));
@@ -43,20 +37,21 @@ public class ChicForms extends BaseClass implements API
 	{
 		try
 		{
-			InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new XmlHandle(config.getProperty("request_location")+input.ReadData("testdata")+"_request"+".xml");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
 			request.StringToFile(sampleInput.FileToString());
 			
-			do
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				if(InputColVerify.DbCol(input))
 				{
-					if(!input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))).equals(""))
+					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
 					{
-						request.write(jsonElements.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))), input.ReadData(InputColVerify.ReadData(config.getProperty("InputColumn"))));
+						request.write(rowInputColVerify.get(config.getProperty("InputColumn")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
 					}
 				}	
-			}while(InputColVerify.MoveForward());
+			}
 		}
 		catch(DatabaseException | RequestFormatException  e)
 		{
@@ -74,36 +69,38 @@ public class ChicForms extends BaseClass implements API
 			http.SendData(input_data);
 			String response_string = null;
 			response_string = http.ReceiveData();
-			response = new XmlHandle(config.getProperty("response_location")+input.ReadData("testdata")+"_response"+".xml");
+			response = new XmlHandle(config.getProperty("response_location")+input.get("testdata")+"_response"+".xml");
 			response.StringToFile(response_string);
 		}
-		catch(RequestFormatException | HTTPHandleException | DatabaseException e)
+		catch(RequestFormatException | HTTPHandleException e)
 		{
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- CHIC FORM CLASS", e);
 		}
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
-		{
-			do 	
+		{   
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+		    for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
-			if(OutputColVerify.DbCol(input))
+			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			if(OutputColVerify.DbCol(rowOutputColVerify))
 			{
 				 try
 			      {	
 				
-				String actual = (response.read(XmlElements.ReadData(OutputColVerify.ReadData(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-				output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
+				String actual = (response.read(XmlElements.get(rowOutputColVerify.get(config.getProperty("OutputColumn")))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+				output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 			      }
 					catch(PathNotFoundException e)
 					{
-						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), "Path not Found");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 					}
-				}while(OutputColVerify.MoveForward());
+				}
 	
 				return output;	
 		}

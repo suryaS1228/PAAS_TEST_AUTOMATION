@@ -1,10 +1,9 @@
 package com.solartis.test.listener;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
-
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class FireEventAPI implements API
 {
@@ -28,7 +27,7 @@ public class FireEventAPI implements API
 	}
 	
 	@Override
-	public void LoadSampleRequest(DatabaseOperation InputData) throws APIException 
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -130,7 +129,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public DatabaseOperation SendResponseDataToFile(DatabaseOperation output) throws APIException 
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -152,7 +151,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public DatabaseOperation CompareFunction(DatabaseOperation output) throws APIException 
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
