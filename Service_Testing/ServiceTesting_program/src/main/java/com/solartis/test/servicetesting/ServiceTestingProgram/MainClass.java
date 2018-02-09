@@ -148,8 +148,9 @@ public class MainClass
 					output.MoveForward();
 				}*/
 		} 
-		catch (APIException e1)
+		catch (Exception e1)
 		{
+			e1.printStackTrace();
 			e1.getCause().getMessage();
 			System.exit(0);	
 

@@ -65,8 +65,8 @@ public class DtcRatingSinglePlanMacro extends DBColoumnVerify implements MacroIn
 		try
 		{
 		// TODO Auto-generated method stub
-			String RateingModelName = Lookup(InputData.get("StateName"),configFile);
-			System.out.println(InputData.get("StateName"));
+			String RateingModelName = Lookup(InputData.get("State_name"),configFile);
+			System.out.println(InputData.get("State_name"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			System.out.println("Sample rating mosel"+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);

@@ -37,18 +37,36 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 	 
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
-			if(config.getProperty("status").equals("Y"))
+		 try
 			{
-				try 
-				{
-					macro.LoadSampleRatingmodel(config, InputData);		
-					macro.GenerateExpected(InputData, config);
-				} catch (MacroException e) 
-				{
-					throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
-				}
+			 	  this.input = InputData;
+				  input = InputData;
+				 
+				  switch(InputData.get("No_of_Travelers"))
+				   
+				   {
+				    case "1":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request1.json"); break;
+				    case "2":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request2.json"); break;
+				    case "3":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request3.json"); break;
+				    case "4":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request4.json"); break;
+				    case "5":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request5.json"); break;
+				    case "6":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request6.json"); break;
+				    case "7":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request7.json"); break;
+				    case "8":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request8.json"); break;
+				    case "9":   sampleInput = new JsonHandle(config.getProperty("sample_request")+"request9.json"); break;
+				   
+				    default:
+				   }
+				  if(config.getProperty("status").equals("Y"))
+					{
+						  macro.LoadSampleRatingmodel(config, InputData);  //Load sample rating model 
+						  macro.GenerateExpected(InputData, config);        //Generate expected rating models  
+					}
 			}
-			super.LoadSampleRequest(InputData);
+			catch(MacroException e)
+			{
+				 throw new APIException("ERROR LoadSampleRequest FUNCTION -- DTC-RatingService CLASS", e);
+	}
 	}
 	 
 	 public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
@@ -82,7 +100,6 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 		  }
 	 }
 
-	 @Override
 	 public void SendAndReceiveData() throws APIException
 	 {
 	  String input_data= null;
