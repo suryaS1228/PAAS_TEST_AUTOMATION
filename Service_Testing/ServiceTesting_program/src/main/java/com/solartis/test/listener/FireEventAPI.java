@@ -152,14 +152,14 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> output) throws APIException 
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> input ,LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
 		try
 		{
-			output =api.CompareFunction(output);
+			output =api.CompareFunction(input,output);
 		}
 		catch(APIException e)
 		{

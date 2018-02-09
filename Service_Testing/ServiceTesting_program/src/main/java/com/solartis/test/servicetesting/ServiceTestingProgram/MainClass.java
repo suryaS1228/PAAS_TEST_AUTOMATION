@@ -131,13 +131,13 @@ public class MainClass
 								if(outputtablechoice.equals("Y"))
 								{
 									
-									inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
+									inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								     
 									input.UpdateRow(RowIterator, inputrow);
 								}
 								else
 								{
-									outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
+									outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								    
 									output.UpdateRow(RowIterator, outputrow);
 									
@@ -166,13 +166,7 @@ public class MainClass
 		}
 		
     }	
-	
-	@AfterTest
-	public void connectionclose() throws DatabaseException
-	{
-		DatabaseOperation.CloseConn();
-	}
-	
+			
 	@SuppressWarnings("unused")
 	@DataProvider(name="PaaSTest", parallel=false)
 	 public Object[][] getDataFromDataprovider() throws DatabaseException
@@ -250,4 +244,9 @@ public class MainClass
 	    }
 	}
 	
+	@AfterTest
+	public void connectionclose() throws DatabaseException
+	{
+		DatabaseOperation.CloseConn();
+	}
 }

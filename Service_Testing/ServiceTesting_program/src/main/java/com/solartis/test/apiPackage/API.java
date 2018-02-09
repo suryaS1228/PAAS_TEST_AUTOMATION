@@ -11,7 +11,7 @@ public interface API
 	public void AddHeaders() throws APIException;
 	public void SendAndReceiveData() throws APIException;
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException;
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> output) throws APIException;
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws APIException;
 	public String RequestToString() throws APIException;
 	public String ResponseToString() throws APIException;
 }

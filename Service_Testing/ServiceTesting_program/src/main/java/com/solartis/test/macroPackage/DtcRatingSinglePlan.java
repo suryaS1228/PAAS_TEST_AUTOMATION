@@ -66,8 +66,8 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 		try
 		{
 		// TODO Auto-generated method stub
-			String RateingModelName = Lookup(InputData.get("StateName"),configFile);
-			System.out.println(InputData.get("StateName"));
+			String RateingModelName = Lookup(InputData.get("State_name"),configFile);
+			System.out.println(InputData.get("State_name"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			System.out.println("Sample rating mosel"+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
@@ -105,7 +105,8 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
 				String condition = rowPumpinData.get("Condition");
-				if (rowPumpinData.get("flag_for_execution").equals("Y"))//&&ConditionReading(condition,inputData))
+				System.out.println(condition+"-------------"+rowPumpinData);
+				if (rowPumpinData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,InputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
 					{

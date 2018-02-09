@@ -1,8 +1,13 @@
 package com.solartis.test.apiPackage;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.jayway.jsonpath.PathNotFoundException;
@@ -13,7 +18,10 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 public class BaseClass 
 {
@@ -163,15 +171,17 @@ public class BaseClass
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> outputrow) throws APIException
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		
 	    try
 	    {
 	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
 			{	
-			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();	
-			    if(StatusColVerify.DbCol(rowStatusColVerify) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
+			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
+			    System.out.println(condition+"---------------"+outputrow);
+			    if(StatusColVerify.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
 					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
@@ -292,6 +302,38 @@ public class BaseClass
 		}
 		return exist;	
 
+	}
+	
+	public void Report () throws APIException
+	{
+		Template template = null;
+		Map<String, Object> root = new HashMap<String, Object>();
+		String Requesttemplatepath="src/main/java/com/solartis/test/report/"+"Report.ftl";
+		String outputfilepath="";
+		try
+		{			
+			System.setProperty("org.freemarker.loggerLibrary", "none");
+			Configuration cfg = new Configuration();
+			cfg.setDefaultEncoding("UTF-8");
+			cfg.setNumberFormat("0.######");
+			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+			System.out.println(Requesttemplatepath);
+			template = cfg.getTemplate(Requesttemplatepath);
+			
+			root.put("", "");
+			
+			
+			File file= new File(outputfilepath);
+			Writer writer = new FileWriter (file);
+			template.process(root, writer);
+			System.out.println(writer.toString());
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException | TemplateException e)
+		{
+			throw new APIException("ERROR OCCURS IN load Template FUNCTION -- BASE CLASS", e);
+		}
 	}
 	
 }
