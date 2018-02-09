@@ -17,7 +17,7 @@ public class DBColoumnVerify extends DatabaseOperation
 			return ConditionReading(row.get(CondColName),row);
 	}
 
-	protected boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
+	public boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
 	{
 		boolean ConditionReading=false;
 		
