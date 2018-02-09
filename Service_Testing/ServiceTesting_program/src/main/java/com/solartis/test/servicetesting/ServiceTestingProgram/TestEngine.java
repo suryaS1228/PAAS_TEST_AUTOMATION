@@ -52,6 +52,7 @@ public class TestEngine
 		try 
 		{
 			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
+			System.out.println("com.solartis.test.apiPackage."+classname);
 			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
 		    api = (API) cons.newInstance(config);
 		    fireEventAPI = new FireEventAPI(api);
@@ -61,6 +62,8 @@ public class TestEngine
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.out.println("Error in Selecting API");
 		}
 	    
@@ -75,6 +78,10 @@ public class TestEngine
 							{
 							    System.out.println("TestData" + input.ReadData("S.No") + "flag_for_execution = Y" );					 
 								
+							    if(fireEventAPI==null)
+							    {
+							    	System.out.println("API is null");
+							    }
 							    fireEventAPI.LoadSampleRequest(input);//LOADING SAMPLE REQUEST
                                 
 							    fireEventAPI.PumpDataToRequest();//PUMPING TESTDATA TO SAMPLEREQUEST 

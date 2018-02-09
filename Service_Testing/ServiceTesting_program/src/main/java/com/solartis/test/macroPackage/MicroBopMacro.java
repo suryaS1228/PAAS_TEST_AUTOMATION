@@ -64,7 +64,7 @@ public class MicroBopMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName ="Micro BOP Rating Model";
+			String RateingModelName ="Micro_BOP_Rating_Model";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
