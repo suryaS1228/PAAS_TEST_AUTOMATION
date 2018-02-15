@@ -64,7 +64,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName ="coverWallet RatingModel_updated_06_17_2017";
+			String RateingModelName ="Coverwallet_Rating_Model";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
