@@ -138,14 +138,14 @@ public class CoverWalletRate extends BaseClass implements API
 						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
 						System.out.println(actual);
 						output.WriteData("Flag_for_execution", "Completed");
-						output.WriteData("UserMessage","");
+						
 						}
 						
-					else
-					{
+					    else
+					   {
 						output.WriteData("Flag_for_execution", responseStatus);
 						output.WriteData("UserMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
-					}
+					    }
 						}
 						catch(PathNotFoundException e)
 						{
