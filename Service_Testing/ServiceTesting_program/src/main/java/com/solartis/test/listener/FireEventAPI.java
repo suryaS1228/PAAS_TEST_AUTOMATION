@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.RequestFormatException;
 
 public class FireEventAPI implements API
 {
@@ -131,7 +132,7 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException, RequestFormatException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)

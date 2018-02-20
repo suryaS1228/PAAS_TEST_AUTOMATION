@@ -111,39 +111,114 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
  {
 	try
 	{
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+		
+		String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+		if(ResponseStatus.equals("SUCCESS"))
+		{
+		
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 		{
 			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-			  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&DBColoumnVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+			  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 				try
 					{
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					System.out.println(config.getProperty("OutputColumn")); 
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+				
 					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 	
-					System.out.println(actual);
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
-					output.put("flag_for_execution", "Completed");
+					output.put("Flag_for_execution", ResponseStatus);
 					}
 					catch(PathNotFoundException | RequestFormatException e)
 					{
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 				}
-			}
+		}
+		}
+		else
+		{
+			output.put("Flag_for_execution", "FailedResponse");
+			
+			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			output.put("AnalyserResult","Rule-"+RuleName);
+			output.put("User_message",Message);
+		}
 		if(config.getProperty("status").equals("Y"))
 		{
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}
 	}
-	catch(DatabaseException | POIException | MacroException e)
+	catch(DatabaseException | POIException | MacroException | RequestFormatException e)
 	{
 		 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
 	}
 	return output;
 }
+ 
+ 
+ public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	{		 
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	{		
+		
+	    try
+	    {
+	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
+			{	
+			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
+			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
+			    System.out.println(condition+"---------------"+outputrow);
+			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+				{
+					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
+					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
+					String StatusColumn = rowStatusColVerify.get(config.getProperty("StatusColumn"));
+					if(!(StatusColumn.equals("")) && !(ExpectedColumn.equals("")))
+					{
+						if(premium_comp(outputrow.get(ExpectedColumn),outputrow.get(ActualColumn)))
+						{
+							outputrow.put(StatusColumn, "Pass");
+						}
+						else
+						{
+							
+							outputrow.put(StatusColumn, "Fail");
+							//outputrow.UpdateRow();
+							analyse(rowStatusColVerify,outputrow);
+						}
+					}
+				}
+			}
+	    	
+	    	
+			String message = "";
+			for(int i=0;i<errorMessage.size();i++)
+			{
+				message=message+errorMessage.get(i)+"; ";
+			}
+			if(message.equals(""))
+			{
+				outputrow.put("AnalyserResult", "Pass");
+			}
+			else
+			{
+			outputrow.put("AnalyserResult", message);
+			}
+			errorMessage.clear();
+			errorParentname.clear();
+			return outputrow;
+
+	    }	
+	    catch(DatabaseException e)
+	    {
+	    	System.out.println(e);
+	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
+	    }
+	}
+	 return outputrow;
+ }
 }

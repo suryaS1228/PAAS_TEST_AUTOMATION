@@ -39,11 +39,13 @@ public class BaseClass
 	protected DBColoumnVerify StatusColVerify = null;
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
+	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
 
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		this.input = InputData;
+		
 		try
 		{
 		sampleInput = new RequestHandler(config);
@@ -145,7 +147,7 @@ public class BaseClass
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
 				String condition = rowOutputColVerify.get("OutputColumnCondtn");
-				if(DBColoumnVerify.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				if(conditioncheck.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					try
 					{
@@ -173,7 +175,8 @@ public class BaseClass
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
-	{		
+	{
+		boolean passflag = true;
 	    try
 	    {
 	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
@@ -182,7 +185,7 @@ public class BaseClass
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
 			    System.out.println(condition+"---------------"+outputrow);
-			    if(DBColoumnVerify.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
 					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
@@ -195,14 +198,19 @@ public class BaseClass
 						}
 						else
 						{
+							passflag=false;
 							outputrow.put(StatusColumn, "Fail");
 							//outputrow.UpdateRow();
 							analyse(rowStatusColVerify,outputrow);
 						}
 					}
-				}
+				}			    
 			}
-			 			
+	    	if(passflag)
+		    {
+		    	outputrow.put("AnalyserResult", "Pass");
+		    }	
+	    	
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{

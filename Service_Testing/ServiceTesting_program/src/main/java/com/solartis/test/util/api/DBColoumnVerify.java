@@ -1,30 +1,38 @@
 package com.solartis.test.util.api;
 
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
+
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.util.common.DatabaseOperation;
+
 
 public class DBColoumnVerify extends DatabaseOperation 
 {
 	protected String CondColName;
-	
 	public DBColoumnVerify()
 	{
 		
 	}
-	
 	public DBColoumnVerify(String CondColName)
 	{
 		this.CondColName = CondColName;
 	}
-	public boolean DbCol(LinkedHashMap<String, String> row) throws DatabaseException
+	public boolean DbCol(LinkedHashMap<String, String> DataTable) throws DatabaseException
 	{
-			return ConditionReading(row.get(CondColName),row);
+			try 
+			{
+				return ConditionReading(this.rs.getString(CondColName),DataTable);
+			}
+			catch (SQLException e) 
+			{
+				throw new DatabaseException("ERROR IN DB CONDITION COLOUMN", e);
+			}
 	}
 
-	public static boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
+	public boolean ConditionReading(String condition,LinkedHashMap<String, String> DataTable) throws DatabaseException
 	{
-		boolean ConditionReading=false;	
+		boolean ConditionReading=false;
 		
 			if(condition.equals(""))
 			{
@@ -79,16 +87,16 @@ public class DBColoumnVerify extends DatabaseOperation
 						String[] individualValue = value.split("\\|");
 			
 							for(int j=0;j<individualValue.length;j++)
-							{								
+							{
 								switch(operator)
 								{
-								case "=": if((row.get(cond).equals(individualValue[j])))
+								case "=": if((DataTable.get(cond).equals(individualValue[j])))
 										   {
-												System.out.println((row.get(cond)+"-----------------------------------------------------"+(individualValue[j])));
+												
 												ConditionReading=true;
 											}
 											break;
-								case "<>": if((row.get(cond).equals(individualValue[j])))
+								case "<>": if((DataTable.get(cond).equals(individualValue[j])))
 											{
 												ConditionReading=false;
 						 						return ConditionReading;
@@ -98,44 +106,47 @@ public class DBColoumnVerify extends DatabaseOperation
 												ConditionReading=true;
 											}
 											break;	
-								case ">": if(Integer.parseInt(row.get(cond)) > Integer.parseInt(individualValue[j]))
+								case ">": if(Integer.parseInt(DataTable.get(cond)) > Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
-						 						return ConditionReading;
+						 						
 											}
 											else
 											{
 												ConditionReading=false;
+												return ConditionReading;
 											}
 											break;	
-								case "<": if(Integer.parseInt(row.get(cond)) < Integer.parseInt(individualValue[j]))
+								case "<": if(Integer.parseInt(DataTable.get(cond)) < Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
-						 						return ConditionReading;
+						 						
 											}
 											else
 											{
 												ConditionReading=false;
+												return ConditionReading;
 											}
 											break;
-								case ">=": if(Integer.parseInt(row.get(cond)) >= Integer.parseInt(individualValue[j]))
+								case ">=": if(Integer.parseInt(DataTable.get(cond)) >= Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
-						 						return ConditionReading;
+						 						
 											}
 											else
 											{
 												ConditionReading=false;
+												return ConditionReading;
 											}
 											break;
-								case "<=": if(Integer.parseInt(row.get(cond)) <= Integer.parseInt(individualValue[j]))
+								case "<=": if(Integer.parseInt(DataTable.get(cond)) <= Integer.parseInt(individualValue[j]))
 											{
 												ConditionReading=true;
-						 						return ConditionReading;
 											}
 											else
 											{
 												ConditionReading=false;
+												return ConditionReading;
 											}
 											break;
 								}
