@@ -83,7 +83,7 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
