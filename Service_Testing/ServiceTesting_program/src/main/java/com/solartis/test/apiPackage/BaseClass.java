@@ -144,7 +144,8 @@ public class BaseClass
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				String condition = rowOutputColVerify.get("OutputColumnCondtn");
+				if(DBColoumnVerify.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					try
 					{
@@ -181,7 +182,7 @@ public class BaseClass
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
 			    System.out.println(condition+"---------------"+outputrow);
-			    if(StatusColVerify.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+			    if(DBColoumnVerify.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
 					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
