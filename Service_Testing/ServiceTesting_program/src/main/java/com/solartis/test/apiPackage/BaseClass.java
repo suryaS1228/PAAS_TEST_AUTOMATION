@@ -4,9 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,8 +20,11 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
+import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.ExcelOperationsPOI;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -40,6 +48,7 @@ public class BaseClass
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
 	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
+	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
 
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
@@ -312,13 +321,47 @@ public class BaseClass
 		return exist;	
 
 	}
-	
-	public void Report () throws APIException
+	protected String excelreportlocation;
+	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException
 	{
+		DatabaseOperation db=new DatabaseOperation();
+		Date date = new Date();
+		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+		//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
+		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM OUTPUT_DTC_Rating_SinglePlan  GROUP BY AnalyserResult");
+		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+		excelreportlocation=config.getProperty("report_location")+"ExcelReport"+DateandTime+".xls";
+		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
+		 ob.getsheets("TestReport");
+		int	row=9;
+		int si_no=1;
+		 while (inputtableiterator.hasNext()) 
+		 {
+			 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+			 LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			
+			    ob.write_data(row, 2,si_no );
+			    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+			    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+				
+			 row++;
+			 si_no++;
+			 
+		 }
+		 ob.refresh();
+		ob.saveAs(excelreportlocation);
+	}
+	
+	public void Report (PropertiesHandle config) throws APIException
+	{
+		
+		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+		Date date = new Date();
+		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
 		Template template = null;
 		Map<String, Object> root = new HashMap<String, Object>();
 		String Requesttemplatepath="src/main/java/com/solartis/test/report/"+"Report.ftl";
-		String outputfilepath="";
+		String outputfilepath=config.getProperty("report_location")+"Report "+DateandTime+".html";
 		try
 		{			
 			System.setProperty("org.freemarker.loggerLibrary", "none");
@@ -329,9 +372,14 @@ public class BaseClass
 			System.out.println(Requesttemplatepath);
 			template = cfg.getTemplate(Requesttemplatepath);
 			
-			root.put("", "");
-			
-			
+			root.put("ReportInformation", new ArrayList<Object>());
+			while (inputtableiterator.hasNext()) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				LinkedHashMap<String, String> inputrow = inputentry.getValue();
+				((List<Object>) root.get("ReportInformation")).add(new Attribute(inputrow.get("AnalyserResult"),inputrow.get("NoOfCount")));
+			}
+			root.put("ExcelReport",excelreportlocation );
 			File file= new File(outputfilepath);
 			Writer writer = new FileWriter (file);
 			template.process(root, writer);

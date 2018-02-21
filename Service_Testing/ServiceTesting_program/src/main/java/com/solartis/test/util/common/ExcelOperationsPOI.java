@@ -336,7 +336,6 @@ public class ExcelOperationsPOI
 		
 	}
 	
-	@SuppressWarnings("resource")
 	public void Copy(String Sampleexcelpath, String Targetexpectedpath) throws POIException
 	{
 		FileChannel source = null;

@@ -51,10 +51,7 @@ public class PropertiesHandle extends Properties
 		
 		protected void WriteProperty(String UserName) throws DatabaseException, PropertiesHandleException
 		{
-			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);
-
-			this.OutputInSameTable();
-						
+			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);						
             if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
 				 this.ActualAndStatus("Y", "N");    
@@ -67,47 +64,40 @@ public class PropertiesHandle extends Properties
 			{
 				this.ActualAndStatus("Y", "Y");    
 			}
-			
-			this.SampleRequest();
-			this.RequestLocation();
-			this.ResponseLocation();
-		   
-			this.SampleRatingModelLocation();
-			this.ExpectedRatingModelPath();
-			this.MacroMappingQuery();
-			this.MacroTranslationQuery();		
-			
-			this.URL();
-			this.ContentType();
-			this.Token();
-			this.EventName();
-			this.EventVersion();
-
+			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
+			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
+			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Request/");
+			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Response/");
+			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
+			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/RatingModelResult/");
+			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
+			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
+			this.put("test_url", this.RdmsValue("URL"));	
+			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
+			this.put("token", this.RdmsValue("Token"));
+		    this.put("EventName", this.RdmsValue("EventName"));
+		    this.put("EventVersion", this.RdmsValue("EventVersion"));
+			this.put("output_query", this.RdmsQuery("OutputTable"));
+			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
+			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
+			this.put("ClassName", this.RdmsValue("ClassName"));
+			this.put("InputJsonPath", "InputJsonPath");
+		    this.put("OutputJsonPath", "OutputJsonPath");
+			this.put("InputColumn", "InputColumn");
+			this.put("OutputColumn", "OutputColumn");
+			this.put("InputCondColumn", "InputColumnCondtn");
+			this.put("OutputCondColumn", "OutputColumnCondtn");
+			this.put("ExpectedColumn", "ExpectedColumn");
+			this.put("StatusColumn", "StatusColumn");
+			this.put("request_query", "SELECT * FROM ConditionInputTable_LDWC_Rating");
+			this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
+			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
+			this.put("db_username", this.RdmsValue("DB_UserName"));
+			this.put("db_password", this.RdmsValue("DB_Password"));
+			this.put("report_location", this.RdmsValue("RootFolder") + "/" + Project + "/" +  "Report/");		 
+			this.put("report_template_location", this.RdmsValue("RootFolder") + "/ReportTemplate/");
 			this.InputQuery();
-			this.OutputQuery();
-			
-			this.InputConditionQuery();
-			this.OutputConiditionQuery();
-			
-			this.ClassName();
-			
-			this.InputJsonPath();
-			this.OutputJsonPath();
-			
-		    this.InputColumn();
-		    this.OutputColumn();
-		    		    
-			this.InputConditionColumn();
-			this.OutputConditionColumn();
-			
-		    this.ExpectedColumn();
-		    this.StatusColumn();
-		    		    
-		    this.DBdetails();
-		    this.RequestQuery();
-		    
-		    DatabaseOperation.CloseConn();
-		 
+		    DatabaseOperation.CloseConn();		 
 		}
 		
 		protected String RdmsQuery(String OutputColoumn) throws PropertiesHandleException
@@ -183,76 +173,13 @@ public class PropertiesHandle extends Properties
 		}
 
 	
-		protected void OutputInSameTable() throws PropertiesHandleException // FUNCTION CHECK OUTPUT IN SAME TABLE ARE NOT
-		{
-			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
-		}	
-		
 		protected void ActualAndStatus(String Actual, String Status)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
 			this.put("actual", Actual);
 			this.put("status", Status);
 		}	
 		
-		protected void SampleRequest() throws PropertiesHandleException// FUNCTION FOR SAMPLEREQUEST PATH
-		{
-			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
-		}
 		
-		protected void RequestLocation() throws PropertiesHandleException// FUNCTION FOR REQUEST TO SAVE PATH
-		{
-			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Request/");
-		}
-		
-		protected void ResponseLocation() throws PropertiesHandleException// FUNCTION FOR RESPONSE TO SAVE PATH
-		{
-			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Response/");
-		}
-		
-		protected void SampleRatingModelLocation() throws PropertiesHandleException// FUNCTION FOR SAMPLE RATING MODEL PATH
-		{
-			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
-		}
-		
-		protected void ExpectedRatingModelPath() throws PropertiesHandleException// FUNCTION FOR EXPECTED RATING MODEL PATH
-		{
-			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/RatingModelResult/");
-		}
-		
-		protected void MacroMappingQuery() throws PropertiesHandleException// FUNCTION TO GET RESULT SET FROM MACRO MAPPING TABLE 
-		{
-			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
-		}
-		
-		protected void MacroTranslationQuery() throws PropertiesHandleException// FUNCTION TO GET RESULT SET FROM MACRO TRNSLATION TABLE 
-		{
-			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
-		}
-
-		protected void URL() throws PropertiesHandleException// FUNCTION TO GET URL
-		{
-			this.put("test_url", this.RdmsValue("URL"));	
-		}
-		
-		protected void ContentType() throws PropertiesHandleException// FUNCTION TO GET CONTENTTYPE
-		{
-			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
-	    }
-	
-		protected void Token() throws PropertiesHandleException// FUNCTION TO GET TOKEN
-		{
-			this.put("token", this.RdmsValue("Token"));
-		}
-		
-		protected void EventName() throws PropertiesHandleException// FUNCTION TO GET EVENT-NAME
-		{
-		    this.put("EventName", this.RdmsValue("EventName"));
-		}
-		
-		protected void EventVersion() throws PropertiesHandleException// FUNCTION TO GET EVENT-VERSION
-		{
-		    this.put("EventVersion", this.RdmsValue("EventVersion"));
-		}
 	
 		protected void InputQuery() throws PropertiesHandleException// FUNCTION FOR INPUTQUERY
 		{
@@ -266,78 +193,7 @@ public class PropertiesHandle extends Properties
 				}		
 		}
 		
-		protected void OutputQuery() throws PropertiesHandleException// FUNCTION FOR OUTPUTQUERY
-		{
-			this.put("output_query", this.RdmsQuery("OutputTable"));
-		}
-		
-		protected void InputConditionQuery() throws PropertiesHandleException// FUNCTION FOR INPUT-CONDITION-QUERY
-		{
-			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
-		}
-		
-		protected void OutputConiditionQuery() throws PropertiesHandleException// FUNCTION FOR OUTPUT-CONDITION-QUERY
-		{
-			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
-		}
-		
-		protected void ClassName() throws PropertiesHandleException // FUNCTION TOS GET CLASS-NAME
-		{
-			this.put("ClassName", this.RdmsValue("ClassName"));
-		}	
-		
-		protected void InputJsonPath() // FUNCTION TO GET INPUT-JSON-PATH
-		{
-			this.put("InputJsonPath", "InputJsonPath");
-		}
-		
-		protected void OutputJsonPath() // FUNCTION TO GET OUTPUT-JSON-PATH
-		{
-		    this.put("OutputJsonPath", "OutputJsonPath");
-		}
-		
-		protected void InputColumn() // FUNCTION TO GET INPUT-COLUMN
-		{
-			this.put("InputColumn", "InputColumn");
-		}
-		
-		protected void OutputColumn() // FUNCTION TO GET OUTPUT-COLUMN
-		{
-			this.put("OutputColumn", "OutputColumn");
-		}
-		
-	    protected void InputConditionColumn() // FUNCTION TO GET INPUT-CONDITION-COLUMN
-		{
-			this.put("InputCondColumn", "InputColumnCondtn");
-		}
-		
-		protected void OutputConditionColumn() // FUNCTION TO GET OUTPUT-CONDITION-COLUMN
-		{
-			this.put("OutputCondColumn", "OutputColumnCondtn");
-		}
-		
-	    protected void ExpectedColumn() // FUNCTION TO GET EXPECTED-COLUMN
-		{
-			this.put("ExpectedColumn", "ExpectedColumn");
-		}
-		
-		protected void StatusColumn() // FUNCTION TO GET STATUS-COLUMN
-		{
-			this.put("StatusColumn", "StatusColumn");
-		}
-		
-		protected void RequestQuery()
-		{
-			this.put("request_query", "SELECT * FROM ConditionInputTable_LDWC_Rating");
-		}
-		
-	    protected void DBdetails() throws PropertiesHandleException// FUNCTION FOR DB-DETAILS
-		{
-			this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
-			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
-			this.put("db_username", this.RdmsValue("DB_UserName"));
-			this.put("db_password", this.RdmsValue("DB_Password"));
-		}	
+	
 		
 		public PropertiesHandle(String path) throws PropertiesHandleException
 		{
