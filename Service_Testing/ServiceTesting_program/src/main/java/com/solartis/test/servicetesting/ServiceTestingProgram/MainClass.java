@@ -249,7 +249,11 @@ public class MainClass
 	@AfterTest
 	public void connectionclose() throws DatabaseException, POIException
 	{
+		
+		if(statuschoice.equals("Y"))
+	    {
 		this.generateChart();
+	    }   
 		DatabaseOperation.CloseConn();
 	}
 	
