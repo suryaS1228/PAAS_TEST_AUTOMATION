@@ -23,9 +23,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solartis.test.util.common.ExcelOperationsPOI;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.listener.FireEventAPI;
 import com.solartis.test.listener.Listener;
@@ -245,8 +247,39 @@ public class MainClass
 	}
 	
 	@AfterTest
-	public void connectionclose() throws DatabaseException
+	public void connectionclose() throws DatabaseException, POIException
 	{
+		this.generateChart();
 		DatabaseOperation.CloseConn();
+	}
+	
+	
+	public void generateChart() throws DatabaseException, POIException
+	{
+		DatabaseOperation db=new DatabaseOperation();
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> table1 = null;
+		//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
+		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM OUTPUT_DTC_Rating_SinglePlan  GROUP BY AnalyserResult");
+		System.out.println(table1);
+		 Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+		 
+		 ExcelOperationsPOI ob=new ExcelOperationsPOI("E:\\Sasirekha1054\\ComparisonReport\\Result Template\\ResultTemplate.xls");
+		 ob.getsheets("Sheet3");
+		int	row=9;
+		int si_no=1;
+		 while (inputtableiterator.hasNext()) 
+		 {
+			 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+			 LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			
+			    ob.write_data(row, 2,si_no );
+			    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+			    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+				ob.refresh();
+				ob.save();
+			 row++;
+			 si_no++;
+			 
+		 }
 	}
 }

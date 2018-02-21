@@ -214,9 +214,9 @@ public class BaseClass
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
-				message=message+errorMessage.get(i)+"; ";
+				message=message+errorMessage.get(i)+" & ";
 			}
-			outputrow.put("AnalyserResult", message);
+			outputrow.put("AnalyserResult", message+" Failed");
 			errorMessage.clear();
 			errorParentname.clear();
 			return outputrow;
@@ -280,10 +280,10 @@ public class BaseClass
 			String[] Parentname =Conditiontablerow.get("ParentName").split(";");
 			int noOfParentname=Parentname.length;
 			for(int i=0;i<noOfParentname;i++)
-			{								
+			{
+				errorParentname.add(Parentname[i]);
 				if(!this.ifexist(Conditiontablerow.get("NodeName")))
 				{
-					errorParentname.add(Parentname[i]);
 					if(flag == false)
 					{
 						errorMessage.add(Conditiontablerow.get("Message"));

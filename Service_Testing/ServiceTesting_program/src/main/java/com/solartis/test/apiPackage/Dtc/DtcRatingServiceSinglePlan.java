@@ -198,7 +198,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
-				message=message+errorMessage.get(i)+"; ";
+				message=message+errorMessage.get(i)+" & ";
 			}
 			if(message.equals(""))
 			{
@@ -206,7 +206,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			}
 			else
 			{
-			outputrow.put("AnalyserResult", message);
+				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
 			}
 			errorMessage.clear();
 			errorParentname.clear();
