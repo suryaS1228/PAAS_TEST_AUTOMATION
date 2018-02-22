@@ -47,7 +47,7 @@ public class RequestHandler
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setNumberFormat("0.######");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-		System.out.println(Requesttemplatepath);
+		//System.out.println(Requesttemplatepath);
 		template = cfg.getTemplate(Requesttemplatepath);
 	}
 	
@@ -102,7 +102,7 @@ public class RequestHandler
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 				{
 					String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
-					System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue);
+					//System.out.println(parentName+"---------"+atributeName+"---------"+atributeStaticValue);
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
 				}
 				else
@@ -115,7 +115,7 @@ public class RequestHandler
 						{
 							atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 						}
-						System.out.println(parentName+"---------"+atributeName+"---------"+atributeDynamicValue);
+						//System.out.println(parentName+"---------"+atributeName+"---------"+atributeDynamicValue);
 						((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
 					}
 				}
@@ -128,7 +128,7 @@ public class RequestHandler
 		File file= new File(filepath);
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
-		System.out.println(writer.toString());
+		//System.out.println(writer.toString());
 		writer.flush();
 		writer.close();
 		

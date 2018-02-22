@@ -67,9 +67,9 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 		{
 		// TODO Auto-generated method stub
 			String RateingModelName = Lookup(InputData.get("State_name"),configFile);
-			System.out.println(InputData.get("State_name"));
+			//System.out.println(InputData.get("State_name"));
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-			System.out.println("Sample rating mosel"+Samplepath);
+			//System.out.println("Sample rating mosel"+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
@@ -105,7 +105,7 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
 				String condition = rowPumpinData.get("Condition");
-				System.out.println(condition+"-------------"+rowPumpinData);
+				//System.out.println(condition+"-------------"+rowPumpinData);
 				if (rowPumpinData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,InputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
@@ -123,8 +123,8 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
-							System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
+							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
+							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
@@ -185,7 +185,7 @@ public class DtcRatingSinglePlan extends DBColoumnVerify implements MacroInterfa
 					int rowNum = Integer.parseInt(part[1]);
 					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
-					System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite+"--------"+CellAddress+"--------------"+condition+"------------"+ConditionReading(condition,inputData));
+					//System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite+"--------"+CellAddress+"--------------"+condition+"------------"+ConditionReading(condition,inputData));
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
 					outputData.put(Datacolumntowrite, Datatowrite);
 				}

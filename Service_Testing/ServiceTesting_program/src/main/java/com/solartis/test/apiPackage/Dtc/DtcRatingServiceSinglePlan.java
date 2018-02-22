@@ -171,7 +171,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			{	
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
-			    System.out.println(condition+"---------------"+outputrow);
+			  //  System.out.println(condition+"---------------"+outputrow);
 			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
@@ -215,7 +215,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 	    }	
 	    catch(DatabaseException e)
 	    {
-	    	System.out.println(e);
+	    	//System.out.println(e);
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
