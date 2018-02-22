@@ -193,7 +193,7 @@ public class BaseClass
 			{	
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
-			    System.out.println(condition+"---------------"+outputrow);
+			   // System.out.println(condition+"---------------"+outputrow);
 			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
@@ -369,7 +369,7 @@ public class BaseClass
 			cfg.setDefaultEncoding("UTF-8");
 			cfg.setNumberFormat("0.######");
 			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-			System.out.println(Requesttemplatepath);
+			//System.out.println(Requesttemplatepath);
 			template = cfg.getTemplate(Requesttemplatepath);
 			
 			root.put("ReportInformation", new ArrayList<Object>());
@@ -383,7 +383,7 @@ public class BaseClass
 			File file= new File(outputfilepath);
 			Writer writer = new FileWriter (file);
 			template.process(root, writer);
-			System.out.println(writer.toString());
+			//System.out.println(writer.toString());
 			writer.flush();
 			writer.close();
 		}
