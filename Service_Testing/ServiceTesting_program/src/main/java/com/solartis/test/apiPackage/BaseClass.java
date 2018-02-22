@@ -1,5 +1,6 @@
 package com.solartis.test.apiPackage;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -366,6 +367,7 @@ public class BaseClass
 		Map<String, Object> root = new HashMap<String, Object>();
 		String Requesttemplatepath="src/main/java/com/solartis/test/report/"+"Report.ftl";
 		String outputfilepath=config.getProperty("report_location")+"Report "+DateandTime+".html";
+		System.out.println(outputfilepath);
 		try
 		{			
 			System.setProperty("org.freemarker.loggerLibrary", "none");
@@ -390,6 +392,9 @@ public class BaseClass
 			//System.out.println(writer.toString());
 			writer.flush();
 			writer.close();
+			
+			File htmlFile = new File(outputfilepath);
+			Desktop.getDesktop().browse(htmlFile.toURI());
 		}
 		catch(IOException | TemplateException e)
 		{
