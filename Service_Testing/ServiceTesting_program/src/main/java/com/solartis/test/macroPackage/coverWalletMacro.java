@@ -64,12 +64,13 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName ="Coverwallet_Rating_Model";
+			String RateingModelName = Lookup(inputData.ReadData("ProgramName"),configFile);
+			//String RateingModelName ="Coverwallet_Rating_Model";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
-		catch (POIException e)
+		catch (POIException | DatabaseException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF COVERWALLET MACRO", e);
 		}
