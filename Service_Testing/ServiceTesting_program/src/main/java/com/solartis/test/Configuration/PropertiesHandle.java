@@ -96,6 +96,8 @@ public class PropertiesHandle extends Properties
 			this.put("db_password", this.RdmsValue("DB_Password"));
 			this.put("report_location", this.RdmsValue("RootFolder") + "/" + Project + "/" +  "Report/");		 
 			this.put("report_template_location", this.RdmsValue("RootFolder") + "/ReportTemplate/");
+			this.put("Project",Project );
+			this.put("API",Api );
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}
