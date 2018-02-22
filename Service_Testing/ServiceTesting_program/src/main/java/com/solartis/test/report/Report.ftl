@@ -70,10 +70,10 @@ function GenerateTable() {
 </head>
 <body>
 <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
-<script src="C:\Users\rajaprabhu_r.SOLARTISTECH\Desktop\report\Web Report\canvasjs.min.js"></script>
+<script src="../../ReportTemplate/canvasjs.min.js"></script>
 
 <button>
-    <a href="${ExcelReport}" download>Click to Download!</a>
+    <a href=""../../Report/${ExcelReport}" download>Click to Download!</a>
 </button>
 <input type="button" value="View in Table" onclick="GenerateTable()" />
 <hr />
