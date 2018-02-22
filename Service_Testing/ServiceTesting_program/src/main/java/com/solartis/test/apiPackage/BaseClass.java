@@ -330,7 +330,7 @@ public class BaseClass
 		//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
 		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM OUTPUT_DTC_Rating_SinglePlan  GROUP BY AnalyserResult");
 		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
-		excelreportlocation=config.getProperty("report_location")+"ExcelReport"+DateandTime+".xls";
+		excelreportlocation=config.getProperty("report_location")+"AnalysisReport"+DateandTime+".xls";
 		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
 		 ob.getsheets("TestReport");
 		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("Api"));
