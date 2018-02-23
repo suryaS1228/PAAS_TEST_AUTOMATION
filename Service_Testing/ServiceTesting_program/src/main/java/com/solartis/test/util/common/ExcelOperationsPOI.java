@@ -99,7 +99,7 @@ public class ExcelOperationsPOI
 				}
 				break;
 			case Cell.CELL_TYPE_STRING	:		cellvalue= cell.getStringCellValue();					break;
-			case Cell.CELL_TYPE_ERROR	:		cellvalue= String.valueOf(cell.getErrorCellValue());	break;
+			case Cell.CELL_TYPE_ERROR	:		cellvalue= String.valueOf(cell.getErrorCellValue()+"err");	break;
 			case Cell.CELL_TYPE_BLANK	:		cellvalue="";	break;
 			case 2                      :   try{
 								                	cellvalue =String.valueOf(cell.getNumericCellValue()); 

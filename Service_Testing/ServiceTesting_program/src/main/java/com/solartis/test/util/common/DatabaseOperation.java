@@ -92,7 +92,7 @@ public class DatabaseOperation
 	public LinkedHashMap<Integer, LinkedHashMap<String, String>> GetDataObjects(String query) throws DatabaseException
 	{
 		this.query = query;
-		System.out.println(this.query);
+		//System.out.println(this.query);
 		LinkedHashMap<String, String> row = null;
 		try 
 		{
