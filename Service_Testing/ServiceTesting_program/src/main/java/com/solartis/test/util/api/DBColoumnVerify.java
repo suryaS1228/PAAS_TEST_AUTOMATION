@@ -27,6 +27,9 @@ public class DBColoumnVerify extends DatabaseOperation
 
 	protected boolean ConditionReading(String condition,DatabaseOperation DataTable) throws DatabaseException
 	{
+		
+		
+		
 		boolean ConditionReading=false;
 		
 			if(condition.equals(""))
@@ -83,6 +86,8 @@ public class DBColoumnVerify extends DatabaseOperation
 			
 							for(int j=0;j<individualValue.length;j++)
 							{
+								
+								//System.out.println(Integer.parseInt(DataTable.ReadData(cond)+"-------"+Integer.parseInt(individualValue[j])));
 								switch(operator)
 								{
 								case "=": if((DataTable.ReadData(cond).equals(individualValue[j])))

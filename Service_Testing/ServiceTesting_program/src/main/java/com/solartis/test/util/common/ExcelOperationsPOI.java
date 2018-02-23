@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.sl.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -302,7 +303,19 @@ public class ExcelOperationsPOI
 	
 	public void refresh()
 	{
-		 HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 //HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+		 for (org.apache.poi.ss.usermodel.Sheet sheet : this.workbook) {
+		     for (Row r : sheet) {
+		         for (Cell c : r) {
+		             if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+		            	 System.out.println(c+"---------------------------------------------"+r);
+		                 evaluator.evaluateFormulaCell(c);
+		                 
+		             }
+		         }
+		     }
+		 }
 	}
 	
 	public void save() throws POIException

@@ -14,6 +14,7 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
@@ -103,6 +104,9 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 			do
 			{	
 				String condition = configTable.ReadData("Condition");
+				System.out.println(condition);
+				System.out.println("111111---"+configTable.ReadData("flag_for_execution"));
+				System.out.println("222222--"+ConditionReading(condition,inputData));
 				if (configTable.ReadData("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
 					if (configTable.ReadData("Type").equals("input"))
@@ -377,5 +381,32 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 		 return true;
 	}
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+	{
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		coverWalletMacro sm;
+		PropertiesHandle configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\CoverWallet\\Rating\\Config\\config.properties");
+		
+		DatabaseOperation.ConnectionSetup(configFile);
+		objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		do
+		{
+			System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
+					if(objectInput.ReadData("Flag_for_execution").equals("Y"))
+					{
+						System.out.println("coming to flow");
+						sm=new coverWalletMacro(configFile);
+						sm.LoadSampleRatingmodel(configFile, objectInput);
+						sm.GenerateExpected(objectInput, configFile);
+						sm.PumpinData(objectInput, configFile);
+						sm.PumpoutData(objectOutput,objectInput, configFile);
+					}
+					//objectInput.WriteData("Flag_for_execution", "Completed");	
+					objectInput.UpdateRow();
+					objectOutput.UpdateRow();
+		}while(objectInput.MoveForward()&&objectOutput.MoveForward());
+	}
 	
 }
