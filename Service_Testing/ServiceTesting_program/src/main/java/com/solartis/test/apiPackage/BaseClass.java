@@ -332,7 +332,7 @@ public class BaseClass
 		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM OUTPUT_DTC_Rating_SinglePlan  GROUP BY AnalyserResult");
 		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 		excelreportlocation="AnalysisReport "+DateandTime+".xls";
-		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport "+DateandTime+".xls";
+		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
 		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
 		 ob.getsheets("TestReport");
 		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
@@ -367,7 +367,7 @@ public class BaseClass
 		Template template = null;
 		Map<String, Object> root = new HashMap<String, Object>();
 		String Requesttemplatepath="src/main/java/com/solartis/test/report/"+"Report.ftl";
-		String outputfilepath=config.getProperty("report_location")+"Report "+DateandTime+".html";
+		String outputfilepath=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".html";
 		System.out.println(outputfilepath);
 		try
 		{			
