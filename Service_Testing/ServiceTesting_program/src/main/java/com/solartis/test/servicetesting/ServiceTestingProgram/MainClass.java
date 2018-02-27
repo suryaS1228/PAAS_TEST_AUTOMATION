@@ -252,13 +252,19 @@ public class MainClass
 	public void connectionclose() throws DatabaseException, POIException, APIException
 	{
 		BaseClass base = new BaseClass();
-		
+		try
+		{
 		if(statuschoice.equals("Y"))
 	    {
 			base.generateChart(config);
 			base.Report(config);
 	    }   
 		DatabaseOperation.CloseConn();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
