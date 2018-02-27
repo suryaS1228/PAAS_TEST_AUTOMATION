@@ -61,7 +61,7 @@ public class MainClass
 	{
 		System.setProperty("jsse.enableSNIExtension", "false");
 		disableSslVerification();
-		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));
+		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
 		
 		DatabaseOperation.ConnectionSetup(config);
 		

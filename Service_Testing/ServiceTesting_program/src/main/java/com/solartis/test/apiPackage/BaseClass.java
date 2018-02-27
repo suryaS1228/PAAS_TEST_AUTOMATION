@@ -332,7 +332,7 @@ public class BaseClass
 		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM OUTPUT_DTC_Rating_SinglePlan  GROUP BY AnalyserResult");
 		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 		excelreportlocation="AnalysisReport "+DateandTime+".xls";
-		String excelreportlocation1=config.getProperty("report_location")+"AnalysisReport "+DateandTime+".xls";
+		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport "+DateandTime+".xls";
 		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
 		 ob.getsheets("TestReport");
 		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("Api"));

@@ -29,10 +29,11 @@ public class PropertiesHandle extends Properties
 	protected String password;
 	protected String priority;
 	protected String queryresult;
+	protected String ExecutionName;
 
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority) throws DatabaseException, PropertiesHandleException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority,String ExecutionName) throws DatabaseException, PropertiesHandleException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -44,6 +45,7 @@ public class PropertiesHandle extends Properties
 			this.USER=USER;
 			this.password=password;
 			this.priority=priority;
+			this.ExecutionName=ExecutionName;
 			
 			WriteProperty(UserName);
 			
@@ -98,6 +100,7 @@ public class PropertiesHandle extends Properties
 			this.put("report_template_location", this.RdmsValue("RootFolder") + "/ReportTemplate/");
 			this.put("Project",Project );
 			this.put("API",Api );
+			this.put("ExecutionName", ExecutionName);
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}
