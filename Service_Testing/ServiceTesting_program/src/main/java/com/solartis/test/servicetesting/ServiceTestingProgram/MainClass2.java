@@ -41,7 +41,7 @@ public class MainClass2
 		System.setProperty("jsse.enableSNIExtension", "false");
 		String apis = System.getProperty("Api");
 		apii = apis.split("-");
-		InputtableQuery="Select * from DTC_inputTable";
+		InputtableQuery="Select * from GL_Quote_Policy_Cancel_INPUT";
 		ConfigObjectRepository=new PropertiesHandle[apii.length];
 		OutputDBObjectRepository= new DatabaseOperation[apii.length];
 		OutputTableRepository = new Object[apii.length];
@@ -54,12 +54,12 @@ public class MainClass2
 				System.out.println("config is null"+i);
 			}
 			ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));;
-			DatabaseOperation.ConnectionSetup(ConfigObjectRepository[i]);
-			OutputDBObjectRepository[i]= new DatabaseOperation();
 			
-			System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
+			OutputDBObjectRepository[i]= new DatabaseOperation();
+			OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
+			//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 			OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
-			System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
+			//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 			OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
 		}
 		
@@ -96,7 +96,7 @@ public class MainClass2
 		ObjectMapper inputtableobjectMapper = new ObjectMapper();
 		ObjectMapper outputtableobjectMapper = new ObjectMapper();
 		Object outputtablerowobj=new Object(); 
-		System.out.println(RowIterator);
+		//System.out.println(RowIterator);
 		outputtablerowobj = outputtablerowobject[RowIterator];
 		String actualchoice = configuration.getProperty("actual");
 		String statuschoice = configuration.getProperty("status");

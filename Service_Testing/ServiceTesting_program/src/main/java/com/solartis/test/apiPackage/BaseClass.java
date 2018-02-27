@@ -45,9 +45,11 @@ public class BaseClass
 					
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
 			{
+				
 				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 				request.StringToFile(sampleInput.FileToString());
+				System.out.println(config.getProperty("InputColumn")+"--"+rowInputColVerify);
 				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
@@ -57,10 +59,10 @@ public class BaseClass
 				}
 				else if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("FromPrevious")))
 				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
+					//if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
+				//	{
 	                  	request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(commonmap.get(config.getProperty("InputColumn"))));
-					}
+					//}
 				}
 			}
 		}

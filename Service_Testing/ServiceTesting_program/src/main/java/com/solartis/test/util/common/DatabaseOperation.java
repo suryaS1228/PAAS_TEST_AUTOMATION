@@ -24,7 +24,7 @@ public class DatabaseOperation
 	protected   LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
 	protected ResultSetMetaData meta = null;
 	
-	public static void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
+	public void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
 	{
 		JDBC_DRIVER =config.getProperty("jdbc_driver");
 		DB_URL = config.getProperty("db_url");
@@ -49,6 +49,18 @@ public class DatabaseOperation
 				throw new DatabaseException("ERROR IN DB - URL / USERNAME / PASSWORD", e);	
 			}	
 		}		
+	}
+	
+	public void switchDB(String db) throws DatabaseException
+	{
+		try
+		{
+		conn.setCatalog(db);
+		}
+		catch (SQLException e)
+		{
+			throw new DatabaseException("Error while switch DataBase", e);
+		}
 	}
 	
 	public static void ConnectionSetup(String JDBC_DRIVER, String DB_URL, String USER, String password) throws DatabaseException 
@@ -128,11 +140,13 @@ public class DatabaseOperation
 	
 	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException, SQLException
 	{
-		System.out.println("row in --------dbop"+row);
+		//System.out.println("row in --------dbop"+row);
 		
-		System.out.println("Metadata in --------dbop"+rs.getMetaData());
-		try 
-		{
+		//System.out.println("Metadata in --------dbop"+rs.getMetaData());
+		Statement stmt = null;
+		ResultSet rs = null;
+		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+	    rs =    stmt.executeQuery(this.query);
 			rs.first();
 			ResultSetMetaData meta = rs.getMetaData();
 		    int rowIterator = 1;
@@ -150,12 +164,12 @@ public class DatabaseOperation
 			 
 			    rowIterator++;
 			 }while (rs.next());	
-		}	
+		//}	
 		
-		catch (SQLException e) 
-		{
-			throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);
-		}
+	//	catch (SQLException e) 
+	//	{
+		//	throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);
+		//}
 	}
 	
 	
