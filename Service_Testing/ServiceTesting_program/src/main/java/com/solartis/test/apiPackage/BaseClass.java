@@ -335,9 +335,10 @@ public class BaseClass
 		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport "+DateandTime+".xls";
 		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
 		 ob.getsheets("TestReport");
-		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("Api"));
+		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
 		 Date today=new Date();
 		 ob.write_data(5, 7,today);
+		 ob.write_data(5, 12,config.getProperty("ExecutionName"));
 		int	row=9;
 		int si_no=1;
 		 while (inputtableiterator.hasNext()) 
