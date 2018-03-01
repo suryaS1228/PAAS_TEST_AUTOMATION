@@ -283,7 +283,7 @@ public class DatabaseOperation
 	
 	
 	
-	public static void ImportDatatoDB(String filepath,Connection conn,String tableName,String SheetName,String Operation) throws IOException, SQLException, ClassNotFoundException, POIException
+	public void ImportDatatoDB(String filepath,Connection conn,String tableName,String SheetName,String Operation) throws IOException, SQLException, ClassNotFoundException, POIException
 	{
 		ExcelOperationsPOI xl=new ExcelOperationsPOI(filepath);
 		String sql=null;
@@ -346,7 +346,11 @@ public class DatabaseOperation
 		
 	}
 	
-	
+	public  void truncateTable(String tablename) throws SQLException
+	{
+		String query="TRUNCATE "+tablename;
+		stmt.executeUpdate(query);
+	}
 	
 	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
 	{
