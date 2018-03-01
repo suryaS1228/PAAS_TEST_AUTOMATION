@@ -17,8 +17,11 @@ import java.util.LinkedHashMap;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import com.mysql.jdbc.PreparedStatement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.POIException;
 
 public class DatabaseOperation
 {
@@ -34,7 +37,7 @@ public class DatabaseOperation
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
 	protected ResultSetMetaData meta = null;
 	
-	public static void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
+	public static Connection ConnectionSetup(PropertiesHandle config) throws DatabaseException 
 	{
 		JDBC_DRIVER =config.getProperty("jdbc_driver");
 		DB_URL = config.getProperty("db_url");
@@ -58,10 +61,11 @@ public class DatabaseOperation
 			{
 				throw new DatabaseException("ERROR IN DB - URL / USERNAME / PASSWORD", e);	
 			}	
-		}		
+		}	
+		return conn;
 	}
 	
-	public static void ConnectionSetup(String JDBC_DRIVER, String DB_URL, String USER, String password) throws DatabaseException 
+	public static Connection ConnectionSetup(String JDBC_DRIVER, String DB_URL, String USER, String password) throws DatabaseException 
 	{
 		if(conn == null)
 		{
@@ -82,7 +86,8 @@ public class DatabaseOperation
 			{
 				throw new DatabaseException("ERROR IN DB - URL / USERNAME / PASSWORD", e);	
 			}	
-		}		
+		}
+		return conn;
 	}
 	
 	public static void CloseConn() throws DatabaseException
@@ -204,6 +209,13 @@ public class DatabaseOperation
 		return rs;
 	}
 	
+	public void createTable(String query) throws SQLException
+	{
+		this.query=query;
+		 stmt = conn.createStatement();
+		 System.out.println(this.query);
+		 stmt.execute(this.query);
+	}
 	
 	public static void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
 	{
@@ -269,13 +281,78 @@ public class DatabaseOperation
 		
 	}
 	
-	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	
+	
+	public static void ImportDatatoDB(String filepath,Connection conn,String tableName,String SheetName,String Operation) throws IOException, SQLException, ClassNotFoundException, POIException
 	{
-		DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
-		String Query="SELECT * FROM INPUT_DTC_Rating_SinglePlan INNER JOIN OUTPUT_DTC_Rating_SinglePlan on INPUT_DTC_Rating_SinglePlan.Testdata=OUTPUT_DTC_Rating_SinglePlan.testdata WHERE INPUT_DTC_Rating_SinglePlan.Flag_for_execution='Completed'";
-		String File="E://first_excel.xls";
-		String Sheet="Sheet2";
-		DatabaseOperation.ExportToExcelTable(Query,File,Sheet);
+		ExcelOperationsPOI xl=new ExcelOperationsPOI(filepath);
+		String sql=null;
+		DatabaseOperation db=new DatabaseOperation();
+		
+		//xl.readExcel();
+		xl.getsheets(SheetName);
+		int n=xl.getTotColumns();
+		int noOfRows=xl.getTotRows();
+		int s=xl.getfirstRowNo();
+		
+		System.out.println("no of rows"+n+"first row no"+s);
+		String[] Columns=new String[n];
+		String insertString="";
+		String values="";
+		for(int i=s;i<n;i++)
+		{
+			String str1=xl.readData(1,i).toString();
+			String str2=xl.readData(0,i).toString();
+			Columns[i]=str1+" "+str2;
+			insertString=insertString+xl.read_data(1,i)+",";
+			values=values+"?,";
+		}
+		System.out.println(insertString.substring(0,(insertString.length()-1)));
+		System.out.println(String.join(",", Columns));
+		System.out.println(values.substring(0,(values.length()-1)));
+		String ColumnString=String.join(",", Columns);
+		String insertStrings=insertString.substring(0,(insertString.length()-1));
+		String ValueStrings=values.substring(0,(values.length()-1));
+		if(Operation.equalsIgnoreCase("CREATE"))
+		{
+			sql = "CREATE TABLE "+ tableName +"("+ColumnString+")";
+			System.out.println(sql);
+			db.createTable(sql);
+		}
+		else if(Operation.equalsIgnoreCase("ALTER"))
+		{
+			sql= "ALTER TABLE "+ tableName +" ADD ("+ColumnString+")";
+			System.out.println(sql);
+			db.createTable(sql);
+		}
+		else
+		{
+			System.out.println("Operation not Performed");
+		}
+		
+		for(int row=2;row<=noOfRows;row++)
+		{
+			String sql1 = "INSERT INTO "+ tableName+"("+insertStrings+")"+" VALUES("+ValueStrings+")";
+			
+			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
+			System.out.println(sql1);
+			for(int col=0;col<n;col++)
+			{
+				insertStatement.setString(col+1,xl.readData(row, col).toString()); 
+				
+			}
+			insertStatement.executeUpdate();
+		}
+		
+	}
+	
+	
+	
+	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
+	{
+		Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
+		DatabaseOperation.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"DTC_Rating","Sheet1","Import");
+
 		
 	}
 	

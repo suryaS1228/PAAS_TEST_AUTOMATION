@@ -1,5 +1,6 @@
 package com.solartis.test.servicetesting.ServiceTestingProgram;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyManagementException;
@@ -23,6 +24,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import com.solartis.test.util.common.ExcelOperationsPOI;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -55,16 +59,16 @@ public class MainClass
 	public static LinkedHashMap<String, String> inputrow;
 	public static LinkedHashMap<String, String> outputrow;
 	public static HashMap<Object,Object> result;
-	
+	public static Connection Conn=null;         //added
 	@BeforeTest
-	public void loadconfig() throws DatabaseException, PropertiesHandleException
+	public void loadconfig() throws DatabaseException, PropertiesHandleException, ClassNotFoundException, IOException, SQLException, POIException
 	{
 		System.setProperty("jsse.enableSNIExtension", "false");
 		disableSslVerification();
 		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
+		Conn=DatabaseOperation.ConnectionSetup(config);
 		
-		DatabaseOperation.ConnectionSetup(config);
-		
+		DatabaseOperation.ImportDatatoDB("TestdataPath",Conn, "inputTable", "Sheet1", "Import");
 		actualchoice = config.getProperty("actual");
 		statuschoice = config.getProperty("status");
 		outputtablechoice = config.getProperty("output_in_same_table");
@@ -260,6 +264,7 @@ public class MainClass
 			base.Report(config);
 			
 	    }   
+		
 		DatabaseOperation.CloseConn();
 		}
 		catch (Exception e)

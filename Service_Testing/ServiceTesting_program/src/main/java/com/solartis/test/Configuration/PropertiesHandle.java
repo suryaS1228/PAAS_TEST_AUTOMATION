@@ -101,7 +101,9 @@ public class PropertiesHandle extends Properties
 			this.put("Project",Project );
 			this.put("API",Api );
 			this.put("ExecutionName", ExecutionName);
-			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("InputTable")+" INNER JOIN OUTPUT_DTC_Rating_SinglePlan on INPUT_DTC_Rating_SinglePlan.Testdata=OUTPUT_DTC_Rating_SinglePlan.testdata WHERE INPUT_DTC_Rating_SinglePlan.Flag_for_execution='Completed'");
+			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("InputTable")+" INNER JOIN "+ this.RdmsValue("OutputTable")+" on "+this.RdmsValue("InputTable")+".Testdata="+this.RdmsValue("OutputTable")+".testdata WHERE "+this.RdmsValue("InputTable")+".Flag_for_execution='Completed'");
+			this.put("inputTable", this.RdmsValue("InputTable"));
+			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty(ExecutionName)+".xls");
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}
