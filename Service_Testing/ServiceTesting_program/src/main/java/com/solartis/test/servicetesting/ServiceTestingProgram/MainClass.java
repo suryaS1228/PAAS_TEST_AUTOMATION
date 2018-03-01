@@ -67,8 +67,8 @@ public class MainClass
 		disableSslVerification();
 		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
 		Conn=DatabaseOperation.ConnectionSetup(config);
-		
-		DatabaseOperation.ImportDatatoDB("TestdataPath",Conn, "inputTable", "Sheet1", "Import");
+	
+		DatabaseOperation.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
 		actualchoice = config.getProperty("actual");
 		statuschoice = config.getProperty("status");
 		outputtablechoice = config.getProperty("output_in_same_table");
