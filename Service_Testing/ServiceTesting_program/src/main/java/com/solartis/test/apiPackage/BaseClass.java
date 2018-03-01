@@ -418,6 +418,8 @@ public class BaseClass
 	
 	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
 	{
+		
+		System.out.println("Exorting data to Excel");
 		DatabaseOperation db=new DatabaseOperation();
 		ResultSet rs=null;
 		HSSFWorkbook workBook=null;
