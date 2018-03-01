@@ -104,7 +104,7 @@ public class DatabaseOperation
 	{
 		this.query = query;
 		LinkedHashMap<String, String> row = null;
-		System.out.println("Query"+this.query);
+		//System.out.println("Query"+this.query);
 		try 
 		{
 			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
@@ -139,37 +139,28 @@ public class DatabaseOperation
 	}*/
 	
 	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException, SQLException
-	{
-		//System.out.println("row in --------dbop"+row);
-		
-		//System.out.println("Metadata in --------dbop"+rs.getMetaData());
+	{		
 		Statement stmt = null;
 		ResultSet rs = null;
 		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
 	    rs =    stmt.executeQuery(this.query);
-			rs.first();
-			ResultSetMetaData meta = rs.getMetaData();
-		    int rowIterator = 1;
-			do
-			{
-				if(rowNumber == rowIterator)
-			    {
-					for (int i = 1; i <= meta.getColumnCount(); i++) 
-					{  
-						
-				       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
-				    }
-					rs.updateRow();
-			    } 
-			 
-			    rowIterator++;
-			 }while (rs.next());	
-		//}	
-		
-	//	catch (SQLException e) 
-	//	{
-		//	throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);
-		//}
+		rs.first();
+		ResultSetMetaData meta = rs.getMetaData();
+	    int rowIterator = 1;
+		do
+		{
+			if(rowNumber == rowIterator)
+		    {
+				for (int i = 1; i <= meta.getColumnCount(); i++) 
+				{  
+					
+			       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
+			    }
+				rs.updateRow();
+		    } 
+		 
+		    rowIterator++;
+		 }while (rs.next());	
 	}
 	
 	

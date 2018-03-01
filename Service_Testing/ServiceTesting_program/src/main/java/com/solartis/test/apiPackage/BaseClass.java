@@ -49,7 +49,6 @@ public class BaseClass
 				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 				request.StringToFile(sampleInput.FileToString());
-				System.out.println(config.getProperty("InputColumn")+"--"+rowInputColVerify);
 				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
@@ -115,6 +114,7 @@ public class BaseClass
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
 	}

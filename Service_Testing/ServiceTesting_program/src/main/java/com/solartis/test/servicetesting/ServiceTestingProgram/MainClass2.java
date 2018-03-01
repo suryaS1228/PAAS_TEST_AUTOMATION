@@ -149,8 +149,6 @@ public class MainClass2
 				else//INPUT AND OUT DB TABLE ARE DIFFERENT
 				{
 					outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-					System.out.println("outputrow"+"----"+outputrow);
-					System.out.println(RowIterator);
 					OutputTable.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA									
 				}
 			} 
