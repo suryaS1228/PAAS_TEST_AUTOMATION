@@ -2,9 +2,15 @@ package com.solartis.test.apiPackage;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +21,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -323,7 +333,7 @@ public class BaseClass
 
 	}
 	protected String excelreportlocation;
-	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException
+	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
 		DatabaseOperation db=new DatabaseOperation();
 		Date date = new Date();
@@ -356,6 +366,8 @@ public class BaseClass
 		 }
 		 ob.refresh();
 		ob.saveAs(excelreportlocation1);
+		
+		this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation, "TestCases");
 	}
 	
 	public void Report (PropertiesHandle config) throws APIException
@@ -403,4 +415,68 @@ public class BaseClass
 		}
 	}
 	
+	
+	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		DatabaseOperation db=new DatabaseOperation();
+		ResultSet rs=null;
+		HSSFWorkbook workBook=null;
+		HSSFSheet sheet =null;
+	    rs=db.GetQueryResultsSet(Query);
+	    File file = new File(FileToExport);
+	    if(!file.exists())                               //Creation of Workbook and Sheet
+	    {
+	    	workBook =new HSSFWorkbook();
+	    }
+	    else
+	    {
+	    	workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+	    }
+        sheet = workBook.createSheet(Sheet);
+                                                         //import columns to Excel
+		ResultSetMetaData metaData=rs.getMetaData();
+		int columnCount=metaData.getColumnCount();
+		ArrayList<String> columns = new ArrayList<String>();
+		for (int i = 1; i <= columnCount; i++) 
+		{
+		      String columnName = metaData.getColumnName(i);
+		      columns.add(columnName);
+		}
+		    
+		HSSFRow row = sheet.createRow(0);
+		int  Fieldcol=0; 
+		for (String columnName : columns) 
+		{
+		      row.createCell(Fieldcol).setCellValue(columnName);
+		      System.out.println(columnName);
+		      Fieldcol++;
+		}
+                                                            //import column values to Excel	
+		int ValueRow=1;
+		do
+		 {
+		    int Valuecol=0;
+			HSSFRow valrow = sheet.createRow(ValueRow);
+	          for (String columnName : columns)
+	           {
+	            String value = rs.getString(columnName);
+	            valrow.createCell(Valuecol).setCellValue(value);
+	            Valuecol++;
+	           }
+	         ValueRow++;
+	     } while (rs.next());
+		                                                    //Save the Details and close the File
+		try
+	     {
+	          FileOutputStream out = new FileOutputStream(FileToExport);
+	          workBook.write(out);
+	          out.close();
+	          System.out.println("first_excel.xls written successfully on disk.");
+	      } 
+	      catch (Exception e) 
+	      {
+	          e.printStackTrace();
+	      }
+		
+	}
 }

@@ -91,7 +91,7 @@ public class PropertiesHandle extends Properties
 			this.put("OutputCondColumn", "OutputColumnCondtn");
 			this.put("ExpectedColumn", "ExpectedColumn");
 			this.put("StatusColumn", "StatusColumn");
-			this.put("request_query", "SELECT * FROM ConditionInputTable_LDWC_Rating");
+			//this.put("request_query", "SELECT * FROM ConditionInputTable_LDWC_Rating");
 			this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
 			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
 			this.put("db_username", this.RdmsValue("DB_UserName"));
@@ -101,6 +101,7 @@ public class PropertiesHandle extends Properties
 			this.put("Project",Project );
 			this.put("API",Api );
 			this.put("ExecutionName", ExecutionName);
+			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("InputTable")+" INNER JOIN OUTPUT_DTC_Rating_SinglePlan on INPUT_DTC_Rating_SinglePlan.Testdata=OUTPUT_DTC_Rating_SinglePlan.testdata WHERE INPUT_DTC_Rating_SinglePlan.Flag_for_execution='Completed'");
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}

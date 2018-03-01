@@ -258,6 +258,7 @@ public class MainClass
 	    {
 			base.generateChart(config);
 			base.Report(config);
+			
 	    }   
 		DatabaseOperation.CloseConn();
 		}

@@ -1,13 +1,22 @@
 package com.solartis.test.util.common;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 
@@ -177,6 +186,97 @@ public class DatabaseOperation
 		{
 			throw new DatabaseException("PROBLEM WITH UPDATE ROW IN DB", e);
 		}
+	}
+	
+	public ResultSet GetQueryResultsSet(String query) throws DatabaseException
+	{
+		this.query = query;
+		try 
+		{
+			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+		    rs =    stmt.executeQuery(this.query);
+		    rs.first();
+		} 
+		catch (SQLException e) 
+		{
+			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB",e);
+		}
+		return rs;
+	}
+	
+	
+	public static void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		DatabaseOperation db=new DatabaseOperation();
+		ResultSet rs=null;
+		HSSFWorkbook workBook=null;
+		HSSFSheet sheet =null;
+	    rs=db.GetQueryResultsSet(Query);
+	    File file = new File(FileToExport);
+	    if(!file.exists())                               //Creation of Workbook and Sheet
+	    {
+	    	workBook =new HSSFWorkbook();
+	    }
+	    else
+	    {
+	    	workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+	    }
+        sheet = workBook.createSheet(Sheet);
+                                                         //import columns to Excel
+		ResultSetMetaData metaData=rs.getMetaData();
+		int columnCount=metaData.getColumnCount();
+		ArrayList<String> columns = new ArrayList<String>();
+		for (int i = 1; i <= columnCount; i++) 
+		{
+		      String columnName = metaData.getColumnName(i);
+		      columns.add(columnName);
+		}
+		    
+		HSSFRow row = sheet.createRow(0);
+		int  Fieldcol=0; 
+		for (String columnName : columns) 
+		{
+		      row.createCell(Fieldcol).setCellValue(columnName);
+		      System.out.println(columnName);
+		      Fieldcol++;
+		}
+                                                            //import column values to Excel	
+		int ValueRow=1;
+		do
+		 {
+		    int Valuecol=0;
+			HSSFRow valrow = sheet.createRow(ValueRow);
+	          for (String columnName : columns)
+	           {
+	            String value = rs.getString(columnName);
+	            valrow.createCell(Valuecol).setCellValue(value);
+	            Valuecol++;
+	           }
+	         ValueRow++;
+	     } while (rs.next());
+		                                                    //Save the Details and close the File
+		try
+	     {
+	          FileOutputStream out = new FileOutputStream(FileToExport);
+	          workBook.write(out);
+	          out.close();
+	          System.out.println("first_excel.xls written successfully on disk.");
+	      } 
+	      catch (Exception e) 
+	      {
+	          e.printStackTrace();
+	      }
+		
+	}
+	
+	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
+		String Query="SELECT * FROM INPUT_DTC_Rating_SinglePlan INNER JOIN OUTPUT_DTC_Rating_SinglePlan on INPUT_DTC_Rating_SinglePlan.Testdata=OUTPUT_DTC_Rating_SinglePlan.testdata WHERE INPUT_DTC_Rating_SinglePlan.Flag_for_execution='Completed'";
+		String File="E://first_excel.xls";
+		String Sheet="Sheet2";
+		DatabaseOperation.ExportToExcelTable(Query,File,Sheet);
+		
 	}
 	
 }
