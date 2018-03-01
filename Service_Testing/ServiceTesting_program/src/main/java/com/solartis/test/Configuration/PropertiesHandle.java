@@ -103,7 +103,8 @@ public class PropertiesHandle extends Properties
 			this.put("ExecutionName", ExecutionName);
 			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("InputTable")+" INNER JOIN "+ this.RdmsValue("OutputTable")+" on "+this.RdmsValue("InputTable")+".Testdata="+this.RdmsValue("OutputTable")+".testdata WHERE "+this.RdmsValue("InputTable")+".Flag_for_execution='Completed'");
 			this.put("inputTable", this.RdmsValue("InputTable"));
-			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty(ExecutionName)+".xls");
+			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
+			
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}
