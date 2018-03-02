@@ -60,7 +60,7 @@ public class MainClass
 	public static LinkedHashMap<String, String> outputrow;
 	public static HashMap<Object,Object> result;
 	public static Connection Conn=null;  //added
-	public DatabaseOperation db=null;
+	public static DatabaseOperation db=null;
 	@BeforeTest
 	public void loadconfig() throws DatabaseException, PropertiesHandleException, ClassNotFoundException, IOException, SQLException, POIException
 	{
@@ -70,6 +70,7 @@ public class MainClass
 		Conn=DatabaseOperation.ConnectionSetup(config);
 	    db=new DatabaseOperation();
 	    db.truncateTable(config.getProperty("inputTable"));
+	    db.truncateTable(config.getProperty("outputTable"));
 		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
 		actualchoice = config.getProperty("actual");
 		statuschoice = config.getProperty("status");
@@ -130,6 +131,7 @@ public class MainClass
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
+									db.insetRowWithSNO(config.getProperty("outputTable"),Integer.parseInt(inputrow.get("S_NO")),inputrow.get("Testdata"));
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
@@ -147,6 +149,7 @@ public class MainClass
 								}
 								else
 								{
+									
 									outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								    
 									output.UpdateRow(RowIterator, outputrow);

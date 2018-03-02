@@ -289,7 +289,6 @@ public class DatabaseOperation
 		String sql=null;
 		DatabaseOperation db=new DatabaseOperation();
 		
-		//xl.readExcel();
 		xl.getsheets(SheetName);
 		int n=xl.getTotColumns();
 		int noOfRows=xl.getTotRows();
@@ -354,11 +353,20 @@ public class DatabaseOperation
 		stmt.executeUpdate(query);
 	}
 	
+	public void insetRowWithSNO(String tablename,int S_NO,String TestdataName) throws SQLException
+	{
+		stmt = conn.createStatement();
+		String query="insert into "+tablename+"(S_NO,testdata)values('"+S_NO+"','"+TestdataName+"')";
+		System.out.println(query);
+		stmt.executeUpdate(query);
+	}
+	
 	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
 	{
 		Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
 	    DatabaseOperation db=new DatabaseOperation();
-	    db.truncateTable("INPUT_DTC_Rating_SinglePlan");
+	   // db.truncateTable("INPUT_DTC_Rating_SinglePlan");
+	    db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan", 10,"sasi");
 		//DatabaseOperation.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"DTC_Rating","Sheet1","Import");
 
 		
