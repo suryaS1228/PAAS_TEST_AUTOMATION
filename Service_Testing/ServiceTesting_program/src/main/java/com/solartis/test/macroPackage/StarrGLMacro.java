@@ -166,7 +166,7 @@ public class StarrGLMacro implements MacroInterface
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 		configTable.GetDataObjects(configFile.getProperty("config_query"));
-		excel.refresh();
+		//excel.refresh();
 		do
 		{
 			
