@@ -10,24 +10,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import com.solartis.test.util.common.ExcelOperationsPOI;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -72,6 +67,7 @@ public class MainClass
 	    db.truncateTable(config.getProperty("inputTable"));
 	    db.truncateTable(config.getProperty("outputTable"));
 		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
+		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("outputTable"), "Sheet2", "Import");
 		actualchoice = config.getProperty("actual");
 		statuschoice = config.getProperty("status");
 		outputtablechoice = config.getProperty("output_in_same_table");
@@ -131,7 +127,7 @@ public class MainClass
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
-									db.insetRowWithSNO(config.getProperty("outputTable"),Integer.parseInt(inputrow.get("S_NO")),inputrow.get("Testdata"));
+									//db.insetRowWithSNO(config.getProperty("outputTable"),Integer.parseInt(inputrow.get("S_NO")),inputrow.get("Testdata"));
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
@@ -210,7 +206,6 @@ public class MainClass
 				 combined[rowIterator][0] = rowIterator+1;
 				 combined[rowIterator][1] = inputtablerowobject;
 				 combined[rowIterator][2] = outputtablerowobject;
-				 
 				 rowIterator++;
 			}  
 		 
