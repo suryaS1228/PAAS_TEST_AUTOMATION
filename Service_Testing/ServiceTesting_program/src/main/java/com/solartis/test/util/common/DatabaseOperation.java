@@ -213,7 +213,7 @@ public class DatabaseOperation
 	{
 		this.query=query;
 		 stmt = conn.createStatement();
-		 System.out.println(this.query);
+		 //System.out.println(this.query);
 		 stmt.execute(this.query);
 	}
 	
@@ -249,7 +249,7 @@ public class DatabaseOperation
 		for (String columnName : columns) 
 		{
 		      row.createCell(Fieldcol).setCellValue(columnName);
-		      System.out.println(columnName);
+		      //System.out.println(columnName);
 		      Fieldcol++;
 		}
                                                             //import column values to Excel	
@@ -294,7 +294,7 @@ public class DatabaseOperation
 		int noOfRows=xl.getTotRows();
 		int s=xl.getfirstRowNo();
 		
-		System.out.println("no of rows"+n+"first row no"+s);
+		//System.out.println("no of rows"+n+"first row no"+s);
 		String[] Columns=new String[n];
 		String insertString="";
 		String values="";
@@ -306,27 +306,27 @@ public class DatabaseOperation
 			insertString=insertString+xl.read_data(1,i)+",";
 			values=values+"?,";
 		}
-		System.out.println(insertString.substring(0,(insertString.length()-1)));
-		System.out.println(String.join(",", Columns));
-		System.out.println(values.substring(0,(values.length()-1)));
+		//System.out.println(insertString.substring(0,(insertString.length()-1)));
+		//System.out.println(String.join(",", Columns));
+		//System.out.println(values.substring(0,(values.length()-1)));
 		String ColumnString=String.join(",", Columns);
 		String insertStrings=insertString.substring(0,(insertString.length()-1));
 		String ValueStrings=values.substring(0,(values.length()-1));
 		if(Operation.equalsIgnoreCase("CREATE"))
 		{
 			sql = "CREATE TABLE "+ tableName +"("+ColumnString+")";
-			System.out.println(sql);
+			//System.out.println(sql);
 			db.createTable(sql);
 		}
 		else if(Operation.equalsIgnoreCase("ALTER"))
 		{
 			sql= "ALTER TABLE "+ tableName +" ADD ("+ColumnString+")";
-			System.out.println(sql);
+			//System.out.println(sql);
 			db.createTable(sql);
 		}
 		else
 		{
-			System.out.println("Operation not Performed");
+			System.out.println("Db Operation not Performed");
 		}
 		
 		for(int row=2;row<=noOfRows;row++)
@@ -334,7 +334,7 @@ public class DatabaseOperation
 			String sql1 = "INSERT INTO "+ tableName+"("+insertStrings+")"+" VALUES("+ValueStrings+")";
 			
 			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
-			System.out.println(sql1);
+			//System.out.println(sql1);
 			for(int col=0;col<n;col++)
 			{
 				insertStatement.setString(col+1,xl.readData(row, col).toString()); 
@@ -349,7 +349,7 @@ public class DatabaseOperation
 	{
 		stmt = conn.createStatement();
 		String query="TRUNCATE "+tablename;
-		System.out.println(query);
+		//System.out.println(query);
 		stmt.executeUpdate(query);
 	}
 	
@@ -357,7 +357,7 @@ public class DatabaseOperation
 	{
 		stmt = conn.createStatement();
 		String query="insert into "+tablename+"(S_NO,testdata)values('"+S_NO+"','"+TestdataName+"')";
-		System.out.println(query);
+		//System.out.println(query);
 		stmt.executeUpdate(query);
 	}
 	
