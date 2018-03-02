@@ -294,7 +294,6 @@ public class DatabaseOperation
 		int noOfRows=xl.getTotRows();
 		int s=xl.getfirstRowNo();
 		
-		//System.out.println("no of rows"+n+"first row no"+s);
 		String[] Columns=new String[n];
 		String insertString="";
 		String values="";
@@ -353,12 +352,13 @@ public class DatabaseOperation
 		stmt.executeUpdate(query);
 	}
 	
-	public void insetRowWithSNO(String tablename,int S_NO,String TestdataName) throws SQLException
+	public void insetRowWithSNO(String OutputTableName,String inputTableName) throws SQLException
 	{
 		stmt = conn.createStatement();
-		String query="insert into "+tablename+"(S_NO,testdata)values('"+S_NO+"','"+TestdataName+"')";
-		//System.out.println(query);
-		stmt.executeUpdate(query);
+		//String query="insert into "+tablename+"(S_NO,testdata)values('"+S_NO+"','"+TestdataName+"')";
+		String query1 ="INSERT INTO "+OutputTableName+" (`S_No`,`Testdata`,`Flag_for_execution`) SELECT `S_No`,`Testdata`,`Flag_for_execution` FROM "+inputTableName;
+		System.out.println(query1);
+		stmt.executeUpdate(query1);
 	}
 	
 	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
@@ -366,7 +366,7 @@ public class DatabaseOperation
 		Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
 	    DatabaseOperation db=new DatabaseOperation();
 	   // db.truncateTable("INPUT_DTC_Rating_SinglePlan");
-	    db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan", 10,"sasi");
+	    db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan","INPUT_DTC_Rating_SinglePlan");
 		//DatabaseOperation.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"DTC_Rating","Sheet1","Import");
 
 		

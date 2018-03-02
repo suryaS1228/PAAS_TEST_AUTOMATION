@@ -279,7 +279,7 @@ public class MainClass
 		    db.truncateTable(config.getProperty("inputTable"));
 		    db.truncateTable(config.getProperty("outputTable"));
 			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
-			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("outputTable"), "Sheet2", "Import");
+			db.insetRowWithSNO(config.getProperty("outputTable"), config.getProperty("inputTable"));
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("request_location"));
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
