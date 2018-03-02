@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Map.Entry;
@@ -68,10 +70,10 @@ public class PropertiesHandle extends Properties
 			}
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
-			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Request/");
-			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Response/");
+			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Request/");
+			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Response/");
 			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
-			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/RatingModelResult/");
+			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/Results/RatingModelResult/");
 			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
 			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
 			this.put("test_url", this.RdmsValue("URL"));	
@@ -96,7 +98,7 @@ public class PropertiesHandle extends Properties
 			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
 			this.put("db_username", this.RdmsValue("DB_UserName"));
 			this.put("db_password", this.RdmsValue("DB_Password"));
-			this.put("report_location", this.RdmsValue("RootFolder") + "/" + Project + "/" +  "Report/");		 
+			this.put("report_location", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Results/AnalysisReport/");		 
 			this.put("report_template_location", this.RdmsValue("RootFolder") + "/ReportTemplate/");
 			this.put("Project",Project );
 			this.put("API",Api );
@@ -105,7 +107,10 @@ public class PropertiesHandle extends Properties
 			this.put("inputTable", this.RdmsValue("InputTable"));
 			this.put("outputTable", this.RdmsValue("OutputTable"));
 			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
-			
+			this.put("ZipFolderPath", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Results/");
+			Date date = new Date();
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
 			this.InputQuery();
 		    DatabaseOperation.CloseConn();		 
 		}

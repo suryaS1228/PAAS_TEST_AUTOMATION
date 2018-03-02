@@ -34,6 +34,7 @@ import com.solartis.test.listener.FireEventAPI;
 import com.solartis.test.listener.Listener;
 import com.solartis.test.listener.LogListener;
 import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.DirectoryManipulation;
 
 public class MainClass 
 {
@@ -63,11 +64,6 @@ public class MainClass
 		disableSslVerification();
 		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
 		Conn=DatabaseOperation.ConnectionSetup(config);
-	    db=new DatabaseOperation();
-	    db.truncateTable(config.getProperty("inputTable"));
-	    db.truncateTable(config.getProperty("outputTable"));
-		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
-		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("outputTable"), "Sheet2", "Import");
 		actualchoice = config.getProperty("actual");
 		statuschoice = config.getProperty("status");
 		outputtablechoice = config.getProperty("output_in_same_table");
@@ -264,6 +260,9 @@ public class MainClass
 			base.Report(config);
 			
 	    }   
+		//System.out.println(config.getProperty("OverallResults"));
+		//System.out.println(config.getProperty("ZipFolderPath"));
+		DirectoryManipulation.zipFolder(config.getProperty("ZipFolderPath"), config.getProperty("OverallResults"));
 		
 		DatabaseOperation.CloseConn();
 		}
@@ -273,6 +272,19 @@ public class MainClass
 		}
 	}
 	
-	
+	public void beforeTesting() throws SQLException, ClassNotFoundException, IOException, POIException
+	{
+		    db=new DatabaseOperation();
+		    db.truncateTable(config.getProperty("inputTable"));
+		    db.truncateTable(config.getProperty("outputTable"));
+			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
+			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("outputTable"), "Sheet2", "Import");
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("request_location"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));
+			
+			
+	}
 	
 }
