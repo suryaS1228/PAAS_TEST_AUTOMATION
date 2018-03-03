@@ -334,7 +334,6 @@ public class DatabaseOperation
 		else
 		{
 			dataRow=1;
-			System.out.println("Db Operation not Performed");
 		}
 		ValueStrings=values.substring(0,(values.length()-1));
 

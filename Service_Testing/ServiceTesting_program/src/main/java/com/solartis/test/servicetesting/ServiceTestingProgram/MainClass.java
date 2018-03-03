@@ -80,7 +80,7 @@ public class MainClass
 			fireEventAPI.addListener(listener);
 		    
 		} 
-		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException | SQLException e) 
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
 			e.printStackTrace();
 			System.out.println("Error in Selecting API");
@@ -274,8 +274,10 @@ public class MainClass
 		}
 	}
 	
-	public void beforeTesting() throws SQLException, ClassNotFoundException, IOException, POIException
+	public void beforeTesting() throws POIException
 	{
+		try
+		{
 		    db=new DatabaseOperation();
 		    db.truncateTable(config.getProperty("inputTable"));
 		    db.truncateTable(config.getProperty("outputTable"));
@@ -285,7 +287,11 @@ public class MainClass
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
 			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));
-			
+		}
+		catch(SQLException | ClassNotFoundException | IOException e)
+		{
+			e.printStackTrace();
+		}
 			
 	}
 	
