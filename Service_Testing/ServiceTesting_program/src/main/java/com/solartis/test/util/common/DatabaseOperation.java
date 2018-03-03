@@ -297,43 +297,52 @@ public class DatabaseOperation
 		String[] Columns=new String[n];
 		String insertString="";
 		String values="";
+		
 		for(int i=s;i<n;i++)
 		{
+			if(Operation.equalsIgnoreCase("CREATE"))
+			{
 			String str1=xl.readData(1,i).toString();
 			String str2=xl.readData(0,i).toString();
 			Columns[i]=str1+" "+str2;
+			
 			insertString=insertString+xl.read_data(1,i)+",";
+			}
+			else
+			{
+				insertString=insertString+xl.read_data(0,i)+",";
+			}
 			values=values+"?,";
 		}
-		//System.out.println(insertString.substring(0,(insertString.length()-1)));
-		//System.out.println(String.join(",", Columns));
-		//System.out.println(values.substring(0,(values.length()-1)));
+		
 		String ColumnString=String.join(",", Columns);
 		String insertStrings=insertString.substring(0,(insertString.length()-1));
-		String ValueStrings=values.substring(0,(values.length()-1));
+		String ValueStrings=null;
+		int dataRow;
 		if(Operation.equalsIgnoreCase("CREATE"))
 		{
+			dataRow=2;
 			sql = "CREATE TABLE "+ tableName +"("+ColumnString+")";
-			//System.out.println(sql);
 			db.createTable(sql);
 		}
 		else if(Operation.equalsIgnoreCase("ALTER"))
 		{
+			dataRow=2;
 			sql= "ALTER TABLE "+ tableName +" ADD ("+ColumnString+")";
-			//System.out.println(sql);
 			db.createTable(sql);
 		}
 		else
 		{
+			dataRow=1;
 			System.out.println("Db Operation not Performed");
 		}
-		
-		for(int row=2;row<=noOfRows;row++)
+		ValueStrings=values.substring(0,(values.length()-1));
+
+		for(int row=dataRow;row<=noOfRows;row++)
 		{
 			String sql1 = "INSERT INTO "+ tableName+"("+insertStrings+")"+" VALUES("+ValueStrings+")";
 			
 			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
-			//System.out.println(sql1);
 			for(int col=0;col<n;col++)
 			{
 				insertStatement.setString(col+1,xl.readData(row, col).toString()); 
@@ -348,26 +357,24 @@ public class DatabaseOperation
 	{
 		stmt = conn.createStatement();
 		String query="TRUNCATE "+tablename;
-		//System.out.println(query);
 		stmt.executeUpdate(query);
 	}
 	
 	public void insetRowWithSNO(String OutputTableName,String inputTableName) throws SQLException
 	{
 		stmt = conn.createStatement();
-		//String query="insert into "+tablename+"(S_NO,testdata)values('"+S_NO+"','"+TestdataName+"')";
 		String query1 ="INSERT INTO "+OutputTableName+" (`S_No`,`Testdata`,`Flag_for_execution`) SELECT `S_No`,`Testdata`,`Flag_for_execution` FROM "+inputTableName;
-		System.out.println(query1);
 		stmt.executeUpdate(query1);
 	}
 	
+	
 	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
 	{
-		Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
-	    DatabaseOperation db=new DatabaseOperation();
+		//Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
+	    //DatabaseOperation db=new DatabaseOperation();
 	   // db.truncateTable("INPUT_DTC_Rating_SinglePlan");
-	    db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan","INPUT_DTC_Rating_SinglePlan");
-		//DatabaseOperation.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"DTC_Rating","Sheet1","Import");
+	    //db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan","INPUT_DTC_Rating_SinglePlan");
+		//db.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"INPUT_DTC_Rating_SinglePlan","Sheet1","Import");
 
 		
 	}
