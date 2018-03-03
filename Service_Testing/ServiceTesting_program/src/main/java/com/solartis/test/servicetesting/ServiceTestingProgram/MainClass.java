@@ -58,30 +58,31 @@ public class MainClass
 	public static Connection Conn=null;  //added
 	public static DatabaseOperation db=null;
 	@BeforeTest
-	public void loadconfig() throws DatabaseException, PropertiesHandleException, ClassNotFoundException, IOException, SQLException, POIException
+	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
 	{
-		System.setProperty("jsse.enableSNIExtension", "false");
-		disableSslVerification();
-		config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
-		Conn=DatabaseOperation.ConnectionSetup(config);
-	    this.beforeTesting();
-		actualchoice = config.getProperty("actual");
-		statuschoice = config.getProperty("status");
-		outputtablechoice = config.getProperty("output_in_same_table");
-		String classname = config.getProperty("ClassName");
-		
 		try 
 		{
+			System.setProperty("jsse.enableSNIExtension", "false");
+			disableSslVerification();
+			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
+			Conn=DatabaseOperation.ConnectionSetup(config);
+		    this.beforeTesting();
+			actualchoice = config.getProperty("actual");
+			statuschoice = config.getProperty("status");
+			outputtablechoice = config.getProperty("output_in_same_table");
+			String classname = config.getProperty("ClassName");
+			
 			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
 			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
-		    api = (API) cons.newInstance(config);
-		    fireEventAPI = new FireEventAPI(api);
-		    Listener listener = new LogListener();
-		    fireEventAPI.addListener(listener);
+			api = (API) cons.newInstance(config);
+			fireEventAPI = new FireEventAPI(api);
+			Listener listener = new LogListener();
+			fireEventAPI.addListener(listener);
 		    
 		} 
-		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException | SQLException e) 
 		{
+			e.printStackTrace();
 			System.out.println("Error in Selecting API");
 		}
 	} 
