@@ -1,9 +1,107 @@
+<#assign AdditionalInsuredActionArray=[]><#list AdditionalInsuredAction as x><#assign AdditionalInsuredActionArray=AdditionalInsuredActionArray+[x.value]></#list>
+<#assign AdditionalInsuredNumberArray=[]><#list AdditionalInsuredNumber as x><#assign AdditionalInsuredNumberArray=AdditionalInsuredNumberArray+[x.value]></#list>
+<#assign AdditionalInsuredTypeArray=[]><#list AdditionalInsuredType as x><#assign AdditionalInsuredTypeArray=AdditionalInsuredTypeArray+[x.value]></#list>
 {
   "ServiceRequestDetail": {
   <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
   </#list>
 	},
   "RepeatedAttributeListDetail": [
+      {
+      "Key": "ISO::BOP::AdditionalInsuredList",
+      "AttributeDetailList": [
+        {
+        <#assign i=0>
+        <#list 1..NoOfAdditionalInsured[0] as result>
+          "RepeatedAttributeDetail": [
+            {
+              "Key": "ISO::BOP::AdditionalInsuredDetails",
+              "AttributeDetailList": [
+                {
+                  "AttributeDetail": [
+                 	{
+                      "Value": "${AdditionalInsuredActionArray[i]}",
+                      "Key": "ISO::BOP::AdditionalInsured::Action"
+                    },
+                    {
+                      "Value": "${AdditionalInsuredNumberArray[i]}",
+                      "Key": "ISO::BOP::AdditionalInsured::Number"
+                    },
+                    {
+                      "Value": "Apartment and Office",
+                      "Key": "ISO::BOP::TypeRisk"
+                    },
+                    {
+                      "Value": "Product",
+                      "Key": "ISO::BOP::AdditionalInsured::YourProducts"
+                    },
+                    {
+                      "Value": "Desc",
+                      "Key": "ISO::BOP::AdditionalInsured::DescOfLeasedEquipment"
+                    },
+                    {
+                      "Value": "FirstName",
+                      "Key": "ISO::BOP::AdditionalInsured::Name"
+                    },
+                    {
+                      "Value": "DescOfProp",
+                      "Key": "ISO::BOP::AdditionalInsured::DescOfProperty"
+                    },
+                    {
+                      "Value": "123",
+                      "Key": "ISO::BOP::AdditionalInsured::AddressLine1"
+                    },
+                    {
+                      "Value": "aaa",
+                      "Key": "ISO::BOP::AdditionalInsured::AddressLine2"
+                    },
+                    {
+                      "Value": "54321",
+                      "Key": "ISO::BOP::AdditionalInsured::ZipCode"
+                    },
+                    {
+                      "Value": "aaa",
+                      "Key": "ISO::BOP::AdditionalInsured::City"
+                    },
+                    {
+                      "Value": "aaa",
+                      "Key": "ISO::BOP::AdditionalInsured::County"
+                    },
+                    {
+                      "Value": "AZ",
+                      "Key": "ISO::BOP::AdditionalInsured::State"
+                    },
+                    {
+                      "Value": "LocAndDesc",
+                      "Key": "ISO::BOP::AdditionalInsured::LocAndDescOfCompOperations"
+                    },
+                    {
+                      "Value": "B",
+                      "Key": "ISO::BOP::COI::Description"
+                    },
+                    {
+                      "Value": "B",
+                      "Key": "ISO::BOP::LossPayableApplicableClause"
+                    },
+                    {
+                      "Value": "71837",
+                      "Key": "ISO::BOP::AdditionalInsured::PassBuilding::ZipCode"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "AttributeDetail": [
+            {
+              "Value": "${AdditionalInsuredTypeArray[i]}",
+              "Key": "ISO::BOP::AdditionalInsuredType"
+            }
+          ]<#assign i=i+1>
+           </#list>
+        }
+      ]
+    },
     {
       "Key": "ISO::BOP::ClaimsList",
       "AttributeDetailList": [
@@ -238,7 +336,7 @@
 	    <#list QuoteInformation as result>
 	    {
 	    	"Key" : "${result.atrib}",
-	    	"Value" : "<#if result.value??><#else>${result.value}</#if>"
+	    	"Value" : "${result.value}"
 	    }<#if result?is_last><#else>,</#if>
 	  </#list>
  	 ]

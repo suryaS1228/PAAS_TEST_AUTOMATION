@@ -11,7 +11,6 @@ import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -370,6 +369,7 @@ public class BaseClass
 		this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "TestCases");
 	}
 	
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void Report (PropertiesHandle config) throws APIException
 	{
 		
@@ -416,6 +416,7 @@ public class BaseClass
 	}
 	
 	
+	@SuppressWarnings("resource")
 	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
 	{
 		

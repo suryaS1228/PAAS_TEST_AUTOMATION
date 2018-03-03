@@ -9,13 +9,12 @@ import com.solartis.test.util.api.DBColoumnVerify;
 
 public class IsoBopEndorsement extends BaseClass implements API 
 {
-		public IsoBopEndorsement(PropertiesHandle config) throws SQLException
-		{
-			this.config = config;
-			jsonElements = new LinkedHashMap<String, String>();
-
-			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		}
+	public IsoBopEndorsement(PropertiesHandle config) throws SQLException
+	{
+		this.config = config;
+		jsonElements = new LinkedHashMap<String, String>();
+		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
+		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+	}
 }
