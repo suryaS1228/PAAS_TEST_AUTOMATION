@@ -409,7 +409,7 @@ public class ExcelOperationsPOI
 	
 	public String readData(int row,int column)
 	{
-		System.out.println("row----------"+row+"Col-----"+column);
+		//System.out.println("row----------"+row+"Col-----"+column);
 		cell=this.worksheet.getRow(row).getCell(column);
 		if(cell==null)
 		{
