@@ -161,7 +161,7 @@ public class PropertiesHandle extends Properties
 					LinkedHashMap<String, String> rowRdmsQueryWithCustomSortPriority = entry.getValue();
 					queryresult = rowRdmsQueryWithCustomSortPriority.get(OutputColoumn);
 				}
-				return "SELECT * FROM " + queryresult + " WHERE (" + queryresult + ".Priority = 'high' OR " + queryresult + ".Priority = 'low' or " + queryresult + ".Priority = 'medium') ORDER BY ( " + queryresult + ".`S.No`)";//".Priority ,'high','medium','low')";	
+				return "SELECT * FROM " + queryresult + " WHERE (" + queryresult + ".Priority = 'high' OR " + queryresult + ".Priority = 'low' or " + queryresult + ".Priority = 'medium') ORDER BY ( " + queryresult + ".`S_No`)";//".Priority ,'high','medium','low')";	
 			} 
 			catch (DatabaseException e)
 			{
