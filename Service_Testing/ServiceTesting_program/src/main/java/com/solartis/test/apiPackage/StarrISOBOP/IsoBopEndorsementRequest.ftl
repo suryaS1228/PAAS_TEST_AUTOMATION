@@ -1,6 +1,7 @@
 <#assign AdditionalInsuredActionArray=[]><#list AdditionalInsuredAction as x><#assign AdditionalInsuredActionArray=AdditionalInsuredActionArray+[x.value]></#list>
 <#assign AdditionalInsuredNumberArray=[]><#list AdditionalInsuredNumber as x><#assign AdditionalInsuredNumberArray=AdditionalInsuredNumberArray+[x.value]></#list>
 <#assign AdditionalInsuredTypeArray=[]><#list AdditionalInsuredType as x><#assign AdditionalInsuredTypeArray=AdditionalInsuredTypeArray+[x.value]></#list>
+<#assign NoOfAdditionalInsuredArray=[]><#list NoOfAdditionalInsured as x><#assign NoOfAdditionalInsuredArray=NoOfAdditionalInsuredArray+[x.value]></#list>
 {
   "ServiceRequestDetail": {
   <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
@@ -10,9 +11,9 @@
       {
       "Key": "ISO::BOP::AdditionalInsuredList",
       "AttributeDetailList": [
-        {
         <#assign i=0>
-        <#list 1..NoOfAdditionalInsured[0] as result>
+        <#list 1..NoOfAdditionalInsuredArray[0] as result>
+        {
           "RepeatedAttributeDetail": [
             {
               "Key": "ISO::BOP::AdditionalInsuredDetails",
@@ -97,9 +98,9 @@
               "Value": "${AdditionalInsuredTypeArray[i]}",
               "Key": "ISO::BOP::AdditionalInsuredType"
             }
-          ]<#assign i=i+1>
+          ]
+        }<#if result?is_last><#else>,</#if><#assign i=i+1>
            </#list>
-        }
       ]
     },
     {
