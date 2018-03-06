@@ -9,13 +9,16 @@
 <#assign ScheduleRatingFactorarray=[]><#list ScheduleRatingFactor as x><#assign ScheduleRatingFactorarray=ScheduleRatingFactorarray+[x.value]></#list>
 <#assign ProviderClassarray=[]><#list ProviderClass as x><#assign ProviderClassarray=ProviderClassarray+[x.value]></#list>
 <#assign numofProviderarray=[]><#list numofProvider as x><#assign numofProviderarray=numofProviderarray+[x.value]></#list>
+<#assign MeetsStudentQualificationarray=[]><#list MeetsStudentQualification as x><#assign MeetsStudentQualificationarray=MeetsStudentQualificationarray+[x.value]></#list>
+
 <#assign i=0>
 {
   "Policy": {
   	"Provider": [
   	<#list 1..numofProviderarray[0] as result>
       {
-      	"ProviderDetail": {
+      	"ProviderDetail":
+      	 {
       	  "HoursWorkPerWeek": "${HoursWorkPerWeekarray[i]}",
           "ProfessionalAssociation": "${ProfessionalAssociationarray[i]}",
           "MiddleInitial": "${MiddleInitialarray[i]}",
@@ -25,8 +28,13 @@
           "YearsOfPolicy": "${YearsOfPolicyarray[i]}",
           "LastName": "${LastNamearray[i]}",
           "ScheduleRatingFactor": "${ScheduleRatingFactorarray[i]}",
-          "ProviderClass": "${ProviderClassarray[i]}"
-      	}
+          "ProviderClass": "${ProviderClassarray[i]}",
+          "MeetsStudentQualification": "${MeetsStudentQualificationarray[i]}",
+          "UseofWrittenContractsFactor": "5",
+          "TrainingorEducationFactor": "5",
+          "ProfessionalReputationFactor": "5",
+          "NatureofOperationsFactor": "5"
+        }
       }
       <#assign i=i+1><#if i=numofProviderarray[0]><#else>,</#if>
       </#list>
