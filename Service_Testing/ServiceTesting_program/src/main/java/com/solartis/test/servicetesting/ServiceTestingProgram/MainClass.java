@@ -64,9 +64,12 @@ public class MainClass
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
 			disableSslVerification();
-			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"));
+			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
 			Conn=DatabaseOperation.ConnectionSetup(config);
-		    this.beforeTesting();
+			if(config.getProperty("ModeofExecution").equalsIgnoreCase("New"))
+			{
+		     this.beforeTesting();
+			}
 			actualchoice = config.getProperty("actual");
 			statuschoice = config.getProperty("status");
 			outputtablechoice = config.getProperty("output_in_same_table");

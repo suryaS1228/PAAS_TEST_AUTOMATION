@@ -32,10 +32,10 @@ public class PropertiesHandle extends Properties
 	protected String priority;
 	protected String queryresult;
 	protected String ExecutionName;
-
+    protected String ModeofExecution;
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority,String ExecutionName) throws DatabaseException, PropertiesHandleException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority,String ExecutionName,String ModeofExecution) throws DatabaseException, PropertiesHandleException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -48,7 +48,7 @@ public class PropertiesHandle extends Properties
 			this.password=password;
 			this.priority=priority;
 			this.ExecutionName=ExecutionName;
-			
+			this.ModeofExecution=ModeofExecution;
 			WriteProperty(UserName);
 			
 		}
@@ -112,6 +112,7 @@ public class PropertiesHandle extends Properties
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
 			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
 			this.InputQuery();
+			this.put("ModeofExecution", ModeofExecution);
 		    DatabaseOperation.CloseConn();		 
 		}
 		
