@@ -93,62 +93,55 @@ public class StarrGLRate extends BaseClass implements API
 		}
 	}
 	
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
-	{
-		if(config.getProperty("status").equals("Y"))
-		{
-			try 
-			{
-				macro.PumpoutData(output, input, config);
-			} 
-			catch (POIException | MacroException | DatabaseException e) 
-			{
-				throw new APIException("ERROR SendResponseDataToFile FUNCTION -- GL-RATING CLASS", e);
-			}
-		}
-		
+	@Override
+	 public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
+	 {
 		try
 		{
-			String responseStatus = response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			System.out.println(responseStatus);
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+			
+			String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(ResponseStatus.equals("SUCCESS"))
+			{
+			
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				
-				
-				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
-				{
+				  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+					{
 					try
-					{
-						if(responseStatus.equals("SUCCESS"))
 						{
-							//System.out.println("Writing Response to Table");
-							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-							output.put("Flag_for_execution", "Completed");
-						}
-						else
-						{
-							output.put("Flag_for_execution", responseStatus);
-							output.put("ErrorMessage", response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\",""));
-						}
-					}
-					catch(PathNotFoundException e)
-					{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-					}
-				}
-			}
-			
-			return output;
-		}
-		catch(DatabaseException | RequestFormatException e)
-		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
-		}
-			
+					
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 		
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						output.put("Flag_for_execution", ResponseStatus);
+						}
+						catch(PathNotFoundException | RequestFormatException e)
+						{
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+						}
+					}
+			}
+			}
+			else
+			{
+				output.put("Flag_for_execution", "FailedResponse");
 				
+				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				output.put("AnalyserResult","Rule-"+RuleName);
+				output.put("User_message",Message);
+			}
+			if(config.getProperty("status").equals("Y"))
+			{
+				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
+			}
+		}
+		catch(DatabaseException | POIException | MacroException | RequestFormatException e)
+		{
+			 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
+		}
+		return output;
 	}
 }

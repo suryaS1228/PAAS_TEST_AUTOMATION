@@ -194,8 +194,10 @@ public class BaseClass
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
-	{
-		boolean passflag = true;
+	{		 
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	{		
+		
 	    try
 	    {
 	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
@@ -203,7 +205,7 @@ public class BaseClass
 			{	
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
-			   // System.out.println(condition+"---------------"+outputrow);
+			  //  System.out.println(condition+"---------------"+outputrow);
 			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
@@ -217,25 +219,29 @@ public class BaseClass
 						}
 						else
 						{
-							passflag=false;
+							
 							outputrow.put(StatusColumn, "Fail");
 							//outputrow.UpdateRow();
 							analyse(rowStatusColVerify,outputrow);
 						}
 					}
-				}			    
+				}
 			}
-	    	if(passflag)
-		    {
-		    	outputrow.put("AnalyserResult", "Pass");
-		    }	
+	    	
 	    	
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
 				message=message+errorMessage.get(i)+" & ";
 			}
-			outputrow.put("AnalyserResult", message+" Failed");
+			if(message.equals(""))
+			{
+				outputrow.put("AnalyserResult", "Pass");
+			}
+			else
+			{
+				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
+			}
 			errorMessage.clear();
 			errorParentname.clear();
 			return outputrow;
@@ -243,10 +249,12 @@ public class BaseClass
 	    }	
 	    catch(DatabaseException e)
 	    {
-	    	System.out.println(e);
+	    	//System.out.println(e);
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
+	 return outputrow;
+ }
 	
 //-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
 	protected static boolean premium_comp(String expected,String actual)
