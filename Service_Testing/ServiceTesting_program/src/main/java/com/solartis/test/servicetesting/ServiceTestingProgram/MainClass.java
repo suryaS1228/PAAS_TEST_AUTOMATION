@@ -259,7 +259,7 @@ public class MainClass
 		if(statuschoice.equals("Y"))
 	    {
 			base.generateChart(config);
-			base.Report(config);
+			//base.Report(config);
 			
 	    }   
 		//System.out.println(config.getProperty("OverallResults"));
