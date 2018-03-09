@@ -82,7 +82,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
@@ -105,7 +105,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 			{	
 				LinkedHashMap<String, String> rowtablePumpinData = entry.getValue();
 				String condition = rowtablePumpinData.get("Condition");
-				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,rowtablePumpinData))
+				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
 					if (rowtablePumpinData.get("Type").equals("input"))
 					{
@@ -183,6 +183,7 @@ public class coverWalletMacro extends DBColoumnVerify implements MacroInterface
 						excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 						excel.getcell(rowNum-1, columnNum);
 						String Datatowrite = excel.read_data(rowNum-1, columnNum);
+						System.out.println(rowNum-1+"----------" +columnNum);
 						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
 						outputData.put(Datacolumntowrite, Datatowrite);
 						//outputData.WriteData(Datacolumntowrite, "poda");

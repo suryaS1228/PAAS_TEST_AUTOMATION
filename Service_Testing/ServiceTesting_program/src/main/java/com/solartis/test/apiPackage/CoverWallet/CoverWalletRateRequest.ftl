@@ -1,6 +1,5 @@
 <#assign HoursWorkPerWeekarray=[]><#list HoursWorkPerWeek as x><#assign HoursWorkPerWeekarray=HoursWorkPerWeekarray+[x.value]></#list>
 <#assign ProfessionalAssociationarray=[]><#list ProfessionalAssociation as x><#assign ProfessionalAssociationarray=ProfessionalAssociationarray+[x.value]></#list>
-<#assign MiddleInitialarray=[]><#list MiddleInitial as x><#assign MiddleInitialarray=MiddleInitialarray+[x.value]></#list>
 <#assign YearsInPracticearray=[]><#list YearsInPractice as x><#assign YearsInPracticearray=YearsInPracticearray+[x.value]></#list>
 <#assign FirstNamearray=[]><#list FirstName as x><#assign FirstNamearray=FirstNamearray+[x.value]></#list>
 <#assign ProviderEmailIdarray=[]><#list ProviderEmailId as x><#assign ProviderEmailIdarray=ProviderEmailIdarray+[x.value]></#list>
@@ -8,7 +7,7 @@
 <#assign LastNamearray=[]><#list LastName as x><#assign LastNamearray=LastNamearray+[x.value]></#list>
 <#assign ScheduleRatingFactorarray=[]><#list ScheduleRatingFactor as x><#assign ScheduleRatingFactorarray=ScheduleRatingFactorarray+[x.value]></#list>
 <#assign ProviderClassarray=[]><#list ProviderClass as x><#assign ProviderClassarray=ProviderClassarray+[x.value]></#list>
-<#assign numofProviderarray=[]><#list numofProvider as x><#assign numofProviderarray=numofProviderarray+[x.value]></#list>
+<#assign numofProviderarray=[]><#list NumOfProviders as x><#assign numofProviderarray=numofProviderarray+[x.value]></#list>
 <#assign MeetsStudentQualificationarray=[]><#list MeetsStudentQualification as x><#assign MeetsStudentQualificationarray=MeetsStudentQualificationarray+[x.value]></#list>
 
 <#assign i=0>
@@ -21,7 +20,6 @@
       	 {
       	  "HoursWorkPerWeek": "${HoursWorkPerWeekarray[i]}",
           "ProfessionalAssociation": "${ProfessionalAssociationarray[i]}",
-          "MiddleInitial": "${MiddleInitialarray[i]}",
           "YearsInPractice": "${YearsInPracticearray[i]}",
           "FirstName": "${FirstNamearray[i]}",
           "ProviderEmailId": "${ProviderEmailIdarray[i]}",
