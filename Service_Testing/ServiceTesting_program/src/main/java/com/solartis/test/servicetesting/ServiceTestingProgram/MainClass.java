@@ -96,10 +96,12 @@ public class MainClass
     {   		
 		try 
 		{
+			
 			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+			
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
 			//for (Entry<Integer, LinkedHashMap<String, String>> entry : inputtable.entrySet())
-				System.out.println("TestData : " + inputrow.get("Testdata"));  	
+				//System.out.println("TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
 						{
 						  //  System.out.println("TestData" + inputrow.get("S.No") + "flag_for_execution = Y" );					 
