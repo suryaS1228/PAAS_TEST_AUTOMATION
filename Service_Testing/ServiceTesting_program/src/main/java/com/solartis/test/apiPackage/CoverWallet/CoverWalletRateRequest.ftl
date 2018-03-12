@@ -13,7 +13,7 @@
 				</#list>       
 	         }
 	    }
-      <#assign i=i+1><#if i=numofProviderarray[0]><#else>,</#if>
+      <#if i=numofProviderarray[0]><#else>,</#if><#assign i=i+1>
       </#list>
 	],
      <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
