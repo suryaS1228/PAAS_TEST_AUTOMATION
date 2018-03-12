@@ -103,7 +103,9 @@ public class PropertiesHandle extends Properties
 			this.put("Project",Project );
 			this.put("API",Api );
 			this.put("ExecutionName", ExecutionName);
-			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("InputTable")+" INNER JOIN "+ this.RdmsValue("OutputTable")+" on "+this.RdmsValue("InputTable")+".Testdata="+this.RdmsValue("OutputTable")+".testdata WHERE "+this.RdmsValue("InputTable")+".Flag_for_execution='Completed'");
+			this.put("TestcaseQuery", "SELECT * FROM "+this.RdmsValue("InputTable"));
+			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("OutputTable"));
+
 			this.put("inputTable", this.RdmsValue("InputTable"));
 			this.put("outputTable", this.RdmsValue("OutputTable"));
 			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
