@@ -350,7 +350,19 @@ public class BaseClass
 		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 		excelreportlocation="AnalysisReport "+DateandTime+".xls";
 		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
-		 ExcelOperationsPOI ob=new ExcelOperationsPOI(config.getProperty("report_template_location")+"ResultTemplate.xls");
+		String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
+		try 
+		{
+			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
+			sample.Copy(Samplepath, excelreportlocation1);
+			sample.save();
+		}
+		catch(Exception e) 
+		{
+			System.out.print("error in copy Sample Report Template");
+			e.printStackTrace();
+		}
+		ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 		 ob.getsheets("TestReport");
 		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
 		 Date today=new Date();
