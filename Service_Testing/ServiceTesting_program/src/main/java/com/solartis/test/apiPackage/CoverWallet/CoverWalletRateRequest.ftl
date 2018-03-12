@@ -1,5 +1,5 @@
 <#assign numofProviderarray=[]><#list NumOfProviders as x><#assign numofProviderarray=numofProviderarray+[x.value]></#list>
-<#assign i=0>
+<#assign i=1>
 {
   "Policy": {
   	"Provider": [
