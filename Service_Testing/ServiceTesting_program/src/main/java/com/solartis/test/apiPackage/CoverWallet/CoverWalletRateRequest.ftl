@@ -4,12 +4,13 @@
   "Policy": {
   	"Provider": [
   	<#list 1..numofProviderarray[0] as result>
-  	<#assign Provider=Provider+i>
+  	<#assign Provider="Provider"+i>
 	  	{
 	      	"ProviderDetail":
 	      	 {
 	  			<#list Provider?eval as result>
-	  			"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>       
+	  			"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+				</#list>       
 	         }
 	    }
       <#assign i=i+1><#if i=numofProviderarray[0]><#else>,</#if>
