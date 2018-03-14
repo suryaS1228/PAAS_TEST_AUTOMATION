@@ -342,6 +342,8 @@ public class BaseClass
 	protected String excelreportlocation;
 	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
+		try 
+		{
 		DatabaseOperation db=new DatabaseOperation();
 		Date date = new Date();
 		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
@@ -351,17 +353,11 @@ public class BaseClass
 		excelreportlocation="AnalysisReport "+DateandTime+".xls";
 		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
 		String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
-		try 
-		{
+		
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, excelreportlocation1);
 			sample.save();
-		}
-		catch(Exception e) 
-		{
-			System.out.print("error in copy Sample Report Template");
-			e.printStackTrace();
-		}
+		
 		ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 		 ob.getsheets("TestReport");
 		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
@@ -387,6 +383,12 @@ public class BaseClass
 		ob.saveAs(excelreportlocation1);
 		this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
 		this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+		}
+		catch(Exception e) 
+		{
+			System.out.print("error in copy Sample Report Template");
+			e.printStackTrace();
+		}
 	}
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
