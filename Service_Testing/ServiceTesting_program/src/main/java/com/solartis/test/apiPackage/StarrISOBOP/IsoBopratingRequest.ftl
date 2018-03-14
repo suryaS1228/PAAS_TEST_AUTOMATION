@@ -1,56 +1,57 @@
 {
-    "ClientUniqueRequestID": "1",
-    "EndClientUserBrowserInformation": "Mozilla/...",
-    "EndClientUserBrowserSessionId": "7Eadfad4444",
-    "EndClientUserUniqueSessionId": "Uniquesession",
-    "OwnerId": "24",
-    "PaaSClientIPAddress": "125.25.25.2",
-    "Policy": {
-            "ChangesLimitedFungiCoverage": {
-            "BOPLimitedFungiBacteriaCovBusnIncomeExtraExpenseCoverageNumDays": "",
-            "Limit": "15000",
-            "SeparatePremisesLocationsOption": "No"
+  "Policy": {
+   <#list Policy as result>"${result.atrib}":"${result.value}",
+  	</#list>
+  	"HiredAutoAndNonOwnedAutoLiability": {
+      <#list HiredAutoAndNonOwnedAutoLiability as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  	  </#list> 
+    },
+  	"ChangesLimitedFungiCoverage": {
+      "SeparatePremisesLocationsOption": "No",
+      "BOPLimitedFungiBacteriaCovBusnIncomeExtraExpenseCoverageNumDays": "",
+      "Limit": "15000"
+    },
+  	"Location": [
+      {
+        "LocationDetail": {
+        <#list LocationDetail as result>"${result.atrib}":"${result.value}",
+  		</#list>
+  		"WaterBackUpAndSumpOverflow": {
+            "CoveredPropertyAnnualAggregateLimit": "5000",
+            "BusinessIncomeExtraExpenseAnnualAggregateLimit": "5000",
+            "Limit": "5000"
         },
-     "HiredAutoAndNonOwnedAutoLiability": {
-     <#list HiredNonOwned as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  </#list>
-  },
-      "Location": [
-       {
-      "LocationDetail": {
-          "Building": [
-           {
-            "BuildingDetail": {
-               "Classification": [
-                 {
-                 "ClassificationDetail": {
-                	<#list classification as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-              </#list>
-              }
-              }
-              ],
-               "DebrisRemovalAdditionalInsurance": {
+  		"Building": [
+            {
+              "BuildingDetail": {
+              <#list BuildingDetail as result>"${result.atrib}":"${result.value}",
+  				</#list>
+  				"DebrisRemovalAdditionalInsurance": {
                   "Limit": "10000"
                 },
-                <#list building as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-              </#list>
+  				"Classification": [
+                  {
+                    "ClassificationDetail": {
+                    <#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  					</#list>      
+  					}
+                  }
+                ]
               }
-              }
-              ],
-               "WaterBackUpAndSumpOverflow": {
-            "BusinessIncomeExtraExpenseAnnualAggregateLimit": "5000",
-            "CoveredPropertyAnnualAggregateLimit": "5000",
-            "Limit": "5000"
-          },
-  		 <#list location as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  		</#list>
-  		}
-  		}
-  		],
-  		 <#list policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  		</#list>
-    },
-     "ServiceRequestDetail": {
-     <#list servicedetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  		</#list>
-  	}
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "PaaSClientIPAddress": "125.25.25.2",
+  "EndClientUserBrowserInformation": "Mozilla/...",
+  "OwnerId": "24",
+  "ServiceRequestDetail": {
+  <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  </#list>      
+  },
+  "EndClientUserUniqueSessionId": "Uniquesession",
+  "EndClientUserBrowserSessionId": "7Eadfad4444",
+  "ClientUniqueRequestID": "1"
+}

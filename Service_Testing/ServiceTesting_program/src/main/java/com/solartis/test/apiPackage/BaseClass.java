@@ -344,45 +344,45 @@ public class BaseClass
 	{
 		try 
 		{
-		DatabaseOperation db=new DatabaseOperation();
-		Date date = new Date();
-		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-		//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
-		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
-		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
-		excelreportlocation="AnalysisReport "+DateandTime+".xls";
-		String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
-		String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
-		
+			DatabaseOperation db=new DatabaseOperation();
+			Date date = new Date();
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+			//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
+			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
+			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+			excelreportlocation="AnalysisReport "+DateandTime+".xls";
+			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
+			
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, excelreportlocation1);
 			sample.save();
-		
-		ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
-		 ob.getsheets("TestReport");
-		 ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
-		 Date today=new Date();
-		 ob.write_data(5, 7,today);
-		 ob.write_data(5, 14,config.getProperty("ExecutionName"));
-		int	row=9;
-		int si_no=1;
-		 while (inputtableiterator.hasNext()) 
-		 {
-			 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-			 LinkedHashMap<String, String> inputrow = inputentry.getValue();
 			
-			    ob.write_data(row, 2,si_no );
-			    ob.write_data(row,3,inputrow.get("AnalyserResult"));
-			    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+			ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
+			ob.getsheets("TestReport");
+			ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
+			Date today=new Date();
+			ob.write_data(5, 7,today);
+			ob.write_data(5, 14,config.getProperty("ExecutionName"));
+			int	row=9;
+			int si_no=1;
+			while (inputtableiterator.hasNext()) 
+			{
+				 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				 LinkedHashMap<String, String> inputrow = inputentry.getValue();
 				
-			 row++;
-			 si_no++;
-			 
-		 }
-		 ob.refresh();
-		ob.saveAs(excelreportlocation1);
-		this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
-		this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+				    ob.write_data(row, 2,si_no );
+				    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+				    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+					
+				 row++;
+				 si_no++;
+				 
+			}
+			ob.refresh();
+			ob.saveAs(excelreportlocation1);
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
 		}
 		catch(Exception e) 
 		{
