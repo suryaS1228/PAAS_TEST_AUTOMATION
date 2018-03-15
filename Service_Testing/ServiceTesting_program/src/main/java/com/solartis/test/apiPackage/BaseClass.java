@@ -232,7 +232,7 @@ public class BaseClass
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
-				message=message+errorMessage.get(i)+" & ";
+				message=message+errorMessage.get(i)+" , ";
 			}
 			if(message.equals(""))
 			{
