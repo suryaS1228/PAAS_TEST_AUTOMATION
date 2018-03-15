@@ -77,7 +77,7 @@ public class IsoMacro implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
