@@ -215,6 +215,10 @@ public class IsoMacro implements MacroInterface
 			String extLookupData = extenedLookup(Datatowrite, configFile, inputData.get("Policy_state"));
 			outputdata = (T) extLookupData;
 			break;
+		case "String":
+			String Stringdata = IntegertoString(Datatowrite);
+			outputdata = (T) Stringdata;
+			break;
 		}
 		return outputdata;
 		
@@ -296,7 +300,7 @@ public class IsoMacro implements MacroInterface
 	
 	protected String extenedLookup(String Lookup1, PropertiesHandle configFile, String StateName) throws MacroException
 	{
-DatabaseOperation Lookup = new DatabaseOperation();
+		DatabaseOperation Lookup = new DatabaseOperation();
 		
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
 		try 
@@ -334,6 +338,11 @@ DatabaseOperation Lookup = new DatabaseOperation();
 		
 	}
 	
+	protected String IntegertoString (String s)
+	{
+		return s;
+		
+	}
 	
 	protected float ISOBOPWindhail(String Data)
 	{
