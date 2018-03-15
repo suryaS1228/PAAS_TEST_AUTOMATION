@@ -122,8 +122,8 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 						
 						if(configTable.ReadData("Translation_Flag").equals("Y"))
 						{
-							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite);
-							System.out.println(trans.Translation1(Datatowrite, configTable, configFile));
+							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite);
+							//System.out.println(trans.Translation1(Datatowrite, configTable, configFile));
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, configTable, configFile));
 						}
 						else

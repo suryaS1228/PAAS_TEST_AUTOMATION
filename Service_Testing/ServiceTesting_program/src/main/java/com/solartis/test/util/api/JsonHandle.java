@@ -11,9 +11,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
 import com.jayway.jsonpath.internal.JsonReader;
 import com.solartis.test.exception.RequestFormatException;
+
 
 public class JsonHandle implements RequestResponse
 {
@@ -171,13 +171,13 @@ public class JsonHandle implements RequestResponse
 			path = JsonPath.compile(json_path);
 			if(doc.read(path).toString().equals("[]"))
 			{
-				throw new PathNotFoundException("path not found in json file");
+				//throw new Exception("path not found in json file");
 			}
 			doc.set(path, new_value);
 			
 			enable_write(doc.jsonString());
 		} 
-		catch (PathNotFoundException | RequestFormatException e) 
+		catch (RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE ENABLE WRITING OPERATION", e);
 		}

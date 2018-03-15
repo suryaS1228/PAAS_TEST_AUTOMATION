@@ -43,14 +43,19 @@
     	<artifactId>json-simple</artifactId>
     	<version>1.1</version>
 	</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
 	<dependency>
-    	<groupId>com.jayway.jsonpath</groupId>
-    	<artifactId>json-path</artifactId>
-    	<version>2.0.0</version>
-	</dependency>
-    
+    <artifactId>json-path</artifactId>
+    <exclusions>
+        <exclusion>
+            <artifactId>json-smart</artifactId>
+            <groupId>net.minidev</groupId>
+        </exclusion>
+    </exclusions>
+    <groupId>com.jayway.jsonpath</groupId>
+    <optional>false</optional>
+    <version>2.0.0</version>
+</dependency>
+
     <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
 	<dependency>
     	<groupId>dom4j</groupId>
@@ -99,47 +104,98 @@
 		  <artifactId>xmlbeans</artifactId>
 		  <version>2.4.0</version>
      </dependency>
+     <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+ <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>5.0.1.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.hibernate/hibernate-core[/url] -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager[/url] -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.0-api[/url] -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.hibernate/hibernate-validator[/url] -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.4.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.hibernate/hibernate-validator-annotation-processor[/url] -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>5.2.4.Final</version>
+        </dependency>
+   
+        <!-- [url]https://mvnrepository.com/artifact/javax.validation/validation-api[/url] -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/org.javassist/javassist[/url] -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
+        </dependency>
+        <!-- [url]https://mvnrepository.com/artifact/antlr/antlr[/url] -->
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+     
   </dependencies>
   
   <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.TestEngine</mainClass>
-                    <systemPropertyVariables>
-					            <Project>${Project}</Project>
-		                        <Api>${Api}</Api>
-		                        <Env>${Env}</Env>
-		                        <OutputChioce>${OutputChioce}</OutputChioce>
-		                        <UserName>${UserName}</UserName>
-		                        <JDBC_DRIVER>${JDBC_DRIVER}</JDBC_DRIVER>
-		                        <DB_URL>${DB_URL}</DB_URL>
-		                        <USER>${USER}</USER>
-		                        <password>${password}</password>
-		                        <Priority>${Priority}</Priority>
-					</systemPropertyVariables>
-                </configuration>
-            </plugin>
-            
-        </plugins>
-    </build>
+    <sourceDirectory>src/main/java/</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/java/</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    
+    <plugins>
+    
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <warSourceDirectory>WebContent</warSourceDirectory>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
