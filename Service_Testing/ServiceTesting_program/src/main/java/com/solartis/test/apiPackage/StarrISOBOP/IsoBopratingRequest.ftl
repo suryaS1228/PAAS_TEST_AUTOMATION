@@ -1,10 +1,10 @@
 {
   "Policy": {
-   <#list Policy as result>"${result.atrib}":"${result.value}",
-  	</#list>
+	<#list Policy as result>"${result.atrib}":"${result.value}", 
+	</#list>
   	"HiredAutoAndNonOwnedAutoLiability": {
-      <#list HiredAutoAndNonOwnedAutoLiability as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  	  </#list> 
+	 <#list HiredAutoAndNonOwnedAutoLiability as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+	 </#list> 
     },
   	"ChangesLimitedFungiCoverage": {
       "SeparatePremisesLocationsOption": "No",
@@ -14,8 +14,8 @@
   	"Location": [
       {
         "LocationDetail": {
-        <#list LocationDetail as result>"${result.atrib}":"${result.value}",
-  		</#list>
+		<#list LocationDetail as result>"${result.atrib}":"${result.value}",
+		</#list>
   		"WaterBackUpAndSumpOverflow": {
             "CoveredPropertyAnnualAggregateLimit": "5000",
             "BusinessIncomeExtraExpenseAnnualAggregateLimit": "5000",
@@ -24,16 +24,16 @@
   		"Building": [
             {
               "BuildingDetail": {
-              <#list BuildingDetail as result>"${result.atrib}":"${result.value}",
-  				</#list>
+			  <#list BuildingDetail as result>"${result.atrib}":"${result.value}",
+			   </#list>
   				"DebrisRemovalAdditionalInsurance": {
                   "Limit": "10000"
                 },
   				"Classification": [
                   {
                     "ClassificationDetail": {
-                    <#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-  					</#list>      
+					<#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+					</#list>      
   					}
                   }
                 ]

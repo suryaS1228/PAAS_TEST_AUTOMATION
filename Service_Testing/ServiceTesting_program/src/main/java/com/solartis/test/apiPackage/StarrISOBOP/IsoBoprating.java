@@ -100,29 +100,29 @@ public class IsoBoprating extends BaseClass implements API
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 			
-			String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			if(ResponseStatus.equals("SUCCESS"))
 			{
 			
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
-					{
-					try
+				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+				{
+					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+					  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 						{
-					
-						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-		
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						output.put("Flag_for_execution", ResponseStatus);
+						  	try
+							{
+						
+							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+			
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+							output.put("Flag_for_execution", ResponseStatus);
+							}
+							catch(PathNotFoundException | RequestFormatException e)
+							{
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+							}
 						}
-						catch(PathNotFoundException | RequestFormatException e)
-						{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-						}
-					}
-			}
+				}
 			}
 			else
 			{
