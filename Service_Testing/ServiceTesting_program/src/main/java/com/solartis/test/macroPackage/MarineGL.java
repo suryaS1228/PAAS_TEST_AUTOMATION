@@ -330,7 +330,7 @@ public class MarineGL extends DBColoumnVerify implements MacroInterface
 	}
 	
 	
-public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+/*public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 {
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
@@ -387,6 +387,6 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 				objectInput.UpdateRow();
 				objectOutput.UpdateRow();
 	}while(objectInput.MoveForward()&&objectOutput.MoveForward());
-}
+}*/
 
 }
