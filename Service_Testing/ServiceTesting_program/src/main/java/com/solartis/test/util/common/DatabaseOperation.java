@@ -49,7 +49,6 @@ public class DatabaseOperation
 	
 	public static void ConnectionSetup(String JDBC_DRIVER, String DB_URL, String USER, String password) throws DatabaseException 
 	{
-		System.out.println("in db operation"+JDBC_DRIVER+DB_URL+USER+password);
 		if(conn == null)
 		{
 			

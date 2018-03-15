@@ -15,7 +15,6 @@ import javax.net.ssl.X509TrustManager;
 
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
-import com.solartis.test.apiPackage.Dtc.DtcPreviewPDF;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PropertiesHandleException;
@@ -29,11 +28,11 @@ public class TestEngine
 	static API api=null;
 	static FireEventAPI fireEventAPI;
 	
-	public  void ServiceTest( String[] args ) throws DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+	public static void main( String[] args ) throws DatabaseException, PropertiesHandleException, APIException
     {   
 		System.setProperty("jsse.enableSNIExtension", "false");
-
-		PropertiesHandle config = new PropertiesHandle(args[0], args[1],args[2], args[3], args[4], args[5], args[6], args[7], args[8],args[9]);
+		disableSslVerification();
+		PropertiesHandle config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));
 
 		DatabaseOperation.ConnectionSetup(config);
 		
@@ -52,27 +51,16 @@ public class TestEngine
 		
 		try 
 		{
+			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
 			System.out.println("com.solartis.test.apiPackage."+classname);
-			try{
-				Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
-				System.out.println("com.solartis.test.apiPackage."+classname);
-				Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
-			    api = (API) cons.newInstance(config);
-				//api=new DtcPreviewPDF(config);
-			    fireEventAPI = new FireEventAPI(api);
-			}
-			catch(Exception e)
-			{
-				System.out.println("Exception occured");
-				e.printStackTrace();
-			}
-			
-			
+			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
+		    api = (API) cons.newInstance(config);
+		    fireEventAPI = new FireEventAPI(api);
 		    Listener listener = new LogListener();
 		    fireEventAPI.addListener(listener);
 		    
 		} 
-		catch (SecurityException | IllegalArgumentException e) 
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -165,5 +153,41 @@ public class TestEngine
 		DatabaseOperation.CloseConn();
    }
 	
+	public static void disableSslVerification() {
+        try
+        {
+            // Create a trust manager that does not validate certificate chains
+            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+                
+            }
+            };
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            // Create all-trusting host name verifier
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+            // Install the all-trusting host verifier
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+    }
 
 }	
