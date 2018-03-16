@@ -368,8 +368,5 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	        rowIterator++;
 	        
 		}
-	
 }
-
-
 }
