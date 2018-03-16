@@ -330,13 +330,14 @@ public class MarineGL extends DBColoumnVerify implements MacroInterface
 	}
 	
 	
-public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+public static void main(String args[]) throws DatabaseException,MacroException, PropertiesHandleException
 {
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
 	MarineGL MG;
-	PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/SquareMouth/SMPayment/Config/config.properties");
+	PropertiesHandle configFile=null;
 	
+	configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Rating\\Config\\config.properties");
 	DatabaseOperation.ConnectionSetup(configFile);
 	 
 	 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
@@ -348,7 +349,6 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 		{
 			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
 			Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
-			Integer inputtablekey = inputentry.getKey();
 	        LinkedHashMap<String, String> inputrow = inputentry.getValue();
 	        LinkedHashMap<String, String> outputrow = outputentry.getValue();
 	        
@@ -363,30 +363,11 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 			}
 	        inputrow.put("Flag_for_execution", "Completed");	
 	        objectInput.UpdateRow(rowIterator, inputrow);
-	        objectOutput.UpdateRow(rowIterator, inputrow);
-	        
-	        
-	        
-	        
-	        
+	        objectOutput.UpdateRow(rowIterator, outputrow);
+	        rowIterator++;
 	        
 		}
-	do
-	{
-		System.out.println("TestData : " + objectInput.ReadData("S.No"));  	
-				if(objectInput.ReadData("Flag_for_execution").equals("Y"))
-				{
-					System.out.println("coming to flow");
-					sm=new SquareMouth(configFile);
-					sm.LoadSampleRatingmodel(configFile, objectInput);
-					sm.GenerateExpected(objectInput, configFile);
-					sm.PumpinData(objectInput, configFile);
-					sm.PumpoutData(objectOutput,objectInput, configFile);
-				}
-				objectInput.WriteData("Flag_for_execution", "Completed");	
-				objectInput.UpdateRow();
-				objectOutput.UpdateRow();
-	}while(objectInput.MoveForward()&&objectOutput.MoveForward());
+	
 }
 
 }

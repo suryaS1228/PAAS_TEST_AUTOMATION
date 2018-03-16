@@ -367,15 +367,5 @@ public class DatabaseOperation
 	}
 	
 	
-	public static void main(String args[]) throws DatabaseException, SQLException, FileNotFoundException, IOException, ClassNotFoundException, POIException
-	{
-		//Connection conn=DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN", "root", "redhat");
-	    //DatabaseOperation db=new DatabaseOperation();
-	   // db.truncateTable("INPUT_DTC_Rating_SinglePlan");
-	    //db.insetRowWithSNO("OUTPUT_DTC_Rating_SinglePlan","INPUT_DTC_Rating_SinglePlan");
-		//db.ImportDatatoDB("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-DTC\\RatingServiceSinglePlan\\Testdata\\QARelease.xls",conn,"INPUT_DTC_Rating_SinglePlan","Sheet1","Import");
-
-		
-	}
 	
 }
