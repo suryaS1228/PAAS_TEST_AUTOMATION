@@ -14,6 +14,7 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.MicroBopMacro;
 import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -32,7 +33,7 @@ public class MicroBOPRate extends BaseClass implements API {
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 		if(config.getProperty("status").equals("Y"))
 		{
-		macro=new coverWalletMacro(config);	
+		macro=new MicroBopMacro(config);	
 		}
 		
 	}
@@ -125,8 +126,14 @@ public class MicroBOPRate extends BaseClass implements API {
 				
 				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String Message2=response.read("..UserMessage").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.put("AnalyserResult","Rule-"+RuleName);
+				
+				
 				output.put("User_message",Message);
+				output.put("User_message2",Message2);
+				
+				
 			}
 			if(config.getProperty("status").equals("Y"))
 			{

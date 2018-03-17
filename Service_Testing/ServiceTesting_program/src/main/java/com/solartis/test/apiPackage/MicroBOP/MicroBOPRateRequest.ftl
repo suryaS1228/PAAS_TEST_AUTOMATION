@@ -10,6 +10,7 @@
               "BuildingDetail": {
                 "Classification": [
                   {
+                  "ClassificationDetail":{
                   <#list Classification as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
                   </#list>
                   }
