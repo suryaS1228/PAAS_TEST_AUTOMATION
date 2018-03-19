@@ -124,10 +124,9 @@ public class MicroBOPRate extends BaseClass implements API {
 			{
 				output.put("Flag_for_execution", "FailedResponse");
 				
-				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message2=response.read("..UserMessage").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				output.put("AnalyserResult","Rule-"+RuleName);
+				output.put("AnalyserResult","Rule-"+Message2);
 				
 				
 				output.put("User_message",Message);

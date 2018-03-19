@@ -256,8 +256,6 @@ public class ExcelOperationsPOI
 		
 		cell = this.worksheet.getRow(this.row_number).getCell(this.column_number);
 		cell.setCellValue(strData);
-	
-		
 	}
 	
 	public void write_data(int strData)
