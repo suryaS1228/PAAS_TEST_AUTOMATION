@@ -9,15 +9,18 @@
 		</#list>
   },
   "QuoteInformation": {
-  <#list QuoteInformation as result>"${result.atrib}":"${result.value}",</#list>
+  <#list QuoteInformation as result>"${result.atrib}":"${result.value}",
+  </#list>
   "Location": {
       "LocationDetail": [
         {
-        <#list LocationDetail?eval as result>"${result.atrib}":"${result.value}",</#list>
+        <#list LocationDetail as result>"${result.atrib}":"${result.value}",
+        </#list>
         "Classification": {
             "ClassificationDetail": [
               {
-              	<#list ClassificationDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+              	<#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+              	</#list>
               }
             ]
           }

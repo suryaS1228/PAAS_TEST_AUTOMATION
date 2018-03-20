@@ -14,16 +14,20 @@
         "LocationDetail" : [        
       
         {
-         <#list LocationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+         <#list LocationDetail as result>"${result.atrib}":"${result.value}",
+         </#list>
           "Classification":{
           "ClassificationDetail": [
           {
-           <#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+           <#list ClassificationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+           </#list>
           }
           ]
           }
         }
         ],
-        <#list QuoteInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+        <#list QuoteInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
       }
     }
+  }
