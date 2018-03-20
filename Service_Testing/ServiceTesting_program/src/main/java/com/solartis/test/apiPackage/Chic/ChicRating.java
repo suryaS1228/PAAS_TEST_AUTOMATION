@@ -24,40 +24,7 @@ public class ChicRating extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	@Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
-	{
-		this.input = InputData;
-		sampleInput = new XmlHandle(config.getProperty("sample_request"));
-		
-	}
 	
-	@Override
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
-	{
-		try
-		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
-			request.StringToFile(sampleInput.FileToString());
-			
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				if(InputColVerify.DbCol(rowInputColVerify))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-						request.write(jsonElements.get(rowInputColVerify.get(config.getProperty("InputColumn"))), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}	
-			}
-		}
-		catch(DatabaseException | RequestFormatException e)
-		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- CHIC FORM CLASS", e);
-		}
-	}
 
 	@Override
 	public void SendAndReceiveData() throws APIException

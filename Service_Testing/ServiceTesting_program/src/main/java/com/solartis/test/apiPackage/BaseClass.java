@@ -1,5 +1,6 @@
 package com.solartis.test.apiPackage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -12,9 +13,14 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
+import freemarker.core.ParseException;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateNotFoundException;
+
 public class BaseClass 
 {
-	protected RequestResponse sampleInput = null;
+	protected RequestHandler sampleInput = null;
 	protected RequestResponse request = null;
 	protected RequestResponse response = null;
 	protected LinkedHashMap<String, String> XmlElements = null;
@@ -30,13 +36,42 @@ public class BaseClass
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
 
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
+	/*public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		this.input = InputData;
 		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
-	}
+	}*/
 
 //-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
+	{
+		try
+		{
+		this.input = InputData;
+		sampleInput = new RequestHandler(config);
+		sampleInput.openTemplate();
+		}
+		catch(IOException|ClassNotFoundException| DatabaseException e)
+		{
+			throw new APIException("Error in load sample request", e);
+		}
+	}
+	
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
+	{
+		try
+		{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			sampleInput.LoadData(tableInputColVerify, InputData);
+			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);	
+			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
+		}
+		catch( DatabaseException| TemplateException| IOException e)
+		{
+			throw new APIException("Error in pumpData to request", e);
+		}
+		
+	}
 	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
 	{
 		try
@@ -48,7 +83,7 @@ public class BaseClass
 				
 				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
-				request.StringToFile(sampleInput.FileToString());
+				request.StringToFile(sampleInput.toString());
 				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))

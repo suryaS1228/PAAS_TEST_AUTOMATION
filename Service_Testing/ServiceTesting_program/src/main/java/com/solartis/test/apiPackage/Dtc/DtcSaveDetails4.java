@@ -24,50 +24,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	@Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-		this.input = InputData;
-		input = InputData;
-		switch(InputData.get("Plan_name"))
-		{
-		 case "Annual":			       sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_annualPlans.json");
-		 									break;
-		 case "Single Trip":			sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_trip.json");
-											break;
-		 case "Renter's Collision": 	sampleInput = new JsonHandle(config.getProperty("sample_request")+"ForthSave_RC.json");
-											break; 
-		 
-		 default:
-		}
-	}
 	
-	public void PumpDataToRequest() throws APIException
-	{
-		try
-		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("StateCode1")+"_"+input.get("Plan_name")+".json");
-			System.out.println(sampleInput);
-			request.StringToFile(sampleInput.FileToString());
-			
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				if(InputColVerify.DbCol(input))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-						request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}	
-			}
-		}
-		catch(DatabaseException | RequestFormatException  e)
-		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- DTC-SAVEDETAILS4 CLASS", e);
-		}
-	}
 	
 	@Override
 	public void AddHeaders() throws APIException

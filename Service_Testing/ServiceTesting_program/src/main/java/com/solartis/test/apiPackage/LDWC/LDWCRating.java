@@ -32,7 +32,7 @@ public class LDWCRating extends BaseClass implements API
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData)
 	{	 
 		this.input = InputData;	
-		sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
+		//sampleInput = new XmlHandle(config.getProperty("sample_request")+ "request.xml");	
 	}
 		
 	public void PumpDataToRequest() throws APIException
@@ -41,7 +41,7 @@ public class LDWCRating extends BaseClass implements API
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			request = new XmlHandle(config.getProperty("request_location")+input.get("testdata")+"_request"+".xml");
-			request.StringToFile(sampleInput.FileToString());
+			//request.StringToFile(sampleInput.FileToString());
 			String Reqid = this.RqUID();
 			System.out.println(Reqid);
 			request.write("//InsuranceSvcRq/RqUID",Reqid);
