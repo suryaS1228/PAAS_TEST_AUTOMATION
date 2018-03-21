@@ -281,6 +281,8 @@ public class BaseClass
     		actual = actual.replaceAll("\\[\"", "");	
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
+    		expected = expected.replaceAll("\\$", "");
+    		actual = actual.replaceAll("\\$", "");
     		System.out.println(expected);
     		System.out.println(actual);
     		if(!(actual.matches("[a-zA-Z]")) && !(actual.matches("[a-zA-Z]")))
@@ -290,8 +292,6 @@ public class BaseClass
     		}
     	//	expected = expected.replaceAll("\\.[0-9]*", "");
     	//  actual = actual.replaceAll("\\.[0-9]*", "");
-    		expected = expected.replaceAll("\\$", "");
-    		actual = actual.replaceAll("\\$", "");
     		if(expected.equals(actual))
     		{
     			status = true;
