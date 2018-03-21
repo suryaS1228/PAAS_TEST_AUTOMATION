@@ -275,7 +275,7 @@ public class BaseClass
 				status = true;
 			}
 		}
-		if(actual!=null && expected!=null && !(actual.equals("Path not Found")))
+		if(actual!=null && expected!=null)
 		{
 			expected = expected.replaceAll("\\[\"", "");
     		actual = actual.replaceAll("\\[\"", "");	
@@ -283,8 +283,11 @@ public class BaseClass
     		actual = actual.replaceAll("\"\\]", "");
     		System.out.println(expected);
     		System.out.println(actual);
+    		if(!(actual.matches("[a-zA-Z]")) && !(actual.matches("[a-zA-Z]")))
+    		{
     		expected = Double.toString(Math.round(Double.parseDouble(expected)));
     		actual = Double.toString(Math.round(Double.parseDouble(actual)));
+    		}
     	//	expected = expected.replaceAll("\\.[0-9]*", "");
     	//  actual = actual.replaceAll("\\.[0-9]*", "");
     		expected = expected.replaceAll("\\$", "");
