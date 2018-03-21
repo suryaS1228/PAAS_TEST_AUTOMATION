@@ -14,8 +14,8 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.DtcRatingSinglePlan;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.MarineGL;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
@@ -32,7 +32,7 @@ public class MarineGL_Rating extends BaseClass implements API
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	if(config.getProperty("status").equals("Y"))
 	{
-		macro=new DtcRatingSinglePlan(config);	
+		macro=new MarineGL(config);	
 	}
  }
  
