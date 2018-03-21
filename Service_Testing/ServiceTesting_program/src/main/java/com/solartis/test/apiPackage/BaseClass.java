@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -285,16 +286,25 @@ public class BaseClass
     		actual = actual.replaceAll("\\$", "");
     		System.out.println(expected);
     		System.out.println(actual);
-    		if(!(actual.matches("[a-zA-Z]")) && !(actual.matches("[a-zA-Z]")))
+    		System.out.println(!(Pattern.matches("[a-zA-Z]+", actual)));
+    		if(actual.matches(".*[a-z].*"))
+    		{
+    			if(expected.equals(actual))
+        		{
+        			status = true;
+        		}
+    		}
+    		else	
     		{
     		expected = Double.toString(Math.round(Double.parseDouble(expected)));
     		actual = Double.toString(Math.round(Double.parseDouble(actual)));
-    		}
+    		//}
     	//	expected = expected.replaceAll("\\.[0-9]*", "");
     	//  actual = actual.replaceAll("\\.[0-9]*", "");
     		if(expected.equals(actual))
     		{
     			status = true;
+    		}
     		}
 		}
 
