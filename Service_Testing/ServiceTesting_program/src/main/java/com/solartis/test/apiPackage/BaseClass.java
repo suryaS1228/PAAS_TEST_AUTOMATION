@@ -275,14 +275,18 @@ public class BaseClass
 				status = true;
 			}
 		}
-		if(actual!=null && expected!=null)
+		if(actual!=null && expected!=null && !(actual.equals("Path not Found")))
 		{
 			expected = expected.replaceAll("\\[\"", "");
     		actual = actual.replaceAll("\\[\"", "");	
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
-    		expected = expected.replaceAll("\\.[0-9]*", "");
-    		actual = actual.replaceAll("\\.[0-9]*", "");
+    		System.out.println(expected);
+    		System.out.println(actual);
+    		expected = Double.toString(Math.round(Double.parseDouble(expected)));
+    		actual = Double.toString(Math.round(Double.parseDouble(actual)));
+    	//	expected = expected.replaceAll("\\.[0-9]*", "");
+    	//  actual = actual.replaceAll("\\.[0-9]*", "");
     		expected = expected.replaceAll("\\$", "");
     		actual = actual.replaceAll("\\$", "");
     		if(expected.equals(actual))
