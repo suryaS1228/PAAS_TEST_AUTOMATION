@@ -123,10 +123,12 @@ public class CoverWalletRate extends BaseClass implements API
 			{
 				output.put("Flag_for_execution", "FailedResponse");
 				
-				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				output.put("AnalyserResult","Rule-"+RuleName);
+				String Message2=response.read("..UserMessage").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.put("User_message",Message);
+				output.put("User_message2",Message2);
+				output.put("AnalyserResult","Rule-"+Message2);
+				
 			}
 			if(config.getProperty("status").equals("Y"))
 			{
