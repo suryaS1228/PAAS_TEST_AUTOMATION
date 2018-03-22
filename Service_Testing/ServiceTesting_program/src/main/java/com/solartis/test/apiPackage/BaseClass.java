@@ -195,7 +195,6 @@ public class BaseClass
 	{		 
 	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
 	{		
-		
 	    try
 	    {
 	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
@@ -216,15 +215,12 @@ public class BaseClass
 						}
 						else
 						{
-							
 							outputrow.put(StatusColumn, "Fail");
 							analyse(rowStatusColVerify,outputrow);
 						}
 					}
 				}
 			}
-	    	
-	    	
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
