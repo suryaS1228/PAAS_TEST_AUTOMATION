@@ -171,11 +171,8 @@ public class BaseClass
 				{
 					try
 					{
-						//System.out.println("Writing Response to Table");
-						//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						//System.out.println(actual);
 						output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)
@@ -206,7 +203,6 @@ public class BaseClass
 			{	
 			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
 			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
-			  //  System.out.println(condition+"---------------"+outputrow);
 			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
@@ -222,7 +218,6 @@ public class BaseClass
 						{
 							
 							outputrow.put(StatusColumn, "Fail");
-							//outputrow.UpdateRow();
 							analyse(rowStatusColVerify,outputrow);
 						}
 					}
@@ -250,7 +245,6 @@ public class BaseClass
 	    }	
 	    catch(DatabaseException e)
 	    {
-	    	//System.out.println(e);
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
@@ -298,9 +292,6 @@ public class BaseClass
     		{
     		expected = Double.toString(Math.round(Double.parseDouble(expected)));
     		actual = Double.toString(Math.round(Double.parseDouble(actual)));
-    		//}
-    	//	expected = expected.replaceAll("\\.[0-9]*", "");
-    	//  actual = actual.replaceAll("\\.[0-9]*", "");
     		if(expected.equals(actual))
     		{
     			status = true;
@@ -355,9 +346,10 @@ public class BaseClass
 				break;
 			}
 		}
-		return exist;	
-
+		return exist;
 	}
+	
+	
 	protected String excelreportlocation;
 	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
@@ -366,7 +358,6 @@ public class BaseClass
 			DatabaseOperation db=new DatabaseOperation();
 			Date date = new Date();
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-			//DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_DTC_Development_ADMIN","root","redhat");
 			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
 			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 			excelreportlocation="AnalysisReport "+DateandTime+".xls";
@@ -413,7 +404,6 @@ public class BaseClass
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void Report (PropertiesHandle config) throws APIException
 	{
-		
 		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 		Date date = new Date();
 		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
@@ -429,7 +419,6 @@ public class BaseClass
 			cfg.setDefaultEncoding("UTF-8");
 			cfg.setNumberFormat("0.######");
 			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-			//System.out.println(Requesttemplatepath);
 			template = cfg.getTemplate(Requesttemplatepath);
 			
 			root.put("ReportInformation", new ArrayList<Object>());
@@ -443,7 +432,6 @@ public class BaseClass
 			File file= new File(outputfilepath);
 			Writer writer = new FileWriter (file);
 			template.process(root, writer);
-			//System.out.println(writer.toString());
 			writer.flush();
 			writer.close();
 			
@@ -461,66 +449,66 @@ public class BaseClass
 	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
 	{
 		
-		System.out.println("Exorting data to Excel");
-		DatabaseOperation db=new DatabaseOperation();
-		ResultSet rs=null;
-		HSSFWorkbook workBook=null;
-		HSSFSheet sheet =null;
-	    rs=db.GetQueryResultsSet(Query);
-	    File file = new File(FileToExport);
-	    if(!file.exists())                               //Creation of Workbook and Sheet
-	    {
-	    	workBook =new HSSFWorkbook();
-	    }
-	    else
-	    {
-	    	workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
-	    }
-        sheet = workBook.createSheet(Sheet);
-                                                         //import columns to Excel
-		ResultSetMetaData metaData=rs.getMetaData();
-		int columnCount=metaData.getColumnCount();
-		ArrayList<String> columns = new ArrayList<String>();
-		for (int i = 1; i <= columnCount; i++) 
-		{
-		      String columnName = metaData.getColumnName(i);
-		      columns.add(columnName);
-		}
-		    
-		HSSFRow row = sheet.createRow(0);
-		int  Fieldcol=0; 
-		for (String columnName : columns) 
-		{
-		      row.createCell(Fieldcol).setCellValue(columnName);
-		     // System.out.println(columnName);
-		      Fieldcol++;
-		}
-                                                            //import column values to Excel	
-		int ValueRow=1;
-		do
-		 {
-		    int Valuecol=0;
-			HSSFRow valrow = sheet.createRow(ValueRow);
-	          for (String columnName : columns)
-	           {
-	            String value = rs.getString(columnName);
-	            valrow.createCell(Valuecol).setCellValue(value);
-	            Valuecol++;
-	           }
-	         ValueRow++;
-	     } while (rs.next());
-		                                                    //Save the Details and close the File
 		try
-	     {
+		{
+			System.out.println("Exporting Report with Test cases to Excel");
+			DatabaseOperation db=new DatabaseOperation();
+			ResultSet rs=null;
+			HSSFWorkbook workBook=null;
+			HSSFSheet sheet =null;
+			rs=db.GetQueryResultsSet(Query);
+			File file = new File(FileToExport);
+			if(!file.exists())                               //Creation of Workbook and Sheet
+			{
+				workBook =new HSSFWorkbook();
+			}
+			else
+			{
+				workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+			}
+			sheet = workBook.createSheet(Sheet);
+                                                                                         //import columns to Excel
+			ResultSetMetaData metaData=rs.getMetaData();
+			int columnCount=metaData.getColumnCount();
+			ArrayList<String> columns = new ArrayList<String>();
+			for (int i = 1; i <= columnCount; i++) 
+			{
+				String columnName = metaData.getColumnName(i);
+				columns.add(columnName);
+			}
+		    
+			HSSFRow row = sheet.createRow(0);
+			int  Fieldcol=0; 
+			for (String columnName : columns) 
+			{
+				row.createCell(Fieldcol).setCellValue(columnName);
+				Fieldcol++;
+			}
+                                                            //import column values to Excel	
+			int ValueRow=1;
+			do
+			{
+				int Valuecol=0;
+				HSSFRow valrow = sheet.createRow(ValueRow);
+				for (String columnName : columns)
+				{
+					String value = rs.getString(columnName);
+					valrow.createCell(Valuecol).setCellValue(value);
+					Valuecol++;
+				}
+				ValueRow++;
+			} while (rs.next());
+		                                                    //Save the Details and close the File
+		
 	          FileOutputStream out = new FileOutputStream(FileToExport);
 	          workBook.write(out);
 	          out.close();
-	          System.out.println("first_excel.xls written successfully on disk.");
-	      } 
-	      catch (Exception e) 
-	      {
-	          e.printStackTrace();
-	      }
-		
+	          System.out.println("REPORT GENERATED SUCCESSFULLY ON DISK");
+		 }
+	     catch (Exception e) 
+	     {
+	    	 System.out.println("Error in Exporting the Testcase with Results");	 
+	       e.printStackTrace();
+	     }
 	}
 }
