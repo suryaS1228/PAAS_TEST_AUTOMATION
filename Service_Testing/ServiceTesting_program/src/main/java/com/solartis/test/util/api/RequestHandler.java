@@ -123,7 +123,7 @@ public class RequestHandler
 			}
 			else if(condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
-				((List<Object>) root.get(parentName)).add(new Attribute(atributeName,commonmap.get(atributeName)));
+				((List<Object>) root.get(parentName)).add(new Attribute(atributeName,commonmap.get(rowInputColVerify.get("DBColumnName"))));
 			}
 		}
 	}
