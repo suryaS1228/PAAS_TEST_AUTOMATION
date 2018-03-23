@@ -58,11 +58,13 @@ public class RequestHandler
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+			String parentName = rowInputColVerify.get("Parent");
+			List <Object> atribParent = new ArrayList<Object>();
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
-				String parentName = rowInputColVerify.get("Parent");
+				
 				boolean flag=false;
-				//System.out.println(parentName);
+				System.out.println(parentName);
 				for(String str: parentlist) 
 				{
 				    if(str.trim().contains(parentName))
@@ -72,10 +74,10 @@ public class RequestHandler
 				if(flag==false)
 				{
 					parentlist.add(parentName);				
-					List <Object> atribParent = new ArrayList<Object>();
+					
 					if(rowInputColVerify.get("AttributeNature").equals("dynamic"))
 					{
-						if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
+						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 							root.put(parentName, atribParent);
 					}
 					else
@@ -84,6 +86,10 @@ public class RequestHandler
 					}
 					//System.out.println(parentName);
 				}
+			}
+			else if(condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			{
+				root.put(parentName, atribParent);
 			}
 		}	
 	}

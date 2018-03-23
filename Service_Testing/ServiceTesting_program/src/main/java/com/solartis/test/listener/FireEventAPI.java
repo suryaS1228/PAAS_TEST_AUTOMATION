@@ -46,17 +46,18 @@ public class FireEventAPI implements API
 			listen.afterLoadSampleRequest();
 	}
 
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforePumpDataToRequest();
 		try
 		{
-			api.PumpDataToRequest(commonmap, commonmap);
+			api.PumpDataToRequest(commonmap, InputData);
 		}
 		catch(APIException e)
 		{
+			e.printStackTrace();
 			for (Listener listen : listeners1)
 				listen.onError(e);
 			throw new APIException(e);
@@ -193,12 +194,7 @@ public class FireEventAPI implements API
 		return ResponseToString;
 	}
 
-	@Override
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap, LinkedHashMap<String, String> InputData)
-			throws APIException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	
 }

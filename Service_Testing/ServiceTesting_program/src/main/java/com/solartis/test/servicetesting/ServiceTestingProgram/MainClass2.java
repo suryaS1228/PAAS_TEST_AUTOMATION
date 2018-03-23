@@ -128,7 +128,7 @@ public class MainClass2
 							
 			fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
-			fireEventAPI.PumpDataToRequest(commonMap);//PUMPING TESTDATA TO SAMPLEREQUEST s
+			fireEventAPI.PumpDataToRequest(commonMap,inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
 						    
 			fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
 						
@@ -143,12 +143,13 @@ public class MainClass2
 				if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
 				{
 					inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-								
+					commonMap.putAll(inputrow);
 					inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 				}
 				else//INPUT AND OUT DB TABLE ARE DIFFERENT
 				{
 					outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+					commonMap.putAll(outputrow);
 					OutputTable.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA									
 				}
 			} 

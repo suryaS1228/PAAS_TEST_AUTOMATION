@@ -65,6 +65,7 @@ public class BaseClass
 		}
 		catch( DatabaseException| TemplateException| IOException e)
 		{
+			e.printStackTrace();
 			throw new APIException("Error in pumpData to request", e);
 		}
 		
@@ -109,6 +110,7 @@ public class BaseClass
 	{
 	  try 
 	  {
+		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)

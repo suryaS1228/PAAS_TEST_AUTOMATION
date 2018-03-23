@@ -14,6 +14,7 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
+
 public class StarrGLCancel extends BaseClass implements API 
 {
 	public StarrGLCancel(PropertiesHandle config) throws SQLException
@@ -26,8 +27,7 @@ public class StarrGLCancel extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	@Override
-	 public void AddHeaders() throws APIException 
+	public void AddHeaders() throws APIException 
 	 {
 		try
 		{

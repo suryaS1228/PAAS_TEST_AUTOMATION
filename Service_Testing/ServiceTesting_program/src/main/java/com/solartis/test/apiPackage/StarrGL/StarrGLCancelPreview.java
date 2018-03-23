@@ -14,6 +14,7 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
+
 public class StarrGLCancelPreview extends BaseClass implements API 
 {
 	public StarrGLCancelPreview(PropertiesHandle config) throws SQLException
