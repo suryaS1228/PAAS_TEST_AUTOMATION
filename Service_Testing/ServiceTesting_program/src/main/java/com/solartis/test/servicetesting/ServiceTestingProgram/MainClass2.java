@@ -41,7 +41,7 @@ public class MainClass2
 		System.setProperty("jsse.enableSNIExtension", "false");
 		String apis = System.getProperty("Api");
 		apii = apis.split("-");
-		InputtableQuery="Select * from GL_Quote_Policy_Cancel_INPUT";
+		InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
 		ConfigObjectRepository=new PropertiesHandle[apii.length];
 		OutputDBObjectRepository= new DatabaseOperation[apii.length];
 		OutputTableRepository = new Object[apii.length];

@@ -88,19 +88,18 @@ public class RequestHandler
 		}	
 	}
 	@SuppressWarnings("unchecked")
-	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData) throws DatabaseException
+	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData,LinkedHashMap<String, String> commonmap) throws DatabaseException
 	{
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+			String parentName = rowInputColVerify.get("Parent");
+			String atributeName = rowInputColVerify.get("AtributeName");
+			//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
+			String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
+			Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
-				String parentName = rowInputColVerify.get("Parent");
-				String atributeName = rowInputColVerify.get("AtributeName");
-				//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
-				String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
-				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
-
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
@@ -115,6 +114,10 @@ public class RequestHandler
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
 					System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
+			}
+			else if(condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			{
+				((List<Object>) root.get(parentName)).add(new Attribute(atributeName,commonmap.get(atributeName)));
 			}
 		}
 	}

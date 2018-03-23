@@ -13,10 +13,7 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
-import freemarker.core.ParseException;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateNotFoundException;
 
 public class BaseClass 
 {
@@ -47,9 +44,9 @@ public class BaseClass
 	{
 		try
 		{
-		this.input = InputData;
-		sampleInput = new RequestHandler(config);
-		sampleInput.openTemplate();
+			this.input = InputData;
+			sampleInput = new RequestHandler(config);
+			sampleInput.openTemplate();
 		}
 		catch(IOException|ClassNotFoundException| DatabaseException e)
 		{
@@ -63,7 +60,7 @@ public class BaseClass
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			sampleInput.LoadData(tableInputColVerify, InputData);
-			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);	
+			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData,commonmap);	
 			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
 		}
 		catch( DatabaseException| TemplateException| IOException e)
