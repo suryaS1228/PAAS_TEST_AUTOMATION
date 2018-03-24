@@ -138,8 +138,10 @@ public class DatabaseOperation
 	    rs =    stmt.executeQuery(query);
 	}*/
 	
-	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row) throws DatabaseException, SQLException
+	public void UpdateRow(Integer rowNumber, LinkedHashMap<String, String> row)
 	{		
+		try
+		{
 		Statement stmt = null;
 		ResultSet rs = null;
 		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
@@ -160,7 +162,12 @@ public class DatabaseOperation
 		    } 
 		 
 		    rowIterator++;
-		 }while (rs.next());	
+		 }while (rs.next());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	

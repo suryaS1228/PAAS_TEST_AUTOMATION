@@ -144,13 +144,15 @@ public class MainClass2
 				{
 					inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 					commonMap.putAll(inputrow);
-					inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+					//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 				}
 				else//INPUT AND OUT DB TABLE ARE DIFFERENT
 				{
 					outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 					commonMap.putAll(outputrow);
-					OutputTable.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA									
+					System.out.println(RowIterator+"-----------"+outputrow);
+					OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
+					System.out.println("Update completed");
 				}
 			} 
 							
@@ -172,7 +174,7 @@ public class MainClass2
 			} 
 							
 			//inputrow.put("Flag_for_execution", "Completed");
-			//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+			inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 			}
 		else
 		{
