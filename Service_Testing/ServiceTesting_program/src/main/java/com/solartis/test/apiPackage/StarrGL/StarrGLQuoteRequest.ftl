@@ -1,8 +1,8 @@
-<#assign array=[]><#list numofai as x><#assign array=array+[x.value]></#list><#assign i=0>
+ <#if numofai??><#assign array=[]><#list numofai as x><#assign array=array+[x.value]></#list><#assign i=0><#else></#if>
 {
   "Policy": {
   "AdditionalInsuredList": [
-      <#list AdditionalInsuredType as result>{
+     <#if additionalInsuredtype??> <#list AdditionalInsuredType as result>{
         "${result.atrib}":"${result.value}",
         "AdditionalInsuredDetail": [
         <#list 1..array[i] as x>
@@ -13,7 +13,7 @@
           </#list>
         ]<#assign i=i+1>
       }<#if result?is_last><#else>,</#if>
-      </#list>
+      </#list><#else></#if>
     ],
   "Location": {
       "LocationDetail": [
