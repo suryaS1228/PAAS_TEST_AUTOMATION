@@ -310,7 +310,14 @@ public class ExcelOperationsPOI
 		         for (Cell c : r) {
 		             if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
 		            	 //System.out.println(c+"---------------------------------------------"+r);
-		                 evaluator.evaluateFormulaCell(c);
+		                 try
+		                 {
+		            	 evaluator.evaluateFormulaCell(c);
+		                 }
+		                 catch(Exception e)
+		                 {		                	 
+		                	 System.out.println("SheetName----"+sheet.getSheetName()+"RowNumber----------"+r.getRowNum()+"Cell formula is -----"+ c.getCellFormula());		                	 		                	
+		                 }
 		                 
 		             }
 		         }
