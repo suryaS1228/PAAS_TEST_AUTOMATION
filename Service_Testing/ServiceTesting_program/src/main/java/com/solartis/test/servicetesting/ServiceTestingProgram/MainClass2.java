@@ -174,7 +174,7 @@ public class MainClass2
 			} 
 							
 			//inputrow.put("Flag_for_execution", "Completed");
-			inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+			//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 			}
 		else
 		{

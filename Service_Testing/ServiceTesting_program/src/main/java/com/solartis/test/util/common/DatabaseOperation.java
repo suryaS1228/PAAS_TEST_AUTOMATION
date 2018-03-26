@@ -7,6 +7,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
+
+import com.mysql.jdbc.PreparedStatement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 
@@ -142,9 +144,9 @@ public class DatabaseOperation
 	{		
 		try
 		{
-		Statement stmt = null;
+			java.sql.PreparedStatement  stmt = null;
 		ResultSet rs = null;
-		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+		stmt = conn.prepareStatement (this.query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
 	    rs =    stmt.executeQuery(this.query);
 		rs.first();
 		ResultSetMetaData meta = rs.getMetaData();
@@ -153,13 +155,13 @@ public class DatabaseOperation
 		{
 			if(rowNumber == rowIterator)
 		    {
-				for (int i = 1; i <= meta.getColumnCount(); i++) 
-				{  
+				for (int i = 1; i <= meta.getColumnCount(); i++)
+				{
 					
-			       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));     
+			       rs.updateString(meta.getColumnName(i), row.get(meta.getColumnName(i)));
 			    }
 				rs.updateRow();
-		    } 
+		    }
 		 
 		    rowIterator++;
 		 }while (rs.next());
