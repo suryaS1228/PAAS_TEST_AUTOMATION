@@ -316,7 +316,8 @@ public class ExcelOperationsPOI
 		                 }
 		                 catch(Exception e)
 		                 {		                	 
-		                	 System.out.println("SheetName----"+sheet.getSheetName()+"RowNumber----------"+r.getRowNum()+"Cell formula is -----"+ c.getCellFormula());		                	 		                	
+		                	 System.out.println("SheetName----"+sheet.getSheetName()+"   RowNumber----------"+r.getRowNum()+"   Cell formula is -----"+ c.getCellFormula());	
+		                	 e.printStackTrace();
 		                 }
 		                 
 		             }
