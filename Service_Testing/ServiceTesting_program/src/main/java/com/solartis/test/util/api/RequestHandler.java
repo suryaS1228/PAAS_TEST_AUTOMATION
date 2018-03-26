@@ -104,7 +104,7 @@ public class RequestHandler
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
-					System.out.println(atributeName+"-----------"+atributeStaticValue);
+					//System.out.println(atributeName+"-----------"+atributeStaticValue);
 				}
 				else
 				{
@@ -113,7 +113,7 @@ public class RequestHandler
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
 			}
 		}

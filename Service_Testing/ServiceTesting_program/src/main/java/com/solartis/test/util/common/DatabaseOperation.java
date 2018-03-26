@@ -344,7 +344,7 @@ public class DatabaseOperation
 			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
 			for(int col=0;col<n;col++)
 			{
-				insertStatement.setString(col+1,xl.readData(row, col).toString()); 
+				insertStatement.setString(col+1,xl.readData(row, col).trim()); 
 				
 			}
 			insertStatement.executeUpdate();
