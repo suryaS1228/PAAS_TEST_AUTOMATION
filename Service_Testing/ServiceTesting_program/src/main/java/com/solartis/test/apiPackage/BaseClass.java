@@ -277,7 +277,7 @@ public class BaseClass
     		System.out.println(expected);
     		System.out.println(actual);
     		System.out.println(!(Pattern.matches("[a-zA-Z]+", actual)));
-    		if(actual.matches(".*[a-z].*"))
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*"))
     		{
     			if(expected.equals(actual))
         		{
