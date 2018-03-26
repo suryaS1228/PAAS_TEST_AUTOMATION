@@ -272,7 +272,7 @@ public class DatabaseOperation
 	          FileOutputStream out = new FileOutputStream(FileToExport);
 	          workBook.write(out);
 	          out.close();
-	          System.out.println("first_excel.xls written successfully on disk.");
+	          System.out.println("Results and Data Exported successfully on disk.");
 	      } 
 	      catch (Exception e) 
 	      {
