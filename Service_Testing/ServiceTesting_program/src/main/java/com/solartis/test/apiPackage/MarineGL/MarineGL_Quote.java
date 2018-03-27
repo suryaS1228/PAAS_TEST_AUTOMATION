@@ -23,6 +23,7 @@ public class MarineGL_Quote extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
+	
 	public void AddHeaders() throws APIException
 	{
 		try

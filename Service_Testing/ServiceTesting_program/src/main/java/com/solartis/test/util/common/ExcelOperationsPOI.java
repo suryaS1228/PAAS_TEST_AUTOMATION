@@ -124,6 +124,12 @@ public class ExcelOperationsPOI
 			worksheet = (HSSFSheet) this.workbook.getSheet(this.sheet_name);
 		}
 		cell = this.worksheet.getRow(rowNumber).getCell(columnNumber);
+		if(cell==null)
+		{
+			return "";
+		}
+		else
+		{
 		FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();		
 		evaluator.clearAllCachedResultValues();
 		//CellValue cellvalue1 =evaluator.evaluate(cell);
@@ -174,6 +180,7 @@ public class ExcelOperationsPOI
 				                            break;
 			
 			default						:	cellvalue="N/A"; 										break;
+		}
 		}
 		return cellvalue;
 		
