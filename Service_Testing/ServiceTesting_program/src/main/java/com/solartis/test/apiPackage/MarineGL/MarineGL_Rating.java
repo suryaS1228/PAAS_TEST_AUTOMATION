@@ -123,6 +123,10 @@ public class MarineGL_Rating extends BaseClass implements API
 			
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(Message.equals("Server Busy, Request cannot be processed right now"))
+			{
+				output.put("AnalyserResult","Error-ServerBusy");
+			}
 			output.put("AnalyserResult","Rule-"+RuleName);
 			output.put("User_message",Message);
 		}
