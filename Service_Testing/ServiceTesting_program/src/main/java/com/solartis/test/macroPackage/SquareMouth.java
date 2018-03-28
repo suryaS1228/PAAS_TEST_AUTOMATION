@@ -104,7 +104,6 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				String condition = rowPumpinData.get("Condition");
 				if (rowPumpinData.get("flag_for_execution").equals("Y"))//&&ConditionReading(condition,inputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))

@@ -15,7 +15,6 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
-import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
@@ -366,7 +365,6 @@ public class StarrGLMacro implements MacroInterface
 		Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(s);
 		boolean b = m.find();
-		String res="";
 		int num=0;
 		if (b)
 		{

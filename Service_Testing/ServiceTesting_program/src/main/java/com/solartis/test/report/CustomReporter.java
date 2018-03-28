@@ -67,6 +67,7 @@ public class CustomReporter implements IReporter {
 	}
 	
 	/* Read template content. */
+	@SuppressWarnings({ "resource", "static-access", "finally" })
 	private String readEmailabelReportTemplate()
 	{
 		StringBuffer retBuf = new StringBuffer();
@@ -101,6 +102,7 @@ public class CustomReporter implements IReporter {
 	}
 	
 	/* Build test suite summary data. */
+	@SuppressWarnings("finally")
 	private String getTestSuiteSummary(List<ISuite> suites)
 	{
 		StringBuffer retBuf = new StringBuffer();
@@ -240,6 +242,7 @@ public class CustomReporter implements IReporter {
 	}
 	
 	/* Get test method summary info. */
+	@SuppressWarnings("finally")
 	private String getTestMehodSummary(List<ISuite> suites)
 	{
 		StringBuffer retBuf = new StringBuffer();
