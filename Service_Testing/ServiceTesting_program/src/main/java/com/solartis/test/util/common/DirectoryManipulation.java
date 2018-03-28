@@ -79,7 +79,8 @@ public static String zipFiles(String zipFile, String srcDir)
 		zip.close();
 	}
 
-  static private void addFileToZip(String path, String srcFile, ZipOutputStream zip)
+  @SuppressWarnings("resource")
+static private void addFileToZip(String path, String srcFile, ZipOutputStream zip)
       throws Exception 
   {
 

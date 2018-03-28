@@ -217,6 +217,7 @@ public class DatabaseOperation
 		 stmt.execute(this.query);
 	}
 	
+	@SuppressWarnings("resource")
 	public static void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
 	{
 		DatabaseOperation db=new DatabaseOperation();
