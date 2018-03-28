@@ -12,7 +12,7 @@ public class LogListener implements Listener
 	{
 		String log4jConfigFile = "src/main/java/log4j.properties";
 		PropertyConfigurator.configure(log4jConfigFile);
-		Log = Logger.getLogger(MainClass.class);
+		Log = Logger.getLogger(MainClass.class.getName());
 	}
 	
 	@Override
