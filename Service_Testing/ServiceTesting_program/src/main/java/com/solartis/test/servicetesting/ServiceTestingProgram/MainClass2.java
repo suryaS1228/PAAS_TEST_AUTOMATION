@@ -91,6 +91,7 @@ public class MainClass2
 		try
 		{
 		//PropertiesHandle config; 
+			
 		LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
 		LinkedHashMap<String, String> outputrow = new LinkedHashMap<String, String> ();
 		ObjectMapper inputtableobjectMapper = new ObjectMapper();
@@ -124,7 +125,7 @@ public class MainClass2
 		//System.out.println("TestData : " + inputrow.get("S.No"));  	
 		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
-			System.out.println("TestData" + inputrow.get("S.No") + "flag_for_execution = Y" );					 
+			System.out.println("TestData" + inputrow.get("S.No") + "  API--"+apis );					 
 							
 			fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
