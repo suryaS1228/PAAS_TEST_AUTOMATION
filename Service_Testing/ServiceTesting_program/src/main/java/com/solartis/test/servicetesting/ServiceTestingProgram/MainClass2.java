@@ -121,7 +121,7 @@ public class MainClass2
 		{
 			System.out.println("inputrow is null");
 		}
-		System.out.println("TestData : " + inputrow.get("S.No"));  	
+		//System.out.println("TestData : " + inputrow.get("S.No"));  	
 		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
 			System.out.println("TestData" + inputrow.get("S.No") + "flag_for_execution = Y" );					 
@@ -150,9 +150,9 @@ public class MainClass2
 				{
 					outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 					commonMap.putAll(outputrow);
-					System.out.println(RowIterator+"-----------"+outputrow);
+					//System.out.println(RowIterator+"-----------"+outputrow);
 					OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
-					System.out.println("Update completed");
+					//System.out.println("Update completed");
 				}
 			} 
 							
