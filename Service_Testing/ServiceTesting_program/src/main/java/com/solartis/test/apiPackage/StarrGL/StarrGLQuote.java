@@ -66,7 +66,7 @@ public class StarrGLQuote extends BaseClass implements API
 						//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn"))+"----------"+actual);
+						//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn"))+"----------"+actual);
 						output.put("Flag_for_execution", "Completed");
 						output.put("MessageType"," ");
 						output.put("UserMessage"," ");
