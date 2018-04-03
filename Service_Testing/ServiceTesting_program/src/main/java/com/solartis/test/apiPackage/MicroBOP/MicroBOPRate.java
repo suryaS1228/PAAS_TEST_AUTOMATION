@@ -30,7 +30,7 @@ public class MicroBOPRate extends BaseClass implements API {
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 		macro=new MicroBopMacro(config);	
 		}
@@ -39,7 +39,7 @@ public class MicroBOPRate extends BaseClass implements API {
 	
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 				try 
 				{
@@ -57,7 +57,7 @@ public class MicroBOPRate extends BaseClass implements API {
 	{	
 		try
 		{
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 			macro.PumpinData(input, config);	
 			
@@ -133,7 +133,7 @@ public class MicroBOPRate extends BaseClass implements API {
 				
 				
 			}
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 			}

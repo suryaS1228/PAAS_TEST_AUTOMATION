@@ -69,8 +69,10 @@ public class MainClass
 			{
 		     this.beforeTesting();
 			}
+			System.out.println(config.getProperty("actualFlag")+"========"+config.getProperty("ComparisonFlag"));
 			actualchoice = config.getProperty("actualFlag");
 			comparisonchoice = config.getProperty("ComparisonFlag");
+			
 			outputtablechoice = config.getProperty("output_in_same_table");
 			String classname = config.getProperty("ClassName");
 			
