@@ -20,7 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -346,7 +345,7 @@ public class BaseClass
 	
 	
 	protected String excelreportlocation;
-	public void generateChart(PropertiesHandle config) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
+	public void generateReport(PropertiesHandle config,String comparisonChoice) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
 		try 
 		{
@@ -362,7 +361,8 @@ public class BaseClass
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, excelreportlocation1);
 			sample.save();
-			
+			if(comparisonChoice.equals("Y"))
+		    {
 			ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 			ob.getsheets("TestReport");
 			ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
@@ -386,6 +386,7 @@ public class BaseClass
 			}
 			ob.refresh();
 			ob.saveAs(excelreportlocation1);
+		    }
 			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
 			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
 		}
@@ -396,48 +397,6 @@ public class BaseClass
 		}
 	}
 	
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public void Report (PropertiesHandle config) throws APIException
-	{
-		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
-		Date date = new Date();
-		String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-		Template template = null;
-		Map<String, Object> root = new HashMap<String, Object>();
-		String Requesttemplatepath="src/main/java/com/solartis/test/report/"+"Report.ftl";
-		String outputfilepath=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".html";
-		System.out.println(outputfilepath);
-		try
-		{			
-			System.setProperty("org.freemarker.loggerLibrary", "none");
-			Configuration cfg = new Configuration();
-			cfg.setDefaultEncoding("UTF-8");
-			cfg.setNumberFormat("0.######");
-			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-			template = cfg.getTemplate(Requesttemplatepath);
-			
-			root.put("ReportInformation", new ArrayList<Object>());
-			while (inputtableiterator.hasNext()) 
-			{
-				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-				LinkedHashMap<String, String> inputrow = inputentry.getValue();
-				((List<Object>) root.get("ReportInformation")).add(new Attribute(inputrow.get("AnalyserResult"),inputrow.get("NoOfCount")));
-			}
-			root.put("ExcelReport",excelreportlocation );
-			File file= new File(outputfilepath);
-			Writer writer = new FileWriter (file);
-			template.process(root, writer);
-			writer.flush();
-			writer.close();
-			
-			File htmlFile = new File(outputfilepath);
-			Desktop.getDesktop().browse(htmlFile.toURI());
-		}
-		catch(IOException | TemplateException e)
-		{
-			throw new APIException("ERROR OCCURS IN load Template FUNCTION -- BASE CLASS", e);
-		}
-	}
 	
 	
 	@SuppressWarnings("resource")

@@ -58,15 +58,15 @@ public class PropertiesHandle extends Properties
 			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);						
             if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
-				 this.ActualAndStatus("Y", "N");    
+				 this.ActualAndComparisonStatus("Y", "N");    
             }
 		    else if(OutputChioce.equalsIgnoreCase("Get_Response_Only"))
 		    {
-		    	this.ActualAndStatus("N", "N");    
+		    	this.ActualAndComparisonStatus("N", "N");    
 		    }
 			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
 			{
-				this.ActualAndStatus("Y", "Y");    
+				this.ActualAndComparisonStatus("Y", "Y");    
 			}
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
@@ -191,10 +191,10 @@ public class PropertiesHandle extends Properties
 		}
 
 	
-		protected void ActualAndStatus(String Actual, String Status)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
+		protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
-			this.put("actual", Actual);
-			this.put("status", Status);
+			this.put("actualStatus", Actual);
+			this.put("Comparisonstatus", Comparison);
 		}	
 		
 		

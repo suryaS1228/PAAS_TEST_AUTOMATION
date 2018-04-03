@@ -42,7 +42,7 @@ public class MainClass
 	static FireEventAPI fireEventAPI;
 	public static PropertiesHandle config; 
 	public static String actualchoice;
-	public static String statuschoice;
+	public static String comparisonchoice;
 	public static String outputtablechoice;
 	public static DatabaseOperation input;
 	public static DatabaseOperation output;
@@ -63,15 +63,14 @@ public class MainClass
 		try 
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
-			disableSslVerification();
 			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
 			Conn=DatabaseOperation.ConnectionSetup(config);
 			if(config.getProperty("ModeofExecution").equalsIgnoreCase("New"))
 			{
 		     this.beforeTesting();
 			}
-			actualchoice = config.getProperty("actual");
-			statuschoice = config.getProperty("status");
+			actualchoice = config.getProperty("actualStatus");
+			comparisonchoice = config.getProperty("Comparisonstatus");
 			outputtablechoice = config.getProperty("output_in_same_table");
 			String classname = config.getProperty("ClassName");
 			
@@ -100,12 +99,9 @@ public class MainClass
 			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-			//for (Entry<Integer, LinkedHashMap<String, String>> entry : inputtable.entrySet())
-				System.out.println("TestData : " + inputrow.get("Testdata"));  	
+				System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
-						{
-						  //  System.out.println("TestData" + inputrow.get("S.No") + "flag_for_execution = Y" );					 
-							
+						{							
 						    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
 						    fireEventAPI.PumpDataToRequest(inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
@@ -130,14 +126,13 @@ public class MainClass
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
-									//db.insetRowWithSNO(config.getProperty("outputTable"),Integer.parseInt(inputrow.get("S_NO")),inputrow.get("Testdata"));
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
 							} 
 							
-							if(statuschoice.equals("Y"))
+							if(comparisonchoice.equals("Y"))
 							{
 								if(outputtablechoice.equals("Y"))
 								{
@@ -179,6 +174,53 @@ public class MainClass
 		
     }	
 			
+	
+	@AfterTest
+	public void connectionclose() throws DatabaseException, POIException, APIException
+	{
+		BaseClass base = new BaseClass();
+		try
+		{
+		if(comparisonchoice.equals("Y"))
+	    {
+			base.generateReport(config,comparisonchoice);
+			
+	    }   
+
+		//System.out.println(config.getProperty("OverallResults"));
+		//System.out.println(config.getProperty("ZipFolderPath"));
+		DirectoryManipulation.zipFolder(config.getProperty("ZipFolderPath"), config.getProperty("OverallResults"));
+		
+		DatabaseOperation.CloseConn();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void beforeTesting() throws POIException
+	{
+		try
+		{
+		    db=new DatabaseOperation();
+		    db.truncateTable(config.getProperty("inputTable"));
+		    db.truncateTable(config.getProperty("outputTable"));
+			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
+			db.insetRowWithSNO(config.getProperty("outputTable"), config.getProperty("inputTable"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("request_location"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
+			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));
+		}
+		catch(SQLException | ClassNotFoundException | IOException e)
+		{
+			e.printStackTrace();
+		}
+			
+	}
+	
+	
 	@SuppressWarnings("unused")
 	@DataProvider(name="PaaSTest", parallel=false)
 	 public Object[][] getDataFromDataprovider() throws DatabaseException
@@ -214,90 +256,5 @@ public class MainClass
 		 
 		 return combined;
 	 }
-	
-	private static void disableSslVerification() {
-	    try
-	    {
-	        // Create a trust manager that does not validate certificate chains
-	        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-	            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-	                return null;
-	            }
-	            @Override
-	            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-	            }
-	            @Override
-	            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-	            }
-				
-	        }
-	        };
-
-	        // Install the all-trusting trust manager
-	        SSLContext sc = SSLContext.getInstance("SSL");
-	        sc.init(null, trustAllCerts, new java.security.SecureRandom());
-	        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-	        // Create all-trusting host name verifier
-	        HostnameVerifier allHostsValid = new HostnameVerifier() {
-	        	@Override
-	        	public boolean verify(String hostname, SSLSession session) {
-	                return true;
-	            }
-	        };
-
-	        // Install the all-trusting host verifier
-	        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-	    } catch (NoSuchAlgorithmException e) {
-	        e.printStackTrace();
-	    } catch (KeyManagementException e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	@AfterTest
-	public void connectionclose() throws DatabaseException, POIException, APIException
-	{
-		BaseClass base = new BaseClass();
-		try
-		{
-		if(statuschoice.equals("Y"))
-	    {
-			base.generateChart(config);
-			//base.Report(config);
-			
-	    }   
-		//System.out.println(config.getProperty("OverallResults"));
-		//System.out.println(config.getProperty("ZipFolderPath"));
-		DirectoryManipulation.zipFolder(config.getProperty("ZipFolderPath"), config.getProperty("OverallResults"));
-		
-		DatabaseOperation.CloseConn();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public void beforeTesting() throws POIException
-	{
-		try
-		{
-		    db=new DatabaseOperation();
-		    db.truncateTable(config.getProperty("inputTable"));
-		    db.truncateTable(config.getProperty("outputTable"));
-			db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
-			db.insetRowWithSNO(config.getProperty("outputTable"), config.getProperty("inputTable"));
-			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("request_location"));
-			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
-			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
-			DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));
-		}
-		catch(SQLException | ClassNotFoundException | IOException e)
-		{
-			e.printStackTrace();
-		}
-			
-	}
 	
 }
