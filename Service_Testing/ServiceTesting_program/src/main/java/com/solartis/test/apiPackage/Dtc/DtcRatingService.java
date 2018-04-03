@@ -30,7 +30,7 @@ public class DtcRatingService extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	if(config.getProperty("status").equals("Y"))
+	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
 	macro=new DtcMacro(config);	
 	}
@@ -80,7 +80,7 @@ public class DtcRatingService extends BaseClass implements API
 				   }
 				  }
 				}
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 				macro.PumpinData(input, config);    //Data feed into Sample Rating model
 			}

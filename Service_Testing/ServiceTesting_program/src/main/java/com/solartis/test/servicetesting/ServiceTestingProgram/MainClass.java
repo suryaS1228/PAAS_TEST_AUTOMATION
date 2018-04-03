@@ -69,8 +69,8 @@ public class MainClass
 			{
 		     this.beforeTesting();
 			}
-			actualchoice = config.getProperty("actualStatus");
-			comparisonchoice = config.getProperty("Comparisonstatus");
+			actualchoice = config.getProperty("actualFlag");
+			comparisonchoice = config.getProperty("ComparisonFlag");
 			outputtablechoice = config.getProperty("output_in_same_table");
 			String classname = config.getProperty("ClassName");
 			

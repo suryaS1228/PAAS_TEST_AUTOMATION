@@ -30,7 +30,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	if(config.getProperty("status").equals("Y"))
+	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
 		macro=new DtcRatingSinglePlan(config);	
 	}
@@ -38,7 +38,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
  
  public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
  {
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -54,7 +54,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
  
  public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -125,7 +125,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			output.put("AnalyserResult","Rule-"+RuleName);
 			output.put("User_message",Message);
 		}
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}

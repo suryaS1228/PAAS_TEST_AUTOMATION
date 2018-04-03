@@ -193,8 +193,8 @@ public class PropertiesHandle extends Properties
 	
 		protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
-			this.put("actualStatus", Actual);
-			this.put("Comparisonstatus", Comparison);
+			this.put("actualFlag", Actual);
+			this.put("ComparisonFlag", Comparison);
 		}	
 		
 		
