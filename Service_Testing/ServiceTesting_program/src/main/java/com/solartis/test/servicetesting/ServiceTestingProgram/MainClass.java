@@ -96,10 +96,8 @@ public class MainClass
 	public static void apiTest(Integer RowIterator, Object inputtablerowobj, Object outputtablerowobj)throws InterruptedException, DatabaseException, InterruptedException
     {   		
 		try 
-		{
-			
+		{	
 			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-			
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
 				System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
@@ -183,14 +181,9 @@ public class MainClass
 		BaseClass base = new BaseClass();
 		try
 		{
-		if(comparisonchoice.equals("Y"))
-	    {
-			base.generateReport(config,comparisonchoice);
-			
-	    }   
+	
+		base.generateReport(config,comparisonchoice);
 
-		//System.out.println(config.getProperty("OverallResults"));
-		//System.out.println(config.getProperty("ZipFolderPath"));
 		DirectoryManipulation.zipFolder(config.getProperty("ZipFolderPath"), config.getProperty("OverallResults"));
 		
 		DatabaseOperation.CloseConn();
