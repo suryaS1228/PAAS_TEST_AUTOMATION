@@ -280,7 +280,7 @@ public class BaseClass
 
     	//System.out.println(expected+"-----------"+actual);
     	
-    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.equals("")||actual.matches("[a-zA-Z]"))
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*"))
     		{
     			//System.out.println("expected or actual is string");
     			if(expected.equals(actual))
