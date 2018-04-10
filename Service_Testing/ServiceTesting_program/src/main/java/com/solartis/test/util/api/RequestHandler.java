@@ -112,8 +112,9 @@ public class RequestHandler
 					{
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
+					System.out.println(atributeName+"-----------"+atributeDynamicValue);
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					//
 				}
 			}
 		}

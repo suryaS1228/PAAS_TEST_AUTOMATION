@@ -251,18 +251,22 @@ public class BaseClass
 	{
 		
 		boolean status = false;
-		if(actual == null||actual.equals(""))
+		if(actual == null||actual.equals("")||actual.isEmpty())
 		{
+			System.out.println("actual is empty");
 			if((expected == null || expected.equals("")||expected.equals("0") || expected.equals("0.0")))
 			{
 				status = true;
+				return status;
 			}
 		}
-		if(expected == null||expected.equals(""))
+		if(expected == null||expected.equals("")||expected.isEmpty())
 		{
+			System.out.println("actual is empty");
 			if(actual == null|| actual.equals("")||actual.equals("0") || actual.equals("0.0"))
 			{
 				status = true;
+				return status;
 			}
 		}
 		if(actual!=null && expected!=null)
@@ -274,12 +278,15 @@ public class BaseClass
     		expected = expected.replaceAll("\\$", "");
     		actual = actual.replaceAll("\\$", "");
 
-    		//System.out.println(!(Pattern.matches("[a-zA-Z]+", actual)));
-    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.equals(""))
+    	//System.out.println(expected+"-----------"+actual);
+    	
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.equals("")||actual.matches("[a-zA-Z]"))
     		{
+    			//System.out.println("expected or actual is string");
     			if(expected.equals(actual))
         		{
         			status = true;
+        			return status;
         		}
     		}
     		else	
@@ -289,6 +296,7 @@ public class BaseClass
     		if(expected.equals(actual))
     		{
     			status = true;
+    			return status;
     		}
     		}
 		}

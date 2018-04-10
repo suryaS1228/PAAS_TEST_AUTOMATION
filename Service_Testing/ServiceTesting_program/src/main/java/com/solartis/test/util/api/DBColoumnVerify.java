@@ -34,7 +34,7 @@ public class DBColoumnVerify extends DatabaseOperation
 	{
 		boolean ConditionReading=false;
 		
-			if(condition.equals(""))
+			if(condition.equals("")||condition.isEmpty()||condition==null)
 			{
 				ConditionReading=true;
 				return ConditionReading;
