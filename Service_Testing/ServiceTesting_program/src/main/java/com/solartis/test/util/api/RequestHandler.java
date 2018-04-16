@@ -99,6 +99,7 @@ public class RequestHandler
 				String atributeName = rowInputColVerify.get("AtributeName");
 				//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
 				String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
+				System.out.println(rowInputColVerify.get("DBColumnName"));
 				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 
 				if(rowInputColVerify.get("AttributeNature").equals("static"))
