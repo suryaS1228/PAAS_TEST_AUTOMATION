@@ -344,7 +344,7 @@ DatabaseOperation Lookup = new DatabaseOperation();
 		}
 		else
 		{
-			//Data=Data.replace("%", "");
+			Data=Data.replace("%", "");
 			float value = Float.valueOf(Data)/100;			
 			DecimalFormat df = new DecimalFormat("#.##");
 			String flo = df.format(value);		

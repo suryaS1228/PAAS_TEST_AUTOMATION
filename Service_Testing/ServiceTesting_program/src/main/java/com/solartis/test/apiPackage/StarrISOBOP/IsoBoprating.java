@@ -31,7 +31,7 @@ public class IsoBoprating extends BaseClass implements API
 			InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 			OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 			macro=new IsoMacro(config);	
 			}
@@ -47,7 +47,7 @@ public class IsoBoprating extends BaseClass implements API
 	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -63,7 +63,7 @@ public class IsoBoprating extends BaseClass implements API
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -113,7 +113,6 @@ public class IsoBoprating extends BaseClass implements API
 							{
 						
 							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-			
 							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 							output.put("Flag_for_execution", ResponseStatus);
 							}
@@ -127,13 +126,12 @@ public class IsoBoprating extends BaseClass implements API
 			else
 			{
 				output.put("Flag_for_execution", "FailedResponse");
-				
 				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.put("AnalyserResult","Rule-"+RuleName);
 				output.put("User_message",Message);
 			}
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 			}
