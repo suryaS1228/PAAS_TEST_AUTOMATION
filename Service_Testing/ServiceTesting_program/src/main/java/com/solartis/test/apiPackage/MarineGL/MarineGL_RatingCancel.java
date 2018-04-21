@@ -16,6 +16,7 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.MarineGL;
+import com.solartis.test.macroPackage.MarineGl_Cancel;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
@@ -32,7 +33,7 @@ public class MarineGL_RatingCancel extends BaseClass implements API
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
-		macro=new MarineGL(config);	
+		macro=new MarineGl_Cancel(config);	
 	}
  }
  
