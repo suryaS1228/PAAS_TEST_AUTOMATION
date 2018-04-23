@@ -371,29 +371,29 @@ public class BaseClass
 			sample.save();
 			if(comparisonChoice.equals("Y"))
 		    {
-			ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
-			ob.getsheets("TestReport");
-			ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
-			Date today=new Date();
-			ob.write_data(5, 7,today);
-			ob.write_data(5, 14,config.getProperty("ExecutionName"));
-			int	row=9;
-			int si_no=1;
-			while (inputtableiterator.hasNext()) 
-			{
-				 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-				 LinkedHashMap<String, String> inputrow = inputentry.getValue();
-				
-				    ob.write_data(row, 2,si_no );
-				    ob.write_data(row,3,inputrow.get("AnalyserResult"));
-				    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
+				ob.getsheets("TestReport");
+				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
+				Date today=new Date();
+				ob.write_data(5, 7,today);
+				ob.write_data(5, 14,config.getProperty("ExecutionName"));
+				int	row=9;
+				int si_no=1;
+				while (inputtableiterator.hasNext()) 
+				{
+					 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+					 LinkedHashMap<String, String> inputrow = inputentry.getValue();
 					
-				 row++;
-				 si_no++;
-				 
-			}
-			ob.refresh();
-			ob.saveAs(excelreportlocation1);
+					    ob.write_data(row, 2,si_no );
+					    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+					    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+						
+					 row++;
+					 si_no++;
+					 
+				}
+				ob.refresh();
+				ob.saveAs(excelreportlocation1);
 		    }
 			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
 			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
