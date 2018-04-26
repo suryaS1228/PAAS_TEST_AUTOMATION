@@ -75,7 +75,7 @@ public class RequestHandler
 					List <Object> atribParent = new ArrayList<Object>();
 					if(rowInputColVerify.get("AttributeNature").equals("dynamic"))
 					{
-						if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
+						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 							root.put(parentName, atribParent);
 					}
 					else
