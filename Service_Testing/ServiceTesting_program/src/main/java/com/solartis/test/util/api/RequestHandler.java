@@ -101,21 +101,27 @@ public class RequestHandler
 				String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
 				System.out.println(rowInputColVerify.get("DBColumnName"));
 				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
-
-				if(rowInputColVerify.get("AttributeNature").equals("static"))
+				if(atributeDynamicValue==null || atributeStaticValue==null)
 				{
-					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
-					//System.out.println(atributeName+"-----------"+atributeStaticValue);
+					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,""));
 				}
-				else
+				else 
 				{
-					if(rowInputColVerify.get("iteration").equals("loop"))
+					if(rowInputColVerify.get("AttributeNature").equals("static"))
 					{
-						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
+						((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
+						//System.out.println(atributeName+"-----------"+atributeStaticValue);
 					}
-					System.out.println(atributeName+"-----------"+atributeDynamicValue);
-					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					//
+					else
+					{
+						if(rowInputColVerify.get("iteration").equals("loop"))
+						{
+							atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
+						}
+						System.out.println(atributeName+"-----------"+atributeDynamicValue);
+						((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
+						//
+					}
 				}
 			}
 		}
