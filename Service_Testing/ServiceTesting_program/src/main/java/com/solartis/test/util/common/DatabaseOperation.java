@@ -103,6 +103,22 @@ public class DatabaseOperation
 		conn = null;
 	}
 	
+	public void executeQuery(String query) throws  DatabaseException
+	{
+		try 
+		{
+			Statement stmt = null;
+			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+			stmt.executeQuery(query);
+		}
+	    catch (Exception e) 
+		{
+			System.out.println(e);
+			throw new DatabaseException("PROBLEM in Executing query",e);
+			
+		}
+	}
+	
 	public LinkedHashMap<Integer, LinkedHashMap<String, String>> GetDataObjects(String query) throws DatabaseException
 	{
 		this.query = query;
