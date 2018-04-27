@@ -68,7 +68,7 @@ public class BaseClass
 	{
 	  try 
 	  {
-		  System.out.println(request.FileToString());
+		 // System.out.println(request.FileToString());
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)
@@ -137,14 +137,14 @@ public class BaseClass
 				{
 				try
 					{
-					System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+					//System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
 					
 					String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					
 				
 					
 					output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
+					//System.out.println(actual);
 					output.WriteData("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)
