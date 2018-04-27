@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -15,14 +16,16 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
+import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class StarrGLCancelPreviewMacro implements MacroInterface
+public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected StarrGLMacro trans;
+	protected StarrGLCancelPreviewMacro trans;
 	protected String Samplepath;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
@@ -82,7 +85,7 @@ public class StarrGLCancelPreviewMacro implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
@@ -100,7 +103,7 @@ public class StarrGLCancelPreviewMacro implements MacroInterface
 			//DatabaseOperation configTable = new DatabaseOperation();
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new StarrGLMacro(configFile);
+			trans= new StarrGLCancelPreviewMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{								
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
@@ -172,7 +175,8 @@ public class StarrGLCancelPreviewMacro implements MacroInterface
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
-			if (rowPumpoutData.get("flag_for_execution").equals("Y"))
+			String condition = rowPumpoutData.get("Condition");
+			if (rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 			{
 				if (rowPumpoutData.get("Type").equals("output"))
 				{
@@ -387,30 +391,45 @@ public class StarrGLCancelPreviewMacro implements MacroInterface
 		
 	}
 	
-	
-	/*public static void main(String args[]) throws  DatabaseException, MacroException, PropertiesHandleException
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 	{
-	 DatabaseOperation objectInput = new DatabaseOperation();
-	 DatabaseOperation objectOutput = new DatabaseOperation();
-	 StarrGLMacro sm;
-	 PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/STARR-GL/Rating/config/config.properties");
-	 
-	 DatabaseOperation.ConnectionSetup(configFile);
-	 objectInput.GetDataObjects(configFile.getProperty("input_query"));
-	 objectOutput.GetDataObjects(configFile.getProperty("output_query"));
-	 do
-	 {
-	  System.out.println("TestData : " + objectInput.ReadData("S.No"));   
-	    if(objectInput.ReadData("Flag_for_execution").equals("Y"))
-	    {
-	     sm=new StarrGLMacro(configFile);
-	     sm.LoadSampleRatingmodel(configFile, objectInput);
-	     sm.GenerateExpected(objectInput, configFile);
-	     sm.PumpinData(objectInput, configFile);
-	     sm.PumpoutData(objectOutput,objectInput, configFile);
-	    }
-	    objectInput.WriteData("Flag_for_execution", "Completed"); 
-	    objectInput.UpdateRow();
-	 }while(objectInput.MoveForward()&&objectOutput.MoveForward());
-	}*/
+		System.out.println("coming to flow1");
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		StarrGLCancelPreviewMacro MG;
+		PropertiesHandle configFile=null;
+		
+		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\CancelPreview\\Config\\config.properties");
+		DatabaseOperation.ConnectionSetup(configFile);
+		System.out.println("coming to flow2");
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>>  outputtable = objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+		 int rowIterator = 1;
+			System.out.println("coming to flow3");
+		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
+			{
+			 System.out.println("coming to flow4");
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
+		        
+		        if(inputrow.get("Flag_for_execution").equals("Y"))
+				{
+					System.out.println("coming to flow");
+					MG=new StarrGLCancelPreviewMacro(configFile);
+					MG.LoadSampleRatingmodel(configFile, inputrow);
+					MG.GenerateExpected(inputrow, configFile);
+					MG.PumpinData(inputrow, configFile);
+					MG.PumpoutData(outputrow,inputrow, configFile);
+				}
+		        inputrow.put("Flag_for_execution", "Completed");	
+		        objectInput.UpdateRow(rowIterator, inputrow);
+		        objectOutput.UpdateRow(rowIterator, outputrow);
+		        rowIterator++;
+		        
+			}
+	}
 }

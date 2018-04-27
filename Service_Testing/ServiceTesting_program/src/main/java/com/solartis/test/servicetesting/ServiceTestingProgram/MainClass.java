@@ -63,7 +63,14 @@ public class MainClass
 		try 
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
+			try
+			{
 			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			Conn=DatabaseOperation.ConnectionSetup(config);
 			if(config.getProperty("ModeofExecution").equalsIgnoreCase("New"))
 			{
