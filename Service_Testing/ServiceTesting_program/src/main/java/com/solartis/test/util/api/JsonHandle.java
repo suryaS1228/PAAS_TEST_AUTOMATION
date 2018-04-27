@@ -127,7 +127,7 @@ public class JsonHandle implements RequestResponse
 		try 
 		{
 			doc.parse(enable_read());
-			System.out.println(json_path);
+		//	System.out.println(json_path);
 			path = JsonPath.compile(json_path);
 			/*if(doc.read(path).toString().equals("[]"))
 			{
