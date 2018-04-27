@@ -109,7 +109,7 @@ public class DatabaseOperation
 		{
 			Statement stmt = null;
 			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
-			stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 		}
 	    catch (Exception e) 
 		{
