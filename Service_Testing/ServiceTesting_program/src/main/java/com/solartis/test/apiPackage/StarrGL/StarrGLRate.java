@@ -106,7 +106,7 @@ public class StarrGLRate extends BaseClass implements API
 			try
 			{
 				String responseStatus = response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				System.out.println(responseStatus);
+				//System.out.println(responseStatus);
 				this.output=output;
 				OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
 				do 	
@@ -117,10 +117,10 @@ public class StarrGLRate extends BaseClass implements API
 						{
 						if(responseStatus.equals("SUCCESS"))
 						{
-						System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
+						//System.out.println(OutputColVerify.ReadData(config.getProperty("OutputColumn")));
 						String actual = (response.read(OutputColVerify.ReadData(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.WriteData(OutputColVerify.ReadData(config.getProperty("OutputColumn")), actual);
-						System.out.println(actual);
+						//System.out.println(actual);
 						output.WriteData("flag_for_execution", "Completed");
 						}
 						
