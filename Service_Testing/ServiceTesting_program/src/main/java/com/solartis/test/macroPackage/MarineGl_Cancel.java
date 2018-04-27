@@ -124,7 +124,7 @@ public class MarineGl_Cancel extends DBColoumnVerify implements MacroInterface
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
 							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
-							System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
+							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
