@@ -26,13 +26,13 @@ public class StarrGLCancelPreview extends BaseClass implements API
 	public StarrGLCancelPreview(PropertiesHandle config) throws SQLException, DatabaseException, MacroException
 	{
 		DatabaseOperation beforeAll = new DatabaseOperation();
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PremopsPremium=(SELECT OTUPUT_Quote_GL_V6.PremOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=OTUPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.ProductsPremium=(SELECT OTUPUT_Quote_GL_V6.ProductsCompletedOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=OTUPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.EBLPremium=(SELECT OTUPUT_Quote_GL_V6.EmployeeBenefitsLiabCovPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=OTUPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.TerrorismPremium=(SELECT OTUPUT_Quote_GL_V6.TerrorismPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=OTUPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.AdditionalInsuredPremium=(SELECT OTUPUT_Quote_GL_V6.AdditionalInsuredPremium_rs FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=OTUPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyEffectiveDate=(SELECT INPUT_Quote_GL_V6.EffectiveDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=INPUT_Quote_GL_V6.`S.No`);");
-		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyExpirationDate=(SELECT INPUT_Quote_GL_V6.ExpirationDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S.No`=INPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PremopsPremium=(SELECT OTUPUT_Quote_GL_V6.PremOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.ProductsPremium=(SELECT OTUPUT_Quote_GL_V6.ProductsCompletedOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.EBLPremium=(SELECT OTUPUT_Quote_GL_V6.EmployeeBenefitsLiabCovPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.TerrorismPremium=(SELECT OTUPUT_Quote_GL_V6.TerrorismPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.AdditionalInsuredPremium=(SELECT OTUPUT_Quote_GL_V6.AdditionalInsuredPremium_rs FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyEffectiveDate=(SELECT INPUT_Quote_GL_V6.EffectiveDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=INPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyExpirationDate=(SELECT INPUT_Quote_GL_V6.ExpirationDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=INPUT_Quote_GL_V6.`S.No`);");
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
 		
