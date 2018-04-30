@@ -15,7 +15,6 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
-import com.solartis.test.macroPackage.MarineGL;
 import com.solartis.test.macroPackage.MarineGl_Cancel;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;

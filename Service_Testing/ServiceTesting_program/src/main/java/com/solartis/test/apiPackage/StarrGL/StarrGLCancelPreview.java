@@ -18,7 +18,6 @@ import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.StarrGLCancelPreviewMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
-import com.solartis.test.util.common.DatabaseOperation;
 
 public class StarrGLCancelPreview extends BaseClass implements API 
 {
