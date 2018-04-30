@@ -32,7 +32,7 @@ public class StarrGLRate extends BaseClass implements API
 			OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 			
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 			macro=new StarrGLMacro(config);	
 			}
@@ -46,7 +46,7 @@ public class StarrGLRate extends BaseClass implements API
 	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -62,7 +62,7 @@ public class StarrGLRate extends BaseClass implements API
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("status").equals("Y"))
+		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{
 			try 
 			{
@@ -133,7 +133,7 @@ public class StarrGLRate extends BaseClass implements API
 				output.put("AnalyserResult","Rule-"+RuleName);
 				output.put("User_message",Message);
 			}
-			if(config.getProperty("status").equals("Y"))
+			if(config.getProperty("ComparisonFlag").equals("Y"))
 			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 			}
