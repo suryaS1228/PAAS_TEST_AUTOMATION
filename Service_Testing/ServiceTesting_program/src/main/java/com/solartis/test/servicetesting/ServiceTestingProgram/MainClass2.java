@@ -90,97 +90,97 @@ public class MainClass2
 	{
 		try
 		{
-		//PropertiesHandle config; 
+			//PropertiesHandle config; 
+				
+			LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
+			LinkedHashMap<String, String> outputrow = new LinkedHashMap<String, String> ();
+			ObjectMapper inputtableobjectMapper = new ObjectMapper();
+			ObjectMapper outputtableobjectMapper = new ObjectMapper();
+			Object outputtablerowobj=new Object(); 
+			//System.out.println(RowIterator);
+			outputtablerowobj = outputtablerowobject[RowIterator];
+			String actualchoice = configuration.getProperty("actual");
+			String statuschoice = configuration.getProperty("status");
+			String outputtablechoice = configuration.getProperty("output_in_same_table");
+			String classname = configuration.getProperty("ClassName");		
 			
-		LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
-		LinkedHashMap<String, String> outputrow = new LinkedHashMap<String, String> ();
-		ObjectMapper inputtableobjectMapper = new ObjectMapper();
-		ObjectMapper outputtableobjectMapper = new ObjectMapper();
-		Object outputtablerowobj=new Object(); 
-		//System.out.println(RowIterator);
-		outputtablerowobj = outputtablerowobject[RowIterator];
-		String actualchoice = configuration.getProperty("actual");
-		String statuschoice = configuration.getProperty("status");
-		String outputtablechoice = configuration.getProperty("output_in_same_table");
-		String classname = configuration.getProperty("ClassName");		
-		
-		Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
-		Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
-		API api = (API) cons.newInstance(configuration);
-		FireEventAPI fireEventAPI = new FireEventAPI(api);
-		Listener listener = new LogListener();
-		fireEventAPI.addListener(listener);
-		
-		if(inputtablerowobj==null||outputtablerowobj==null)
-		{
-			System.out.println("objects is null.............");
-		}
-	
-		inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-		outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-		if (inputrow==null)
-		{
-			System.out.println("inputrow is null");
-		}
-		//System.out.println("TestData : " + inputrow.get("S.No"));  	
-		if(inputrow.get("Flag_for_execution").equals("Y"))
-		{
-			System.out.println("TestData" + inputrow.get("S.No") + "  API--"+apis );					 
-							
-			fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
-                            
-			fireEventAPI.PumpDataToRequest(commonMap,inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
-						    
-			fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
-						
-			fireEventAPI.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
-							
-			fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
-							
-			fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
-							
-			if(actualchoice.equals("Y"))
-			{								  
-				if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
-				{
-					inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-					commonMap.putAll(inputrow);
-					//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
-				}
-				else//INPUT AND OUT DB TABLE ARE DIFFERENT
-				{
-					outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-					commonMap.putAll(outputrow);
-					//System.out.println(RowIterator+"-----------"+outputrow);
-					OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
-					//System.out.println("Update completed");
-				}
-			} 
-							
-			if(statuschoice.equals("Y"))
+			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
+			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
+			API api = (API) cons.newInstance(configuration);
+			FireEventAPI fireEventAPI = new FireEventAPI(api);
+			Listener listener = new LogListener();
+			fireEventAPI.addListener(listener);
+			
+			if(inputtablerowobj==null||outputtablerowobj==null)
 			{
-				if(outputtablechoice.equals("Y"))
-				{									
-					inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
-								     
-					inputTable.UpdateRow(RowIterator, inputrow);
-				}
-				else
-				{
-					outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
-								    
-					OutputTable.UpdateRow(RowIterator, outputrow);
-					commonMap.putAll(outputrow);									
-				}
-			} 
-							
-			//inputrow.put("Flag_for_execution", "Completed");
-			//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+				System.out.println("objects is null.............");
 			}
-		else
-		{
-			System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
-		}
+		
+			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+			outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
+			if (inputrow==null)
+			{
+				System.out.println("inputrow is null");
+			}
+			//System.out.println("TestData : " + inputrow.get("S.No"));  	
+			if(inputrow.get("Flag_for_execution").equals("Y"))
+			{
+				System.out.println("TestData" + inputrow.get("S.No") + "  API--"+apis );					 
+								
+				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
+	                            
+				fireEventAPI.PumpDataToRequest(commonMap,inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
+							    
+				fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
+							
+				fireEventAPI.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+								
+				fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
+								
+				fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
+								
+				if(actualchoice.equals("Y"))
+				{								  
+					if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
+					{
+						inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+						commonMap.putAll(inputrow);
+						//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+					}
+					else//INPUT AND OUT DB TABLE ARE DIFFERENT
+					{
+						outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+						commonMap.putAll(outputrow);
+						//System.out.println(RowIterator+"-----------"+outputrow);
+						OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
+						//System.out.println("Update completed");
+					}
+				} 
+								
+				if(statuschoice.equals("Y"))
+				{
+					if(outputtablechoice.equals("Y"))
+					{									
+						inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
+									     
+						inputTable.UpdateRow(RowIterator, inputrow);
+					}
+					else
+					{
+						outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
+									    
+						OutputTable.UpdateRow(RowIterator, outputrow);
+						commonMap.putAll(outputrow);									
+					}
+				} 
+								
+				//inputrow.put("Flag_for_execution", "Completed");
+				//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+				}
+			else
+			{
+				System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
+			}
 		}
 		catch (Exception e)
 		{
