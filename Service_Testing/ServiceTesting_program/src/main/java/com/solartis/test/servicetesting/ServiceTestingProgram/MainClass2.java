@@ -41,17 +41,7 @@ public class MainClass2
 			System.setProperty("jsse.enableSNIExtension", "false");
 			String apis = System.getProperty("Api");
 			apii = apis.split("-");
-			DatabaseOperation inputquery = new DatabaseOperation();
-			inputquery.switchDB("Starr_Config_Development");
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
-			Iterator<Entry<Integer, LinkedHashMap<String, String>>> QueryTableiterator = QueryTable.entrySet().iterator();
-			while (QueryTableiterator.hasNext() ) 
-			{
-				Entry<Integer, LinkedHashMap<String, String>> inputentry = QueryTableiterator.next();				
-				LinkedHashMap<String, String> inputrow = inputentry.getValue();
-				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
-				InputtableQuery=inputrow.get("Query");
-			}
+			
 			
 			//InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
 			ConfigObjectRepository=new PropertiesHandle[apii.length];
@@ -73,6 +63,18 @@ public class MainClass2
 				OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
+			}
+			
+			DatabaseOperation inputquery = new DatabaseOperation();
+			inputquery.switchDB("Starr_Config_Development");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
+			Iterator<Entry<Integer, LinkedHashMap<String, String>>> QueryTableiterator = QueryTable.entrySet().iterator();
+			while (QueryTableiterator.hasNext() ) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = QueryTableiterator.next();				
+				LinkedHashMap<String, String> inputrow = inputentry.getValue();
+				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
+				InputtableQuery=inputrow.get("Query");
 			}
 			
 			inputTable = new DatabaseOperation();

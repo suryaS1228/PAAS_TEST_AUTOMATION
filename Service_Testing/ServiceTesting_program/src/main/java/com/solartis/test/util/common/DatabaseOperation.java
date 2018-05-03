@@ -57,7 +57,7 @@ public class DatabaseOperation
 	{
 		try
 		{
-		conn.setCatalog(db);
+			conn.setCatalog(db);
 		}
 		catch (SQLException e)
 		{
