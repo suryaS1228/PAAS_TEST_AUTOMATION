@@ -38,33 +38,45 @@ public class MainClass2
 	{
 		try
 		{
-		System.setProperty("jsse.enableSNIExtension", "false");
-		String apis = System.getProperty("Api");
-		apii = apis.split("-");
-		InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
-		ConfigObjectRepository=new PropertiesHandle[apii.length];
-		OutputDBObjectRepository= new DatabaseOperation[apii.length];
-		OutputTableRepository = new Object[apii.length];
-		for(int i=0;i<apii.length;i++)
-		{
-			
-			System.out.println(apii[i]);
-			if(ConfigObjectRepository==null)
+			System.setProperty("jsse.enableSNIExtension", "false");
+			String apis = System.getProperty("Api");
+			apii = apis.split("-");
+			DatabaseOperation inputquery = new DatabaseOperation();
+			inputquery.switchDB("Starr_Config_Development");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
+			Iterator<Entry<Integer, LinkedHashMap<String, String>>> QueryTableiterator = QueryTable.entrySet().iterator();
+			while (QueryTableiterator.hasNext() ) 
 			{
-				System.out.println("config is null"+i);
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = QueryTableiterator.next();				
+				LinkedHashMap<String, String> inputrow = inputentry.getValue();
+				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
+				InputtableQuery=inputrow.get("Query");
 			}
-			ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));;
 			
-			OutputDBObjectRepository[i]= new DatabaseOperation();
-			OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
-			//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
-			OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
-			//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
-			OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
-		}
-		
-		inputTable = new DatabaseOperation();
-		inputTable.GetDataObjects(InputtableQuery);
+			//InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
+			ConfigObjectRepository=new PropertiesHandle[apii.length];
+			OutputDBObjectRepository= new DatabaseOperation[apii.length];
+			OutputTableRepository = new Object[apii.length];
+			for(int i=0;i<apii.length;i++)
+			{
+				
+				System.out.println(apii[i]);
+				if(ConfigObjectRepository==null)
+				{
+					System.out.println("config is null"+i);
+				}
+				ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));;
+				
+				OutputDBObjectRepository[i]= new DatabaseOperation();
+				OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
+				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
+				OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
+				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
+				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
+			}
+			
+			inputTable = new DatabaseOperation();
+			inputTable.GetDataObjects(InputtableQuery);
 		}
 		catch (Exception e)
 		{
