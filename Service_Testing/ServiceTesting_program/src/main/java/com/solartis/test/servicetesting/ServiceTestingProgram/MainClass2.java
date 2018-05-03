@@ -75,8 +75,10 @@ public class MainClass2
 				Entry<Integer, LinkedHashMap<String, String>> inputentry = QueryTableiterator.next();				
 				LinkedHashMap<String, String> inputrow = inputentry.getValue();
 				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
-				InputtableQuery=inputrow.get("Query");
-				ProjectDBName=inputrow.get("ProjectDBName");
+				{
+					InputtableQuery=inputrow.get("Query");
+					ProjectDBName=inputrow.get("ProjectDBName");
+				}
 			}
 			
 			inputTable = new DatabaseOperation();
