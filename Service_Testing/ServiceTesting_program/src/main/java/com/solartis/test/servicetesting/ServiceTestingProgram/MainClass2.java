@@ -82,7 +82,7 @@ public class MainClass2
 			}
 			
 			inputTable = new DatabaseOperation();
-			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName"));
+			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName").toUpperCase());
 			inputTable.GetDataObjects(InputtableQuery);
 		}
 		catch (Exception e)
