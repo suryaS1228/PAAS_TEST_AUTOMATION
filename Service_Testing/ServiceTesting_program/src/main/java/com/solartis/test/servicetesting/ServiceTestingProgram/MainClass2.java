@@ -65,6 +65,7 @@ public class MainClass2
 				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
 			}
 			
+			String ProjectDBName = "";
 			DatabaseOperation inputquery = new DatabaseOperation();
 			inputquery.switchDB("Starr_Config_Development");
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
@@ -75,9 +76,11 @@ public class MainClass2
 				LinkedHashMap<String, String> inputrow = inputentry.getValue();
 				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
 				InputtableQuery=inputrow.get("Query");
+				ProjectDBName=inputrow.get("ProjectDBName");
 			}
 			
 			inputTable = new DatabaseOperation();
+			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName"));
 			inputTable.GetDataObjects(InputtableQuery);
 		}
 		catch (Exception e)
