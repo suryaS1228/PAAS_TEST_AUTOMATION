@@ -29,8 +29,10 @@ public class MainClass2
 	public static String[] apii;
 	public static PropertiesHandle[] ConfigObjectRepository;
 	public static DatabaseOperation[] OutputDBObjectRepository;
+	public static DatabaseOperation[] inputDBObjectRepository;
 	public static DatabaseOperation inputTable;
 	public static Object[] OutputTableRepository;
+	public static Object[] inputIndividualTableRepository;
 	public static String InputtableQuery;
 	
 	@BeforeTest
@@ -46,7 +48,9 @@ public class MainClass2
 			//InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
 			ConfigObjectRepository=new PropertiesHandle[apii.length];
 			OutputDBObjectRepository= new DatabaseOperation[apii.length];
+			inputDBObjectRepository= new DatabaseOperation[apii.length];
 			OutputTableRepository = new Object[apii.length];
+			inputIndividualTableRepository = new Object[apii.length];
 			for(int i=0;i<apii.length;i++)
 			{
 				
@@ -58,11 +62,15 @@ public class MainClass2
 				ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));;
 				
 				OutputDBObjectRepository[i]= new DatabaseOperation();
+				inputDBObjectRepository[i]= new DatabaseOperation();
 				OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
+				//inputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
+				inputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("input_query"));
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
+				inputIndividualTableRepository[i]=this.inputTables(ConfigObjectRepository[i]);
 			}
 			
 			String ProjectDBName = "";
@@ -98,14 +106,14 @@ public class MainClass2
 	{
 		for(int i=0;i<apii.length;i++)
 		{
-			GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i]);
+			GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
 		}
 		
 		commonMap.clear();
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	public void GenericMethod(Integer RowIterator, Object inputtablerowobj, Object[] outputtablerowobject, String apis, PropertiesHandle configuration,DatabaseOperation inputTable, DatabaseOperation OutputTable)throws InterruptedException, DatabaseException, InterruptedException , DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public void GenericMethod(Integer RowIterator, Object inputtablerowobj, Object[] outputtablerowobject, String apis, PropertiesHandle configuration,DatabaseOperation inputTable, DatabaseOperation OutputTable, DatabaseOperation inputIndividualTable,Object[] individualInputTablerowobject)throws InterruptedException, DatabaseException, InterruptedException , DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		try
 		{
@@ -113,11 +121,14 @@ public class MainClass2
 				
 			LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
 			LinkedHashMap<String, String> outputrow = new LinkedHashMap<String, String> ();
+			LinkedHashMap<String, String> individualinputrow = new LinkedHashMap<String, String> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
 			ObjectMapper outputtableobjectMapper = new ObjectMapper();
 			Object outputtablerowobj=new Object(); 
+			Object individualinputtablerowobj=new Object();
 			//System.out.println(RowIterator);
 			outputtablerowobj = outputtablerowobject[RowIterator];
+			individualinputtablerowobj = outputtablerowobject[RowIterator];
 			String actualchoice = configuration.getProperty("actual");
 			String statuschoice = configuration.getProperty("status");
 			String outputtablechoice = configuration.getProperty("output_in_same_table");
@@ -137,6 +148,7 @@ public class MainClass2
 		
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
+			individualinputrow = outputtableobjectMapper.convertValue(individualinputtablerowobj, LinkedHashMap.class);
 			if (inputrow==null)
 			{
 				System.out.println("inputrow is null");
@@ -193,8 +205,8 @@ public class MainClass2
 					}
 				} 
 								
-				//inputrow.put("Flag_for_execution", "Completed");
-				//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+				individualinputrow.put("Flag_for_execution", "Completed");
+				inputIndividualTable.UpdateRow(RowIterator, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 				}
 			else
 			{
@@ -241,6 +253,28 @@ public class MainClass2
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable;
 		DatabaseOperation output = new DatabaseOperation();
 		outputtable = output.GetDataObjects(config.getProperty("output_query"));
+		Object[] outputableobject = new Object[outputtable.size()];
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+		int rowIterator = 0;
+		while (outputtableiterator.hasNext()) 
+		{
+			Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+			LinkedHashMap<String, String> outputrow = outputentry.getValue();
+			outputtableobjectMapper = new ObjectMapper();
+			Object outputtablerowobject = outputtableobjectMapper.convertValue(outputrow, Object.class);
+			outputableobject[rowIterator]=outputtablerowobject;
+			rowIterator++;
+		}
+		return outputableobject;		
+	}
+	
+	public Object[] inputTables(PropertiesHandle config) throws DatabaseException
+	{
+		
+		ObjectMapper outputtableobjectMapper;
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable;
+		DatabaseOperation output = new DatabaseOperation();
+		outputtable = output.GetDataObjects(config.getProperty("input_query"));
 		Object[] outputableobject = new Object[outputtable.size()];
 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
 		int rowIterator = 0;
