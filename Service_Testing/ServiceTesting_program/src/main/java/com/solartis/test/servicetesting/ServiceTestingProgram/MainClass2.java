@@ -208,7 +208,7 @@ public class MainClass2
 				individualinputrow.put("Flag_for_execution", "Completed");
 				//System.out.println(individualinputrow.get("Flag_for_execution"));
 				inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
-				System.out.println(individualinputrow);
+				//System.out.println(individualinputrow);
 			}
 			else
 			{
