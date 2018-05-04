@@ -42,8 +42,7 @@ public class MainClass2
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
 			String apis = System.getProperty("Api");
-			apii = apis.split("-");
-			
+			apii = apis.split("-");			
 			
 			//InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
 			ConfigObjectRepository=new PropertiesHandle[apii.length];
@@ -64,7 +63,7 @@ public class MainClass2
 				OutputDBObjectRepository[i]= new DatabaseOperation();
 				inputDBObjectRepository[i]= new DatabaseOperation();
 				OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
-				//inputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
+				inputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
 				inputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("input_query"));
@@ -124,11 +123,12 @@ public class MainClass2
 			LinkedHashMap<String, String> individualinputrow = new LinkedHashMap<String, String> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
 			ObjectMapper outputtableobjectMapper = new ObjectMapper();
+			ObjectMapper individualInputtableobjectMapper = new ObjectMapper();
 			Object outputtablerowobj=new Object(); 
 			Object individualinputtablerowobj=new Object();
 			//System.out.println(RowIterator);
 			outputtablerowobj = outputtablerowobject[RowIterator];
-			individualinputtablerowobj = outputtablerowobject[RowIterator];
+			individualinputtablerowobj = individualInputTablerowobject[RowIterator];
 			String actualchoice = configuration.getProperty("actual");
 			String statuschoice = configuration.getProperty("status");
 			String outputtablechoice = configuration.getProperty("output_in_same_table");
@@ -148,7 +148,7 @@ public class MainClass2
 		
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-			individualinputrow = outputtableobjectMapper.convertValue(individualinputtablerowobj, LinkedHashMap.class);
+			individualinputrow = individualInputtableobjectMapper.convertValue(individualinputtablerowobj, LinkedHashMap.class);
 			if (inputrow==null)
 			{
 				System.out.println("inputrow is null");
@@ -204,10 +204,12 @@ public class MainClass2
 						commonMap.putAll(outputrow);									
 					}
 				} 
-								
+				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
-				inputIndividualTable.UpdateRow(RowIterator, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
-				}
+				//System.out.println(individualinputrow.get("Flag_for_execution"));
+				inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+				System.out.println(individualinputrow);
+			}
 			else
 			{
 				System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
