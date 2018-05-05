@@ -23,20 +23,30 @@ public class StarrGLCancelPreview extends BaseClass implements API
 	MacroInterface macro = null;
 	public StarrGLCancelPreview(PropertiesHandle config) throws SQLException, DatabaseException, MacroException
 	{
+		/*DatabaseOperation beforeAll = new DatabaseOperation();
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PremopsPremium=(SELECT OTUPUT_Quote_GL_V6.PremOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.ProductsPremium=(SELECT OTUPUT_Quote_GL_V6.ProductsCompletedOpsCoveragePremium  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.EBLPremium=(SELECT OTUPUT_Quote_GL_V6.EmployeeBenefitsLiabCovPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.TerrorismPremium=(SELECT OTUPUT_Quote_GL_V6.TerrorismPremium_rs  FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.AdditionalInsuredPremium=(SELECT OTUPUT_Quote_GL_V6.AdditionalInsuredPremium_rs FROM OTUPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=OTUPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyEffectiveDate=(SELECT INPUT_Quote_GL_V6.EffectiveDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=INPUT_Quote_GL_V6.`S.No`);");
+		beforeAll.executeQuery("UPDATE `INPUT_GL_CancelPreview` SET INPUT_GL_CancelPreview.PolicyExpirationDate=(SELECT INPUT_Quote_GL_V6.ExpirationDate FROM INPUT_Quote_GL_V6  WHERE INPUT_GL_CancelPreview.`S_No`=INPUT_Quote_GL_V6.`S.No`);");*/
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		
+		if(config.getProperty("ComparisonFlag").equals("Y"))
+		{
 		macro=new StarrGLCancelPreviewMacro(config);	
-		
+		}
 	}
 	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-		
+		if(config.getProperty("ComparisonFlag").equals("Y"))
+		{
 			try 
 			{
 				macro.LoadSampleRatingmodel(config, InputData);		
@@ -45,13 +55,14 @@ public class StarrGLCancelPreview extends BaseClass implements API
 			{
 				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 			}
-		
+		}
 		super.LoadSampleRequest(InputData);
 	}
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		
+		if(config.getProperty("ComparisonFlag").equals("Y"))
+		{
 			try 
 			{
 				macro.PumpinData(input, config);
@@ -60,7 +71,7 @@ public class StarrGLCancelPreview extends BaseClass implements API
 			{
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
-		
+		}
 		super.PumpDataToRequest(InputData);
 	}
 	
@@ -126,9 +137,10 @@ public class StarrGLCancelPreview extends BaseClass implements API
 				output.put("AnalyserResult","Rule-"+RuleName);
 				output.put("Rule_message",Message);
 			}
-			
+			if(config.getProperty("ComparisonFlag").equals("Y"))
+			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
-			
+			}
 		}
 		catch(DatabaseException | POIException | MacroException | RequestFormatException e)
 		{
