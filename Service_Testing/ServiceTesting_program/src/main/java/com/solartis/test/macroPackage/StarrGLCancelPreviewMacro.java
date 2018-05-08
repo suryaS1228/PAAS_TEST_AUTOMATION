@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -15,7 +14,6 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
-import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
@@ -106,17 +104,25 @@ public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroI
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{								
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
+				if (rowPumpinData.get("Type").equals("input"))
 				{
-					if (rowPumpinData.get("Type").equals("input"))
+					String  Datatowrite = "";
+					String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
+					String CellAddress = rowPumpinData.get("Cell_Address");	
+					if(Datacolumntowrite.equals("#fromPrevious#"))
 					{
-						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
-						String CellAddress = rowPumpinData.get("Cell_Address");
-						
-						String  Datatowrite = inputData.get(Datacolumntowrite);
-						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
-						int columnNum=Alphabet.getNum(part[0].toUpperCase());
-						int rowNum = Integer.parseInt(part[1]);
+						Datatowrite = inputData.get(Datacolumntowrite);
+					}
+					else
+					{
+						Datatowrite = inputData.get(Datacolumntowrite);
+					}
+					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
+					int columnNum=Alphabet.getNum(part[0].toUpperCase());
+					int rowNum = Integer.parseInt(part[1]);
+					
+					if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
+					{											
 						System.out.println(columnNum+"----"+rowNum+"-----"+rowPumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
