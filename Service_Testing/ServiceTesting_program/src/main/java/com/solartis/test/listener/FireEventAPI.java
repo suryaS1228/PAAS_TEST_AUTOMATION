@@ -70,7 +70,7 @@ public class FireEventAPI implements API
 	}
 	
 	@Override
-	public String RequestToString() throws APIException 
+	public String RequestToString(String Token) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -78,7 +78,7 @@ public class FireEventAPI implements API
 		String requesttoString="";
 		try
 		{
-			api.RequestToString();
+			api.RequestToString(Token);
 		}
 		catch(APIException e)
 		{
@@ -92,14 +92,14 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public void AddHeaders() throws APIException 
+	public void AddHeaders(String Token) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeAddHeaders();
 		try
 		{
-			api.AddHeaders();
+			api.AddHeaders(Token);
 		}
 		catch(APIException e)
 		{

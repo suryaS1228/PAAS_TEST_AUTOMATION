@@ -48,6 +48,7 @@ public class MainClass
 	public static HashMap<Object,Object> result;
 	public static Connection Conn=null;  //added
 	public static DatabaseOperation db=null;
+	public static String Token;
 	@BeforeTest
 	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
 	{
@@ -80,7 +81,9 @@ public class MainClass
 			fireEventAPI = new FireEventAPI(api);
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
-		    
+			
+			BaseClass baseclass = new BaseClass();
+		    Token=baseclass.tokenGenerator();
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
@@ -104,9 +107,9 @@ public class MainClass
                             
 						    fireEventAPI.PumpDataToRequest(inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
 						    
-						    fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
+						    fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 						
-						    fireEventAPI.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+						    fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 							
 						    fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 							

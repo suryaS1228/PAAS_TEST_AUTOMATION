@@ -61,7 +61,7 @@ public class LDWCRating extends BaseClass implements API
 	}
 	
 	@Override
-	public void AddHeaders() throws APIException
+	public void AddHeaders(String Token) throws APIException
 	{
 		try 
 		{
