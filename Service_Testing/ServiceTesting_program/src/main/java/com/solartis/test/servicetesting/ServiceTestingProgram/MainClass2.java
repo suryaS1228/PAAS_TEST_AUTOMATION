@@ -330,7 +330,7 @@ public class MainClass2
 		try
 		{
 	
-		base.generateReport(ConfigObjectRepository[0],"");
+			base.generateReport(ConfigObjectRepository[0],"");
 
 		DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults"));
 		

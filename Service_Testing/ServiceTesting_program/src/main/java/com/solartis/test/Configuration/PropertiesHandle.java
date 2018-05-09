@@ -125,7 +125,10 @@ public class PropertiesHandle extends Properties
 			Date date = new Date();
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
 			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
-			
+			this.put("report_location", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Results/AnalysisReport/");		 
+			this.put("report_template_location", this.RdmsValue("RootFolder") + "/ReportTemplate/");
+			this.put("TestcaseQuery", "SELECT * FROM "+this.RdmsValue("InputTable"));
+			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("OutputTable"));
 			 DatabaseOperation.CloseConn();
 		}
 		

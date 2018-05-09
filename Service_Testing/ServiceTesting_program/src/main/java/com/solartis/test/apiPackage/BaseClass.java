@@ -58,8 +58,7 @@ public class BaseClass
 			DatabaseOperation db=new DatabaseOperation();
 			Date date = new Date();
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
-			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+
 			excelreportlocation="AnalysisReport "+DateandTime+".xls";
 			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
 			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
@@ -69,6 +68,8 @@ public class BaseClass
 			sample.save();
 			if(comparisonChoice.equals("Y"))
 		    {
+				table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
+				Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
 				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 				ob.getsheets("TestReport");
 				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
