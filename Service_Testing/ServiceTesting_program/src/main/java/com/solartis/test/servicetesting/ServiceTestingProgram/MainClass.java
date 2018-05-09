@@ -83,7 +83,7 @@ public class MainClass
 			fireEventAPI.addListener(listener);
 			
 			BaseClass baseclass = new BaseClass();
-		    Token=baseclass.tokenGenerator();
+		    Token=baseclass.tokenGenerator(config);
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
