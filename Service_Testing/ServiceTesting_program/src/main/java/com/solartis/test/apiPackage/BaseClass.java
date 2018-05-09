@@ -1,17 +1,34 @@
 package com.solartis.test.apiPackage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import com.jayway.jsonpath.PathNotFoundException;
+import com.mysql.jdbc.ResultSetMetaData;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
+import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.ExcelOperationsPOI;
 
 import freemarker.template.TemplateException;
 
@@ -31,7 +48,128 @@ public class BaseClass
 	protected DBColoumnVerify StatusColVerify = null;
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
+	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
 
+	protected String excelreportlocation;
+	public void generateReport(PropertiesHandle config,String comparisonChoice) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
+	{
+		try 
+		{
+			DatabaseOperation db=new DatabaseOperation();
+			Date date = new Date();
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
+			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+			excelreportlocation="AnalysisReport "+DateandTime+".xls";
+			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
+			
+			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
+			sample.Copy(Samplepath, excelreportlocation1);
+			sample.save();
+			if(comparisonChoice.equals("Y"))
+		    {
+				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
+				ob.getsheets("TestReport");
+				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
+				Date today=new Date();
+				ob.write_data(5, 7,today);
+				ob.write_data(5, 14,config.getProperty("ExecutionName"));
+				int	row=9;
+				int si_no=1;
+				while (inputtableiterator.hasNext()) 
+				{
+					 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+					 LinkedHashMap<String, String> inputrow = inputentry.getValue();
+					
+					    ob.write_data(row, 2,si_no );
+					    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+					    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+						
+					 row++;
+					 si_no++;
+					 
+				}
+				ob.refresh();
+				ob.saveAs(excelreportlocation1);
+		    }
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+		}
+		catch(Exception e) 
+		{
+			System.out.print("error in copy Sample Report Template");
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("resource")
+	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		
+		try
+		{
+			System.out.println("Exporting Report with Test cases to Excel");
+			DatabaseOperation db=new DatabaseOperation();
+			ResultSet rs=null;
+			HSSFWorkbook workBook=null;
+			HSSFSheet sheet =null;
+			rs=db.GetQueryResultsSet(Query);
+			File file = new File(FileToExport);
+			if(!file.exists())                               //Creation of Workbook and Sheet
+			{
+				workBook =new HSSFWorkbook();
+			}
+			else
+			{
+				workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+			}
+			sheet = workBook.createSheet(Sheet);
+                                                                                         //import columns to Excel
+			ResultSetMetaData metaData=(ResultSetMetaData) rs.getMetaData();
+			int columnCount=metaData.getColumnCount();
+			ArrayList<String> columns = new ArrayList<String>();
+			for (int i = 1; i <= columnCount; i++) 
+			{
+				String columnName = metaData.getColumnName(i);
+				columns.add(columnName);
+			}
+		    
+			HSSFRow row = sheet.createRow(0);
+			int  Fieldcol=0; 
+			for (String columnName : columns) 
+			{
+				row.createCell(Fieldcol).setCellValue(columnName);
+				Fieldcol++;
+			}
+                                                            //import column values to Excel	
+			int ValueRow=1;
+			do
+			{
+				int Valuecol=0;
+				HSSFRow valrow = sheet.createRow(ValueRow);
+				for (String columnName : columns)
+				{
+					String value = rs.getString(columnName);
+					valrow.createCell(Valuecol).setCellValue(value);
+					Valuecol++;
+				}
+				ValueRow++;
+			} while (rs.next());
+		                                                    //Save the Details and close the File
+		
+	          FileOutputStream out = new FileOutputStream(FileToExport);
+	          workBook.write(out);
+	          out.close();
+	          System.out.println("REPORT GENERATED SUCCESSFULLY ON DISK");
+		 }
+	     catch (Exception e) 
+	     {
+	    	 System.out.println("Error in Exporting the Testcase with Results");	 
+	       e.printStackTrace();
+	     }
+}
+	
 	public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";

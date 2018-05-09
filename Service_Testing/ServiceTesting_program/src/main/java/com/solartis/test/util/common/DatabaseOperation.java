@@ -1,15 +1,27 @@
 package com.solartis.test.util.common;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import com.mysql.jdbc.PreparedStatement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.POIException;
 
 public class DatabaseOperation
 {
@@ -25,7 +37,7 @@ public class DatabaseOperation
 	protected   LinkedHashMap<Integer, LinkedHashMap<String, String>> table = null;
 	protected ResultSetMetaData meta = null;
 	
-	public void ConnectionSetup(PropertiesHandle config) throws DatabaseException 
+	public Connection ConnectionSetup(PropertiesHandle config) throws DatabaseException 
 	{
 		JDBC_DRIVER =config.getProperty("jdbc_driver");
 		DB_URL = config.getProperty("db_url");
@@ -49,7 +61,8 @@ public class DatabaseOperation
 			{
 				throw new DatabaseException("ERROR IN DB - URL / USERNAME / PASSWORD", e);	
 			}	
-		}		
+		}	
+		return conn;
 	}
 	
 	public void switchDB(String db) throws DatabaseException
@@ -201,4 +214,179 @@ public class DatabaseOperation
 		}
 	}
 	
+
+	public void createTable(String query) throws SQLException
+	{
+		this.query=query;
+		 stmt = conn.createStatement();
+		 //System.out.println(this.query);
+		 stmt.execute(this.query);
+	}
+	
+	public ResultSet GetQueryResultsSet(String query) throws DatabaseException
+	{
+		this.query = query;
+		try 
+		{
+			stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+		    rs =    stmt.executeQuery(this.query);
+		    rs.first();
+		} 
+		catch (SQLException e) 
+		{
+			throw new DatabaseException("PROBLEM WITH RESULT-SET OBTAINED FROM DB",e);
+		}
+		return rs;
+	}
+	
+	@SuppressWarnings("resource")
+	public static void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		DatabaseOperation db=new DatabaseOperation();
+		ResultSet rs=null;
+		HSSFWorkbook workBook=null;
+		HSSFSheet sheet =null;
+	    rs=db.GetQueryResultsSet(Query);
+	    File file = new File(FileToExport);
+	    if(!file.exists())                               //Creation of Workbook and Sheet
+	    {
+	    	workBook =new HSSFWorkbook();
+	    }
+	    else
+	    {
+	    	workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+	    }
+        sheet = workBook.createSheet(Sheet);
+                                                         //import columns to Excel
+		ResultSetMetaData metaData=rs.getMetaData();
+		int columnCount=metaData.getColumnCount();
+		ArrayList<String> columns = new ArrayList<String>();
+		for (int i = 1; i <= columnCount; i++) 
+		{
+		      String columnName = metaData.getColumnName(i);
+		      columns.add(columnName);
+		}
+		    
+		HSSFRow row = sheet.createRow(0);
+		int  Fieldcol=0; 
+		for (String columnName : columns) 
+		{
+		      row.createCell(Fieldcol).setCellValue(columnName);
+		      //System.out.println(columnName);
+		      Fieldcol++;
+		}
+                                                            //import column values to Excel	
+		int ValueRow=1;
+		do
+		 {
+		    int Valuecol=0;
+			HSSFRow valrow = sheet.createRow(ValueRow);
+	          for (String columnName : columns)
+	           {
+	            String value = rs.getString(columnName);
+	            valrow.createCell(Valuecol).setCellValue(value);
+	            Valuecol++;
+	           }
+	         ValueRow++;
+	     } while (rs.next());
+		                                                    //Save the Details and close the File
+		try
+	     {
+	          FileOutputStream out = new FileOutputStream(FileToExport);
+	          workBook.write(out);
+	          out.close();
+	          System.out.println("Results and Data Exported successfully on disk.");
+	      } 
+	      catch (Exception e) 
+	      {
+	          e.printStackTrace();
+	      }
+		
+	}
+	
+	
+	
+	public void ImportDatatoDB(String filepath,Connection conn,String tableName,String SheetName,String Operation) throws IOException, SQLException, ClassNotFoundException, POIException
+	{
+		ExcelOperationsPOI xl=new ExcelOperationsPOI(filepath);
+		String sql=null;
+		DatabaseOperation db=new DatabaseOperation();
+		
+		xl.getsheets(SheetName);
+		int n=xl.getTotColumns();
+		int noOfRows=xl.getTotRows();
+		int s=xl.getfirstRowNo();
+		
+		String[] Columns=new String[n];
+		String insertString="";
+		String values="";
+		
+		for(int i=s;i<n;i++)
+		{
+			if(Operation.equalsIgnoreCase("CREATE"))
+			{
+			String str1=xl.readData(1,i).toString();
+			String str2=xl.readData(0,i).toString();
+			Columns[i]=str1+" "+str2;
+			
+			insertString=insertString+xl.read_data(1,i)+",";
+			}
+			else
+			{
+				insertString=insertString+xl.read_data(0,i)+",";
+			}
+			values=values+"?,";
+		}
+		
+		String ColumnString=String.join(",", Columns);
+		String insertStrings=insertString.substring(0,(insertString.length()-1));
+		String ValueStrings=null;
+		int dataRow;
+		if(Operation.equalsIgnoreCase("CREATE"))
+		{
+			dataRow=2;
+			sql = "CREATE TABLE "+ tableName +"("+ColumnString+")";
+			db.createTable(sql);
+		}
+		else if(Operation.equalsIgnoreCase("ALTER"))
+		{
+			dataRow=2;
+			sql= "ALTER TABLE "+ tableName +" ADD ("+ColumnString+")";
+			db.createTable(sql);
+		}
+		else
+		{
+			dataRow=1;
+		}
+		ValueStrings=values.substring(0,(values.length()-1));
+
+		for(int row=dataRow;row<=noOfRows;row++)
+		{
+			String sql1 = "INSERT INTO "+ tableName+"("+insertStrings+")"+" VALUES("+ValueStrings+")";
+			
+			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
+			for(int col=0;col<n;col++)
+			{
+				System.out.println(xl.read_data(row, col).trim());
+				insertStatement.setString(col+1,xl.read_data(row, col).trim()); 
+				
+			}
+			insertStatement.executeUpdate();
+		}
+		
+	}
+	
+	public  void truncateTable(String tablename) throws SQLException
+	{
+		stmt = conn.createStatement();
+		String query="TRUNCATE "+tablename;
+		stmt.executeUpdate(query);
+	}
+	
+	public void insetRowWithSNO(String OutputTableName,String inputTableName) throws SQLException
+	{
+		stmt = conn.createStatement();
+		String query1 ="INSERT INTO "+OutputTableName+" (`S_No`,`Testdata`,`Flag_for_execution`) SELECT `S_No`,`Testdata`,`Flag_for_execution` FROM "+inputTableName;
+		stmt.executeUpdate(query1);
+}
 }

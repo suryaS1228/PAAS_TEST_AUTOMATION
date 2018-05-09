@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Map.Entry;
@@ -30,10 +32,12 @@ public class PropertiesHandle extends Properties
 	protected String password;
 	protected String priority;
 	protected String queryresult;
+	protected String ExecutionName;
+	protected String ModeofExecution;
 
 	static DatabaseOperation ConfigQuery = new DatabaseOperation();
 			
-	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority) throws DatabaseException, PropertiesHandleException, SQLException
+	    public PropertiesHandle(String Project,String Api, String Env ,String OutputChioce, String UserName, String JDBC_DRIVER, String DB_URL, String USER, String password, String priority, String ExecutionName,String ModeofExecution) throws DatabaseException, PropertiesHandleException, SQLException
 		{
 			this.Project = Project;
 			this.Api=Api;
@@ -45,6 +49,8 @@ public class PropertiesHandle extends Properties
 			this.USER=USER;
 			this.password=password;
 			this.priority=priority;
+			this.ExecutionName=ExecutionName;
+			this.ModeofExecution=ModeofExecution;
 			
 			WriteProperty(UserName);
 			System.out.println(DB_URL);
@@ -104,15 +110,23 @@ public class PropertiesHandle extends Properties
 		    this.ExpectedColumn();
 		    this.StatusColumn();
 		    		    
-		    this.DBdetails();
-		    
-		    DatabaseOperation.CloseConn();
+		    this.DBdetails();		   
 		    
 		    this.put("AuthenticationURL", this.RdmsValue("AuthenticationURL"));
 			this.put("OwnerID", this.RdmsValue("OwnerID"));
 			this.put("Userneme", this.RdmsValue("Userneme"));
 			this.put("Password", this.RdmsValue("Password"));
-		 
+			this.put("ExecutionName", ExecutionName);
+			this.put("ModeofExecution", ModeofExecution);
+			this.put("inputTable", this.RdmsValue("InputTable"));
+			this.put("outputTable", this.RdmsValue("OutputTable"));
+			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
+			this.put("ZipFolderPath", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Results/");
+			Date date = new Date();
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
+			
+			 DatabaseOperation.CloseConn();
 		}
 		
 		protected String RdmsQuery(String OutputColoumn) throws PropertiesHandleException, SQLException

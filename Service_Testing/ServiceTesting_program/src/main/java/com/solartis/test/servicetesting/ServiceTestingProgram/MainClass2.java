@@ -1,14 +1,18 @@
 package com.solartis.test.servicetesting.ServiceTestingProgram;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -16,11 +20,13 @@ import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.listener.FireEventAPI;
 import com.solartis.test.listener.Listener;
 import com.solartis.test.listener.LogListener;
 import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.DirectoryManipulation;
 
 
 public class MainClass2 
@@ -36,6 +42,8 @@ public class MainClass2
 	public static Object[] inputIndividualTableRepository;
 	public static String InputtableQuery;
 	public static String Token;
+	public static DatabaseOperation db=null;
+	public static Connection Conn=null;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -60,7 +68,7 @@ public class MainClass2
 				{
 					System.out.println("config is null"+i);
 				}
-				ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"));;
+				ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
 				
 				OutputDBObjectRepository[i]= new DatabaseOperation();
 				inputDBObjectRepository[i]= new DatabaseOperation();
@@ -74,6 +82,11 @@ public class MainClass2
 				inputIndividualTableRepository[i]=this.inputTables(ConfigObjectRepository[i]);
 			}
 			
+			Conn=OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[0]);
+			if(ConfigObjectRepository[0].getProperty("ModeofExecution").equalsIgnoreCase("New"))
+			{
+				this.beforeTesting(ConfigObjectRepository[0]);
+			}
 			String ProjectDBName = "";
 			DatabaseOperation inputquery = new DatabaseOperation();
 			inputquery.switchDB("Starr_Config_Development");
@@ -296,5 +309,37 @@ public class MainClass2
 		}
 		return outputableobject;		
 	}
+	
+	public void beforeTesting(PropertiesHandle config) throws POIException, SQLException, ClassNotFoundException, IOException
+	{
+		db=new DatabaseOperation();
+		db.truncateTable(config.getProperty("inputTable"));
+		db.truncateTable(config.getProperty("outputTable"));
+		db.ImportDatatoDB(config.getProperty("TestdataPath"),Conn, config.getProperty("inputTable"), "Sheet1", "Import");
+		db.insetRowWithSNO(config.getProperty("outputTable"), config.getProperty("inputTable"));
+		DirectoryManipulation.deleteFileFromDirectory(config.getProperty("request_location"));
+		DirectoryManipulation.deleteFileFromDirectory(config.getProperty("response_location"));
+		DirectoryManipulation.deleteFileFromDirectory(config.getProperty("TargetPath"));
+		DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));			
+	}
+	
+	@AfterTest
+	public void connectionclose() throws DatabaseException, POIException, APIException
+	{
+		BaseClass base = new BaseClass();
+		try
+		{
+	
+		base.generateReport(ConfigObjectRepository[0],"");
+
+		DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults"));
+		
+		DatabaseOperation.CloseConn();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+}
 	
 }

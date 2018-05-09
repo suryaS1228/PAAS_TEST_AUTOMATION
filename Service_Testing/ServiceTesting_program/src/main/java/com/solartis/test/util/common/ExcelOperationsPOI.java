@@ -396,7 +396,38 @@ public class ExcelOperationsPOI
 		this.workbook.setSheetName(sheetindex, newsheetnamee);
 		
 	}
+
+	public int getTotRows()
+	{
+		return this.worksheet.getLastRowNum();
 	
+	}
+	
+	public int getfirstRowNo()
+	{
+		return this.worksheet.getFirstRowNum();
+	}
+	
+	public int getTotColumns()
+	{
+		return this.worksheet.getRow(0).getLastCellNum();
+	}
+	
+	public int getFirstColumnNo()
+	{
+		return this.worksheet.getRow(0).getFirstCellNum();
+	}
+	
+	public String readData(int row,int column)
+	{
+		//System.out.println("row----------"+row+"Col-----"+column);
+		cell=this.worksheet.getRow(row).getCell(column);
+		if(cell==null)
+		{
+			return "";
+		}
+		return this.worksheet.getRow(row).getCell(column).toString();
+	} 
 }
 
 

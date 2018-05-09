@@ -160,6 +160,8 @@
 		                        <USER>${USER}</USER>
 		                        <password>${password}</password>
 		                        <Priority>${Priority}</Priority>
+		                        <ExecutionName>${ExecutionName}</ExecutionName>
+								<ModeofExecution>${ModeofExecution}</ModeofExecution>
 		          </systemPropertyVariables>
 		        </configuration>
 			</plugin>
