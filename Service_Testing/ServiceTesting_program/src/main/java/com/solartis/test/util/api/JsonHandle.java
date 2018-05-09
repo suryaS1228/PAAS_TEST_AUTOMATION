@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -166,7 +167,17 @@ public class JsonHandle implements RequestResponse
 		
 	}
 
-
+	public String readToken(String json_path, String response) throws RequestFormatException, IOException, ParseException
+	{
+		JsonReader  doc = new JsonReader();
+		JSONObject obj = new JSONObject();
+		JSONParser parser = new JSONParser();
+		JsonPath path;
+		obj = (JSONObject) parser.parse(new StringReader(response));
+		doc.parse(obj.toJSONString());		
+		path = JsonPath.compile(json_path);
+		return doc.read(path).toString();	
+	}
 	
 
 	

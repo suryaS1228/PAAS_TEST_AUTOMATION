@@ -93,7 +93,7 @@ public class MainClass
 						    
 						    fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
 						
-						    fireEventAPI.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+						    fireEventAPI.AddHeaders(String Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 							
 						    fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 							

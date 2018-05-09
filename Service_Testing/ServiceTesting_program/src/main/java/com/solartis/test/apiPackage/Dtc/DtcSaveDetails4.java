@@ -27,13 +27,13 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	
 	
 	@Override
-	public void AddHeaders() throws APIException
+	public void AddHeaders(String Token) throws APIException
 	{
 		try 
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", config.getProperty("token"));
+			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 

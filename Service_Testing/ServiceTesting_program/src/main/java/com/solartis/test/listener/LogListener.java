@@ -57,14 +57,14 @@ public class LogListener implements Listener
 	}
 
 	@Override
-	public void beforeAddHeaders()
+	public void beforeAddHeaders(String Token)
 	{
 		//System.out.println("beforeAddHeaders");
 		Log.info("beforeAddHeaders");
 	}
 
 	@Override
-	public void afterAddHeaders() 
+	public void afterAddHeaders(String Token) 
 	{
 		//System.out.println("afterAddHeaders");
 		Log.info("afterAddHeaders");

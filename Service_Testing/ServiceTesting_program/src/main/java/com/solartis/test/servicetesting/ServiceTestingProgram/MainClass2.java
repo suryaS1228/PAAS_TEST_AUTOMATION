@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
+import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PropertiesHandleException;
@@ -34,6 +35,7 @@ public class MainClass2
 	public static Object[] OutputTableRepository;
 	public static Object[] inputIndividualTableRepository;
 	public static String InputtableQuery;
+	public static String Token;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -91,6 +93,9 @@ public class MainClass2
 			inputTable = new DatabaseOperation();
 			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName").toUpperCase());
 			inputTable.GetDataObjects(InputtableQuery);
+			
+			BaseClass baseclass = new BaseClass();
+		    Token=baseclass.tokenGenerator(ConfigObjectRepository[0]);
 		}
 		catch (Exception e)
 		{
@@ -162,9 +167,9 @@ public class MainClass2
 	                            
 				fireEventAPI.PumpDataToRequest(commonMap,inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
 							    
-				fireEventAPI.RequestToString();//SHOWING REQUEST IN LOG 
+				fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 							
-				fireEventAPI.AddHeaders();//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+				fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
 								
 				fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 								

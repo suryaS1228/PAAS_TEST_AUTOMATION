@@ -32,6 +32,32 @@ public class BaseClass
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
 
+	public String tokenGenerator(PropertiesHandle config)
+	{
+		String Token="";
+		try
+		{
+			System.out.println(config.getProperty("AuthenticationURL"));
+			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
+			http.SendData(input_data);
+			String response_string = http.ReceiveData();	
+			System.out.println(input_data+"/n/n/n"+response_string);
+			JsonHandle response = new JsonHandle();
+			//response.StringToFile(response_string);
+			//response.FileToString();
+			Token = Token+response.readToken("$..Token",response_string).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			System.out.println(Token);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error in Generating Token");
+			e.printStackTrace();
+		}
+		return Token;
+	}
+	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	/*public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
@@ -106,11 +132,12 @@ public class BaseClass
 	}
 
 //------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
-	public String RequestToString() throws APIException
+	public String RequestToString(String Token) throws APIException
 	{
 	  try 
 	  {
 		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
+		  request.write("$..Token", Token);
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)
@@ -120,13 +147,13 @@ public class BaseClass
 	}
 	
 //-------------------------------------------------------------ADDING HEADER || TOKENS------------------------------------------------------------------	
-	public void AddHeaders() throws APIException
+	public void AddHeaders(String Token) throws APIException
 	{
 		try
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", config.getProperty("token"));
+			http.AddHeader("Token", Token);
 		}
 		catch(HTTPHandleException e)
 		{

@@ -8,8 +8,8 @@ public interface Listener
 	public void afterPumpDataToRequest();
 	public void beforeRequestToString();	
 	public void afterRequestToString();
-	public void beforeAddHeaders();	
-	public void afterAddHeaders();	
+	public void beforeAddHeaders(String Token);	
+	public void afterAddHeaders(String Token);	
 	public void beforeSendAndReceiveData();	
 	public void afterSendAndReceiveData();
 	public void beforeSendResponseDataToFile();
