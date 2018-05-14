@@ -148,7 +148,7 @@ public class MainClass2
 			outputtablerowobj = outputtablerowobject[RowIterator];
 			individualinputtablerowobj = individualInputTablerowobject[RowIterator];
 			String actualchoice = configuration.getProperty("actual");
-			String statuschoice = configuration.getProperty("status");
+			String statuschoice = configuration.getProperty("ComparisonFlag");
 			String outputtablechoice = configuration.getProperty("output_in_same_table");
 			String classname = configuration.getProperty("ClassName");		
 			
