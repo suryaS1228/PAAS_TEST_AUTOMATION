@@ -217,7 +217,7 @@ public class PropertiesHandle extends Properties
 		protected void ActualAndStatus(String Actual, String Status)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
 			this.put("actual", Actual);
-			this.put("status", Status);
+			this.put("ComparisonFlag", Status);
 		}	
 		
 		protected void SampleRequest() throws PropertiesHandleException// FUNCTION FOR SAMPLEREQUEST PATH
