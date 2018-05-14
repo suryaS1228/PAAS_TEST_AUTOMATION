@@ -1,6 +1,14 @@
 package com.solartis.test.apiPackage.StarrGL;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -11,9 +19,12 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.common.DatabaseOperation;
 
 public class StarrGLPolicyIssuance extends BaseClass implements API 
 {
@@ -91,5 +102,54 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
+	}
+	
+	
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException, IOException
+	{
+		System.out.println("coming to flow1");
+		DatabaseOperation objectInput = new DatabaseOperation();
+		PropertiesHandle configFile=null;
+		
+		configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\CancelPreview\\Config\\config.properties");
+		DatabaseOperation.ConnectionSetup(configFile);
+		System.out.println("coming to flow2");
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		 int rowIterator = 1;
+			System.out.println("coming to flow3");
+		 while (inputtableiterator.hasNext() ) 
+			{
+			 //System.out.println("coming to flow4");
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        
+		        if(inputrow.get("Flag_for_execution").equals("Y"))
+				{
+					System.out.println("coming to  "+inputrow.get("PolicyNumber"));
+					String url=inputrow.get("ISSUANCE");
+					String filename = inputrow.get("PolicyNumber");
+					/*if (filename.indexOf(".") > 0)
+						filename = filename.substring(0, filename.lastIndexOf("."));
+					
+					filename=filename.substring(filename.lastIndexOf('/')+1);*/
+					
+					String path="Q:\\Manual Testing\\Starr\\Starr-GL\\Releases\\CA-reduction factor-Prod issue\\UAT\\PDFS\\";
+					urltopdf(url,path,filename);
+				}
+		        //inputrow.put("Flag_for_execution", "Completed");	
+		        objectInput.UpdateRow(rowIterator, inputrow);
+		        rowIterator++;
+		        
+			}
+	}
+	
+	public static void urltopdf(String URL,String path,String filename) throws IOException
+	{
+		System.setProperty("jsse.enableSNIExtension", "false");	
+		URL website = new URL(URL);
+		Path targetPath = new File(path + File.separator + filename+".pdf").toPath();
+		InputStream in = website.openStream();		
+		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
 	}
 }
