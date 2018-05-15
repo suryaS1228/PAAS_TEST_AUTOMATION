@@ -1,6 +1,8 @@
 package com.solartis.test.apiPackage.CommercialAuto;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -13,11 +15,19 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.MarineGL;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.RequestHandler;
+import com.solartis.test.util.common.DatabaseOperation;
+
+import freemarker.core.ParseException;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateNotFoundException;
 
 public class CommercialAuto_Rating extends BaseClass implements API 
 {
@@ -142,6 +152,28 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	return output;
 }
  
- 
+ public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
+ {
+	 PropertiesHandle config = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
+	 DatabaseOperation input = new DatabaseOperation();
+	 input.ConnectionSetup(config);
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects("SELECT * FROM INPUT_CA_Rate_Policy a LEFT JOIN INPUT_CA_Rate_TruckDetails b on a.`S_No` = b.`S_No` LEFT JOIN INPUT_CA_Rate_PrivatePassengerDetails c on b.`S_No` = c.`S_No` LEFT JOIN INPUT_CA_Rate_HI_NON_AI d on c.`S_No` = d.`S_No`");
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		while (inputtableiterator.hasNext()) 
+		{
+			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+			LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			
+			DatabaseOperation requestconfig = new DatabaseOperation();
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> requstdetail = requestconfig.GetDataObjects("Select * from `ConditionInputTable_CA_Rate`");
+			
+			
+			 RequestHandler req = new RequestHandler(config);
+			 req.openTemplate();
+			 req.LoadData(requstdetail, inputrow);
+			 req.PumpinDatatoRequest(requstdetail, inputrow);
+			 req.saveJsontoPath("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Results\\Request\\Testdata1.json");
+		}
+ }
  
 }
