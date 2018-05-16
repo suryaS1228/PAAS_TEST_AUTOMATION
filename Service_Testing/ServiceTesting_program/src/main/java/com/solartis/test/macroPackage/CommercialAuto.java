@@ -330,7 +330,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	
 	
 
-public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+/*public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 {
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
@@ -367,5 +367,43 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	        rowIterator++;
 	        
 		}
-}
+}*/
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+	{
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		CommercialAuto MG;
+		PropertiesHandle configFile=null;
+		
+		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Rating\\Config\\config.properties");
+		DatabaseOperation.ConnectionSetup(configFile);
+		 
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>>  outputtable = objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+		 int rowIterator = 1;
+		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
+		        
+		        if(inputrow.get("Flag_for_execution").equals("Y"))
+				{
+					System.out.println("coming to flow");
+					MG=new CommercialAuto(configFile);
+					MG.LoadSampleRatingmodel(configFile, inputrow);
+					MG.GenerateExpected(inputrow, configFile);
+					MG.PumpinData(inputrow, configFile);
+					MG.PumpoutData(outputrow,inputrow, configFile);
+				}
+		        inputrow.put("Flag_for_execution", "Completed");	
+		        objectInput.UpdateRow(rowIterator, inputrow);
+		        objectOutput.UpdateRow(rowIterator, outputrow);
+		        rowIterator++;
+		        
+			}
+	}
 }

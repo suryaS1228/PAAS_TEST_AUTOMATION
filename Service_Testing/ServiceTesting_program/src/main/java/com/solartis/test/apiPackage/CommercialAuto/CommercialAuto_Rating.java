@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import com.jayway.jsonpath.PathNotFoundException;
+import com.mysql.jdbc.Statement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -88,7 +89,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		  http.AddHeader("EventName", config.getProperty("EventName")); 
 		  http.AddHeader("EventVersion", config.getProperty("EventVersion"));
 	  } 
-	  catch (HTTPHandleException e) 
+	  catch (HTTPHandleException e)
 	  {
 		  throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-RatingService CLASS", e);
 	  }
@@ -99,28 +100,49 @@ public class CommercialAuto_Rating extends BaseClass implements API
  @Override
  public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
  {
+	 
+	 String actual="";
+	 
 	try
 	{
+		Statement stmt = (Statement) DatabaseOperation.conn.createStatement();
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-		
-		String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 		if(ResponseStatus.equals("SUCCESS"))
 		{
 		
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 		{
 			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			//System.out.println("flag is-----"+rowOutputColVerify.get("Flag")+"======"+(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")));
+			//System.out.println("Condition is----"+conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input));
+			//System.out.println("boolean is----"+((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input)));
 			  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 				try
 					{
 				
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-	
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					output.put("Flag_for_execution", ResponseStatus);
+					try
+					{
+					actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 					}
-					catch(PathNotFoundException | RequestFormatException e)
+					catch(Exception e)
+					{
+						actual="no value in response";
+					}
+					String updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='"+actual+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+	                try {
+	                stmt.executeUpdate(updatequery);
+	                }
+	                catch(SQLException e)
+	                {
+	                	System.out.println("error in update query");
+	                	e.printStackTrace();
+	                }
+	                //output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+					//output.put("Flag_for_execution", ResponseStatus);
+					}
+					catch(PathNotFoundException e)
 					{
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
@@ -145,7 +167,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}
 	}
-	catch(DatabaseException | POIException | MacroException | RequestFormatException e)
+	catch(DatabaseException | POIException | MacroException | RequestFormatException|SQLException e)
 	{
 		 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
 	}
@@ -154,7 +176,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
  
  public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
  {
-	 PropertiesHandle config = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
+	 PropertiesHandle config = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
 	 DatabaseOperation input = new DatabaseOperation();
 	 input.ConnectionSetup(config);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects("SELECT * FROM INPUT_CA_Rate_Policy a LEFT JOIN INPUT_CA_Rate_TruckDetails b on a.`S_No` = b.`S_No` LEFT JOIN INPUT_CA_Rate_PrivatePassengerDetails c on b.`S_No` = c.`S_No` LEFT JOIN INPUT_CA_Rate_HI_NON_AI d on c.`S_No` = d.`S_No`");
@@ -172,7 +194,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			 req.openTemplate();
 			 req.LoadData(requstdetail, inputrow);
 			 req.PumpinDatatoRequest(requstdetail, inputrow);
-			 req.saveJsontoPath("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Results\\Request\\Testdata1.json");
+			 req.saveJsontoPath("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Results\\Request\\Testdata1.json");
 		}
  }
  

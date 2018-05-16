@@ -35,6 +35,7 @@ public class RequestHandler
 	public RequestHandler(PropertiesHandle config) throws ClassNotFoundException, DatabaseException
 	{
 		requestconfigDB = new DatabaseOperation();
+		System.out.println(config.getProperty("InputColQuery"));
 		requestconfig=requestconfigDB.GetDataObjects(config.getProperty("InputColQuery"));
 		Requesttemplatepath="src/main/java/com/solartis/test/apiPackage/"+config.getProperty("ClassName").replace(".", "/")+"Request.ftl";
 	}

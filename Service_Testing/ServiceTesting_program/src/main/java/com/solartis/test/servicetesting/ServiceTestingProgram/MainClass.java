@@ -71,17 +71,14 @@ public class MainClass
 			System.out.println(config.getProperty("actualFlag")+"========"+config.getProperty("ComparisonFlag"));
 			actualchoice = config.getProperty("actualFlag");
 			comparisonchoice = config.getProperty("ComparisonFlag");
-			
 			outputtablechoice = config.getProperty("output_in_same_table");
 			String classname = config.getProperty("ClassName");
-			
 			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
 			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
 			api = (API) cons.newInstance(config);
 			fireEventAPI = new FireEventAPI(api);
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
-			
 			BaseClass baseclass = new BaseClass();
 		    Token=baseclass.tokenGenerator(config);
 		} 
@@ -128,7 +125,7 @@ public class MainClass
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+									//output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
 							} 
@@ -153,7 +150,7 @@ public class MainClass
 							} 
 							
 							inputrow.put("Flag_for_execution", "Completed");
-							input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+							//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 							}
 						else
 						{

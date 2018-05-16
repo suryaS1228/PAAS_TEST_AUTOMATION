@@ -109,7 +109,6 @@ public class PropertiesHandle extends Properties
 			this.put("ExecutionName", ExecutionName);
 			this.put("TestcaseQuery", "SELECT * FROM "+this.RdmsValue("InputTable"));
 			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("OutputTable"));
-
 			this.put("inputTable", this.RdmsValue("InputTable"));
 			this.put("outputTable", this.RdmsValue("OutputTable"));
 			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
@@ -119,7 +118,10 @@ public class PropertiesHandle extends Properties
 			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
 			this.InputQuery();
 			this.put("ModeofExecution", ModeofExecution);
-		    DatabaseOperation.CloseConn();		 
+		    DatabaseOperation.CloseConn();	
+		    
+		    System.out.println("1----------"+this.get("input_query"));
+		    System.out.println("2----------"+this.get("output_query"));
 		}
 		
 		protected String RdmsQuery(String OutputColoumn) throws PropertiesHandleException
@@ -212,7 +214,11 @@ public class PropertiesHandle extends Properties
 				else if(priority.equalsIgnoreCase("high") || priority.equalsIgnoreCase("low"))
 				{
 					this.put("input_query",  this.RdmsQueryWithPriority("InputTable", priority));
-				}		
+				}
+				else
+				{
+					this.put("input_query",  this.RdmsQuery("InputTable"));
+				}
 		}
 		
 	

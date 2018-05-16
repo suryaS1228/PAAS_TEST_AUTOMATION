@@ -25,7 +25,7 @@ import com.solartis.test.exception.POIException;
 
 public class DatabaseOperation
 {
-	private static Connection conn = null;
+	public static Connection conn = null;
 	private static String JDBC_DRIVER = null;
 	private static String DB_URL =null;
 	private static String USER=null;
