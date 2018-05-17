@@ -50,7 +50,7 @@ public class MainClass
 	public static DatabaseOperation db=null;
 	public static String Token;
 	@BeforeTest
-	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
+	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException, APIException
 	{
 		try 
 		{
@@ -82,8 +82,7 @@ public class MainClass
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
 			
-			BaseClass baseclass = new BaseClass();
-		    Token=baseclass.tokenGenerator(config);
+		    Token=fireEventAPI.tokenGenerator(config);
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
