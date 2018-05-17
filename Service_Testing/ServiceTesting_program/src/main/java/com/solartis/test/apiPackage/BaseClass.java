@@ -53,8 +53,9 @@ public class BaseClass
 
 	public String tokenGenerator(PropertiesHandle config)
 	{
-		String Token="";
-		try
+		String Token=config.getProperty("AuthenticationToken");
+		/*String Token="";
+		 * try
 		{
 			System.out.println(config.getProperty("AuthenticationURL"));
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
@@ -73,7 +74,7 @@ public class BaseClass
 		{
 			System.out.println("Error in Generating Token");
 			e.printStackTrace();
-		}
+		}*/
 		return Token;
 	}
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
