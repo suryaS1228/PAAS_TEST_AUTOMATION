@@ -30,10 +30,27 @@
     ],
     "AdditionalInsuredList": [
       {
-      
+      "AdditionalInsuredType":"Lessor Of Leased Equipment - Automatic Status When Required In Lease Agreement With You",
       "AdditionalInsuredDetail": [
           {
-          <#list AdditionalInsuredDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+          <#list AdditionalInsuredDetail1 as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+          },
+          {
+          <#list AdditionalInsuredDetail2 as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+          }
+        ]
+      },
+      {
+      "AdditionalInsuredType":"Concessionaires Trading Under Your Name",
+      "AdditionalInsuredDetail": [
+          {
+          <#list AdditionalInsuredDetail3 as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+          },
+          {
+          <#list AdditionalInsuredDetail4 as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
           }
         ]

@@ -174,7 +174,8 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	return output;
 }
  
- public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
+ @SuppressWarnings("static-access")
+public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
  {
 	 PropertiesHandle config = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
 	 DatabaseOperation input = new DatabaseOperation();
