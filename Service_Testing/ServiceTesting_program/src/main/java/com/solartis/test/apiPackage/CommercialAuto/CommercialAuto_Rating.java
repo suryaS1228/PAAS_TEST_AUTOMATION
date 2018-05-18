@@ -33,7 +33,7 @@ import freemarker.template.TemplateNotFoundException;
 public class CommercialAuto_Rating extends BaseClass implements API 
 {
  MacroInterface macro = null;
- 
+ Statement stmt =null;
  public CommercialAuto_Rating(PropertiesHandle config) throws SQLException, MacroException
  {
   this.config = config;
@@ -107,7 +107,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	 LinkedHashMap<String, String> rowOutputColVerify =null;
 	try
 	{
-		Statement stmt = (Statement) DatabaseOperation.conn.createStatement();
+		stmt = (Statement) DatabaseOperation.conn.createStatement();
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 		if(ResponseStatus.equals("SUCCESS"))
@@ -187,7 +187,79 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	}
 	return output;
 }
- 
+//---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	{		
+		String updatequery=null;
+		  LinkedHashMap<String, String> rowStatusColVerify=null;
+		  
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	{		
+	    try
+	    {
+	    	stmt = (Statement) DatabaseOperation.conn.createStatement();
+	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
+			{	
+			    rowStatusColVerify = entry.getValue();
+			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
+			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+				{
+					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
+					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
+					String StatusColumn = rowStatusColVerify.get(config.getProperty("StatusColumn"));
+					if(!(StatusColumn.equals("")) && !(ExpectedColumn.equals("")))
+					{
+						if(premium_comp(outputrow.get(ExpectedColumn),outputrow.get(ActualColumn)))
+						{
+							outputrow.put(StatusColumn, "Pass");
+							//
+							 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+"."+StatusColumn+"='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+							 stmt.executeUpdate(updatequery);
+						}
+						else
+						{
+							outputrow.put(StatusColumn, "Fail");
+							//
+							 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+"."+StatusColumn+"='Fail' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+							 stmt.executeUpdate(updatequery);
+							analyse(rowStatusColVerify,outputrow);
+						}
+					}
+				}
+			}
+			String message = "";
+			for(int i=0;i<errorMessage.size();i++)
+			{
+				message=message+errorMessage.get(i)+",";
+			}
+			if(message.equals(""))
+			{
+				outputrow.put("AnalyserResult", "Pass");
+				updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+".AnalyserResult ='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				 stmt.executeUpdate(updatequery);
+				//
+			}
+			else
+			{
+				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
+				String FailMessage=message.substring(0, message.length() - 2)+" Failed";
+				//
+				updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+".AnalyserResult ='"+FailMessage+"' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				 stmt.executeUpdate(updatequery);
+			}
+			errorMessage.clear();
+			errorParentname.clear();
+			return outputrow;
+
+	    }	
+	    catch(DatabaseException|SQLException e)
+	    {
+	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
+	    }
+	}
+	 return outputrow;
+}
  @SuppressWarnings("static-access")
 public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
  {

@@ -1,5 +1,6 @@
 package com.solartis.test.macroPackage;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -198,7 +199,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		}
 		excel.save();
 		}
-		catch(DatabaseException e)
+		catch(DatabaseException|SQLException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO MACRO", e);
 		}
