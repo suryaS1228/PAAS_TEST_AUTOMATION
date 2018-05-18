@@ -33,6 +33,7 @@ import freemarker.template.TemplateNotFoundException;
 public class CommercialAuto_Rating extends BaseClass implements API 
 {
  MacroInterface macro = null;
+ 
  public CommercialAuto_Rating(PropertiesHandle config) throws SQLException, MacroException
  {
   this.config = config;
@@ -41,6 +42,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+	
 	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
 		macro=new MarineGL(config);	
@@ -96,13 +98,13 @@ public class CommercialAuto_Rating extends BaseClass implements API
  }
 
 
-
  @Override
  public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
  {
 	 
 	 String actual="";
-	 
+	 String updatequery=null;
+	 LinkedHashMap<String, String> rowOutputColVerify =null;
 	try
 	{
 		Statement stmt = (Statement) DatabaseOperation.conn.createStatement();
@@ -113,7 +115,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 		{
-			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			rowOutputColVerify = entry.getValue();
 			//System.out.println("flag is-----"+rowOutputColVerify.get("Flag")+"======"+(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")));
 			//System.out.println("Condition is----"+conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input));
 			//System.out.println("boolean is----"+((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input)));
@@ -130,7 +132,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 					{
 						actual="no value in response";
 					}
-					String updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='"+actual+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+					updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='"+actual+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 	                try {
 	                stmt.executeUpdate(updatequery);
 	                }
@@ -139,11 +141,15 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	                	System.out.println("error in update query");
 	                	e.printStackTrace();
 	                }
-	                //output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					//output.put("Flag_for_execution", ResponseStatus);
+	                updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".Flag_for_execution ='"+ResponseStatus+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+					stmt.executeUpdate(updatequery);
+	                output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+					output.put("Flag_for_execution", ResponseStatus);
 					}
 					catch(PathNotFoundException e)
 					{
+						updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='pathnotfoundException' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+						stmt.executeUpdate(updatequery);
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 				}
@@ -152,15 +158,23 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		else
 		{
 			output.put("Flag_for_execution", "FailedResponse");
-			
+			 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".Flag_for_execution ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			 stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			if(Message.equals("Server Busy, Request cannot be processed right now"))
 			{
 				output.put("AnalyserResult","Error-ServerBusy");
+				 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+				 stmt.executeUpdate(updatequery);
+
 			}
 			output.put("AnalyserResult","Rule-"+RuleName);
+			updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".AnalyserResult ='"+RuleName+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			 stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
+			 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".User_message ='"+Message+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			 stmt.executeUpdate(updatequery);
 		}
 		if(config.getProperty("ComparisonFlag").equals("Y"))
 		{

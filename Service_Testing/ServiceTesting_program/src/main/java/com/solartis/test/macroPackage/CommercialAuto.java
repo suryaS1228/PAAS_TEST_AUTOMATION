@@ -164,6 +164,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	@Override
 	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
+		String updatequery=null;
 		try
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
@@ -187,7 +188,10 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 					excel.getcell(rowNum-1, columnNum);
 					//System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite+"--------"+CellAddress+"--------------"+condition+"------------"+ConditionReading(condition,inputData));
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
+					
 					outputData.put(Datacolumntowrite, Datatowrite);
+					updatequery="update "+ configFile.getProperty("outputTable")+ " SET "+ rowPumpoutData.get("TableName")+"."+Datacolumntowrite+" ='"+Datatowrite+"' where "+rowPumpoutData.get("TableName")+".Testdata='"+outputData.get("Testdata")+"'";
+					 stmt.executeUpdate(updatequery);
 				}
 			}
 			//outputData.UpdateRow();
