@@ -120,12 +120,15 @@ public class MainClass
 
 									inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								
-									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+									//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
 									outputrow = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-									 output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+									
+									
+									
+									//output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
 							} 
@@ -137,14 +140,14 @@ public class MainClass
 									
 									inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								     
-									input.UpdateRow(RowIterator, inputrow);
+									//input.UpdateRow(RowIterator, inputrow);
 								}
 								else
 								{
 									
 									outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								    
-									output.UpdateRow(RowIterator, outputrow);
+									//output.UpdateRow(RowIterator, outputrow);
 									
 								}
 							} 
