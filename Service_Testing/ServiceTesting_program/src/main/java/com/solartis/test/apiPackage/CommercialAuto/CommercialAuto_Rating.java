@@ -183,7 +183,8 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	}
 	catch(DatabaseException | POIException | MacroException | RequestFormatException|SQLException e)
 	{
-		 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
+		e.printStackTrace(); 
+		throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
 	}
 	return output;
 }
@@ -236,7 +237,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			if(message.equals(""))
 			{
 				outputrow.put("AnalyserResult", "Pass");
-				updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+".AnalyserResult ='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
 				 stmt.executeUpdate(updatequery);
 				//
 			}
@@ -245,7 +246,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
 				String FailMessage=message.substring(0, message.length() - 2)+" Failed";
 				//
-				updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowStatusColVerify.get("TableName")+".AnalyserResult ='"+FailMessage+"' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+FailMessage+"' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
 				 stmt.executeUpdate(updatequery);
 			}
 			errorMessage.clear();

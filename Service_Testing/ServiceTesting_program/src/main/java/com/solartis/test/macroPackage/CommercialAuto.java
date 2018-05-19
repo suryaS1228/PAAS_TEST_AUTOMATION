@@ -1,5 +1,6 @@
 package com.solartis.test.macroPackage;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -193,7 +194,9 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 					
 					outputData.put(Datacolumntowrite, Datatowrite);
 					updatequery="update "+ configFile.getProperty("outputTable")+ " SET "+ rowPumpoutData.get("TableName")+"."+Datacolumntowrite+" ='"+Datatowrite+"' where "+rowPumpoutData.get("TableName")+".Testdata='"+outputData.get("Testdata")+"'";
-					 stmt.executeUpdate(updatequery);
+					System.out.println(updatequery); 
+					stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+					stmt.executeUpdate(updatequery);
 				}
 			}
 			//outputData.UpdateRow();
