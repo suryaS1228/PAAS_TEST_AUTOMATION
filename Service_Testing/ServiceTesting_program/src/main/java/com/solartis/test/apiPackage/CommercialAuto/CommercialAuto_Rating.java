@@ -138,13 +138,13 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	                }
 	                catch(SQLException e)
 	                {
-	                	System.out.println("error in update query");
+	                	System.out.println("error in update query---"+updatequery);
 	                	e.printStackTrace();
 	                }
-	                updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".Flag_for_execution ='"+ResponseStatus+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+	                updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='"+ResponseStatus+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 					stmt.executeUpdate(updatequery);
 	                output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					output.put("Flag_for_execution", ResponseStatus);
+					output.put("ResponseStatus", ResponseStatus);
 					}
 					catch(PathNotFoundException e)
 					{
@@ -157,23 +157,23 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		}
 		else
 		{
-			output.put("Flag_for_execution", "FailedResponse");
-			 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".Flag_for_execution ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			output.put("ResponseStatus", "FailedResponse");
+			 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 			 stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			if(Message.equals("Server Busy, Request cannot be processed right now"))
 			{
 				output.put("AnalyserResult","Error-ServerBusy");
-				 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+				 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 				 stmt.executeUpdate(updatequery);
 
 			}
 			output.put("AnalyserResult","Rule-"+RuleName);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".AnalyserResult ='"+RuleName+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+RuleName+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 			 stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
-			 updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+".User_message ='"+Message+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message ='"+Message+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 			 stmt.executeUpdate(updatequery);
 		}
 		if(config.getProperty("ComparisonFlag").equals("Y"))
@@ -193,7 +193,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		String updatequery=null;
 		  LinkedHashMap<String, String> rowStatusColVerify=null;
 		  
-	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	 if(outputrow.get("ResponseStatus").equals("SUCCESS"))
 	{		
 	    try
 	    {
@@ -260,6 +260,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	}
 	 return outputrow;
 }
+	
  @SuppressWarnings("static-access")
 public static void main(String args[]) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException
  {

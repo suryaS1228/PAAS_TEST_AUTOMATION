@@ -53,7 +53,8 @@ public class BaseClass
 
 	public String tokenGenerator(PropertiesHandle config)
 	{
-		String Token=config.getProperty("AuthenticationURL");
+		String Token=config.getProperty("AuthenticationToken");
+		
 		/*try
 		{
 			System.out.println(config.getProperty("AuthenticationURL"));
@@ -189,7 +190,7 @@ public class BaseClass
 					{
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						output.put("flag_for_execution", "Completed");
+						//output.put("ResponseStatus", "Completed");
 					}
 					catch(PathNotFoundException e)
 					{
@@ -209,7 +210,7 @@ public class BaseClass
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		 
-	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	 if(outputrow.get("ResponseStatus").equals("SUCCESS"))
 	{		
 	    try
 	    {
