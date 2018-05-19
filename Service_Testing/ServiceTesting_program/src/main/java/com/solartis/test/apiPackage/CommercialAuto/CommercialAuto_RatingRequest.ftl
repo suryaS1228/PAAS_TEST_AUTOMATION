@@ -28,6 +28,10 @@
       }  <#if i=numofPPassengers[0]><#else>,</#if><#assign i=i+1>
       </#list>
     ],
+    
+    <#list Policy as result>
+	  <#if result.atrib=="State">
+		<#if result.value=="CA">
     "AdditionalInsuredList": [
       {
       "AdditionalInsuredType":"Lessor Of Leased Equipment - Automatic Status When Required In Lease Agreement With You",
@@ -56,6 +60,8 @@
         ]
       }
     ],
+    </#if></#if>
+    	</#list>
     "HiredAuto": 
     [
       {
