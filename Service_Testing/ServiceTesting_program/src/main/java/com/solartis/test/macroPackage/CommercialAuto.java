@@ -20,11 +20,12 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
-import com.solartis.test.util.common.ExcelOperationsPOI;
+import com.solartis.test.util.common.ExcelOperationsPOIInterface;
+import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
 public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 {
-	protected ExcelOperationsPOI sampleexcel=null;
+	protected ExcelOperationsPOIInterface sampleexcel=null;
 	protected String Targetpath;
 	protected String Samplepath;
 	protected int numofplans;
@@ -68,10 +69,10 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		try
 		{
 		// TODO Auto-generated method stub
-			String RateingModelName ="MarineGL_RM";
+			String RateingModelName ="CA Rating Workbook V1";
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-			sampleexcel= new ExcelOperationsPOI(Samplepath);
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
+			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
 		}
 		catch (POIException e)
 		{
@@ -84,7 +85,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xlsx";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -100,13 +101,13 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
 			trans= new CommercialAuto(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
 				String condition = rowPumpinData.get("Condition");
-				//System.out.println(condition+"-------------"+rowPumpinData);
+				System.out.println(condition+"-------------"+rowPumpinData);
 				if (rowPumpinData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,InputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
@@ -168,7 +169,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		String updatequery=null;
 		try
 		{
-		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	

@@ -12,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.internal.JsonFormatter;
 import com.jayway.jsonpath.internal.JsonReader;
 import com.solartis.test.exception.RequestFormatException;
 
@@ -83,7 +84,7 @@ public class JsonHandle implements RequestResponse
 		
 		try 
 		{
-			write_file.write(json_string);
+			write_file.write(JsonFormatter.prettyPrint(json_string));
 		} 
 		catch (IOException e) 
 		{
