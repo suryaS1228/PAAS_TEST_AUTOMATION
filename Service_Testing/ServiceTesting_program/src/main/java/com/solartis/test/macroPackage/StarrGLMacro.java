@@ -17,6 +17,8 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
+import com.solartis.test.util.common.ExcelOperationsPOIInterface;
+import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
 public class StarrGLMacro implements MacroInterface
 {
@@ -69,7 +71,7 @@ public class StarrGLMacro implements MacroInterface
 		{
 			String RateingModelName = Lookup("filename",configFile);
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
@@ -82,7 +84,7 @@ public class StarrGLMacro implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xlsx";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
@@ -99,7 +101,7 @@ public class StarrGLMacro implements MacroInterface
 		{
 			//DatabaseOperation configTable = new DatabaseOperation();
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
 			trans= new StarrGLMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{								
@@ -166,7 +168,7 @@ public class StarrGLMacro implements MacroInterface
 	{
 		try
 		{
-		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+		ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
