@@ -9,21 +9,22 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.solartis.test.exception.POIException;
 
-public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
+public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 {
 	protected String path = null;
 	protected Workbook workbook = null;
-	protected HSSFSheet worksheet=null;
+	protected XSSFSheet worksheet=null;
 	protected String sheet_name = null;
 	protected FileInputStream inputfilestream;
 	protected Cell cell=null;
@@ -31,13 +32,13 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	protected int column_number;
 	
 	
-	public ExcelOperationsPOI(String path) throws POIException
+	public ExcelOperationsPOI_xlsx(String path) throws POIException
 	{
 		 try 
 		 {
 			this.path=path;
 			inputfilestream= new FileInputStream(new File(path));
-			workbook = new HSSFWorkbook(inputfilestream);
+			workbook = new XSSFWorkbook(inputfilestream);
 		 } 
 		 catch (IOException e) 
 		 {
@@ -50,7 +51,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		try 
 		 {
 			inputfilestream= new FileInputStream(new File(this.path));
-			workbook = new HSSFWorkbook(inputfilestream);
+			workbook = new XSSFWorkbook(inputfilestream);
 		 } 
 		 catch (IOException e) 
 		 {
@@ -61,7 +62,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	public void getsheets(String sheet_name)
 	{
 		this.sheet_name = sheet_name;
-		worksheet = (HSSFSheet) this.workbook.getSheet(sheet_name);
+		worksheet = (XSSFSheet) this.workbook.getSheet(sheet_name);
 		this.row_number = 0;
 		this.column_number = 0;
 	}
@@ -80,14 +81,14 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		if(workbook == null)
 		{
 			openWorkbook();
-			worksheet = (HSSFSheet) this.workbook.getSheet(this.sheet_name);
+			worksheet = (XSSFSheet) this.workbook.getSheet(this.sheet_name);
 		}
 		cell = this.worksheet.getRow(this.row_number).getCell(this.column_number);
 		switch(this.cell.getCellType()) 
 		{
 			case Cell.CELL_TYPE_BOOLEAN:	cellvalue= String.valueOf(cell.getBooleanCellValue());	break;
 			case Cell.CELL_TYPE_NUMERIC:	
-				if(HSSFDateUtil.isCellDateFormatted(cell))
+				if(DateUtil.isCellDateFormatted(cell))
 				{
 					Date date5 = cell.getDateCellValue();
 					DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
@@ -121,7 +122,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		if(workbook == null)
 		{
 			openWorkbook();
-			worksheet = (HSSFSheet) this.workbook.getSheet(this.sheet_name);
+			worksheet = (XSSFSheet) this.workbook.getSheet(this.sheet_name);
 		}
 		cell = this.worksheet.getRow(rowNumber).getCell(columnNumber);
 		if(cell==null)
@@ -138,7 +139,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		{
 			case Cell.CELL_TYPE_BOOLEAN	:	cellvalue= String.valueOf(cell.getBooleanCellValue());		break;
 			case Cell.CELL_TYPE_NUMERIC	:	
-											if(HSSFDateUtil.isCellDateFormatted(cell))
+											if(DateUtil.isCellDateFormatted(cell))
 											{
 												Date date5 = cell.getDateCellValue();
 												DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
@@ -156,7 +157,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 											switch(cell.getCachedFormulaResultType())
 											{
 												case Cell.CELL_TYPE_NUMERIC:
-													if(HSSFDateUtil.isCellDateFormatted(cell))
+													if(DateUtil.isCellDateFormatted(cell))
 													{
 														Date date5 = cell.getDateCellValue();
 														DateFormat date1 = new SimpleDateFormat("MM/dd/yyyy");
@@ -307,7 +308,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	
 	public void refresh()
 	{
-		 HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
 	}
 	
 	public void save() throws POIException
