@@ -19,7 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import com.solartis.test.exception.POIException;
 
-public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
+public class ExcelOperationsPOI 
 {
 	protected String path = null;
 	protected Workbook workbook = null;
