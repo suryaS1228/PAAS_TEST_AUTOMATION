@@ -92,7 +92,7 @@ public class MainClass
 	} 
 	
 	@SuppressWarnings("unchecked")
-	@Test(dataProvider="PaaSTest")
+	@Test(dataProvider="PaaSTest",timeOut = 300000)
 	public static void apiTest(Integer RowIterator, Object inputtablerowobj, Object outputtablerowobj)throws InterruptedException, DatabaseException, InterruptedException
     {   		
 		try 
