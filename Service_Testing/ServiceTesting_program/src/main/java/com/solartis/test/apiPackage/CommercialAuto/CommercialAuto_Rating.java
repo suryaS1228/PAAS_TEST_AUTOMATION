@@ -18,7 +18,7 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.CommercialAuto;
+import com.solartis.test.macroPackage.CommercialAutoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -45,7 +45,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	
 	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
-		macro=new CommercialAuto(config);	
+		macro=new CommercialAutoMacro(config);	
 	}
  }
  

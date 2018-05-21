@@ -24,13 +24,13 @@ import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOIInterface;
 import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
-public class CommercialAuto extends DBColoumnVerify implements MacroInterface
+public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOIInterface sampleexcel=null;
 	protected String Targetpath;
 	protected String Samplepath;
 	protected int numofplans;
-	protected CommercialAuto trans;
+	protected CommercialAutoMacro trans;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
 	protected LinkedHashMap<Integer,String> planname;
@@ -51,7 +51,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 	
-	public CommercialAuto(PropertiesHandle configFile) throws MacroException
+	public CommercialAutoMacro(PropertiesHandle configFile) throws MacroException
 	{
 		super(" ");
 		configTable = new DatabaseOperation();
@@ -103,7 +103,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
-			trans= new CommercialAuto(configFile);
+			trans= new CommercialAutoMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
@@ -381,7 +381,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	{
 		DatabaseOperation objectInput = new DatabaseOperation();
 		DatabaseOperation objectOutput = new DatabaseOperation();
-		CommercialAuto MG;
+		CommercialAutoMacro MG;
 		PropertiesHandle configFile=null;
 		
 		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Rating\\Config\\config.properties");
@@ -402,7 +402,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		        if(inputrow.get("Flag_for_execution").equals("Y"))
 				{
 					System.out.println("coming to flow");
-					MG=new CommercialAuto(configFile);
+					MG=new CommercialAutoMacro(configFile);
 					MG.LoadSampleRatingmodel(configFile, inputrow);
 					MG.GenerateExpected(inputrow, configFile);
 					MG.PumpinData(inputrow, configFile);
