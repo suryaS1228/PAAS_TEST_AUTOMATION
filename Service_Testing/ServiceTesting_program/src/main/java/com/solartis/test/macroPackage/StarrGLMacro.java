@@ -67,9 +67,8 @@ public class StarrGLMacro implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName = Lookup("filename",configFile);
-			
-
+			String RatingModelVersion=inputData.get("RatingModelVersion");
+			String RateingModelName = Lookup(RatingModelVersion,configFile);		
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 
