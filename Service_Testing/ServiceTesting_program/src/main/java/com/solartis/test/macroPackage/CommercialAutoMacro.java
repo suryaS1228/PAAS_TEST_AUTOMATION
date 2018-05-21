@@ -69,7 +69,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-			String RateingModelName ="CA Rating Workbook V1";
+			String RateingModelName ="CA Rating Workbook V1_updated";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
@@ -120,7 +120,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
-						excel.getcell(rowNum, columnNum);
+						//excel.getcell(rowNum, columnNum);
 						
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
