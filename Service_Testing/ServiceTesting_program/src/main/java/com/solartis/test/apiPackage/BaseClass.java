@@ -298,7 +298,7 @@ public class BaseClass
 
     	//System.out.println(expected+"-----------"+actual);
     	
-    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.matches("[a-zA-Z]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*")||expected.matches("[M|D|C|L|X|V|I]*"))
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.matches(".*[A-Z].*")||expected.matches(".*[A-Z].*")||actual.equals("[]")||expected.matches("[a-zA-Z]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*")||expected.matches("[M|D|C|L|X|V|I]*"))
     		{
     			//System.out.println("expected or actual is string");
     			if(expected.equals(actual))
