@@ -22,7 +22,7 @@ import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
 public class StarrGLMacro implements MacroInterface
 {
-	protected ExcelOperationsPOI sampleexcel=null;
+	protected ExcelOperationsPOIInterface sampleexcel=null;
 	protected String Targetpath;
 	protected StarrGLMacro trans;
 	protected String Samplepath;
@@ -72,7 +72,7 @@ public class StarrGLMacro implements MacroInterface
 			String RateingModelName = Lookup("filename",configFile);
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
-			sampleexcel= new ExcelOperationsPOI(Samplepath);
+			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
 		}
 		catch (POIException e)
 		{
