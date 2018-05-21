@@ -21,8 +21,8 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.ExcelOperationsPOI;
 import com.solartis.test.util.common.ExcelOperationsPOIInterface;
-import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
 public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterface
 {
@@ -69,11 +69,10 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-		// TODO Auto-generated method stub
 			String RateingModelName ="CA Rating Workbook V1";
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
-			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
 		{
@@ -86,7 +85,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xlsx";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -102,7 +101,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI(Targetpath);
 			trans= new CommercialAutoMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
@@ -170,7 +169,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		String updatequery=null;
 		try
 		{
-			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
