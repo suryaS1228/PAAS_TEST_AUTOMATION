@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
@@ -107,7 +106,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
 				String condition = rowPumpinData.get("Condition");
-				System.out.println(condition+"-------------"+rowPumpinData);
+				//System.out.println(condition+"-------------"+rowPumpinData);
 				if (rowPumpinData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,InputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
@@ -125,8 +124,6 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
-							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
@@ -193,7 +190,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 					
 					outputData.put(Datacolumntowrite, Datatowrite);
 					updatequery="update "+ configFile.getProperty("outputTable")+ " SET "+ rowPumpoutData.get("TableName")+"."+Datacolumntowrite+" ='"+Datatowrite+"' where "+rowPumpoutData.get("TableName")+".Testdata='"+outputData.get("Testdata")+"'";
-					System.out.println(updatequery); 
+					//System.out.println(updatequery); 
 					stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
 					stmt.executeUpdate(updatequery);
 				}
