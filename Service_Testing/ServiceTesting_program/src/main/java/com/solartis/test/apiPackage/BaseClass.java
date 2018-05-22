@@ -117,20 +117,23 @@ public class BaseClass
 	{
 	  try 
 	  {
+		System.out.println(input.get("Testdata"));
 		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 		  request.write("$..Token", Token);
 		  return request.FileToString();
-	  } 
+		  }
+	
 	  catch (RequestFormatException e)
 	  {
 		  throw new APIException("ERROR OCCURS IN REQUEST TO STRING FUNCTION -- BASE CLASS", e);
 	   }
+
 	}
 	
 //-------------------------------------------------------------ADDING HEADER || TOKENS------------------------------------------------------------------	
 	public void AddHeaders(String Token) throws APIException
 	{
-		try
+	   try
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
@@ -140,11 +143,13 @@ public class BaseClass
 		{
 			throw new APIException("ERROR ADD HEADER FUNCTION -- BASE CLASS", e);
 		}
+	    
 	}
 
 //------------------------------------------------------------STORING RESPONSE TO FOLDER----------------------------------------------------------------	
 	public void SendAndReceiveData() throws APIException 
-	{
+	{    
+		
 		try
 		{
 			String input_data= null;
@@ -164,6 +169,7 @@ public class BaseClass
 //-------------------------------------------------------------CONVERTING RESPONSE TO STRING------------------------------------------------------------
 	public String ResponseToString() throws APIException 
 	{
+	  
 		try
 		{
 			return response.FileToString();
@@ -172,11 +178,14 @@ public class BaseClass
 		{
 			throw new APIException("ERROR IN RESPONSE TO STRING FUNCTION -- BASE CLASS", e);
 		}
+	
 	}
 	
 //-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
+	    if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
+	    {
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
@@ -205,11 +214,18 @@ public class BaseClass
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
+	    }
+	    else
+	    {
+	    	return null;
+	    }
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		 
+	    if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
+	    {
 	 if(outputrow.get("ResponseStatus").equals("SUCCESS"))
 	{		
 	    try
@@ -261,6 +277,7 @@ public class BaseClass
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
+	    }
 	 return outputrow;
  }
 	

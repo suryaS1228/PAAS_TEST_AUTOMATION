@@ -43,7 +43,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	
-	if(config.getProperty("ComparisonFlag").equals("Y"))
+	if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 	{
 		macro=new CommercialAutoMacro(config);	
 	}
@@ -51,7 +51,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
  
  public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
  {
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
@@ -62,23 +62,29 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 			}
 		}
+	 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+	 {
 		super.LoadSampleRequest(InputData);
+	 }
 }
  
  public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
-				macro.PumpinData(input, config);
+				macro.PumpinData(InputData, config);
 			} 
 			catch (DatabaseException | POIException | MacroException e) 
 			{
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
+	 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+	 {
 		super.PumpDataToRequest(InputData);
+	 }
 	}
 
  public void AddHeaders(String Token) throws APIException 
@@ -101,12 +107,14 @@ public class CommercialAuto_Rating extends BaseClass implements API
  @Override
  public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
  {
-	 
+	
 	 String actual="";
 	 String updatequery=null;
 	 LinkedHashMap<String, String> rowOutputColVerify =null;
 	try
 	{
+		 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
+		 {
 		stmt = (Statement) DatabaseOperation.conn.createStatement();
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
@@ -176,10 +184,13 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message ='"+Message+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 			 stmt.executeUpdate(updatequery);
 		}
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+	}
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
+			System.out.println("Coming to comparison function==========");
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}
+		
 	}
 	catch(DatabaseException | POIException | MacroException | RequestFormatException|SQLException e)
 	{

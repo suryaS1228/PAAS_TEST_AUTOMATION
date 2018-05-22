@@ -56,7 +56,7 @@ public class PropertiesHandle extends Properties
 		protected void WriteProperty(String UserName) throws DatabaseException, PropertiesHandleException
 		{
 			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);						
-            if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
+         /*   if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
 				 this.ActualAndComparisonStatus("Y", "N");    
             }
@@ -68,6 +68,11 @@ public class PropertiesHandle extends Properties
 			{
 				this.ActualAndComparisonStatus("Y", "Y");    
 			}
+			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
+			{
+				this.ActualAndComparisonStatus("Y", "Y");    
+			}*/
+			this.put("Execution_Flag",OutputChioce);
 			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
 			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Request/");
@@ -198,11 +203,12 @@ public class PropertiesHandle extends Properties
 		}
 
 	
-		protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
+		/*protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
 			this.put("actualFlag", Actual);
 			this.put("ComparisonFlag", Comparison);
-		}	
+			this.put("ExpectedFlag", "");
+		}	*/
 		
 		
 	

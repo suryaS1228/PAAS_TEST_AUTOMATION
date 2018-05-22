@@ -49,6 +49,7 @@ public class MainClass
 	public static Connection Conn=null;  //added
 	public static DatabaseOperation db=null;
 	public static String Token;
+	public static String ExecutionFlag;
 	@BeforeTest
 	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
 	{
@@ -68,9 +69,10 @@ public class MainClass
 			{
 		     this.beforeTesting();
 			}
-			System.out.println(config.getProperty("actualFlag")+"========"+config.getProperty("ComparisonFlag"));
-			actualchoice = config.getProperty("actualFlag");
-			comparisonchoice = config.getProperty("ComparisonFlag");
+			System.out.println(config.getProperty("Execution_Flag"));
+			//actualchoice = config.getProperty("actualFlag");
+			//comparisonchoice = config.getProperty("ComparisonFlag");
+			ExecutionFlag=config.getProperty("Execution_Flag");
 			outputtablechoice = config.getProperty("output_in_same_table");
 			String classname = config.getProperty("ClassName");
 			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
@@ -79,8 +81,11 @@ public class MainClass
 			fireEventAPI = new FireEventAPI(api);
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
+			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
+			    {
 			BaseClass baseclass = new BaseClass();
 		    Token=baseclass.tokenGenerator(config);
+			    }
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 		{
@@ -99,11 +104,15 @@ public class MainClass
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
 				System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
-						{							
+						{		
+							System.out.println("---------------------"+ExecutionFlag);
 						    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
                             
 						    fireEventAPI.PumpDataToRequest(inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
 						    
+						    if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
+						    {
+						    	System.out.println(Token);
 						    fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 						
 						    fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
@@ -111,8 +120,8 @@ public class MainClass
 						    fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
 							
 						    fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
-							
-							if(actualchoice.equals("Y"))
+						    }
+							if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("ExpectedOnly")||ExecutionFlag.equals("Comparison"))
 							{
 								  
 								if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
@@ -133,7 +142,7 @@ public class MainClass
 								}
 							} 
 							
-							if(comparisonchoice.equals("Y"))
+							if(ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ActualandComparison"))
 							{
 								if(outputtablechoice.equals("Y"))
 								{
@@ -183,7 +192,7 @@ public class MainClass
 		try
 		{
 	
-		base.generateReport(config,comparisonchoice);
+		base.generateReport(config,ExecutionFlag);
 
 		DirectoryManipulation.zipFolder(config.getProperty("ZipFolderPath"), config.getProperty("OverallResults"));
 		
