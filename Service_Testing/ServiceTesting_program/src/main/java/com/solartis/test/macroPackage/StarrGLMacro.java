@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -15,6 +16,7 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
@@ -390,31 +392,43 @@ public class StarrGLMacro implements MacroInterface
 		
 	}
 	
-	
-	/*public static void main(String args[]) throws  DatabaseException, MacroException, PropertiesHandleException
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 	{
-	 DatabaseOperation objectInput = new DatabaseOperation();
-	 DatabaseOperation objectOutput = new DatabaseOperation();
-	 StarrGLMacro sm;
-	 PropertiesHandle configFile = new PropertiesHandle("E:/RestFullAPIDeliverable/Devolpement/admin/STARR-GL/Rating/config/config.properties");
-	 
-	 DatabaseOperation.ConnectionSetup(configFile);
-	 objectInput.GetDataObjects(configFile.getProperty("input_query"));
-	 objectOutput.GetDataObjects(configFile.getProperty("output_query"));
-	 do
-	 {
-	  System.out.println("TestData : " + objectInput.ReadData("S.No"));   
-	    if(objectInput.ReadData("Flag_for_execution").equals("Y"))
-	    {
-	     sm=new StarrGLMacro(configFile);
-	     sm.LoadSampleRatingmodel(configFile, objectInput);
-	     sm.GenerateExpected(objectInput, configFile);
-	     sm.PumpinData(objectInput, configFile);
-	     sm.PumpoutData(objectOutput,objectInput, configFile);
-	    }
-	    objectInput.WriteData("Flag_for_execution", "Completed"); 
-	    objectInput.UpdateRow();
-	 }while(objectInput.MoveForward()&&objectOutput.MoveForward());
-	}*/
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		StarrGLMacro MG;
+		PropertiesHandle configFile=null;
+		
+		configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\Rating\\config\\config.properties");
+		DatabaseOperation.ConnectionSetup(configFile);
+		 
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>>  outputtable = objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+		 int rowIterator = 1;
+		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
+		        
+		        if(inputrow.get("Flag_for_execution").equals("Y"))
+				{
+					System.out.println("coming to flow");
+					MG=new StarrGLMacro(configFile);
+					MG.LoadSampleRatingmodel(configFile, inputrow);
+					MG.GenerateExpected(inputrow, configFile);
+					MG.PumpinData(inputrow, configFile);
+					MG.PumpoutData(outputrow,inputrow, configFile);
+				}
+		        inputrow.put("Flag_for_execution", "Completed");	
+		        objectInput.UpdateRow(rowIterator, inputrow);
+		        objectOutput.UpdateRow(rowIterator, outputrow);
+		        rowIterator++;
+		        
+			}
+	}
 
 }
