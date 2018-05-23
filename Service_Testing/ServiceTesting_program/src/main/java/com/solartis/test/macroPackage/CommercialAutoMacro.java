@@ -216,7 +216,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		switch(configTable.get("Translation_Function"))
 		{
 		case "Date": 
-			Date DateData = Date(Datatowrite,"mm/dd/yyyy",configTable.get("Translation_Format"));
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
 			outputdata = (T) DateData;
 			break;
 		case "Lookup":
