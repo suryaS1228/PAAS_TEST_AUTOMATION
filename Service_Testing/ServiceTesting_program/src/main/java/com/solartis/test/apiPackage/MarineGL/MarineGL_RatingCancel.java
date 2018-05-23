@@ -38,6 +38,7 @@ public class MarineGL_RatingCancel extends BaseClass implements API
  
  public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
  {
+	 this.input = InputData;
 	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 

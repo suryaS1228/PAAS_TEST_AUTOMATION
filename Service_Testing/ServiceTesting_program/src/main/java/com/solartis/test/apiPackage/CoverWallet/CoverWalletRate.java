@@ -67,6 +67,7 @@ public class CoverWalletRate extends BaseClass implements API
 	}
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
+		 this.input = InputData;
 		 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
 				try 
@@ -91,7 +92,7 @@ public class CoverWalletRate extends BaseClass implements API
 		{
 			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
-			macro.PumpinData(input, config);	
+			macro.PumpinData(InputData, config);	
 			}
 		  if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
 		   {
