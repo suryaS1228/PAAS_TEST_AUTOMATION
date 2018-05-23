@@ -68,8 +68,8 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-			String RateingModelName ="CA Rating Workbook V1_updated";
-			
+			//String RateingModelName ="CA Rating Workbook V1_updated";
+			String RateingModelName = Lookup("filename",configFile);
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
 			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
 		}
