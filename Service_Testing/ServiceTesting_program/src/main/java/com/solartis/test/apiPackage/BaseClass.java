@@ -387,7 +387,7 @@ public class BaseClass
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, excelreportlocation1);
 			sample.save();
-			if(comparisonChoice.equals("Y"))
+			if(config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison"))
 		    {
 				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 				ob.getsheets("TestReport");
