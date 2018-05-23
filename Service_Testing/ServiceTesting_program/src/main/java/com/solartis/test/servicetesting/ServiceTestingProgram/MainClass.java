@@ -51,7 +51,7 @@ public class MainClass
 	public static String Token;
 	public static String ExecutionFlag;
 	@BeforeTest
-	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
+	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException, APIException
 	{
 		try 
 		{
@@ -83,8 +83,9 @@ public class MainClass
 			fireEventAPI.addListener(listener);
 			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
 			    {
-			BaseClass baseclass = new BaseClass();
-		    Token=baseclass.tokenGenerator(config);
+				  System.out.println("coming to token generator----------------------------");
+			//BaseClass baseclass = new BaseClass();
+		    Token=fireEventAPI.tokenGenerator(config);
 			    }
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
