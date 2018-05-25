@@ -155,7 +155,7 @@ public class IsoBopRenewalRateMacro implements MacroInterface
 		{
 		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-		excel.refresh();
+		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
