@@ -63,7 +63,7 @@ public class IsoBopRenewalRateMacro implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.get("RatingModel_version"),configFile);
+			String RateingModelName = Lookup("RatingModel_version",configFile);
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
