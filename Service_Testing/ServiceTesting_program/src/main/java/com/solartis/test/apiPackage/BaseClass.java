@@ -288,7 +288,7 @@ public class BaseClass
 		boolean status = false;
 		if(actual == null||actual.equals("")||actual.isEmpty())
 		{
-			System.out.println("actual is empty");
+			//System.out.println("actual is empty");
 			if((expected == null || expected.equals("")||expected.equals("0") || expected.equals("0.0")))
 			{
 				status = true;
@@ -297,7 +297,7 @@ public class BaseClass
 		}
 		if(expected == null||expected.equals("")||expected.isEmpty())
 		{
-			System.out.println("actual is empty");
+			//System.out.println("actual is empty");
 			if(actual == null|| actual.equals("")||actual.equals("0") || actual.equals("0.0"))
 			{
 				status = true;
