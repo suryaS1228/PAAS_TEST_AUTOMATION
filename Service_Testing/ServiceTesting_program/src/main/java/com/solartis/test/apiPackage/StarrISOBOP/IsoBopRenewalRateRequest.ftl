@@ -1,3 +1,5 @@
+<#assign NumofAIArray=[]><#list NumofAI as x><#assign NumofAIArray=NumofAIArray+[x.value]></#list>
+<#assign i=1>
 {
   "ServiceRequestDetail": {
   <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
@@ -33,18 +35,25 @@
       }
     ],
     "AdditionalInsuredList": [
-    <#list AdditionalInsuredType as result>
+    <#list 1..NumofAIArray[0] as result>
+  	<#assign AdditionalInsuredType="AdditionInsured_Type"+i>
+    
     {
+    <#list AdditionalInsuredType?eval as result>
     "${result.atrib}":"${result.value}",
+    </#list>
     "AdditionalInsuredDetail": [
           {
-          <#list AdditionalInsuredDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+          <#list AdditionalInsuredDetail as result>
+          <#if result.atrib=="AINumber">"${result.atrib}":"${result.value}${i}",<#else>
+          "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+          </#if>
   		  </#list>
-  		  }
-    <#if result?is_last><#else>,</#if>
-  	</#list>
-    ]
+  		  }   	
+  	   ]
     }
+    <#if i=NumofAIArray[0]><#else>,</#if><#assign i=i+1>
+      </#list>
     ],    
     "MortgageholderList": [
       {

@@ -16,10 +16,11 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class IsoBopRenewalRateMacro implements MacroInterface
+public class IsoBopRenewalRateMacro extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
@@ -98,7 +99,8 @@ public class IsoBopRenewalRateMacro implements MacroInterface
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{		
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
+				String condition = rowPumpinData.get("Condition");
+				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y")&&ConditionReading(condition,inputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
 					{
@@ -159,7 +161,8 @@ public class IsoBopRenewalRateMacro implements MacroInterface
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
-			if (rowPumpoutData.get("flag_for_execution").equals("Y"))
+			String condition = rowPumpoutData.get("Condition");
+			if (rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 			{
 				if (rowPumpoutData.get("Type").equals("output"))
 				{
