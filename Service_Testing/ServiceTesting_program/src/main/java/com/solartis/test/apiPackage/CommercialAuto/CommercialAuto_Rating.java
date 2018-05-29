@@ -189,7 +189,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	}
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-			System.out.println("Coming to comparison function==========");
+			//System.out.println("Coming to comparison function==========");
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}
 		
