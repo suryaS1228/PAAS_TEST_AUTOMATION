@@ -117,7 +117,7 @@ public class BaseClass
 	{
 	  try 
 	  {
-		System.out.println(input.get("Testdata"));
+		//System.out.println(input.get("Testdata"));
 		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 		  request.write("$..Token", Token);
 		  return request.FileToString();
