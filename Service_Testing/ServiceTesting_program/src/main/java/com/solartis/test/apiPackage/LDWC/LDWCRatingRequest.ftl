@@ -18,6 +18,7 @@
 		</ClientApp>
 	</SignonRq>
 	<InsuranceSvcRq>
+		<#list Policy as result><#if result.atrib=="RqUID"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 		<com.csc_TransactionSeqNbr>1</com.csc_TransactionSeqNbr>
 		<LargeDeductibleCreditCalculationRq>
 			<MsgStatus>
@@ -40,6 +41,7 @@
 				<GeneralPartyInfo>
 					<NameInfo>
 						<CommlName>
+							<#list Policy as result><#if result.atrib=="CommercialName"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 							<com.csc_ClientNumber></com.csc_ClientNumber>
 						</CommlName>
 					</NameInfo>
@@ -49,27 +51,35 @@
 				</InsuredOrPrincipalInfo>
 			</InsuredOrPrincipal>
 			<CommlPolicy>
+				<#list Policy as result><#if result.atrib=="com.csc_QuoteNumber"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
+				<#list Policy as result><#if result.atrib=="PolicyNumber"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 				<PolicyVersion>1</PolicyVersion>
 				<CompanyProductCd>WC</CompanyProductCd>
 				<LOBCd>WCV</LOBCd>
 				<ContractTerm>
+					<#list Policy as result><#if result.atrib=="EffectiveDt"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
+					<#list Policy as result><#if result.atrib=="ExpirationDt"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 				</ContractTerm>
 				<PolicyStatusCd>N</PolicyStatusCd>
 				<CurrentTermAmt>
 					<Amt>55800000</Amt>
 				</CurrentTermAmt>
+				<#list Policy as result><#if result.atrib=="com.csc_TxnType"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
+				<#list Policy as result><#if result.atrib=="com.csc_Submission_Nbr"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 				<CommlCoverage>
 					<CoverageCd>WC</CoverageCd>
 					<Deductible>
 						<DeductibleTypeCd>00</DeductibleTypeCd>
 						<DeductibleAppliesToCd>Amount</DeductibleAppliesToCd>
 						<FormatCurrency>
+							<#list DeductibleAmt as result><${result.atrib}>${result.value}</${result.atrib}></#list>
 						</FormatCurrency>
 					</Deductible>
 					<Deductible>
 						<DeductibleTypeCd>00</DeductibleTypeCd>
 						<DeductibleAppliesToCd>Aggregate</DeductibleAppliesToCd>
 						<FormatCurrency>
+							<#list AggregateAmt as result><${result.atrib}>${result.value}</${result.atrib}></#list>
 						</FormatCurrency>
 					</Deductible>
 				</CommlCoverage>
@@ -77,6 +87,7 @@
 			<WorkCompLineBusiness>
 				<LOBCd>WC</LOBCd>
 				<WorkCompRateState>
+					<#list Policy as result><#if result.atrib=="StateProvCd"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 					<CreditOrSurcharge>
 						<CreditSurchargeCd>EMOD</CreditSurchargeCd>
 						<NumericValue>
@@ -84,6 +95,7 @@
 						</NumericValue>
 					</CreditOrSurcharge>
 					<CreditOrSurcharge>
+						<#list Policy as result><#if result.atrib=="CreditSurchargeCd"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 						<NumericValue>
 							<FormatModFactor>0.500000</FormatModFactor>
 						</NumericValue>
