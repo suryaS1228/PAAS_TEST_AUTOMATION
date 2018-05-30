@@ -1,6 +1,7 @@
 package com.solartis.test.apiPackage.LDWC;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -10,119 +11,180 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.util.api.*;
+import com.solartis.test.macroPackage.LDWCMacro;
+import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.util.api.DBColoumnVerify;
+import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.RequestHandler;
+import com.solartis.test.util.common.DatabaseOperation;
 
+import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateNotFoundException;
 
 
-public class LDWCRating extends BaseClass implements API
+public class LDWCRating  extends BaseClass implements API
 {
-	public LDWCRating(PropertiesHandle config)
+	MacroInterface macro = null;
+	public LDWCRating(PropertiesHandle config) throws APIException
 	{
-		this.config = config;
-		XmlElements = new LinkedHashMap<String, String>();
+	    this.config = config;
+		jsonElements = new LinkedHashMap<String, String>();
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
-		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
+		OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 		
-	}	
-		
-	@Override
-	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-		try
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-			
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			sampleInput.LoadData(tableInputColVerify, InputData);
-			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);	
-			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".xml");
-		}
-			
-		catch(DatabaseException | TemplateException | IOException  e)
-		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+		macro=new LDWCMacro(config);	
 		}
 		
 	}
 	
-	public String RequestToString() throws APIException
+	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-	  try 
-	  {
-		  request = new XmlHandle(config.getProperty("request_location")+input.get("Testdata")+".xml");
-		  return request.FileToString();
-	  } 
-	  catch (RequestFormatException e)
-	  {
-		  throw new APIException("ERROR OCCURS IN REQUEST TO STRING FUNCTION -- BASE CLASS", e);
-	   }
+		this.input = InputData;
+		 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
+		{
+			try 
+			{
+				macro.LoadSampleRatingmodel(config, InputData);		
+				macro.GenerateExpected(InputData, config);
+			} catch (MacroException e) 
+			{
+				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
+			}
+		}
+		 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
+		super.LoadSampleRequest(InputData);
+		 }
+	}
+	
+	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
+	{			
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
+		{
+			try 
+			{
+				macro.PumpinData(input, config);
+			} 
+			catch (DatabaseException | POIException | MacroException e) 
+			{
+				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
+			}
+		}
+		 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
+			 try
+				{
+					LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+					sampleInput.LoadData(tableInputColVerify, InputData);
+					sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData);	
+					sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".xml");
+				}
+					
+				catch(DatabaseException | TemplateException | IOException  e)
+				{
+					throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
+				}
+		 }
 	}
 	
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
-		try 
+		try
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
-			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			http.AddHeader("Content-Type", "application/xml");
 		}
-		catch (HTTPHandleException e) 
+    	catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- LDWC RATING CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- GL-RATING CLASS", e);
 		}
 	}
-
+	
 	@Override
-	public void SendAndReceiveData() throws APIException
-	{
+	 public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
+	 {
 		try
 		{
-			String input_data = request.FileToString();
-			http.SendData(input_data);
-			String response_string = http.ReceiveData();
-			response = new XmlHandle(config.getProperty("response_location")+input.get("Testdata")+"_response"+".xml");
-			response.StringToFile(response_string);
-		}
-		catch(RequestFormatException | HTTPHandleException e)
-		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
-		}
-	}
-
-	@Override
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
-	{
-		try
-		{ 
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+			if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+			{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+			
+			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(ResponseStatus.equals("SUCCESS"))
+			{
+			
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
-				{
-					 try
-				      {	
-					   System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					   String actual = (response.read((rowOutputColVerify.get(config.getProperty("OutputJsonPath")))).replaceAll("\\[\"","")).replaceAll("\"\\]","").replaceAll("\\\\","");
-					   output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					   output.put("flag_for_execution", "Completed");
-				      }
-						catch(PathNotFoundException e)
+				  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+					{
+					try
+						{
+					
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+		
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						output.put("Flag_for_execution", ResponseStatus);
+						}
+						catch(PathNotFoundException | RequestFormatException e)
 						{
 							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 						}
 					}
 			}
-	
-				return output;	
+			}
+			else
+			{
+				output.put("Flag_for_execution", "FailedResponse");
+				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				output.put("AnalyserResult","Rule-"+RuleName);
+				output.put("User_message",Message);
+			}
+			}
+			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
+			{
+				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
+			}
 		}
-		catch(DatabaseException | RequestFormatException e)
+		catch(DatabaseException | POIException | MacroException | RequestFormatException e)
 		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- LDWC RATING CLASS", e);
+			 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
 		}
-		
+		return output;
 	}
+	
+	public static void main(String[] args) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, IOException, TemplateException
+	  {
+	 	 PropertiesHandle config = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-LDWC\\rating\\config\\config.properties");
+	 	 DatabaseOperation input = new DatabaseOperation();
+	 	 input.ConnectionSetup(config);
+	 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects("SELECT * FROM INPUT_Rating_LDWC");
+	 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+	 		while (inputtableiterator.hasNext()) 
+	 		{
+	 			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+	 			LinkedHashMap<String, String> inputrow = inputentry.getValue();
+	 			
+	 			DatabaseOperation requestconfig = new DatabaseOperation();
+	 			LinkedHashMap<Integer, LinkedHashMap<String, String>> requstdetail = requestconfig.GetDataObjects("Select * from ConditionInputTable_LDWC_Rate");
+	 			
+	 			
+	 			 RequestHandler req = new RequestHandler(config);
+	 			 req.openTemplate();
+	 			 req.LoadData(requstdetail, inputrow);
+	 			 req.PumpinDatatoRequest(requstdetail, inputrow);
+	 			 req.saveJsontoPath("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-LDWC\\rating\\Results\\Request\\Testdata1.xml");
+	 		}
+	 }
 }
 
