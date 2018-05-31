@@ -95,6 +95,20 @@ public class LDWCRating  extends BaseClass implements API
 		 }
 	}
 	
+	public String RequestToString(String Token) throws APIException
+	{
+	  try 
+	  {
+		  request = new XmlHandle(config.getProperty("request_location")+input.get("Testdata")+".xml");
+		  //request.write("$..Token", Token);
+		  return request.FileToString();
+	  } 
+	  catch (RequestFormatException e)
+	  {
+		  throw new APIException("ERROR OCCURS IN REQUEST TO STRING FUNCTION -- BASE CLASS", e);
+	   }
+	}
+	
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
