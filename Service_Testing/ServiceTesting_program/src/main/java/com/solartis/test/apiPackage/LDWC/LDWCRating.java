@@ -15,11 +15,11 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.LDWCMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.RequestHandler;
+import com.solartis.test.util.api.XmlHandle;
 import com.solartis.test.util.common.DatabaseOperation;
 
 import freemarker.template.MalformedTemplateNameException;
@@ -40,7 +40,7 @@ public class LDWCRating  extends BaseClass implements API
 		
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-		macro=new LDWCMacro(config);	
+		//macro=new LDWCMacro(config);	
 		}
 		
 	}
@@ -109,6 +109,40 @@ public class LDWCRating  extends BaseClass implements API
 		}
 	}
 	
+	public void SendAndReceiveData() throws APIException 
+	{
+		try
+		{
+			String input_data= null;
+			input_data = request.FileToString();
+		    http.SendData(input_data);
+			String response_string = http.ReceiveData();	
+			response = new XmlHandle(config.getProperty("response_location")+input.get("Testdata")+".xml");
+			response.StringToFile(response_string);
+		}
+		catch(RequestFormatException | HTTPHandleException e)
+		{
+			System.out.println(e);
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
+		}
+	}
+	
+//-------------------------------------------------------------CONVERTING RESPONSE TO STRING------------------------------------------------------------
+	public String ResponseToString() throws APIException 
+	{
+		try
+		{
+			return response.FileToString();
+		}
+		catch(RequestFormatException e)
+		{
+			throw new APIException("ERROR IN RESPONSE TO STRING FUNCTION -- BASE CLASS", e);
+		}
+	}
+	
+//-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
+
+	
 	@Override
 	 public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
 	 {
@@ -163,6 +197,7 @@ public class LDWCRating  extends BaseClass implements API
 		return output;
 	}
 	
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, IOException, TemplateException
 	  {
 	 	 PropertiesHandle config = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-LDWC\\rating\\config\\config.properties");
