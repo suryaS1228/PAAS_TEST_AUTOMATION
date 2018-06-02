@@ -164,40 +164,42 @@ public class LDWCRating  extends BaseClass implements API
 		{
 			if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
 			{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-			
-			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			if(ResponseStatus.equals("SUCCESS"))
-			{
-			
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
-			{
-				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+				
+				String ResponseStatus=response.read("//MsgStatusCd");
+				if(ResponseStatus.equals("Error"))
+				{					
+						output.put("Flag_for_execution", "FailedResponse");
+						String RuleName=response.read("//MsgStatusCd");
+						String Message=response.read("//MsgErrorCd");
+						String MessageStatusDes=response.read("//MsgStatusDesc");
+						output.put("AnalyserResult","Rule-"+RuleName);
+						output.put("MsgErrorCd",Message);	
+						output.put("MsgStatusCd",RuleName);
+						output.put("MsgStatusDesc",MessageStatusDes);
+				}
+				else
+				{
+					for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 					{
-					try
+						LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+	    				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 						{
-					
-						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-		
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						output.put("Flag_for_execution", ResponseStatus);
-						}
-						catch(PathNotFoundException | RequestFormatException e)
-						{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+							try
+							{
+							
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+								output.put("Flag_for_execution", ResponseStatus);
+							}
+							catch(PathNotFoundException | RequestFormatException e)
+							{
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+							}
 						}
 					}
-			}
-			}
-			else
-			{
-				output.put("Flag_for_execution", "FailedResponse");
-				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				output.put("AnalyserResult","Rule-"+RuleName);
-				output.put("User_message",Message);
-			}
+				}
 			}
 			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
