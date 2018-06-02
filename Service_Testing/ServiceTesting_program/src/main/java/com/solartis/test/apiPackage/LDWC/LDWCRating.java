@@ -188,7 +188,7 @@ public class LDWCRating  extends BaseClass implements API
 							try
 							{
 							
-								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))));
 				
 								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 								output.put("Flag_for_execution", ResponseStatus);
