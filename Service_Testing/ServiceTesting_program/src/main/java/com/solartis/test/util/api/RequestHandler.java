@@ -58,7 +58,7 @@ public class RequestHandler
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
+			if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
 				String parentName = rowInputColVerify.get("Parent");
 				boolean flag=false;
@@ -73,7 +73,7 @@ public class RequestHandler
 				{
 					parentlist.add(parentName);				
 					List <Object> atribParent = new ArrayList<Object>();
-					if(rowInputColVerify.get("AttributeNature").equals("dynamic"))
+					if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("dynamic"))
 					{
 						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 							root.put(parentName, atribParent);
@@ -93,7 +93,7 @@ public class RequestHandler
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
 				String parentName = rowInputColVerify.get("Parent");
 				String atributeName = rowInputColVerify.get("AtributeName");
@@ -102,14 +102,14 @@ public class RequestHandler
 				//System.out.println(rowInputColVerify.get("DBColumnName"));
 				Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 
-				if(rowInputColVerify.get("AttributeNature").equals("static"))
+				if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
 					//System.out.println(atributeName+"-----------"+atributeStaticValue);
 				}
 				else
 				{
-					if(rowInputColVerify.get("iteration").equals("loop"))
+					if(rowInputColVerify.get("iteration").equalsIgnoreCase("loop"))
 					{
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
