@@ -108,6 +108,7 @@ public class BaseClass
 			
 		catch(DatabaseException | TemplateException | IOException  e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
 		}
 	}
