@@ -12,8 +12,8 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 	
   <dependencies>
@@ -140,12 +140,12 @@
        				    	<goal>single</goal>
     				    </goals>
       					<configuration>
-        					<archive>
-          						<manifest>
+        					 <archive>
+          						<manifest> 
             						<mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.MainClass</mainClass>
-          						</manifest>
-        					</archive>
-        					<descriptorRefs>
+          						 </manifest>
+        					</archive> 
+            				<descriptorRefs>
           						<descriptorRef>jar-with-dependencies</descriptorRef>
         					</descriptorRefs>
       					</configuration>

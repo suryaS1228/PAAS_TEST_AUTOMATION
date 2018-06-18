@@ -7,6 +7,7 @@
      "EventName" : "IssueCertificate_Workflow",
      "PaaSClientIPAddress" : "125.25.25.2",
      "ClientUniqueRequestID" : "1",
+     "OwnerId":"14",
      "ServiceRequestDetail": {
      <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
         },
@@ -32,7 +33,7 @@
           
              "BillingInfo": 
              {
-           <#list MemberDetails as result>"${result.atrib}":"${result.value}", </#list>
+           <#list BillingInfo as result>"${result.atrib}":"${result.value}", </#list>
               "Communication" :
                {
            <#list Communication2 as result>"${result.atrib}":"${result.value}", </#list>
