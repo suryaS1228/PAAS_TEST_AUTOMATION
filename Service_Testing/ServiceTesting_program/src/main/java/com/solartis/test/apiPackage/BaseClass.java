@@ -108,6 +108,7 @@ public class BaseClass
 			
 		catch(DatabaseException | TemplateException | IOException  e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
 		}
 	}
@@ -431,7 +432,7 @@ public class BaseClass
 		
 		try
 		{
-			System.out.println("Exporting Report with Test cases to Excel");
+			//System.out.println("Exporting Report with Test cases to Excel");
 			DatabaseOperation db=new DatabaseOperation();
 			ResultSet rs=null;
 			HSSFWorkbook workBook=null;

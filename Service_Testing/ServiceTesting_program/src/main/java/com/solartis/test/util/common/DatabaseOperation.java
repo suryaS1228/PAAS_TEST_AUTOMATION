@@ -356,16 +356,24 @@ public class DatabaseOperation
 
 		for(int row=dataRow;row<=noOfRows;row++)
 		{
+			System.out.println(noOfRows+"------"+xl.read_data(row, 0)+"---"+row);
+			if(!(xl.read_data(row, 0).equals("end")))
+			{
 			String sql1 = "INSERT INTO "+ tableName+"("+insertStrings+")"+" VALUES("+ValueStrings+")";
-			
 			PreparedStatement insertStatement =(PreparedStatement) conn.prepareStatement(sql1);
 			for(int col=0;col<n;col++)
 			{
-				System.out.println(xl.read_data(row, col).trim());
+				//System.out.println(xl.read_data(row, col).trim());
 				insertStatement.setString(col+1,xl.read_data(row, col).trim()); 
 				
 			}
+			
 			insertStatement.executeUpdate();
+			}
+			else
+			{
+				break;
+			}
 		}
 		
 	}

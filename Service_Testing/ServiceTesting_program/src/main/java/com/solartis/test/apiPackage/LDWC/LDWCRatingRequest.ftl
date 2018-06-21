@@ -62,7 +62,7 @@
 				</ContractTerm>
 				<PolicyStatusCd>N</PolicyStatusCd>
 				<CurrentTermAmt>
-					<Amt>55800000</Amt>
+					<#list Policy as result><#if result.atrib=="CurrentTermAmt"><Amt>${result.value}</Amt></#if></#list>
 				</CurrentTermAmt>
 				<#list Policy as result><#if result.atrib=="com.csc_TxnType"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>
 				<#list Policy as result><#if result.atrib=="com.csc_Submission_Nbr"><${result.atrib}>${result.value}</${result.atrib}></#if></#list>

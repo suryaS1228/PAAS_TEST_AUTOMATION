@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.StarrSearchRescue;
+package com.solartis.test.apiPackage.Ubimodo;
 
 import java.util.LinkedHashMap;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -8,9 +8,9 @@ import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.util.api.*;
 
-public class StarrSearchRescueIssueCertificate extends BaseClass implements API
+public class UbimodoIssueCertificate extends BaseClass implements API
 {
-	public StarrSearchRescueIssueCertificate(PropertiesHandle config)
+	public UbimodoIssueCertificate(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
