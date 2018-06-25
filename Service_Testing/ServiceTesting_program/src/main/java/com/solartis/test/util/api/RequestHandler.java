@@ -61,27 +61,31 @@ public class RequestHandler
 			if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
 				String parentName = rowInputColVerify.get("Parent");
+				//System.out.println("========="+parentName);
 				boolean flag=false;
 				//System.out.println(parentName);
 				for(String str: parentlist) 
 				{
-				    if(str.trim().contains(parentName))
+				    if(str.trim().equals(parentName))
+				    {
 				       flag=true;
-				    //System.out.println(parentName);
+				    System.out.println(parentName);
+				    }
 				}
 				if(flag==false)
 				{
+					//System.out.println("in false flag"+parentName);
 					parentlist.add(parentName);				
 					List <Object> atribParent = new ArrayList<Object>();
-					if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("dynamic"))
-					{
+					//if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("dynamic"))
+					//{
 						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 							root.put(parentName, atribParent);
-					}
-					else
-					{
-						root.put(parentName, atribParent);
-					}
+					//}
+					//else
+					//{
+						//root.put(parentName, atribParent);
+					//}
 					//System.out.println(parentName);
 				}
 			}
@@ -113,7 +117,8 @@ public class RequestHandler
 					{
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
-					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					//System.out.println(atributeName+"-----------"+atributeDynamicValue+"------------"+ root.get(parentName));
+					
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
 					//
 				}
