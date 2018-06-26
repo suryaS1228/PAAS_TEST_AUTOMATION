@@ -29,6 +29,7 @@ public class EmbrokerIssueCertificate extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
+			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
 		}
 		catch (HTTPHandleException e) 
 		{
