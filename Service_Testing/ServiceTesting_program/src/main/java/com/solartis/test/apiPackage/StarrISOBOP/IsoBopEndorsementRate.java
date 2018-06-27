@@ -28,7 +28,7 @@ public class IsoBopEndorsementRate extends BaseClass implements API
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", Token);
+			http.AddHeader("Token",Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 

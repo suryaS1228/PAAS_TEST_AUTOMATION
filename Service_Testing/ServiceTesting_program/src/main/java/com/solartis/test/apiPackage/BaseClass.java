@@ -5,7 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,7 +25,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.jayway.jsonpath.PathNotFoundException;
-import com.mysql.jdbc.ResultSetMetaData;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
@@ -48,133 +53,14 @@ public class BaseClass
 	protected DBColoumnVerify StatusColVerify = null;
 	protected ArrayList<String> errorParentname = new ArrayList<String>();
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
+	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
 
-	protected String excelreportlocation;
-	public void generateReport(PropertiesHandle config,String comparisonChoice) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
-	{
-		try 
-		{
-			DatabaseOperation db=new DatabaseOperation();
-			Date date = new Date();
-			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-
-			excelreportlocation="AnalysisReport "+DateandTime+".xls";
-			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
-			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
-			
-			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
-			sample.Copy(Samplepath, excelreportlocation1);
-			sample.save();
-			if(comparisonChoice.equals("Y"))
-		    {
-				table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
-				Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
-				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
-				ob.getsheets("TestReport");
-				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
-				Date today=new Date();
-				ob.write_data(5, 7,today);
-				ob.write_data(5, 14,config.getProperty("ExecutionName"));
-				int	row=9;
-				int si_no=1;
-				while (inputtableiterator.hasNext()) 
-				{
-					 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-					 LinkedHashMap<String, String> inputrow = inputentry.getValue();
-					
-					    ob.write_data(row, 2,si_no );
-					    ob.write_data(row,3,inputrow.get("AnalyserResult"));
-					    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
-						
-					 row++;
-					 si_no++;
-					 
-				}
-				ob.refresh();
-				ob.saveAs(excelreportlocation1);
-		    }
-			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
-			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
-		}
-		catch(Exception e) 
-		{
-			System.out.print("error in copy Sample Report Template");
-			e.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("resource")
-	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
-	{
-		
-		try
-		{
-			System.out.println("Exporting Report with Test cases to Excel");
-			DatabaseOperation db=new DatabaseOperation();
-			ResultSet rs=null;
-			HSSFWorkbook workBook=null;
-			HSSFSheet sheet =null;
-			rs=db.GetQueryResultsSet(Query);
-			File file = new File(FileToExport);
-			if(!file.exists())                               //Creation of Workbook and Sheet
-			{
-				workBook =new HSSFWorkbook();
-			}
-			else
-			{
-				workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
-			}
-			sheet = workBook.createSheet(Sheet);
-                                                                                         //import columns to Excel
-			ResultSetMetaData metaData=(ResultSetMetaData) rs.getMetaData();
-			int columnCount=metaData.getColumnCount();
-			ArrayList<String> columns = new ArrayList<String>();
-			for (int i = 1; i <= columnCount; i++) 
-			{
-				String columnName = metaData.getColumnName(i);
-				columns.add(columnName);
-			}
-		    
-			HSSFRow row = sheet.createRow(0);
-			int  Fieldcol=0; 
-			for (String columnName : columns) 
-			{
-				row.createCell(Fieldcol).setCellValue(columnName);
-				Fieldcol++;
-			}
-                                                            //import column values to Excel	
-			int ValueRow=1;
-			do
-			{
-				int Valuecol=0;
-				HSSFRow valrow = sheet.createRow(ValueRow);
-				for (String columnName : columns)
-				{
-					String value = rs.getString(columnName);
-					valrow.createCell(Valuecol).setCellValue(value);
-					Valuecol++;
-				}
-				ValueRow++;
-			} while (rs.next());
-		                                                    //Save the Details and close the File
-		
-	          FileOutputStream out = new FileOutputStream(FileToExport);
-	          workBook.write(out);
-	          out.close();
-	          System.out.println("REPORT GENERATED SUCCESSFULLY ON DISK");
-		 }
-	     catch (Exception e) 
-	     {
-	    	 System.out.println("Error in Exporting the Testcase with Results");	 
-	       e.printStackTrace();
-	     }
-}
-	
 	public String tokenGenerator(PropertiesHandle config)
 	{
-		String Token="";
-		try
+		String Token=config.getProperty("AuthenticationToken");
+		/*String Token="";
+		 * try
 		{
 			System.out.println(config.getProperty("AuthenticationURL"));
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
@@ -193,25 +79,29 @@ public class BaseClass
 		{
 			System.out.println("Error in Generating Token");
 			e.printStackTrace();
-		}
+		}*/
 		return Token;
 	}
 	
-//---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
-	/*public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+	public void urltopdf(String URL,String path) throws IOException
 	{
-		this.input = InputData;
-		sampleInput = new JsonHandle(config.getProperty("sample_request") + "request.json");
-	}*/
-
-//-----------------------------------------------------------PUMPING TEST DATA TO REQUEST--------------------------------------------------------------- 	
+		System.setProperty("jsse.enableSNIExtension", "false");	
+		URL website = new URL(URL);
+		Path targetPath = new File(path).toPath();
+		InputStream in = website.openStream();		
+		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
+	}
+	
+//---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
+		this.input = InputData;
+		
 		try
 		{
-			this.input = InputData;
-			sampleInput = new RequestHandler(config);
-			sampleInput.openTemplate();
+		sampleInput = new RequestHandler(config);
+		sampleInput.openTemplate();
 		}
 		catch(IOException|ClassNotFoundException| DatabaseException e)
 		{
@@ -341,7 +231,8 @@ public class BaseClass
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify) && (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				String condition = rowOutputColVerify.get("OutputColumnCondtn");
+				if(conditioncheck.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
 				{
 					try
 					{
@@ -368,15 +259,18 @@ public class BaseClass
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> outputrow) throws APIException
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	{		 
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
 	{		
 	    try
 	    {
 	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
 			{	
-			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();	
-			    if(StatusColVerify.DbCol(rowStatusColVerify) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
+			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
+			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
 				{
 					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
 					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
@@ -390,19 +284,24 @@ public class BaseClass
 						else
 						{
 							outputrow.put(StatusColumn, "Fail");
-							//outputrow.UpdateRow();
 							analyse(rowStatusColVerify,outputrow);
 						}
 					}
 				}
 			}
-			 			
 			String message = "";
 			for(int i=0;i<errorMessage.size();i++)
 			{
-				message=message+errorMessage.get(i)+"; ";
+				message=message+errorMessage.get(i)+",";
 			}
-			outputrow.put("AnalyserResult", message);
+			if(message.equals(""))
+			{
+				outputrow.put("AnalyserResult", "Pass");
+			}
+			else
+			{
+				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
+			}
 			errorMessage.clear();
 			errorParentname.clear();
 			return outputrow;
@@ -410,28 +309,31 @@ public class BaseClass
 	    }	
 	    catch(DatabaseException e)
 	    {
-	    	System.out.println(e);
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
+	 return outputrow;
+ }
 	
 //-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
 	protected static boolean premium_comp(String expected,String actual)
 	{
 		
 		boolean status = false;
-		if(actual == null||actual.equals(""))
+		if(actual == null||actual.equals("")||actual.isEmpty())
 		{
 			if((expected == null || expected.equals("")||expected.equals("0") || expected.equals("0.0")))
 			{
 				status = true;
+				return status;
 			}
 		}
-		if(expected == null||expected.equals(""))
+		if(expected == null||expected.equals("")||expected.isEmpty())
 		{
 			if(actual == null|| actual.equals("")||actual.equals("0") || actual.equals("0.0"))
 			{
 				status = true;
+				return status;
 			}
 		}
 		if(actual!=null && expected!=null)
@@ -440,11 +342,29 @@ public class BaseClass
     		actual = actual.replaceAll("\\[\"", "");	
     		expected = expected.replaceAll("\"\\]", "");
     		actual = actual.replaceAll("\"\\]", "");
-    		expected = expected.replaceAll("\\.[0-9]*", "");
-    		actual = actual.replaceAll("\\.[0-9]*", "");
-    		if(expected.equals(actual))
+    		expected = expected.replaceAll("\\$", "");
+    		actual = actual.replaceAll("\\$", "");
+
+    	//System.out.println(expected+"-----------"+actual);
+    	
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.matches(".*[A-Z].*")||expected.matches(".*[A-Z].*")||actual.equals("[]")||expected.matches("[a-zA-Z]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*")||expected.matches("[M|D|C|L|X|V|I]*"))
     		{
-    			status = true;
+    			//System.out.println("expected or actual is string");
+    			if(expected.equals(actual))
+        		{
+        			status = true;
+        			return status;
+        		}
+    		}
+    		else	
+    		{
+	    		expected = Double.toString(Math.round(Double.parseDouble(expected)));
+	    		actual = Double.toString(Math.round(Double.parseDouble(actual)));
+	    		if(expected.equals(actual))
+	    		{
+	    			status = true;
+	    			return status;
+	    		}
     		}
 		}
 
@@ -466,10 +386,10 @@ public class BaseClass
 			String[] Parentname =Conditiontablerow.get("ParentName").split(";");
 			int noOfParentname=Parentname.length;
 			for(int i=0;i<noOfParentname;i++)
-			{								
+			{
+				errorParentname.add(Parentname[i]);
 				if(!this.ifexist(Conditiontablerow.get("NodeName")))
 				{
-					errorParentname.add(Parentname[i]);
 					if(flag == false)
 					{
 						errorMessage.add(Conditiontablerow.get("Message"));
@@ -495,8 +415,129 @@ public class BaseClass
 				break;
 			}
 		}
-		return exist;	
-
+		return exist;
 	}
 	
+	
+	protected String excelreportlocation;
+	public void generateReport(PropertiesHandle config,String comparisonChoice) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
+	{
+		try 
+		{
+			DatabaseOperation db=new DatabaseOperation();
+			Date date = new Date();
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
+			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
+			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+			excelreportlocation="AnalysisReport "+DateandTime+".xls";
+			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
+			
+			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
+			sample.Copy(Samplepath, excelreportlocation1);
+			sample.save();
+			if(config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison"))
+		    {
+				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
+				ob.getsheets("TestReport");
+				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
+				Date today=new Date();
+				ob.write_data(5, 7,today);
+				ob.write_data(5, 14,config.getProperty("ExecutionName"));
+				int	row=9;
+				int si_no=1;
+				while (inputtableiterator.hasNext()) 
+				{
+					 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+					 LinkedHashMap<String, String> inputrow = inputentry.getValue();
+					
+					    ob.write_data(row, 2,si_no );
+					    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+					    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+						
+					 row++;
+					 si_no++;
+					 
+				}
+				ob.refresh();
+				ob.saveAs(excelreportlocation1);
+		    }
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+		}
+		catch(Exception e) 
+		{
+			System.out.print("error in copy Sample Report Template");
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	@SuppressWarnings("resource")
+	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException
+	{
+		
+		try
+		{
+			//System.out.println("Exporting Report with Test cases to Excel");
+			DatabaseOperation db=new DatabaseOperation();
+			ResultSet rs=null;
+			HSSFWorkbook workBook=null;
+			HSSFSheet sheet =null;
+			rs=db.GetQueryResultsSet(Query);
+			File file = new File(FileToExport);
+			if(!file.exists())                               //Creation of Workbook and Sheet
+			{
+				workBook =new HSSFWorkbook();
+			}
+			else
+			{
+				workBook = new HSSFWorkbook(new FileInputStream(FileToExport));
+			}
+			sheet = workBook.createSheet(Sheet);
+                                                                                         //import columns to Excel
+			ResultSetMetaData metaData=rs.getMetaData();
+			int columnCount=metaData.getColumnCount();
+			ArrayList<String> columns = new ArrayList<String>();
+			for (int i = 1; i <= columnCount; i++) 
+			{
+				String columnName = metaData.getColumnName(i);
+				columns.add(columnName);
+			}
+		    
+			HSSFRow row = sheet.createRow(0);
+			int  Fieldcol=0; 
+			for (String columnName : columns) 
+			{
+				row.createCell(Fieldcol).setCellValue(columnName);
+				Fieldcol++;
+			}
+                                                            //import column values to Excel	
+			int ValueRow=1;
+			do
+			{
+				int Valuecol=0;
+				HSSFRow valrow = sheet.createRow(ValueRow);
+				for (String columnName : columns)
+				{
+					String value = rs.getString(columnName);
+					valrow.createCell(Valuecol).setCellValue(value);
+					Valuecol++;
+				}
+				ValueRow++;
+			} while (rs.next());
+		                                                    //Save the Details and close the File
+		
+	          FileOutputStream out = new FileOutputStream(FileToExport);
+	          workBook.write(out);
+	          out.close();
+	          System.out.println("REPORT GENERATED SUCCESSFULLY ON DISK");
+		 }
+	     catch (Exception e) 
+	     {
+	    	 System.out.println("Error in Exporting the Testcase with Results");	 
+	       e.printStackTrace();
+	     }
+	}
 }

@@ -210,13 +210,13 @@ public class MainClass2
 				{
 					if(outputtablechoice.equals("Y"))
 					{									
-						inputrow = fireEventAPI.CompareFunction(inputrow);//CALLING COMPARING FUNCTION
+						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									     
 						inputTable.UpdateRow(RowIterator, inputrow);
 					}
 					else
 					{
-						outputrow = fireEventAPI.CompareFunction(outputrow);//CALLING COMPARING FUNCTION
+						outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									    
 						OutputTable.UpdateRow(RowIterator, outputrow);
 						commonMap.putAll(outputrow);									

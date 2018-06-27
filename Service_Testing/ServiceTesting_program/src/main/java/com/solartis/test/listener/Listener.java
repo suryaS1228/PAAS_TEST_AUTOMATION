@@ -19,4 +19,6 @@ public interface Listener
 	public void beforeResponseToString();	
 	public void afterResponseToString();
 	public void onError(Throwable e);
+	public void beforeTokenGenerator();
+	public void afterTokenGeneratior();
 }

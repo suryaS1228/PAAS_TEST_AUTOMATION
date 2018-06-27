@@ -1,6 +1,7 @@
 package com.solartis.test.macroPackage;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -77,7 +78,7 @@ public class IsoMacro implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -113,7 +114,7 @@ public class IsoMacro implements MacroInterface
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
+							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile, inputData));
 						}
 						else
 						{
@@ -188,7 +189,7 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws   MacroException
+	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile, LinkedHashMap<String, String> inputData) throws   MacroException
 	{
 		T outputdata = null;
 		switch(configTable.get("Translation_Function"))
@@ -206,9 +207,13 @@ public class IsoMacro implements MacroInterface
 			outputdata = (T) PaddingZeros;
 			break;
 		case "ISOBOPWindhail":
-			int ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
-			Integer windhail = new Integer(ISOBOPWindhail);
+			float ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
+			Float windhail = new Float(ISOBOPWindhail);
 			outputdata =  (T) windhail;
+			break;
+		case "extenedLookup":
+			String extLookupData = extenedLookup(Datatowrite, configFile, inputData.get("Policy_state"));
+			outputdata = (T) extLookupData;
 			break;
 		}
 		return outputdata;
@@ -289,6 +294,38 @@ public class IsoMacro implements MacroInterface
 		}
 	}
 	
+	protected String extenedLookup(String Lookup1, PropertiesHandle configFile, String StateName) throws MacroException
+	{
+DatabaseOperation Lookup = new DatabaseOperation();
+		
+		HashMap<String,String> LookupMap = new HashMap<String,String>();
+		try 
+		{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
+			{
+				LinkedHashMap<String, String> rowLookup = entry.getValue();
+				if(rowLookup.get("ReferanceData").equals(StateName))
+				{
+					LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));	
+				}
+			}
+		} 
+		catch (DatabaseException e) 
+		{
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+		}
+		
+		if (LookupMap.get(Lookup1)==null)
+		{
+			return "Other";
+		}
+		else
+		{
+			return LookupMap.get(Lookup1);
+		}
+	}
+	
 	protected String PaddingZeros(String Data)
 	{
 		String s = String.format("%%0%dd", 3);
@@ -298,18 +335,21 @@ public class IsoMacro implements MacroInterface
 	}
 	
 	
-	protected int ISOBOPWindhail(String Data)
+	protected float ISOBOPWindhail(String Data)
 	{
-		int percentageData=0;
+		float percentageData=0;
 		if(Data.equals("Not Applicable"))
 		{
 			percentageData = 0;
 		}
 		else
 		{
-			String[] windhail = Data.split("%");
-			percentageData = Integer.valueOf(windhail[0]);			
-			return percentageData;
+			Data=Data.replace("%", "");
+			float value = Float.valueOf(Data)/100;			
+			DecimalFormat df = new DecimalFormat("#.##");
+			String flo = df.format(value);		
+			float percentagevalue = Float.valueOf(flo);
+			return percentagevalue;
 		}
 		return percentageData;		
 	}

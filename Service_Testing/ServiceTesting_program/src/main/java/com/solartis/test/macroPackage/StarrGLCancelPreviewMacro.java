@@ -1,9 +1,11 @@
 package com.solartis.test.macroPackage;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -14,6 +16,7 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
+import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
@@ -104,25 +107,17 @@ public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroI
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{								
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				if (rowPumpinData.get("Type").equals("input"))
+				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
 				{
-					String  Datatowrite = "";
-					String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
-					String CellAddress = rowPumpinData.get("Cell_Address");	
-					if(Datacolumntowrite.equals("#fromPrevious#"))
+					if (rowPumpinData.get("Type").equals("input"))
 					{
-						Datatowrite = inputData.get(Datacolumntowrite);
-					}
-					else
-					{
-						Datatowrite = inputData.get(Datacolumntowrite);
-					}
-					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
-					int columnNum=Alphabet.getNum(part[0].toUpperCase());
-					int rowNum = Integer.parseInt(part[1]);
-					
-					if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y"))
-					{											
+						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
+						String CellAddress = rowPumpinData.get("Cell_Address");
+						
+						String  Datatowrite = inputData.get(Datacolumntowrite);
+						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
+						int columnNum=Alphabet.getNum(part[0].toUpperCase());
+						int rowNum = Integer.parseInt(part[1]);
 						System.out.println(columnNum+"----"+rowNum+"-----"+rowPumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
@@ -396,7 +391,7 @@ public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroI
 		
 	}
 	
-	/*public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 	{
 		System.out.println("coming to flow1");
 		DatabaseOperation objectInput = new DatabaseOperation();
@@ -405,7 +400,7 @@ public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroI
 		PropertiesHandle configFile=null;
 		
 		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\CancelPreview\\Config\\config.properties");
-		DatabaseOperation.ConnectionSetup(configFile);
+		//DatabaseOperation.ConnectionSetup(configFile);
 		System.out.println("coming to flow2");
 		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
@@ -436,5 +431,5 @@ public class StarrGLCancelPreviewMacro extends DBColoumnVerify implements MacroI
 		        rowIterator++;
 		        
 			}
-	}*/
+	}
 }

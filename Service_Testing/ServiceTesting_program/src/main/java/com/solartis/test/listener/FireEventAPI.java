@@ -2,6 +2,8 @@ package com.solartis.test.listener;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+
+import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.exception.APIException;
 
@@ -150,14 +152,15 @@ public class FireEventAPI implements API
 	}
 
 	@Override
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> output) throws APIException 
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,
+			LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
 		try
 		{
-			output =api.CompareFunction(output);
+			output =api.CompareFunction(inputrow,output);
 		}
 		catch(APIException e)
 		{
@@ -194,7 +197,24 @@ public class FireEventAPI implements API
 		return ResponseToString;
 	}
 
-	
-	
+	@Override
+	public String tokenGenerator(PropertiesHandle config) throws APIException {
+		for (Listener listen : listeners1)
+			listen.beforeTokenGenerator();
+		String token ="";
+		try
+		{
+			token=api.tokenGenerator(config);
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
+		for (Listener listen : listeners1)
+			listen.afterTokenGeneratior();
+		return token;
+	}	
 	
 }

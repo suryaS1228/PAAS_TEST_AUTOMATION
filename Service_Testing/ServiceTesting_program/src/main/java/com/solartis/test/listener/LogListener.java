@@ -134,8 +134,15 @@ public class LogListener implements Listener
 		e.printStackTrace();
 	}
 
-	
+	@Override
+	public void beforeTokenGenerator() {
+		// TODO Auto-generated method stub
+		Log.info("beforeTokenGenerator");
+	}
 
-	
-
+	@Override
+	public void afterTokenGeneratior() {
+		// TODO Auto-generated method stub
+		Log.info("afterTokenGeneratior");
+	}
 }
