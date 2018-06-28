@@ -174,7 +174,7 @@ public class MainClass2
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
 			if(inputrow.get("Flag_for_execution").equals("Y"))
 			{
-				System.out.println("TestData" + inputrow.get("S.No") + "  API--"+apis );					 
+				System.out.println("TestData" + inputrow.get("S_No") + "  API--"+apis );					 
 								
 				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
 	                            

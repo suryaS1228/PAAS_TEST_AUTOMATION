@@ -60,9 +60,7 @@ public class PropertiesHandle extends Properties
 		{
 			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);
 
-			this.OutputInSameTable();
-						
-            if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
+         /*   if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
 				 this.ActualAndStatus("Y", "N");    
             }
@@ -73,45 +71,39 @@ public class PropertiesHandle extends Properties
 			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
 			{
 				this.ActualAndStatus("Y", "Y");    
-			}
-			
-			this.SampleRequest();
-			this.RequestLocation();
-			this.ResponseLocation();
-		   
-			this.SampleRatingModelLocation();
-			this.ExpectedRatingModelPath();
-			this.MacroMappingQuery();
-			this.MacroTranslationQuery();		
-			
-			this.URL();
-			this.ContentType();
-			this.Token();
-			this.EventName();
-			this.EventVersion();
-
+			}*/
 			this.InputQuery();
-			this.OutputQuery();
-			
-			this.InputConditionQuery();
-			this.OutputConiditionQuery();
-			
-			this.ClassName();
-			
-			this.InputJsonPath();
-			this.OutputJsonPath();
-			
-		    this.InputColumn();
-		    this.OutputColumn();
-		    		    
-			this.InputConditionColumn();
-			this.OutputConditionColumn();
-			
-		    this.ExpectedColumn();
-		    this.StatusColumn();
-		    		    
-		    this.DBdetails();		   
-		    
+			this.put("AuthenticationToken", this.RdmsValue("AuthenticationToken"));
+			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
+			this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
+			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
+			this.put("db_username", this.RdmsValue("DB_UserName"));
+			this.put("db_password", this.RdmsValue("DB_Password"));
+			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Request/");
+			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
+			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Response/");
+			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
+			this.put("output_query", this.RdmsQuery("OutputTable"));
+			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
+			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
+			this.put("ClassName", this.RdmsValue("ClassName"));
+			this.put("InputJsonPath", "InputJsonPath");
+		    this.put("OutputJsonPath", "OutputJsonPath");
+			this.put("InputColumn", "InputColumn");
+			this.put("OutputColumn", "OutputColumn");
+			this.put("InputCondColumn", "InputColumnCondtn");
+			this.put("OutputCondColumn", "OutputColumnCondtn");
+			this.put("ExpectedColumn", "ExpectedColumn");
+			this.put("StatusColumn", "StatusColumn");
+			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/Results/RatingModelResult/");
+			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
+			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
+			this.put("test_url", this.RdmsValue("URL"));	
+			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
+			this.put("token", this.RdmsValue("Token"));
+		    this.put("EventName", this.RdmsValue("EventName"));
+		    this.put("EventVersion", this.RdmsValue("EventVersion"));	    
+			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
 		    this.put("AuthenticationURL", this.RdmsValue("AuthenticationURL"));
 			this.put("OwnerID", this.RdmsValue("OwnerID"));
 			this.put("Userneme", this.RdmsValue("Userneme"));
@@ -174,6 +166,7 @@ public class PropertiesHandle extends Properties
 		{
 			try 
 			{
+				ConfigQuery.switchDB("Starr_Config_Development");
 				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableRdmsQueryWithCustomSortPriority = ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 			    for (Entry<Integer, LinkedHashMap<String, String>> entry : tableRdmsQueryWithCustomSortPriority.entrySet())	
 				{
@@ -193,7 +186,8 @@ public class PropertiesHandle extends Properties
 			try
 			{
 				ConfigQuery.switchDB("Starr_Config_Development");
-				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableRdmsValue = ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Environment_CONFIG.AuthenticationURL,Environment_CONFIG.OwnerID,Environment_CONFIG.Userneme,Environment_CONFIG.Password,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableRdmsValue = ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Environment_CONFIG.AuthenticationURL,Environment_CONFIG.OwnerID,Environment_CONFIG.Userneme,Environment_CONFIG.Password,Environment_CONFIG.AuthenticationToken,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+				//System.out.println("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Environment_CONFIG.AuthenticationURL,Environment_CONFIG.OwnerID,Environment_CONFIG.Userneme,Environment_CONFIG.Password,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableRdmsValue.entrySet())	
 				{
 					LinkedHashMap<String, String> rowRdmsValue = entry.getValue();
@@ -207,89 +201,12 @@ public class PropertiesHandle extends Properties
 			}
 		}
 
-	
-		protected void OutputInSameTable() throws PropertiesHandleException // FUNCTION CHECK OUTPUT IN SAME TABLE ARE NOT
-, SQLException
+		protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
-			this.put("output_in_same_table", this.RdmsValue("OutputInInputTable"));
-		}	
-		
-		protected void ActualAndStatus(String Actual, String Status)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
-		{
-			this.put("actual", Actual);
-			this.put("ComparisonFlag", Status);
-		}	
-		
-		protected void SampleRequest() throws PropertiesHandleException// FUNCTION FOR SAMPLEREQUEST PATH
-, SQLException
-		{
-			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
+			this.put("actualFlag", Actual);
+			this.put("ComparisonFlag", Comparison);
 		}
 		
-		protected void RequestLocation() throws PropertiesHandleException// FUNCTION FOR REQUEST TO SAVE PATH
-, SQLException
-		{
-			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Request/");
-		}
-		
-		protected void ResponseLocation() throws PropertiesHandleException// FUNCTION FOR RESPONSE TO SAVE PATH
-, SQLException
-		{
-			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Response/");
-		}
-		
-		protected void SampleRatingModelLocation() throws PropertiesHandleException// FUNCTION FOR SAMPLE RATING MODEL PATH
-, SQLException
-		{
-			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
-		}
-		
-		protected void ExpectedRatingModelPath() throws PropertiesHandleException,SQLException// FUNCTION FOR EXPECTED RATING MODEL PATH
-		{
-			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/RatingModelResult/");
-		}
-		
-		protected void MacroMappingQuery() throws PropertiesHandleException,SQLException// FUNCTION TO GET RESULT SET FROM MACRO MAPPING TABLE 
-		{
-			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
-		}
-		
-		protected void MacroTranslationQuery() throws PropertiesHandleException// FUNCTION TO GET RESULT SET FROM MACRO TRNSLATION TABLE 
-, SQLException
-		{
-			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
-		}
-
-		protected void URL() throws PropertiesHandleException// FUNCTION TO GET URL
-, SQLException
-		{
-			this.put("test_url", this.RdmsValue("URL"));	
-		}
-		
-		protected void ContentType() throws PropertiesHandleException// FUNCTION TO GET CONTENTTYPE
-, SQLException
-		{
-			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
-	    }
-	
-		protected void Token() throws PropertiesHandleException// FUNCTION TO GET TOKEN
-, SQLException
-		{
-			this.put("token", this.RdmsValue("Token"));
-		}
-		
-		protected void EventName() throws PropertiesHandleException// FUNCTION TO GET EVENT-NAME
-, SQLException
-		{
-		    this.put("EventName", this.RdmsValue("EventName"));
-		}
-		
-		protected void EventVersion() throws PropertiesHandleException// FUNCTION TO GET EVENT-VERSION
-, SQLException
-		{
-		    this.put("EventVersion", this.RdmsValue("EventVersion"));
-		}
-	
 		protected void InputQuery() throws PropertiesHandleException// FUNCTION FOR INPUTQUERY
 , SQLException
 		{
@@ -302,79 +219,6 @@ public class PropertiesHandle extends Properties
 					this.put("input_query",  this.RdmsQueryWithPriority("InputTable", priority));
 				}		
 		}
-		
-		protected void OutputQuery() throws PropertiesHandleException// FUNCTION FOR OUTPUTQUERY
-, SQLException
-		{
-			this.put("output_query", this.RdmsQuery("OutputTable"));
-		}
-		
-		protected void InputConditionQuery() throws PropertiesHandleException// FUNCTION FOR INPUT-CONDITION-QUERY
-, SQLException
-		{
-			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
-		}
-		
-		protected void OutputConiditionQuery() throws PropertiesHandleException// FUNCTION FOR OUTPUT-CONDITION-QUERY
-, SQLException
-		{
-			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
-		}
-		
-		protected void ClassName() throws PropertiesHandleException // FUNCTION TOS GET CLASS-NAME
-, SQLException
-		{
-			this.put("ClassName", this.RdmsValue("ClassName"));
-		}	
-		
-		protected void InputJsonPath() // FUNCTION TO GET INPUT-JSON-PATH
-		{
-			this.put("InputJsonPath", "InputJsonPath");
-		}
-		
-		protected void OutputJsonPath() // FUNCTION TO GET OUTPUT-JSON-PATH
-		{
-		    this.put("OutputJsonPath", "OutputJsonPath");
-		}
-		
-		protected void InputColumn() // FUNCTION TO GET INPUT-COLUMN
-		{
-			this.put("InputColumn", "InputColumn");
-		}
-		
-		protected void OutputColumn() // FUNCTION TO GET OUTPUT-COLUMN
-		{
-			this.put("OutputColumn", "OutputColumn");
-		}
-		
-	    protected void InputConditionColumn() // FUNCTION TO GET INPUT-CONDITION-COLUMN
-		{
-			this.put("InputCondColumn", "InputColumnCondtn");
-		}
-		
-		protected void OutputConditionColumn() // FUNCTION TO GET OUTPUT-CONDITION-COLUMN
-		{
-			this.put("OutputCondColumn", "OutputColumnCondtn");
-		}
-		
-	    protected void ExpectedColumn() // FUNCTION TO GET EXPECTED-COLUMN
-		{
-			this.put("ExpectedColumn", "ExpectedColumn");
-		}
-		
-		protected void StatusColumn() // FUNCTION TO GET STATUS-COLUMN
-		{
-			this.put("StatusColumn", "StatusColumn");
-		}
-		
-	    protected void DBdetails() throws PropertiesHandleException// FUNCTION FOR DB-DETAILS
-, SQLException
-		{
-			this.put("jdbc_driver", this.RdmsValue("JDCDriver"));
-			this.put("db_url", this.RdmsValue("DB_URL") + "/" + this.RdmsValue("ProjectDBName") + "_" + this.RdmsValue("UserDBName"));
-			this.put("db_username", this.RdmsValue("DB_UserName"));
-			this.put("db_password", this.RdmsValue("DB_Password"));
-		}	
 		
 		public PropertiesHandle(String path) throws PropertiesHandleException
 		{

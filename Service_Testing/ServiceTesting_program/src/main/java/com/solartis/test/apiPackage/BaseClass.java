@@ -58,7 +58,6 @@ public class BaseClass
 
 	public String tokenGenerator(PropertiesHandle config)
 	{
-		String Token=config.getProperty("AuthenticationToken");
 		/*String Token="";
 		 * try
 		{
@@ -80,7 +79,7 @@ public class BaseClass
 			System.out.println("Error in Generating Token");
 			e.printStackTrace();
 		}*/
-		return Token;
+		return config.getProperty("AuthenticationToken");
 	}
 	
 //------------------------------------------------------------------------------------------------------------------------------------------------------

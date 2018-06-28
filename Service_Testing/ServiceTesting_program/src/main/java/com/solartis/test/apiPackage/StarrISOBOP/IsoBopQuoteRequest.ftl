@@ -238,7 +238,7 @@
 	    <#list QuoteInformation as result>
 	    {
 	    	"Key" : "${result.atrib}",
-	    	"Value" : "<#if result.value??><#else>${result.value}</#if>"
+	    	"Value" : "${result.value}"
 	    }<#if result?is_last><#else>,</#if>
 	  </#list>
  	 ]
