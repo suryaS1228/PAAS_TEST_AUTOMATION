@@ -13,7 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -99,8 +98,8 @@ public class BaseClass
 		
 		try
 		{
-		sampleInput = new RequestHandler(config);
-		sampleInput.openTemplate();
+			sampleInput = new RequestHandler(config);
+			sampleInput.openTemplate();
 		}
 		catch(IOException|ClassNotFoundException| DatabaseException e)
 		{
@@ -244,7 +243,7 @@ public class BaseClass
 					}
 					catch(PathNotFoundException e)
 					{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 				}
 			}
@@ -419,50 +418,17 @@ public class BaseClass
 	
 	
 	protected String excelreportlocation;
-	public void generateReport(PropertiesHandle config,String comparisonChoice) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
+	public void generateReport(PropertiesHandle config,String ReportPath) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
 		try 
 		{
-			DatabaseOperation db=new DatabaseOperation();
-			Date date = new Date();
-			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
-			table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
-			Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
-			excelreportlocation="AnalysisReport "+DateandTime+".xls";
-			String excelreportlocation1=config.getProperty("report_location")+config.getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
 			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
-			
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
-			sample.Copy(Samplepath, excelreportlocation1);
+			sample.Copy(Samplepath, ReportPath);
 			sample.save();
-			if(config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison"))
-		    {
-				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
-				ob.getsheets("TestReport");
-				ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
-				Date today=new Date();
-				ob.write_data(5, 7,today);
-				ob.write_data(5, 14,config.getProperty("ExecutionName"));
-				int	row=9;
-				int si_no=1;
-				while (inputtableiterator.hasNext()) 
-				{
-					 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-					 LinkedHashMap<String, String> inputrow = inputentry.getValue();
-					
-					    ob.write_data(row, 2,si_no );
-					    ob.write_data(row,3,inputrow.get("AnalyserResult"));
-					    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
-						
-					 row++;
-					 si_no++;
-					 
-				}
-				ob.refresh();
-				ob.saveAs(excelreportlocation1);
-		    }
-			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
-			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+		    
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), ReportPath, "Testcases");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), ReportPath, "ComparisonResults");
 		}
 		catch(Exception e) 
 		{
@@ -471,7 +437,35 @@ public class BaseClass
 		}
 	}
 	
-	
+	public void comparisonReport(String excelreportlocation1) throws DatabaseException, POIException
+	{
+		DatabaseOperation db=new DatabaseOperation();
+		table1=db.GetDataObjects("SELECT AnalyserResult, COUNT(*) as NoOfCount FROM "+config.getProperty("outputTable")+"  GROUP BY AnalyserResult");
+		Iterator<Entry<Integer, LinkedHashMap<String,String>>> inputtableiterator = table1.entrySet().iterator();
+		ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
+		ob.getsheets("TestReport");
+		ob.write_data(5, 4,config.getProperty("Project")+"-"+config.getProperty("API"));
+		Date today=new Date();
+		ob.write_data(5, 7,today);
+		ob.write_data(5, 14,config.getProperty("ExecutionName"));
+		int	row=9;
+		int si_no=1;
+		while (inputtableiterator.hasNext()) 
+		{
+			 Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+			 LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			
+			    ob.write_data(row, 2,si_no );
+			    ob.write_data(row,3,inputrow.get("AnalyserResult"));
+			    ob.write_data(row,4,Integer.parseInt(inputrow.get("NoOfCount")));
+				
+			 row++;
+			 si_no++;
+			 
+		}
+		ob.refresh();
+		ob.save();
+	}
 	
 	@SuppressWarnings("resource")
 	public void ExportToExcelTable(String Query,String FileToExport,String Sheet) throws DatabaseException, SQLException, FileNotFoundException, IOException

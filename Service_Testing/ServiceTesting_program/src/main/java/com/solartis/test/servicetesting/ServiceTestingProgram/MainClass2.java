@@ -3,6 +3,7 @@ package com.solartis.test.servicetesting.ServiceTestingProgram;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -44,6 +46,7 @@ public class MainClass2
 	public static String Token;
 	public static DatabaseOperation db=null;
 	public static Connection Conn=null;
+	public static String ExecutionFlag;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -107,8 +110,12 @@ public class MainClass2
 			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName").toUpperCase());
 			inputTable.GetDataObjects(InputtableQuery);
 			
-			BaseClass baseclass = new BaseClass();
-		    Token=baseclass.tokenGenerator(ConfigObjectRepository[0]);
+			ExecutionFlag=ConfigObjectRepository[0].getProperty("Execution_Flag");
+			if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ResponseOnly"))
+		    {
+				BaseClass baseclass = new BaseClass();
+			    Token=baseclass.tokenGenerator(ConfigObjectRepository[0]);
+		    }
 		}
 		catch (Exception e)
 		{
@@ -118,7 +125,7 @@ public class MainClass2
 	}
 
 	
-	@Test(dataProvider="PAASDP")
+	@Test(dataProvider="PaaSTest")
 	public void Api1(Integer RowIterator, Object inputtablerowobj) throws InterruptedException, DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		for(int i=0;i<apii.length;i++)
@@ -147,8 +154,6 @@ public class MainClass2
 			//System.out.println(RowIterator);
 			outputtablerowobj = outputtablerowobject[RowIterator];
 			individualinputtablerowobj = individualInputTablerowobject[RowIterator];
-			String actualchoice = configuration.getProperty("actual");
-			String statuschoice = configuration.getProperty("ComparisonFlag");
 			String outputtablechoice = configuration.getProperty("output_in_same_table");
 			String classname = configuration.getProperty("ClassName");		
 			
@@ -172,25 +177,27 @@ public class MainClass2
 				System.out.println("inputrow is null");
 			}
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
-			if(inputrow.get("Flag_for_execution").equals("Y"))
+			if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
 				System.out.println("TestData" + inputrow.get("S_No") + "  API--"+apis );					 
 								
 				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
 	                            
 				fireEventAPI.PumpDataToRequest(commonMap,inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
-							    
-				fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
-							
-				fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+				
+				if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ResponseOnly"))
+			    {
+					fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 								
-				fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
-								
-				fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
-								
-				if(actualchoice.equals("Y"))
-				{								  
-					if(outputtablechoice.equals("Y"))//INPUT AND OUT DB TABLE ARE SAME
+					fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
+									
+					fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
+									
+					fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
+			    }	
+				if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("ExpectedOnly")||ExecutionFlag.equalsIgnoreCase("Comparison"))
+				{												  
+					if(outputtablechoice.equalsIgnoreCase("Y"))//INPUT AND OUT DB TABLE ARE SAME
 					{
 						inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 						commonMap.putAll(inputrow);
@@ -203,12 +210,11 @@ public class MainClass2
 						//System.out.println(RowIterator+"-----------"+outputrow);
 						OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
 						//System.out.println("Update completed");
-					}
-				} 
-								
-				if(statuschoice.equals("Y"))
+					}					
+				}		
+				if(ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ActualandComparison"))
 				{
-					if(outputtablechoice.equals("Y"))
+					if(outputtablechoice.equalsIgnoreCase("Y"))
 					{									
 						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									     
@@ -221,7 +227,7 @@ public class MainClass2
 						OutputTable.UpdateRow(RowIterator, outputrow);
 						commonMap.putAll(outputrow);									
 					}
-				} 
+				}
 				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
 				//System.out.println(individualinputrow.get("Flag_for_execution"));
@@ -243,7 +249,7 @@ public class MainClass2
 		}*/		
     }
 	
-	@DataProvider(name="PAASDP")
+	@DataProvider(name="PaaSTest")
 	public Object[][] dpapi1() throws DatabaseException
 	{
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
@@ -329,12 +335,17 @@ public class MainClass2
 		BaseClass base = new BaseClass();
 		try
 		{
-	
-			base.generateReport(ConfigObjectRepository[0],"");
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+			String ReportPath = ConfigObjectRepository[0].getProperty("report_location")+ConfigObjectRepository[0].getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			base.generateReport(ConfigObjectRepository[0], ReportPath);
+			
+			if(ConfigObjectRepository[0].getProperty("Execution_Flag").equals("ActualandComparison")||ConfigObjectRepository[0].getProperty("Execution_Flag").equals("Comparison"))
+		    {
+				base.comparisonReport(ReportPath);
+		    }
 
-		DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults"));
-		
-		DatabaseOperation.CloseConn();
+			DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults"));		
+			DatabaseOperation.CloseConn();
 		}
 		catch (Exception e)
 		{
