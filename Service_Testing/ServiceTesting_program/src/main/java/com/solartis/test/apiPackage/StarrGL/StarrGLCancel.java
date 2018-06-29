@@ -47,41 +47,43 @@ public class StarrGLCancel extends BaseClass implements API
 	{
 		try
 		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+			if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
 			{
-				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
+				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 				{
-				try
-				{
-					//System.out.println("Writing Response to Table");
-					String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-					//System.out.println(responseStatus);
-					if(responseStatus.equals("SUCCESS"))
+					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+					if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 					{
-						//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						//System.out.println(actual);
-						output.put("Flag_for_execution", "Completed");
-						output.put("RuleName","");
-						output.put("User_message","");
+						try
+						{
+							//System.out.println("Writing Response to Table");
+							String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+							//System.out.println(responseStatus);
+							if(responseStatus.equals("SUCCESS"))
+							{
+								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+								//System.out.println(actual);
+								output.put("Flag_for_execution", "Completed");
+								output.put("RuleName","");
+								output.put("User_message","");
+							}
+							else
+							{
+								output.put("Flag_for_execution",responseStatus);
+								output.put("RuleName",response.read("..RuleName"));
+								output.put("User_message",response.read("..Message"));
+							}
+						}
+						catch(PathNotFoundException e)
+						{
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+						}
 					}
-					else
-					{
-						output.put("Flag_for_execution",responseStatus);
-						output.put("RuleName",response.read("..RuleName"));
-						output.put("User_message",response.read("..Message"));
-					}
-				}
-				catch(PathNotFoundException e)
-				{
-						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-				}
 				}
 			}
-			
 			return output;
 		
 		}
