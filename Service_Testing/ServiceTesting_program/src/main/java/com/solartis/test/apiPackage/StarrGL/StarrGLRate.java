@@ -58,7 +58,10 @@ public class StarrGLRate extends BaseClass implements API
 				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 			}
 		}
-		super.LoadSampleRequest(InputData);
+		if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
+			super.LoadSampleRequest(InputData);
+		 }
 	}
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
@@ -74,7 +77,10 @@ public class StarrGLRate extends BaseClass implements API
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
+		if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
 		super.PumpDataToRequest(InputData);
+		 }
 	}
 	
 	@Override

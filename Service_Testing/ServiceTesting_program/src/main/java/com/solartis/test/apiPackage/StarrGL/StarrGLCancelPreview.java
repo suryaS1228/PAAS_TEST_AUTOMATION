@@ -37,15 +37,15 @@ public class StarrGLCancelPreview extends BaseClass implements API
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-		macro=new StarrGLCancelPreviewMacro(config);	
+			macro=new StarrGLCancelPreviewMacro(config);	
 		}
 	}
 	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
@@ -56,12 +56,15 @@ public class StarrGLCancelPreview extends BaseClass implements API
 				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 			}
 		}
+		if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
 		super.LoadSampleRequest(InputData);
+		 }
 	}
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
@@ -72,7 +75,10 @@ public class StarrGLCancelPreview extends BaseClass implements API
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
+		 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		 {
 		super.PumpDataToRequest(InputData);
+		 }
 	}
 	
 	@Override
@@ -98,44 +104,47 @@ public class StarrGLCancelPreview extends BaseClass implements API
 		DBColoumnVerify conditioncheck = new DBColoumnVerify();
 		try
 		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-			
-			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			if(ResponseStatus.equals("SUCCESS"))
-			{			
-				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
-				{
-					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-					if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
-					{
-						try
-						{					
-							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+			{
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 				
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-							output.put("Flag_for_execution", ResponseStatus);
-						}
-						catch(PathNotFoundException | RequestFormatException e)
+				String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				if(ResponseStatus.equals("SUCCESS"))
+				{			
+					for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+					{
+						LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+						if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 						{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+							try
+							{					
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+								output.put("Flag_for_execution", ResponseStatus);
+							}
+							catch(PathNotFoundException | RequestFormatException e)
+							{
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+							}
 						}
 					}
 				}
-			}
-			else
-			{
-				output.put("Flag_for_execution", "FailedResponse");
-				
-				String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				if(Message.equals("Server Busy, Request cannot be processed right now"))
+				else
 				{
-					output.put("AnalyserResult","Error-ServerBusy");
+					output.put("Flag_for_execution", "FailedResponse");
+					
+					String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+					if(Message.equals("Server Busy, Request cannot be processed right now"))
+					{
+						output.put("AnalyserResult","Error-ServerBusy");
+					}
+					output.put("AnalyserResult","Rule-"+RuleName);
+					output.put("Rule_message",Message);
 				}
-				output.put("AnalyserResult","Rule-"+RuleName);
-				output.put("Rule_message",Message);
 			}
-			if(config.getProperty("ComparisonFlag").equals("Y"))
+			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 			}
