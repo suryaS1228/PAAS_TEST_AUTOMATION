@@ -10,22 +10,18 @@
          {   
           <#list Policy as result>"${result.atrib}":"${result.value}",</#list>
            "Coverage": [
-                {
                 
-                "CoverageDetail": {
                      <#assign i=1>
         <#list 1..Numofcoverage[0] as result>
         <#assign CoverageDetail="CoverageDetail"+i>
         {
-         <#list CoverageDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }<#if result?is_last><#else>,</#if><#assign i=i+1>
-        </#list>
                 
-     
-                   
-               }
+                "CoverageDetail": {
+        
+         <#list CoverageDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+        }}<#if result?is_last><#else>,</#if><#assign i=i+1>
+        </#list>
                
-               }
                
                ]
                }
