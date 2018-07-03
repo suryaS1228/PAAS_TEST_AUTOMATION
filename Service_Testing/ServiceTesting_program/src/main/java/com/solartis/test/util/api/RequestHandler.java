@@ -1,6 +1,9 @@
 package com.solartis.test.util.api;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -136,6 +139,27 @@ public class RequestHandler
 		//System.out.println(writer.toString());
 		writer.flush();
 		writer.close();
+		
+		/*String line;
+
+	    try {
+
+	        BufferedReader bufferreader = new BufferedReader(new FileReader(filepath));
+
+
+	        while ((line = bufferreader.readLine()) != null) {     
+	          *//** 
+	            Your implementation  
+	          **//*
+	           // line = bufferreader.readLine();
+	            System.out.println(line);
+	        }
+
+	    } catch (FileNotFoundException ex) {
+	        ex.printStackTrace();
+	    } catch (IOException ex) {
+	        ex.printStackTrace();
+	    }*/
 		
 	}
 	

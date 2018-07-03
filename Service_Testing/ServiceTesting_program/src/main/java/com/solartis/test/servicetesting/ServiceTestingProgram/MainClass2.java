@@ -2,7 +2,10 @@ package com.solartis.test.servicetesting.ServiceTestingProgram;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,6 +57,12 @@ public class MainClass2
 		try
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
+			System.setProperty("file.encoding","UTF-8");
+			//System.setProperty("string.encode(\"ascii\", \"ignore\")");
+			// Charset utff = StandardCharsets.US_ASCII;
+			Field charset = Charset.class.getDeclaredField("defaultCharset");
+			charset.setAccessible(true);
+			charset.set(null,null);
 			String apis = System.getProperty("Api");
 			apii = apis.split("-");			
 			
@@ -236,7 +245,7 @@ public class MainClass2
 			}
 			else
 			{
-				System.out.println("TestData" + inputrow.get("S.No") + "---flag_for_execution N");
+				System.out.println("TestData" + inputrow.get("S_No") + "---flag_for_execution N");
 			}
 		}
 		catch (Exception e)
