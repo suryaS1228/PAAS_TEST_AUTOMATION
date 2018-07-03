@@ -51,7 +51,7 @@ public class SquareMouthPayIssue extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(input))
+				if(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 					 try
 				      {	

@@ -30,7 +30,7 @@ public class MarineGL_RatingCancel extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify("OutputColumnCondtn");	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	if(config.getProperty("ComparisonFlag").equals("Y"))
+	if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 	{
 		macro=new MarineGl_Cancel(config);	
 	}
@@ -38,7 +38,8 @@ public class MarineGL_RatingCancel extends BaseClass implements API
  
  public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
  {
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+	 this.input = InputData;
+	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
@@ -49,12 +50,15 @@ public class MarineGL_RatingCancel extends BaseClass implements API
 				throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 			}
 		}
+	 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+	 {
 		super.LoadSampleRequest(InputData);
+	 }
 }
  
  public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws  APIException
 	{			
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
 			{
@@ -65,7 +69,10 @@ public class MarineGL_RatingCancel extends BaseClass implements API
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
+	 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+	 {
 		super.PumpDataToRequest(InputData);
+	 }
 	}
 
  public void AddHeaders(String Token) throws APIException 
@@ -91,6 +98,8 @@ public class MarineGL_RatingCancel extends BaseClass implements API
  {
 	try
 	{
+		if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+		{
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		
 		String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
@@ -130,7 +139,8 @@ public class MarineGL_RatingCancel extends BaseClass implements API
 			output.put("AnalyserResult","Rule-"+RuleName);
 			output.put("User_message",Message);
 		}
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+		}
+		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 		}

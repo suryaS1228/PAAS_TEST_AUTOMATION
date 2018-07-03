@@ -13,15 +13,15 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.IsoMacro;
+import com.solartis.test.macroPackage.IsoBopRenewalRateMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class IsoBoprating extends BaseClass implements API
+public class IsoBopRenewalRate extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public IsoBoprating(PropertiesHandle config) throws APIException
+	public IsoBopRenewalRate(PropertiesHandle config) throws APIException
 	{
 	    try
 	    {
@@ -33,7 +33,7 @@ public class IsoBoprating extends BaseClass implements API
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
-			macro=new IsoMacro(config);	
+			macro=new IsoBopRenewalRateMacro(config);	
 			}
 	    }
 	    catch(MacroException e)
@@ -93,6 +93,8 @@ public class IsoBoprating extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
+			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
+			System.out.println(config.getProperty("test_url")+"----"+ config.getProperty("content_type")+"-----"+ config.getProperty("EventName")+"------"+config.getProperty("EventVersion"));
 		}
     	catch (HTTPHandleException e) 
 		{
@@ -116,20 +118,20 @@ public class IsoBoprating extends BaseClass implements API
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 				{
 					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-					  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
-						{
-						  	try
-							{
-						
+					if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+					{
+					  	try
+						{					
 							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 							output.put("Flag_for_execution", ResponseStatus);
-							}
-							catch(PathNotFoundException | RequestFormatException e)
-							{
-								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-							}
+							output.put("User_message","");
 						}
+						catch(PathNotFoundException | RequestFormatException e)
+						{
+							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+						}
+					}
 				}
 			}
 			else

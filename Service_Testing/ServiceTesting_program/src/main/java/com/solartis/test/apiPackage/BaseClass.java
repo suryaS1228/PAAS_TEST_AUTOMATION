@@ -54,8 +54,8 @@ public class BaseClass
 	public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token=config.getProperty("AuthenticationToken");
-		
-		/*try
+		/*String Token="";
+		 * try
 		{
 			System.out.println(config.getProperty("AuthenticationURL"));
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
@@ -108,6 +108,7 @@ public class BaseClass
 			
 		catch(DatabaseException | TemplateException | IOException  e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
 		}
 	}
@@ -117,23 +118,20 @@ public class BaseClass
 	{
 	  try 
 	  {
-		//System.out.println(input.get("Testdata"));
 		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
 		  request.write("$..Token", Token);
 		  return request.FileToString();
-		  }
-	
+	  } 
 	  catch (RequestFormatException e)
 	  {
 		  throw new APIException("ERROR OCCURS IN REQUEST TO STRING FUNCTION -- BASE CLASS", e);
 	   }
-
 	}
 	
 //-------------------------------------------------------------ADDING HEADER || TOKENS------------------------------------------------------------------	
 	public void AddHeaders(String Token) throws APIException
 	{
-	   try
+		try
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
@@ -143,13 +141,11 @@ public class BaseClass
 		{
 			throw new APIException("ERROR ADD HEADER FUNCTION -- BASE CLASS", e);
 		}
-	    
 	}
 
 //------------------------------------------------------------STORING RESPONSE TO FOLDER----------------------------------------------------------------	
 	public void SendAndReceiveData() throws APIException 
-	{    
-		
+	{
 		try
 		{
 			String input_data= null;
@@ -169,7 +165,6 @@ public class BaseClass
 //-------------------------------------------------------------CONVERTING RESPONSE TO STRING------------------------------------------------------------
 	public String ResponseToString() throws APIException 
 	{
-	  
 		try
 		{
 			return response.FileToString();
@@ -178,14 +173,11 @@ public class BaseClass
 		{
 			throw new APIException("ERROR IN RESPONSE TO STRING FUNCTION -- BASE CLASS", e);
 		}
-	
 	}
 	
 //-----------------------------------------------------------UPDATING RESPONSE DATA TO DATABASE---------------------------------------------------------	
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
-	    if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
-	    {
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
@@ -199,7 +191,7 @@ public class BaseClass
 					{
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						//output.put("ResponseStatus", "Completed");
+						output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)
 					{
@@ -214,19 +206,12 @@ public class BaseClass
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
-	    }
-	    else
-	    {
-	    	return null;
-	    }
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		 
-	    if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
-	    {
-	 if(outputrow.get("ResponseStatus").equals("SUCCESS"))
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
 	{		
 	    try
 	    {
@@ -277,7 +262,6 @@ public class BaseClass
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
-	    }
 	 return outputrow;
  }
 	
@@ -288,7 +272,7 @@ public class BaseClass
 		boolean status = false;
 		if(actual == null||actual.equals("")||actual.isEmpty())
 		{
-			//System.out.println("actual is empty");
+			System.out.println("actual is empty");
 			if((expected == null || expected.equals("")||expected.equals("0") || expected.equals("0.0")))
 			{
 				status = true;
@@ -297,7 +281,7 @@ public class BaseClass
 		}
 		if(expected == null||expected.equals("")||expected.isEmpty())
 		{
-			//System.out.println("actual is empty");
+			System.out.println("actual is empty");
 			if(actual == null|| actual.equals("")||actual.equals("0") || actual.equals("0.0"))
 			{
 				status = true;
@@ -315,7 +299,7 @@ public class BaseClass
 
     	//System.out.println(expected+"-----------"+actual);
     	
-    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.equals("[]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*"))
+    		if(actual.matches(".*[a-z].*")||expected.matches(".*[a-z].*")||actual.matches(".*[A-Z].*")||expected.matches(".*[A-Z].*")||actual.equals("[]")||expected.matches("[a-zA-Z]")||expected.equals("")||actual.matches("[a-zA-Z]")||actual.matches("[M|D|C|L|X|V|I]*")||expected.matches("[M|D|C|L|X|V|I]*"))
     		{
     			//System.out.println("expected or actual is string");
     			if(expected.equals(actual))
@@ -326,13 +310,13 @@ public class BaseClass
     		}
     		else	
     		{
-    		expected = Double.toString(Math.round(Double.parseDouble(expected)));
-    		actual = Double.toString(Math.round(Double.parseDouble(actual)));
-    		if(expected.equals(actual))
-    		{
-    			status = true;
-    			return status;
-    		}
+	    		expected = Double.toString(Math.round(Double.parseDouble(expected)));
+	    		actual = Double.toString(Math.round(Double.parseDouble(actual)));
+	    		if(expected.equals(actual))
+	    		{
+	    			status = true;
+	    			return status;
+	    		}
     		}
 		}
 
@@ -404,7 +388,7 @@ public class BaseClass
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, excelreportlocation1);
 			sample.save();
-			if(comparisonChoice.equals("Y"))
+			if(config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison"))
 		    {
 				ExcelOperationsPOI ob=new ExcelOperationsPOI(excelreportlocation1);
 				ob.getsheets("TestReport");
@@ -430,8 +414,8 @@ public class BaseClass
 				ob.refresh();
 				ob.saveAs(excelreportlocation1);
 		    }
-		//	this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
-			//this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
 		}
 		catch(Exception e) 
 		{
@@ -448,7 +432,7 @@ public class BaseClass
 		
 		try
 		{
-			System.out.println("Exporting Report with Test cases to Excel");
+			//System.out.println("Exporting Report with Test cases to Excel");
 			DatabaseOperation db=new DatabaseOperation();
 			ResultSet rs=null;
 			HSSFWorkbook workBook=null;

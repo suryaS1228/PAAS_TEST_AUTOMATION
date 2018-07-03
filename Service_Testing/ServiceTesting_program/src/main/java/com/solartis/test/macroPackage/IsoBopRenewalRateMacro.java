@@ -1,11 +1,11 @@
 package com.solartis.test.macroPackage;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -16,16 +16,15 @@ import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
-import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
+public class IsoBopRenewalRateMacro extends DBColoumnVerify implements MacroInterface
 {
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected StarrGLMacro trans;
+	protected IsoBopRenewalRateMacro trans;
 	protected String Samplepath;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
@@ -47,21 +46,16 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	public StarrGLMacro()
-	{
-		
-	}
-	public StarrGLMacro(PropertiesHandle configFile) throws MacroException
+	public IsoBopRenewalRateMacro(PropertiesHandle configFile) throws MacroException
 	{
 		configTable = new DatabaseOperation();
-		//configFile = new PropertiesHandle("A:/1 Projects/09 StarrGL/Release_24_UAT/RatingTrial/configuration_file/config_json.properties");
 		try 
 		{
 			configTable.GetDataObjects(configFile.getProperty("config_query"));
 		}
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF StarrGLMACRO", e);
+			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF ISOMACRO", e);
 		}
 		
 	}
@@ -70,11 +64,10 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			String RatingModelVersion=inputData.get("RatingModelVersion");
-			String RateingModelName = Lookup(RatingModelVersion,configFile);		
+			String RateingModelName = Lookup("RatingModel_version",configFile);
+			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
-
 		}
 		catch (POIException e)
 		{
@@ -89,9 +82,8 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
-			System.out.println("generate expected rating over");
 		}
-		catch( POIException e)
+		catch(POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL", e);
 		}
@@ -101,15 +93,14 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			//DatabaseOperation configTable = new DatabaseOperation();
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new StarrGLMacro(configFile);
+			trans= new IsoBopRenewalRateMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
-			{								
+			{		
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
 				String condition = rowPumpinData.get("Condition");
-				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y") &&ConditionReading(condition,inputData))
+				if (rowPumpinData.get("flag_for_execution").equalsIgnoreCase("Y")&&ConditionReading(condition,inputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
 					{
@@ -120,13 +111,12 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+rowPumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
+							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile, inputData));
 						}
 						else
 						{
@@ -153,17 +143,11 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch(DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF StarrGL MACRO", e);
-			//e.printStackTrace();
+			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF ISO MACRO", e);
 		}
 		catch(POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF StarrGL MACRO", e);
-			//e.printStackTrace();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
+			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF ISO MACRO", e);
 		}
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -190,9 +174,7 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
-					System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
 					outputData.put(Datacolumntowrite, Datatowrite);
-					//outputData.WriteData(Datacolumntowrite, "poda");
 				}
 			}
 			//outputData.UpdateRow();
@@ -201,47 +183,42 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch(DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF StarrGL MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO MACRO", e);
 		}
 		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF StarrGL MACRO", e);
+			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF ISO MACRO", e);
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		System.out.println("output over");
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile) throws   MacroException
+	protected <T> T Translation1(String Datatowrite, LinkedHashMap<String, String> configTable,  PropertiesHandle configFile, LinkedHashMap<String, String> inputData) throws   MacroException
 	{
 		T outputdata = null;
-			switch(configTable.get("Translation_Function"))
-			{
-			case "Date": 
-				Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
-				outputdata = (T) DateData;
-				break;
-			case "Lookup":
-				String LookupData = Lookup(Datatowrite, configFile);
-				outputdata = (T) LookupData;
-				break;
-			case "String":
-				String Stringdata = IntegertoString(Datatowrite);
-				outputdata = (T) Stringdata;
-				break;
-			case "ReplaceComma":
-				int replaceddata= ReplaceComma(Datatowrite);
-				Integer replacdata = new Integer (replaceddata);
-				outputdata = (T) replacdata;
-				break;
-			case "Version":
-				String versiondata=Version(Datatowrite);
-				outputdata = (T) versiondata;
-				break;
-			}		
+		switch(configTable.get("Translation_Function"))
+		{
+		case "Date": 
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
+			outputdata = (T) DateData;
+			break;
+		case "Lookup":
+			String LookupData = Lookup(Datatowrite, configFile);
+			outputdata = (T) LookupData;
+			break;
+		case "PaddingZeros":
+			String PaddingZeros = PaddingZeros(Datatowrite);
+			outputdata = (T) PaddingZeros;
+			break;
+		case "ISOBOPWindhail":
+			float ISOBOPWindhail = ISOBOPWindhail(Datatowrite);
+			Float windhail = new Float(ISOBOPWindhail);
+			outputdata =  (T) windhail;
+			break;
+		case "extenedLookup":
+			String extLookupData = extenedLookup(Datatowrite, configFile, inputData.get("Policy_state"));
+			outputdata = (T) extLookupData;
+			break;
+		}
 		return outputdata;
 		
 	}
@@ -284,12 +261,8 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 			} 
 			catch (NumberFormatException | ParseException e) 
 			{
-				// TODO Auto-generated catch block
-				throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF StarrGL MACRO", e);
+				throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF ISO MACRO", e);
 			}  			
-		   // System.out.println(value+"\t"+Date1);  						
-		
-		
 		return Date1;
 		
 	}
@@ -297,22 +270,21 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	protected String  Lookup(String Lookup1, PropertiesHandle configFile) throws  MacroException
 	{
 		
-		DatabaseOperation Lookup = new DatabaseOperation();		
+		DatabaseOperation Lookup = new DatabaseOperation();
+		
 		HashMap<String,String> LookupMap = new HashMap<String,String>();
 		try 
 		{
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
 			{
 				LinkedHashMap<String, String> rowLookup = entry.getValue();
-				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));				
-				
+				LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));	
 			}
 		} 
 		catch (DatabaseException e) 
 		{
-			// TODO Auto-generated catch block
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF StarrGL MACRO", e);
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
 		}
 		
 		if (LookupMap.get(Lookup1)==null)
@@ -323,6 +295,66 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 		{
 			return LookupMap.get(Lookup1);
 		}
+	}
+	
+	protected String extenedLookup(String Lookup1, PropertiesHandle configFile, String StateName) throws MacroException
+	{
+DatabaseOperation Lookup = new DatabaseOperation();
+		
+		HashMap<String,String> LookupMap = new HashMap<String,String>();
+		try 
+		{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableLookup = Lookup.GetDataObjects(configFile.getProperty("lookup_query"));
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableLookup.entrySet())	
+			{
+				LinkedHashMap<String, String> rowLookup = entry.getValue();
+				if(rowLookup.get("ReferanceData").equals(StateName))
+				{
+					LookupMap.put(rowLookup.get("LookupData"), rowLookup.get("LookupValue"));	
+				}
+			}
+		} 
+		catch (DatabaseException e) 
+		{
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+		}
+		
+		if (LookupMap.get(Lookup1)==null)
+		{
+			return "Other";
+		}
+		else
+		{
+			return LookupMap.get(Lookup1);
+		}
+	}
+	
+	protected String PaddingZeros(String Data)
+	{
+		String s = String.format("%%0%dd", 3);
+		String f =String.format(s, Integer.valueOf(Data));
+		return f;
+		
+	}
+	
+	
+	protected float ISOBOPWindhail(String Data)
+	{
+		float percentageData=0;
+		if(Data.equals("Not Applicable"))
+		{
+			percentageData = 0;
+		}
+		else
+		{
+			Data=Data.replace("%", "");
+			float value = Float.valueOf(Data)/100;			
+			DecimalFormat df = new DecimalFormat("#.##");
+			String flo = df.format(value);		
+			float percentagevalue = Float.valueOf(flo);
+			return percentagevalue;
+		}
+		return percentageData;		
 	}
 	
 	protected boolean isInteger(String s) 
@@ -340,7 +372,6 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	    {
 	        return false;
 	    }
-	    // only got here if we didn't return false
 	    return true;
 	}
 	protected boolean isFloat(String s)
@@ -359,79 +390,7 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 	    }
 		 return true;
 	}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	protected String IntegertoString (String s)
-	{
-		return s;
-		
-	}
 	
-	protected int ReplaceComma(String s)
-	{
-		Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-		Matcher m = p.matcher(s);
-		boolean b = m.find();
-		int num=0;
-		if (b)
-		{
-			 s = s.replaceAll("(?<=\\d),(?=\\d)", "");
-			 num= Integer.parseInt(s);
-		}
-		else
-		{
-			num=Integer.parseInt(s);
-		}
-
-		return num;
-		
-	}
-	
-	protected String Version(String s)
-	{
-		
-		s=s.substring(1);
-		s=s.replace("-", "_");
-		return s;
-		
-	}
-	
-	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
-	{
-		DatabaseOperation objectInput = new DatabaseOperation();
-		DatabaseOperation objectOutput = new DatabaseOperation();
-		StarrGLMacro MG;
-		PropertiesHandle configFile=null;
-		
-		configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\Rating\\config\\config.properties");
-		DatabaseOperation.ConnectionSetup(configFile);
-		 
-		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
-		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
-		 LinkedHashMap<Integer, LinkedHashMap<String, String>>  outputtable = objectOutput.GetDataObjects(configFile.getProperty("output_query"));
-		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
-		 int rowIterator = 1;
-		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
-			{
-				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
-				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
-		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
-		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
-		        
-		        if(inputrow.get("Flag_for_execution").equals("Y"))
-				{
-					System.out.println("coming to flow");
-					MG=new StarrGLMacro(configFile);
-					MG.LoadSampleRatingmodel(configFile, inputrow);
-					MG.GenerateExpected(inputrow, configFile);
-					MG.PumpinData(inputrow, configFile);
-					MG.PumpoutData(outputrow,inputrow, configFile);
-				}
-		        inputrow.put("Flag_for_execution", "Completed");	
-		        objectInput.UpdateRow(rowIterator, inputrow);
-		        objectOutput.UpdateRow(rowIterator, outputrow);
-		        rowIterator++;
-		        
-			}
-	}
-
 }

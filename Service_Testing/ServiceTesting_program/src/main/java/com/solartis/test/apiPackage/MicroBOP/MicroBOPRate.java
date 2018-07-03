@@ -17,6 +17,7 @@ import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.macroPackage.MicroBopMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.JsonHandle;
 
 public class MicroBOPRate extends BaseClass implements API {
 	
@@ -30,16 +31,42 @@ public class MicroBOPRate extends BaseClass implements API {
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-		if(config.getProperty("ComparisonFlag").equals("Y"))
+		 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 		macro=new MicroBopMacro(config);	
 		}
 		
 	}
-	
+	public String tokenGenerator(PropertiesHandle config)
+	{
+		String Token="";
+		try
+		{
+			System.out.println(config.getProperty("AuthenticationURL"));
+			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
+			http.SendData(input_data);
+			String response_string = http.ReceiveData();	
+			System.out.println(input_data+"/n/n/n"+response_string);
+			JsonHandle response = new JsonHandle();
+			//response.StringToFile(response_string);
+			//response.FileToString();
+			Token = Token+response.readToken("$..Token",response_string).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			System.out.println(Token);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error in Generating Token");
+			e.printStackTrace();
+		}
+		return Token;
+		
+	}
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
-			if(config.getProperty("ComparisonFlag").equals("Y"))
+		 this.input = InputData;
+		 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
 				try 
 				{
@@ -50,19 +77,26 @@ public class MicroBOPRate extends BaseClass implements API {
 					throw new APIException("ERROR LoadSampleRequest FUNCTION -- GL-RATING CLASS", e);
 				}
 			}
+		 
+			 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+			 {
 			super.LoadSampleRequest(InputData);
+			 }
 	}
 	
 	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{	
 		try
 		{
-			if(config.getProperty("ComparisonFlag").equals("Y"))
+			 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
 			macro.PumpinData(input, config);	
 			
 			}
+			if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
+			{
 			super.PumpDataToRequest(InputData);
+			}
 
 		}
 		catch(DatabaseException | POIException | MacroException  e)
@@ -93,6 +127,8 @@ public class MicroBOPRate extends BaseClass implements API {
 	 {
 		try
 		{
+			 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
+			 {
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 			
 			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
@@ -133,7 +169,8 @@ public class MicroBOPRate extends BaseClass implements API {
 				
 				
 			}
-			if(config.getProperty("ComparisonFlag").equals("Y"))
+			 }
+			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
 				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
 			}

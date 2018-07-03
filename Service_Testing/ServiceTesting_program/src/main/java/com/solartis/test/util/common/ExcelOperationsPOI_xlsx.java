@@ -13,8 +13,8 @@ import java.util.Date;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -280,7 +280,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 	
 	public void write_data(int rownum,int columnnum,Object strData)
 	{
-		System.out.print(rownum+columnnum);
+		//System.out.print(rownum+columnnum);
 		 cell = this.worksheet.getRow(rownum).getCell(columnnum);
 		 String s=(strData.getClass()).toString();
 		 //System.out.println(s);
@@ -306,30 +306,9 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void refresh()
 	{
-		 //XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
-		 FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
-		 for (org.apache.poi.ss.usermodel.Sheet sheet : this.workbook) {
-		     for (Row r : sheet) {
-		         for (Cell c : r) {
-		             if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-		            	 //System.out.println(c+"---------------------------------------------"+r);
-		                 try
-		                 {
-		            	 evaluator.evaluateFormulaCell(c);
-		                 }
-		                 catch(Exception e)
-		                 {		                	 
-		                	 System.out.println("SheetName----"+sheet.getSheetName()+"   RowNumber----------"+r.getRowNum()+"   Cell formula is -----"+ c.getCellFormula());	
-		                	 //e.printStackTrace();
-		                 }
-		                 
-		             }
-		         }
-		     }
-		 }
+		 XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
 	}
 	
 	public void save() throws POIException

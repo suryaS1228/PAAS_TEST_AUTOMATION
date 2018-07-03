@@ -83,7 +83,7 @@ public class JsonHandle implements RequestResponse
 		
 		try 
 		{
-			write_file.write(json_string);//JsonFormatter.prettyPrint(json_string));
+			write_file.write(json_string);
 		} 
 		catch (IOException e) 
 		{
