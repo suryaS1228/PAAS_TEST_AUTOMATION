@@ -1,7 +1,5 @@
 package com.solartis.test.util.api;
 
-import java.io.UnsupportedEncodingException;
-
 import com.solartis.test.exception.RequestFormatException;
 
 public interface RequestResponse 

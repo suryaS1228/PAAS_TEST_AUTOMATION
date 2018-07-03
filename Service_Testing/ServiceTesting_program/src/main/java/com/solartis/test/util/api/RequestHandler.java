@@ -124,7 +124,7 @@ public class RequestHandler
 					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
 			}
-			else if(condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
 				((List<Object>) root.get(parentName)).add(new Attribute(atributeName,commonmap.get(rowInputColVerify.get("DBColumnName"))));
 			}
