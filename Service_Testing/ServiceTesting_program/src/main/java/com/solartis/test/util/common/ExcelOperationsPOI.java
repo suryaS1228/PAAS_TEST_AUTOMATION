@@ -10,11 +10,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import com.solartis.test.exception.POIException;
@@ -305,10 +305,32 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void refresh()
 	{
-		 HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		//HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+		 for (org.apache.poi.ss.usermodel.Sheet sheet : this.workbook) {
+		     for (Row r : sheet) {
+		         for (Cell c : r) {
+		             if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+		            	 //System.out.println(c+"---------------------------------------------"+r);
+		                 try
+		                 {
+		            	 evaluator.evaluateFormulaCell(c);
+		                 }
+		                 catch(Exception e)
+		                 {		                	 
+		                	 System.out.println("SheetName----"+sheet.getSheetName()+"   RowNumber----------"+r.getRowNum()+"   Cell formula is -----"+ c.getCellFormula());	
+		                	 //e.printStackTrace();
+		                 }
+		                 
+		             }
+		         }
+		     }
+		 }
 	}
+	
 	
 	public void save() throws POIException
 	{
