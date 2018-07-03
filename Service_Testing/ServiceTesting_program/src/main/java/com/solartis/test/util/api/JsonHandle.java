@@ -1,11 +1,16 @@
 package com.solartis.test.util.api;
 
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +27,7 @@ public class JsonHandle implements RequestResponse
 	private JSONParser parser = new JSONParser();
 	private JsonReader  doc = new JsonReader();
 	private String file_location;
-	private FileReader read_file = null;
+	private BufferedReader read_file = null;
 	private FileWriter write_file = null;
 	public JsonHandle(String file_location)
 	{
@@ -43,30 +48,29 @@ public class JsonHandle implements RequestResponse
 
 	private String enable_read() throws RequestFormatException
 	{
+		StringBuffer si = new StringBuffer();
 		try 
 		{
-			read_file = new FileReader(file_location);
+			//read_file = new FileReader(file_location);
+			read_file = new BufferedReader(new InputStreamReader(new FileInputStream(file_location), "UTF-8"));
+			String s = null;
+			
+
+			while (( s=read_file.readLine())!=null)
+			    {
+						si=si.append(s);
+			          // System.out.println(s);
+			    }
 		} 
-		catch (FileNotFoundException e) 
+		catch (IOException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE SPECIFIED JSON FILEPATH = " + file_location +" TO READ", e);
 		}
 		
-		try 
-		{
-			obj = (JSONObject) parser.parse(read_file);
-		} 
-		catch (IOException e)
-		{
-			throw new RequestFormatException("ERROR OCCURS WHILE READING A JSON FILE -- I/O OPERATION FAILED", e);
-		} 
-		catch (ParseException e) 
-		{
-			throw new RequestFormatException("ERROR OCCURS WHILE READING A JSON FILE --PARSING OPERATION", e);
-		}
-		
 		read_file = null;
-		return obj.toJSONString();
+		//System.out.println(obj.toJSONString());
+		//System.out.println(si);
+		return si.toString();
 		
 	}
 	
@@ -138,17 +142,8 @@ public class JsonHandle implements RequestResponse
 	}
 	
 	public String FileToString() throws RequestFormatException
-	{
-		try
-		{
-			doc.parse(enable_read());
-		} 
-		catch (RequestFormatException e) 
-		{
-			throw new RequestFormatException("ERROR OCCURS WHILE CONVERTING FILE TO STRING OPERATION", e);
-		}
-		
-		return doc.jsonString();
+	{		
+		return enable_read();
 	}
 	
 	public void write(String json_path,String new_value) throws RequestFormatException
