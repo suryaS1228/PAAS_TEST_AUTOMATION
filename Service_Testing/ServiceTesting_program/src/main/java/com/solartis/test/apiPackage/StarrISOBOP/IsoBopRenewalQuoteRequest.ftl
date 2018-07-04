@@ -11,12 +11,12 @@
   "Location": [
       {
         "LocationDetail": {
-      <#list LocationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+      <#list LocationDetail as result>"${result.atrib}":"${result.value}",
   		</#list>
       "Building": [
             {
               "BuildingDetail": {
-              <#list BuildingDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+              <#list BuildingDetail as result>"${result.atrib}":"${result.value}",
   				</#list>
               "Classification": [
                   {
@@ -40,7 +40,7 @@
           {
           <#list AdditionalInsuredDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
   		  </#list>
-  		  }
+  		  }]
     }<#if result?is_last><#else>,</#if>
   	</#list>
     ],    
