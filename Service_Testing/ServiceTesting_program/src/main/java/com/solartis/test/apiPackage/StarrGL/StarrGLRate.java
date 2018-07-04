@@ -14,10 +14,9 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.StarrGLMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
-
-import StarrGLMacro.StarrGLMacro;
 
 
 public class StarrGLRate extends BaseClass implements API
