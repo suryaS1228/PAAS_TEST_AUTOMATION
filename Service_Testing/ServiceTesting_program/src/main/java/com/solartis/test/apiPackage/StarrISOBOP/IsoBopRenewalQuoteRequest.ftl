@@ -6,7 +6,7 @@
   "OwnerId": "24",
   "EndClientUserUniqueSessionId": "Uniquesession",
   "Policy": {
-  <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  <#list Policy as result>"${result.atrib}":"${result.value}",
   </#list>
   "Location": [
       {
