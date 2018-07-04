@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -134,14 +133,24 @@ public class MainClass2
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	@Test(dataProvider="PaaSTest")
 	public void Api1(Integer RowIterator, Object inputtablerowobj) throws InterruptedException, DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		for(int i=0;i<apii.length;i++)
+		LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
+		ObjectMapper inputtableobjectMapper = new ObjectMapper();
+		inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+		if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
 		{
-			GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
+			for(int i=0;i<apii.length;i++)
+			{
+				GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
+			}
 		}
-		
+		else
+		{
+			System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
+		}
 		commonMap.clear();
 	}
 	
@@ -188,7 +197,7 @@ public class MainClass2
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
 			if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
-				System.out.println("TestData" + inputrow.get("S_No") + "  API--"+apis );					 
+				System.out.println("TestData " + inputrow.get("S_No") + "  API--"+apis );					 
 								
 				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
 	                            
@@ -245,7 +254,7 @@ public class MainClass2
 			}
 			else
 			{
-				System.out.println("TestData" + inputrow.get("S_No") + "---flag_for_execution N");
+				System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
 			}
 		}
 		catch (Exception e)
