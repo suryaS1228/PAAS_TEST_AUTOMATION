@@ -55,6 +55,8 @@ public class BaseClass
 	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
 
+	protected long start;
+	protected long end;
 	public String tokenGenerator(PropertiesHandle config)
 	{
 		/*String Token="";
@@ -195,8 +197,10 @@ public class BaseClass
 		{
 			String input_data= null;
 			input_data = request.FileToString();
+			start = System.currentTimeMillis();
 		    http.SendData(input_data);
-			String response_string = http.ReceiveData();	
+			String response_string = http.ReceiveData();
+		    end = System.currentTimeMillis();
 			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+".json");
 			response.StringToFile(response_string);
 		}
@@ -240,6 +244,7 @@ public class BaseClass
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						//System.out.println(actual);
 						output.put("flag_for_execution", "Completed");
+						output.put("Time", (end-start) + " Millis");
 					}
 					catch(PathNotFoundException e)
 					{

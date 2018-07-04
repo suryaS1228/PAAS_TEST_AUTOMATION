@@ -69,6 +69,7 @@ public class StarrGLCancel extends BaseClass implements API
 								output.put("Flag_for_execution", "Completed");
 								output.put("RuleName","");
 								output.put("User_message","");
+								output.put("Time", (end-start) + " Millis");
 							}
 							else
 							{
