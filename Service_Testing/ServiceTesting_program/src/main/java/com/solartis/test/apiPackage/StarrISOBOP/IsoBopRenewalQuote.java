@@ -54,15 +54,11 @@ public class IsoBopRenewalQuote extends BaseClass implements API
 				{
 				try
 				{
-					System.out.println("Writing Response to Table");
 					String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-					System.out.println(responseStatus);
 					if(responseStatus.equals("SUCCESS"))
 					{
-						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-						System.out.println(actual);
 						output.put("Flag_for_execution", "Completed");
 						output.put("MessageType"," ");
 						output.put("UserMessage"," ");

@@ -6,7 +6,10 @@ import java.util.LinkedHashMap;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
+import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
+import com.solartis.test.util.api.HttpHandle;
 
 public class IsoBopRenewalPolicy extends BaseClass implements API 
 {
@@ -20,7 +23,21 @@ public class IsoBopRenewalPolicy extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	
+	public void AddHeaders(String Token) throws APIException
+	{
+		try
+		{
+			http = new HttpHandle(config.getProperty("test_url"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			http.AddHeader("Token", Token);
+			http.AddHeader("EventName", config.getProperty("EventName"));
+			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
+		}
+    	catch (HTTPHandleException e) 
+		{
+			throw new APIException("ERROR ADD HEADER FUNCTION -- GL-QUOTE CLASS", e);
+		}
+	}
 	
 }
 
