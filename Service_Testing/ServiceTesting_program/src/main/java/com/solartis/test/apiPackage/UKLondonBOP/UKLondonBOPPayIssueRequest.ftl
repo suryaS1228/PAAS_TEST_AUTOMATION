@@ -14,9 +14,10 @@
   "OwnerId": "38",
   "EndClientUserUniqueSessionId": "Uniquesession",
   "Policy": {
-  <#list Policy as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  <#list Policy as result>"${result.atrib}":"${result.value}",
   </#list> 
-  "Location": [
+  "Location": 
+  [
   <#list 1..NoOfLocationDetailarray[0] as result>
   <#assign LocationDetail ="LocationDetail"+i>  
       {
@@ -32,7 +33,8 @@
                <#list BuildingDetail?eval as result>
 	           "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		       </#list>               
-              "Classification": [
+              "Classification": 
+              [
               <#list 1..NoOfClassificationDetailarray[0] as result>
               <#assign ClassificationDetail ="ClassificationDetail"+k>              
                   {
@@ -55,7 +57,8 @@
       <#if i=NoOfLocationDetailarray[0]><#else>,</#if><#assign i=i+1>
       </#list>  
     ],    
-    "ClaimsList": [
+    "ClaimsList":
+     [
   <#list 1..NoOfClaimsListarray[0] as result>
   <#assign ClaimsList ="ClaimsList"+l>        
       {      
