@@ -124,17 +124,17 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
 		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
 		        
-		        if(inputrow.get("Flag_for_execution").equals("Y"))
+		        if(inputrow.get("Flag_for_execution").equals("SUCCESS"))
 				{
 					System.out.println("coming to  "+inputrow.get("PolicyNumber"));
 					String url=inputrow.get("ISSUANCE");
-					String filename = inputrow.get("PolicyNumber");
+					String filename = inputrow.get("Testdata")+"__"+inputrow.get("PolicyNumber");
 					/*if (filename.indexOf(".") > 0)
 						filename = filename.substring(0, filename.lastIndexOf("."));
 					
 					filename=filename.substring(filename.lastIndexOf('/')+1);*/
 					
-					String path="Q:\\Manual Testing\\Starr\\Starr-GL\\Releases\\CA-reduction factor-Prod issue\\UAT\\PDFS\\";
+					String path="Q:\\Manual Testing\\Hyper V\\SGL\\Quote-Policy\\Hyper PDF\\";
 					urltopdf(url,path,filename);
 				}
 		        //inputrow.put("Flag_for_execution", "Completed");	
