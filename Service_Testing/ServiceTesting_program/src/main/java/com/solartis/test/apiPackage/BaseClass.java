@@ -55,6 +55,7 @@ public class BaseClass
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
 	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
+	protected long start,end;
 
 	public String tokenGenerator(PropertiesHandle config)
 	{
@@ -166,8 +167,10 @@ public class BaseClass
 		{
 			String input_data= null;
 			input_data = request.FileToString();
+			start = System.currentTimeMillis();
 		    http.SendData(input_data);
 			String response_string = http.ReceiveData();	
+			end = System.currentTimeMillis();
 			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+".json");
 			response.StringToFile(response_string);
 		}
@@ -208,6 +211,7 @@ public class BaseClass
 						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						output.put("flag_for_execution", "Completed");
+						output.put("Time", (end-start) + " Millis");
 					}
 					catch(PathNotFoundException e)
 					{
