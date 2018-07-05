@@ -122,6 +122,7 @@ public class StarrGLRate extends BaseClass implements API
 								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");				
 								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 								output.put("Flag_for_execution", ResponseStatus);
+								output.put("Time", (end-start) + " Millis");
 							}
 							catch(PathNotFoundException | RequestFormatException e)
 							{
