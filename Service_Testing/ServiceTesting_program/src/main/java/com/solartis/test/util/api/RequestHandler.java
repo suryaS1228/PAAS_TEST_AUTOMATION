@@ -69,7 +69,7 @@ public class RequestHandler
 				    if(str.trim().equals(parentName))
 				    {
 				       flag=true;
-				    System.out.println(parentName);
+				   // System.out.println(parentName);
 				    }
 				}
 				if(flag==false)
