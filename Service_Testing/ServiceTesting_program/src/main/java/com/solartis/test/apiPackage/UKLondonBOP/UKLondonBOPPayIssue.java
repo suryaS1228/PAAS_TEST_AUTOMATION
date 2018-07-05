@@ -1,12 +1,16 @@
 package com.solartis.test.apiPackage.UKLondonBOP;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
+import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
+import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
@@ -42,4 +46,58 @@ public class UKLondonBOPPayIssue extends BaseClass implements API
 	}
 
 
+
+@Override
+public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
+{
+	try
+	{
+		 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
+		 {
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+		
+		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+		if(ResponseStatus.equals("SUCCESS"))
+		{
+		
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+		{
+			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+			  if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&conditioncheck.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+				{
+				try
+					{
+				
+					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+	
+					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+					output.put("Flag_for_execution", ResponseStatus);
+					}
+					catch(PathNotFoundException | RequestFormatException e)
+					{
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+					}
+				}
+		}
+		}
+		else
+		{
+			output.put("Flag_for_execution", "FailedResponse");
+			
+			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			String Message2=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			output.put("User_message",Message);
+			output.put("RuleName",Message2);
+			output.put("AnalyserResult","Rule-"+Message2);
+			
+		}
+	 }
+		
+	}
+	catch(DatabaseException | RequestFormatException e)
+	{
+		 throw new APIException("ERROR SendResponseDataToFile FUNCTION -- DTC-RatingService CLASS", e);
+	}
+	return output;
+}
 }
