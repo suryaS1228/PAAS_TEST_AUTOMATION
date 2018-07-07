@@ -67,7 +67,7 @@ public class RequestHandler
 				//System.out.println(parentName);
 				for(String str: parentlist) 
 				{
-				    if(str.trim().contains(parentName))
+				    if(str.trim().equals(parentName))
 				       flag=true;
 				    //System.out.println(parentName);
 				}
