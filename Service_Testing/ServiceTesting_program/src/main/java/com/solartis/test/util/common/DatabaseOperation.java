@@ -13,11 +13,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.dbspec.Join;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import com.mysql.jdbc.PreparedStatement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
@@ -388,5 +396,26 @@ public class DatabaseOperation
 		stmt = conn.createStatement();
 		String query1 ="INSERT INTO "+OutputTableName+" (`S_No`,`Testdata`,`Flag_for_execution`) SELECT `S_No`,`Testdata`,`Flag_for_execution` FROM "+inputTableName;
 		stmt.executeUpdate(query1);
-}
+	}
+	
+	public String buildJoinQuery(List<String> TableNames)
+	{
+		SelectQuery query=null;
+		DbSpec spec = new DbSpec();
+	    DbSchema schema = spec.addDefaultSchema();
+
+	    query = new SelectQuery().addAllColumns();
+	    DbJoin[] joins =new DbJoin[TableNames.size()-1];
+	    for (int i = 0; i < TableNames.size(); i++) 
+		{
+	    	schema.addTable(TableNames.get(i)).addColumn("S_No", "number", null);
+	    	if(!(i==0))
+	    	{
+	    		joins[i-1] = spec.addJoin(null, TableNames.get(0), null, TableNames.get(i), "S_No");
+	    		query.addJoins(SelectQuery.JoinType.LEFT_OUTER, joins[i-1]);
+	    	}
+		}
+	    String query1= query.validate().toString();
+	    return query1;
+	}
 }
