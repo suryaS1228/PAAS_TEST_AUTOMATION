@@ -5,9 +5,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.testng.annotations.AfterTest;
@@ -49,6 +51,7 @@ public class MainClass2
 	public static DatabaseOperation db=null;
 	public static Connection Conn=null;
 	public static String ExecutionFlag;
+	public static List<String> InputtableList;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -71,6 +74,8 @@ public class MainClass2
 			inputDBObjectRepository= new DatabaseOperation[apii.length];
 			OutputTableRepository = new Object[apii.length];
 			inputIndividualTableRepository = new Object[apii.length];
+			
+			InputtableList = new ArrayList<String> ();
 			for(int i=0;i<apii.length;i++)
 			{
 				
@@ -91,6 +96,8 @@ public class MainClass2
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
 				inputIndividualTableRepository[i]=this.inputTables(ConfigObjectRepository[i]);
+				
+				InputtableList.add(ConfigObjectRepository[i].getProperty("inputTable"));
 			}
 			
 			Conn=OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[0]);
@@ -98,9 +105,10 @@ public class MainClass2
 			{
 				this.beforeTesting(ConfigObjectRepository[0]);
 			}
-			String ProjectDBName = "";
 			DatabaseOperation inputquery = new DatabaseOperation();
-			inputquery.switchDB("Starr_Config_Development");
+			InputtableQuery = inputquery.buildJoinQuery(InputtableList);
+			String ProjectDBName = ConfigObjectRepository[0].getProperty("ProjectDBName");
+			/*inputquery.switchDB("Starr_Config_Development");
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
 			Iterator<Entry<Integer, LinkedHashMap<String, String>>> QueryTableiterator = QueryTable.entrySet().iterator();
 			while (QueryTableiterator.hasNext() ) 
@@ -112,8 +120,7 @@ public class MainClass2
 					InputtableQuery=inputrow.get("Query");
 					ProjectDBName=inputrow.get("ProjectDBName");
 				}
-			}
-			
+			}*/			
 			inputTable = new DatabaseOperation();
 			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName").toUpperCase());
 			inputTable.GetDataObjects(InputtableQuery);
