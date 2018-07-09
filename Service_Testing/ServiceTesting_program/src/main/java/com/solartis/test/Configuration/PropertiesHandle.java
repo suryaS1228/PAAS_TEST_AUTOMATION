@@ -73,6 +73,7 @@ public class PropertiesHandle extends Properties
 				this.ActualAndStatus("Y", "Y");    
 			}*/
 			this.InputQuery();
+			this.put("ProjectDBName", this.RdmsValue("ProjectDBName"));
 			this.put("ExecutionName", ExecutionName);
 			this.put("Execution_Flag",OutputChioce);
 			this.put("AuthenticationToken", this.RdmsValue("AuthenticationToken"));

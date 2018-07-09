@@ -18,7 +18,9 @@ import com.solartis.test.exception.RequestFormatException;
 public class JsonHandle implements RequestResponse
 {
 	private JsonPath path;
+	@SuppressWarnings("unused")
 	private JSONObject obj = new JSONObject();
+	@SuppressWarnings("unused")
 	private JSONParser parser = new JSONParser();
 	private JsonReader  doc = new JsonReader();
 	private String file_location;

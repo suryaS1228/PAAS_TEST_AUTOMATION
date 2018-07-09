@@ -20,12 +20,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.healthmarketscience.sqlbuilder.SelectQuery;
-import com.healthmarketscience.sqlbuilder.dbspec.Join;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import com.mysql.jdbc.PreparedStatement;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
