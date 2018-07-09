@@ -406,16 +406,23 @@ public class DatabaseOperation
 
 	    query = new SelectQuery().addAllColumns();
 	    DbJoin[] joins =new DbJoin[TableNames.size()-1];
-	    for (int i = 0; i < TableNames.size(); i++) 
-		{
-	    	schema.addTable(TableNames.get(i)).addColumn("S_No", "number", null);
-	    	if(!(i==0))
-	    	{
-	    		joins[i-1] = spec.addJoin(null, TableNames.get(0), null, TableNames.get(i), "S_No");
-	    		query.addJoins(SelectQuery.JoinType.LEFT_OUTER, joins[i-1]);
-	    	}
-		}
+	    if(TableNames.size()==1)
+	    {
+	    	query.addFromTable(schema.addTable(TableNames.get(0)));
+	    }
+	    else
+	    {
+		    for (int i = 0; i < TableNames.size(); i++) 
+			{
+		    	schema.addTable(TableNames.get(i)).addColumn("S_No", "number", null);
+		    	if(!(i==0))
+		    	{
+		    		joins[i-1] = spec.addJoin(null, TableNames.get(0), null, TableNames.get(i), "S_No");
+		    		query.addJoins(SelectQuery.JoinType.LEFT_OUTER, joins[i-1]);
+		    	}
+			}
+	    }
 	    String query1= query.validate().toString();
 	    return query1;
-	}
+	}	
 }
