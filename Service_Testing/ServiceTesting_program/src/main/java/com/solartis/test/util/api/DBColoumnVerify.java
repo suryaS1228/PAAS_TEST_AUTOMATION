@@ -145,6 +145,7 @@ public class DBColoumnVerify extends DatabaseOperation
 											}
 											break;
 								case "{}": 
+									if(row.get(cond).trim().isEmpty())
 									{
 										ConditionReading=true;
 				 						return ConditionReading;
@@ -155,6 +156,7 @@ public class DBColoumnVerify extends DatabaseOperation
 									}
 									break;
 								case "!{}":
+									if(!(row.get(cond).trim().isEmpty()))
 									{
 										ConditionReading=true;
 				 						return ConditionReading;
