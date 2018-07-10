@@ -70,7 +70,16 @@ public class DBColoumnVerify extends DatabaseOperation
 								CondValue=splits[i].split("<");
 								operator = "<";
 							}
-							
+							else if(splits[i].contains("!{}"))
+							{
+								CondValue=splits[i].split("!{}");
+								operator = "!{}";
+							}
+							else if(splits[i].contains("{}"))
+							{
+								CondValue=splits[i].split("{}");
+								operator = "{}";
+							}
 							
 						String cond=CondValue[0];
 						String value=CondValue[1];
@@ -135,6 +144,27 @@ public class DBColoumnVerify extends DatabaseOperation
 												ConditionReading=false;
 											}
 											break;
+								case "{}": 
+									{
+										ConditionReading=true;
+				 						return ConditionReading;
+									}
+									else
+									{
+										ConditionReading=false;
+									}
+									break;
+								case "!{}":
+									{
+										ConditionReading=true;
+				 						return ConditionReading;
+									}
+									else
+									{
+										ConditionReading=false;
+										
+									}
+									break;
 								}
 								
 							}
