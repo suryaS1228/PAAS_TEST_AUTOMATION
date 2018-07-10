@@ -55,34 +55,34 @@ public class DocumentGeneration extends BaseClass implements API
 					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
 					if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 					{
-					try
-					{
-						//System.out.println("Writing Response to Table");
-						String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-						//System.out.println(responseStatus);
-						if(responseStatus.equals("SUCCESS"))
+						try
 						{
-							//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-							//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn"))+"----------"+actual);
-							output.put("Flag_for_execution", "Completed");
-							output.put("MessageType"," ");
-							output.put("UserMessage"," ");
-							output.put("Time", (end-start) + " Millis");
+							//System.out.println("Writing Response to Table");
+							String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+							//System.out.println(responseStatus);
+							if(responseStatus.equals("SUCCESS"))
+							{
+								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn"))+"----------"+actual);
+								output.put("Flag_for_execution", "Completed");
+								output.put("MessageType"," ");
+								output.put("UserMessage"," ");
+								output.put("Time", (end-start) + " Millis");
+							}
+							else
+							{
+								output.put("Flag_for_execution",responseStatus);
+								output.put("MessageType",response.read("..RuleName"));
+								output.put("UserMessage",response.read("..Message"));
+								break;
+							}
 						}
-						else
+						catch(PathNotFoundException e)
 						{
-							output.put("Flag_for_execution",responseStatus);
-							output.put("MessageType",response.read("..RuleName"));
-							output.put("UserMessage",response.read("..Message"));
-							break;
+								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 						}
-					}
-					catch(PathNotFoundException e)
-					{
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-					}
 					}
 				}
 			}
@@ -94,5 +94,5 @@ public class DocumentGeneration extends BaseClass implements API
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
-	}
+}
 }
