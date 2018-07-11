@@ -8,9 +8,9 @@ import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.util.api.*;
 
-public class EmbrokerIssueCertificate extends BaseClass implements API
+public class EmbrokerSubmission extends BaseClass implements API
 {
-	public EmbrokerIssueCertificate(PropertiesHandle config)
+	public EmbrokerSubmission(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
