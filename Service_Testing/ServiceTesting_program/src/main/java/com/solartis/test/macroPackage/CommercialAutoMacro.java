@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
@@ -23,8 +22,8 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
+import com.solartis.test.util.common.ExcelOperationsPOI;
 import com.solartis.test.util.common.ExcelOperationsPOIInterface;
-import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
 public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterface
 {
@@ -73,10 +72,10 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		{
 			//String RateingModelName ="CA Rating Workbook V1_updated";
 			String RateingModelName = Lookup("filename",configFile);
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
-			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
-		catch (POIException | InvalidFormatException e)
+		catch (POIException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF DTC MACRO", e);
 		}
@@ -87,7 +86,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xlsx";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -103,7 +102,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI(Targetpath);
 			trans= new CommercialAutoMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
@@ -153,7 +152,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 			excel.refresh();
 			excel.save();
 		}
-		catch(DatabaseException|InvalidFormatException e)
+		catch(DatabaseException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF ISO MACRO", e);
 		}
@@ -169,7 +168,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		String updatequery=null;
 		try
 		{
-			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
@@ -206,7 +205,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 		{
 			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO MACRO", e);
 		}
-		catch (POIException|InvalidFormatException e)
+		catch (POIException e)
 		{
 			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF ISO MACRO", e);
 		}
