@@ -1,5 +1,7 @@
 package com.solartis.test.macroPackage;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.MacroException;
@@ -19,15 +23,16 @@ import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
-import com.solartis.test.util.common.ExcelOperationsPOI;
+import com.solartis.test.util.common.ExcelOperationsPOIInterface;
+import com.solartis.test.util.common.ExcelOperationsPOI_xlsx;
 
-public class CommercialAuto extends DBColoumnVerify implements MacroInterface
+public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterface
 {
-	protected ExcelOperationsPOI sampleexcel=null;
+	protected ExcelOperationsPOIInterface sampleexcel=null;
 	protected String Targetpath;
 	protected String Samplepath;
 	protected int numofplans;
-	protected CommercialAuto trans;
+	protected CommercialAutoMacro trans;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
 	protected LinkedHashMap<Integer,String> planname;
@@ -48,7 +53,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 	
-	public CommercialAuto(PropertiesHandle configFile) throws MacroException
+	public CommercialAutoMacro(PropertiesHandle configFile) throws MacroException
 	{
 		super(" ");
 		configTable = new DatabaseOperation();
@@ -66,13 +71,12 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-		// TODO Auto-generated method stub
-			String RateingModelName ="MarineGL_RM";
-			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
-			sampleexcel= new ExcelOperationsPOI(Samplepath);
+			//String RateingModelName ="CA Rating Workbook V1_updated";
+			String RateingModelName = Lookup("filename",configFile);
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xlsx";
+			sampleexcel= new ExcelOperationsPOI_xlsx(Samplepath);
 		}
-		catch (POIException e)
+		catch (POIException | InvalidFormatException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF DTC MACRO", e);
 		}
@@ -83,7 +87,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xlsx";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -99,8 +103,8 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
-			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new CommercialAuto(configFile);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
+			trans= new CommercialAutoMacro(configFile);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
@@ -118,13 +122,11 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
-						excel.getcell(rowNum, columnNum);
+						//excel.getcell(rowNum, columnNum);
 						
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
-							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
 						else
@@ -151,7 +153,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 			excel.refresh();
 			excel.save();
 		}
-		catch(DatabaseException e)
+		catch(DatabaseException|InvalidFormatException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF ISO MACRO", e);
 		}
@@ -164,9 +166,10 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	@Override
 	public void PumpoutData(LinkedHashMap<String, String> outputData,LinkedHashMap<String, String> inputData,PropertiesHandle configFile) throws MacroException
 	{
+		String updatequery=null;
 		try
 		{
-		ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
+			ExcelOperationsPOIInterface excel=new ExcelOperationsPOI_xlsx(Targetpath);
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpoutData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 		//excel.refresh();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpoutData.entrySet())	
@@ -187,18 +190,23 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 					excel.getcell(rowNum-1, columnNum);
 					//System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite+"--------"+CellAddress+"--------------"+condition+"------------"+ConditionReading(condition,inputData));
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
+					
 					outputData.put(Datacolumntowrite, Datatowrite);
+					updatequery="update "+ configFile.getProperty("outputTable")+ " SET "+ rowPumpoutData.get("TableName")+"."+Datacolumntowrite+" ='"+Datatowrite+"' where "+rowPumpoutData.get("TableName")+".Testdata='"+outputData.get("Testdata")+"'";
+					//System.out.println(updatequery); 
+					stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+					stmt.executeUpdate(updatequery);
 				}
 			}
 			//outputData.UpdateRow();
 		}
 		excel.save();
 		}
-		catch(DatabaseException e)
+		catch(DatabaseException|SQLException e)
 		{
 			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF ISO MACRO", e);
 		}
-		catch (POIException e)
+		catch (POIException|InvalidFormatException e)
 		{
 			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF ISO MACRO", e);
 		}
@@ -211,7 +219,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 		switch(configTable.get("Translation_Function"))
 		{
 		case "Date": 
-			Date DateData = Date(Datatowrite,"mm/dd/yyyy",configTable.get("Translation_Format"));
+			Date DateData = Date(Datatowrite,"yyyy-mm-dd",configTable.get("Translation_Format"));
 			outputdata = (T) DateData;
 			break;
 		case "Lookup":
@@ -330,7 +338,7 @@ public class CommercialAuto extends DBColoumnVerify implements MacroInterface
 	
 	
 
-public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+/*public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
 {
 	DatabaseOperation objectInput = new DatabaseOperation();
 	DatabaseOperation objectOutput = new DatabaseOperation();
@@ -367,5 +375,42 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	        rowIterator++;
 	        
 		}
-}
+}*/
+	public static void main(String args[]) throws PropertiesHandleException, DatabaseException, MacroException
+	{
+		DatabaseOperation objectInput = new DatabaseOperation();
+		DatabaseOperation objectOutput = new DatabaseOperation();
+		CommercialAutoMacro MG;
+		PropertiesHandle configFile=null;
+		
+		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
+		DatabaseOperation.ConnectionSetup(configFile);
+		 
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>>  outputtable = objectOutput.GetDataObjects(configFile.getProperty("output_query"));
+		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
+		 int rowIterator = 1;
+		 while (inputtableiterator.hasNext() && outputtableiterator.hasNext()) 
+			{
+				Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
+		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
+		        
+		        if(inputrow.get("Flag_for_execution").equals("Y"))
+				{
+					System.out.println("coming to flow");
+					MG=new CommercialAutoMacro(configFile);
+					MG.LoadSampleRatingmodel(configFile, inputrow);
+					MG.GenerateExpected(inputrow, configFile);
+					MG.PumpinData(inputrow, configFile);
+					MG.PumpoutData(outputrow,inputrow, configFile);
+				}
+		       // inputrow.put("Flag_for_execution", "Completed");	
+		        //objectInput.UpdateRow(rowIterator, inputrow);
+		      //  objectOutput.UpdateRow(rowIterator, outputrow);
+		       // rowIterator++;
+			}
+	}
 }

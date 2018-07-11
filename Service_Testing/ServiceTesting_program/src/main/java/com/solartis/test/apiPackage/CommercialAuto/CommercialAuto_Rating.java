@@ -18,7 +18,7 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.CommercialAuto;
+import com.solartis.test.macroPackage.CommercialAutoMacro;
 import com.solartis.test.macroPackage.MacroInterface;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -45,13 +45,12 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	
 	if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 	{
-		macro=new CommercialAuto(config);	
+		macro=new CommercialAutoMacro(config);	
 	}
  }
  
  public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
  {
-	 this.input = InputData;
 	 if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
 			try 
@@ -105,7 +104,8 @@ public class CommercialAuto_Rating extends BaseClass implements API
  }
 
 
- @Override
+ @SuppressWarnings("null")
+@Override
  public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
  {
 	
@@ -133,27 +133,28 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				try
 					{
 				
-					try
-					{
-					actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					}
-					catch(Exception e)
-					{
-						actual="no value in response";
-					}
-					updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='"+actual+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-	                try {
-	                stmt.executeUpdate(updatequery);
-	                }
-	                catch(SQLException e)
-	                {
-	                	System.out.println("error in update query---"+updatequery);
-	                	e.printStackTrace();
-	                }
-	                updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='"+ResponseStatus+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-					stmt.executeUpdate(updatequery);
-	                output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					output.put("ResponseStatus", ResponseStatus);
+						try
+						{
+							actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						}
+						catch(Exception e)
+						{
+							actual="no value in response";
+						}
+						updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"=\""+actual+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+		                try 
+		                {
+		                	stmt.executeUpdate(updatequery);
+		                }
+		                catch(SQLException e)
+		                {
+		                	System.out.println("error in update query---"+updatequery);
+		                	e.printStackTrace();
+		                }
+		                updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus =\""+ResponseStatus+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+						stmt.executeUpdate(updatequery);
+		                output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						output.put("ResponseStatus", ResponseStatus);
 					}
 					catch(PathNotFoundException e)
 					{
@@ -162,28 +163,28 @@ public class CommercialAuto_Rating extends BaseClass implements API
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 				}
-		}
+			}
 		}
 		else
 		{
 			output.put("ResponseStatus", "FailedResponse");
-			 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-			 stmt.executeUpdate(updatequery);
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			if(Message.equals("Server Busy, Request cannot be processed right now"))
 			{
 				output.put("AnalyserResult","Error-ServerBusy");
-				 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-				 stmt.executeUpdate(updatequery);
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+				stmt.executeUpdate(updatequery);
 
 			}
 			output.put("AnalyserResult","Rule-"+RuleName);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+RuleName+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-			 stmt.executeUpdate(updatequery);
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult =\""+RuleName+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
-			 updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message ='"+Message+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
-			 stmt.executeUpdate(updatequery);
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message =\""+Message+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			stmt.executeUpdate(updatequery);
 		}
 	}
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))

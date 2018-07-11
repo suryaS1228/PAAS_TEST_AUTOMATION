@@ -3,22 +3,10 @@ package com.solartis.test.servicetesting.ServiceTestingProgram;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -63,13 +51,11 @@ public class MainClass
 	public static String Token;
 	public static String ExecutionFlag;
 	@BeforeTest
-	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException, APIException
+	public void loadconfig() throws DatabaseException, PropertiesHandleException,  POIException
 	{
 		try 
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
-			System.setProperty("com.sun.net.ssl.checkRevocation", "false");
-			disableSslVerification();
 			try
 			{
 			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
@@ -97,9 +83,8 @@ public class MainClass
 			fireEventAPI.addListener(listener);
 			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
 			    {
-				  System.out.println("coming to token generator----------------------------");
-			//BaseClass baseclass = new BaseClass();
-		    Token=fireEventAPI.tokenGenerator(config);
+			BaseClass baseclass = new BaseClass();
+		    Token=baseclass.tokenGenerator(config);
 			    }
 		} 
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
@@ -122,12 +107,18 @@ public class MainClass
 						{		
 							System.out.println("---------------------"+ExecutionFlag);
 						    fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
-                            
+                            try
+                            {
 						    fireEventAPI.PumpDataToRequest(inputrow);//PUMPING TESTDATA TO SAMPLEREQUEST s
+                            }
+                            catch(Exception e)
+                            {
+                            	e.printStackTrace();
+                            }
 						    
 						    if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
 						    {
-						    	//System.out.println(Token);
+						    	System.out.println(Token);
 						    fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 						
 						    fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
@@ -144,7 +135,7 @@ public class MainClass
 
 									inputrow = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
 								
-									input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
+									//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 								}
 								else//INPUT AND OUT DB TABLE ARE DIFFERENT
 								{
@@ -152,7 +143,7 @@ public class MainClass
 									
 									
 									
-									output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
+									//output.UpdateRow(RowIterator, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA	
 								
 								}
 							} 
@@ -164,20 +155,20 @@ public class MainClass
 									
 									inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								     
-									input.UpdateRow(RowIterator, inputrow);
+									//input.UpdateRow(RowIterator, inputrow);
 								}
 								else
 								{
 									
 									outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								    
-									output.UpdateRow(RowIterator, outputrow);
+									//output.UpdateRow(RowIterator, outputrow);
 									
 								}
 							} 
 							
 							inputrow.put("Flag_for_execution", "Completed");
-							input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+							//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 							}
 						else
 						{
@@ -246,6 +237,7 @@ public class MainClass
 	 public Object[][] getDataFromDataprovider() throws DatabaseException
 	 {
 		 input = new DatabaseOperation();
+		 System.out.println(config.getProperty("input_query")+"-----"+config.getProperty("output_query"));
 		 inputtable = input.GetDataObjects(config.getProperty("input_query"));
 		 Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
 		 output = new DatabaseOperation();
@@ -276,45 +268,5 @@ public class MainClass
 		 
 		 return combined;
 	 }
-	
-	public static void disableSslVerification() {
-        try
-        {
-            // Create a trust manager that does not validate certificate chains
-            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-                @Override
-                public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                }
-                @Override
-                public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                }
-				
-                
-            }
-            };
-            // Install the all-trusting trust manager
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            // Create all-trusting host name verifier
-            HostnameVerifier allHostsValid = new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-
-			
-            };
-            // Install the all-trusting host verifier
-            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-    }
 	
 }

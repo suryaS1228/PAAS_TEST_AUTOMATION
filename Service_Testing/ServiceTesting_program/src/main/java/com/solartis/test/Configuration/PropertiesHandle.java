@@ -56,7 +56,7 @@ public class PropertiesHandle extends Properties
 		protected void WriteProperty(String UserName) throws DatabaseException, PropertiesHandleException
 		{
 			DatabaseOperation.ConnectionSetup(JDBC_DRIVER, DB_URL, USER, password);						
-          /*  if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
+         /*   if(OutputChioce.equalsIgnoreCase("Output_Saved_in_DB"))
             {
 				 this.ActualAndComparisonStatus("Y", "N");    
             }
@@ -64,6 +64,10 @@ public class PropertiesHandle extends Properties
 		    {
 		    	this.ActualAndComparisonStatus("N", "N");    
 		    }
+			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
+			{
+				this.ActualAndComparisonStatus("Y", "Y");    
+			}
 			if(OutputChioce.equalsIgnoreCase("Compared_Results"))
 			{
 				this.ActualAndComparisonStatus("Y", "Y");    
@@ -82,7 +86,6 @@ public class PropertiesHandle extends Properties
 			this.put("OwnerID", this.RdmsValue("OwnerID"));
 			this.put("Userneme", this.RdmsValue("Userneme"));
 			this.put("Password", this.RdmsValue("Password"));
-			this.put("AuthenticationToken", this.RdmsValue("AuthenticationToken"));
 			this.put("content_type", "application/"+this.RdmsValue("ServiceType"));
 			this.put("token", this.RdmsValue("Token"));
 		    this.put("EventName", this.RdmsValue("EventName"));
@@ -111,7 +114,6 @@ public class PropertiesHandle extends Properties
 			this.put("ExecutionName", ExecutionName);
 			this.put("TestcaseQuery", "SELECT * FROM "+this.RdmsValue("InputTable"));
 			this.put("resultQuery", "SELECT * FROM "+this.RdmsValue("OutputTable"));
-
 			this.put("inputTable", this.RdmsValue("InputTable"));
 			this.put("outputTable", this.RdmsValue("OutputTable"));
 			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
@@ -121,7 +123,11 @@ public class PropertiesHandle extends Properties
 			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");
 			this.InputQuery();
 			this.put("ModeofExecution", ModeofExecution);
-		    DatabaseOperation.CloseConn();		 
+			this.put("AuthenticationToken", this.RdmsValue("AuthenticationToken"));
+		    DatabaseOperation.CloseConn();	
+		    
+		    System.out.println("1----------"+this.get("input_query"));
+		    System.out.println("2----------"+this.get("output_query"));
 		}
 		
 		protected String RdmsQuery(String OutputColoumn) throws PropertiesHandleException
@@ -182,7 +188,7 @@ public class PropertiesHandle extends Properties
 		{
 			try
 			{
-				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableRdmsValue = ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Environment_CONFIG.AuthenticationURL,Environment_CONFIG.AuthenticationToken,Environment_CONFIG.OwnerID,Environment_CONFIG.Userneme,Environment_CONFIG.Password,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
+				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableRdmsValue = ConfigQuery.GetDataObjects("SELECT UserFolder_CONFIG.RootFolder,UserFolder_CONFIG.JDCDriver,UserFolder_CONFIG.DB_URL,UserFolder_CONFIG.DB_UserName,UserFolder_CONFIG.DB_Password,UserFolder_CONFIG.UserDBName,Version_CONFIG.Version,Project_CONFIG.ProjectDBName,Project_CONFIG.ServiceType,Environment_CONFIG.URL,Environment_CONFIG.AuthenticationURL,Environment_CONFIG.OwnerID,Environment_CONFIG.Userneme,Environment_CONFIG.Password,Environment_CONFIG.AuthenticationToken,Project_CONFIG.Token,VersionDetail_CONFIG.EventName,VersionDetail_CONFIG.EventVersion,API_CONFIG.OutputInInputTable,VersionDetail_CONFIG.ClassName,VersionDetail_CONFIG.InputConditonTable,VersionDetail_CONFIG.InputTable,VersionDetail_CONFIG.OutputConditionTable,VersionDetail_CONFIG.OutputTable,VersionDetail_CONFIG.MacroMappingTable,VersionDetail_CONFIG.MacroTranslationTable FROM Project_CONFIG INNER JOIN UserFolder_CONFIG INNER JOIN API_CONFIG ON Project_CONFIG.ProjectID = API_CONFIG.ProjectID INNER JOIN Environment_CONFIG ON API_CONFIG.APIID = Environment_CONFIG.APIID INNER JOIN Version_CONFIG ON Environment_CONFIG.Env_ID = Version_CONFIG.Env_ID INNER JOIN VersionDetail_CONFIG ON (VersionDetail_CONFIG.Verision = Version_CONFIG.Version and VersionDetail_CONFIG.APIID = API_CONFIG.APIID)  WHERE Project_CONFIG.ProjectName ='" + Project +"' AND API_CONFIG.APIName = '" + Api + "' AND Environment_CONFIG.Env_Name = '" + Env + "' AND UserFolder_CONFIG.User_ID = '" + UserName + "' ORDER BY Version_CONFIG.Version DESC LIMIT 1");
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableRdmsValue.entrySet())	
 				{
 					LinkedHashMap<String, String> rowRdmsValue = entry.getValue();
@@ -197,11 +203,12 @@ public class PropertiesHandle extends Properties
 		}
 
 	
-		protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
+		/*protected void ActualAndComparisonStatus(String Actual, String Comparison)// FUNCTION FOR ACTUAL AND STATUS OCCURANCE
 		{
 			this.put("actualFlag", Actual);
 			this.put("ComparisonFlag", Comparison);
-		}	
+			this.put("ExpectedFlag", "");
+		}	*/
 		
 		
 	
@@ -214,7 +221,11 @@ public class PropertiesHandle extends Properties
 				else if(priority.equalsIgnoreCase("high") || priority.equalsIgnoreCase("low"))
 				{
 					this.put("input_query",  this.RdmsQueryWithPriority("InputTable", priority));
-				}		
+				}
+				else
+				{
+					this.put("input_query",  this.RdmsQuery("InputTable"));
+				}
 		}
 		
 	
