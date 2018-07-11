@@ -68,6 +68,7 @@ public class IsoBopRenewalPolicy extends BaseClass implements API
 		
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						output.put("Flag_for_execution", ResponseStatus);
+						output.put("Time", (end-start) + " Millis");
 						}
 						catch(PathNotFoundException | RequestFormatException e)
 						{

@@ -62,6 +62,7 @@ public class IsoBopRenewalQuote extends BaseClass implements API
 						output.put("Flag_for_execution", "Completed");
 						output.put("MessageType"," ");
 						output.put("UserMessage"," ");
+						output.put("Time", (end-start) + " Millis");
 					}
 					else
 					{
