@@ -111,7 +111,7 @@ public class MainClass2
 			String ProjectDBName = ConfigObjectRepository[0].getProperty("ProjectDBName");
 				
 			inputTable = new DatabaseOperation();
-			inputTable.switchDB(ProjectDBName+"_"+ConfigObjectRepository[0].getProperty("UserDBName").toUpperCase());
+			inputTable.switchDB(ProjectDBName+"_"+ConfigObjectRepository[0].getProperty("UserDBName"));
 			inputTable.GetDataObjects(InputtableQuery);
 			
 			ExecutionFlag=ConfigObjectRepository[0].getProperty("Execution_Flag");
