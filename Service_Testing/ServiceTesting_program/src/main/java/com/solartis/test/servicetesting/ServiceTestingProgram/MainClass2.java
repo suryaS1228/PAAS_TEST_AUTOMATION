@@ -52,6 +52,7 @@ public class MainClass2
 	public static Connection Conn=null;
 	public static String ExecutionFlag;
 	public static List<String> InputtableList;
+	public static boolean TokenFlag;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -108,29 +109,14 @@ public class MainClass2
 			DatabaseOperation inputquery = new DatabaseOperation();
 			InputtableQuery = inputquery.buildJoinQuery(InputtableList);
 			String ProjectDBName = ConfigObjectRepository[0].getProperty("ProjectDBName");
-			/*inputquery.switchDB("Starr_Config_Development");
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> QueryTable=inputquery.GetDataObjects("Select * from Project_CONFIG");
-			Iterator<Entry<Integer, LinkedHashMap<String, String>>> QueryTableiterator = QueryTable.entrySet().iterator();
-			while (QueryTableiterator.hasNext() ) 
-			{
-				Entry<Integer, LinkedHashMap<String, String>> inputentry = QueryTableiterator.next();				
-				LinkedHashMap<String, String> inputrow = inputentry.getValue();
-				if(System.getProperty("Project").equalsIgnoreCase(inputrow.get("ProjectName")))
-				{
-					InputtableQuery=inputrow.get("Query");
-					ProjectDBName=inputrow.get("ProjectDBName");
-				}
-			}*/			
+				
 			inputTable = new DatabaseOperation();
 			inputTable.switchDB(ProjectDBName+"_Development_"+System.getProperty("UserName").toUpperCase());
 			inputTable.GetDataObjects(InputtableQuery);
 			
 			ExecutionFlag=ConfigObjectRepository[0].getProperty("Execution_Flag");
-			if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ResponseOnly"))
-		    {
-				BaseClass baseclass = new BaseClass();
-			    Token=baseclass.tokenGenerator(ConfigObjectRepository[0]);
-		    }
+						
+			TokenFlag = true;
 		}
 		catch (Exception e)
 		{
@@ -204,7 +190,17 @@ public class MainClass2
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
 			if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
-				System.out.println("TestData " + inputrow.get("S_No") + "  API--"+apis );					 
+				System.out.println("TestData " + inputrow.get("S_No") + "  API--"+apis );		
+				
+				if (TokenFlag)
+				{
+					if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ResponseOnly"))
+				    {
+					    Token=fireEventAPI.tokenGenerator(ConfigObjectRepository[0]);
+				    }
+					TokenFlag=false;
+				}
+				inputrow.put("Token", Token);
 								
 				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
 	                            

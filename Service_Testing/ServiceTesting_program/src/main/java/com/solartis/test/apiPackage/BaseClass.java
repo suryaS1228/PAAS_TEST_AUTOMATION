@@ -166,7 +166,7 @@ public class BaseClass
 	  try 
 	  {
 		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
-		  request.write("$..Token", Token);
+		 // request.write("$..Token", Token);
 		  return request.FileToString();
 	  } 
 	  catch (RequestFormatException e)
