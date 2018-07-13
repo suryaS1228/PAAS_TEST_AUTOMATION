@@ -46,7 +46,7 @@ public class CoverWalletRate extends BaseClass implements API
 			System.out.println(config.getProperty("AuthenticationURL"));
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-		   String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
+		   String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.98\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
 			//System.out.println(input_data);
 		   http.SendData(input_data);
 			String response_string = http.ReceiveData().toString();	
