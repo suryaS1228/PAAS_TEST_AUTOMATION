@@ -12,6 +12,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.jdbc.Statement;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -168,6 +170,10 @@ public class MainClass
 							} 
 							
 							inputrow.put("Flag_for_execution", "Completed");
+							
+							String updatequery="update "+ config.getProperty("inputTable")+ " SET INPUT_CA_Rate_Policy.Flag_for_execution='Completed' where INPUT_CA_Rate_Policy.Testdata='"+inputrow.get("Testdata")+"'";
+							Statement	stmt = (Statement) Conn.createStatement();
+							stmt.executeUpdate(updatequery);
 							//input.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 							}
 						else

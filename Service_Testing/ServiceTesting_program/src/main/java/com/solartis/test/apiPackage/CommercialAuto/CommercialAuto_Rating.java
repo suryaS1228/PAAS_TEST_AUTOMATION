@@ -168,22 +168,23 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		else
 		{
 			output.put("ResponseStatus", "FailedResponse");
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			System.out.println(updatequery);
 			stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			if(Message.equals("Server Busy, Request cannot be processed right now"))
 			{
 				output.put("AnalyserResult","Error-ServerBusy");
-				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
 				stmt.executeUpdate(updatequery);
 
 			}
 			output.put("AnalyserResult","Rule-"+RuleName);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult =\""+RuleName+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult =\""+RuleName+"\" where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
 			stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message =\""+Message+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message =\""+Message+"\" where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
 			stmt.executeUpdate(updatequery);
 		}
 	}
@@ -269,6 +270,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 	    }	
 	    catch(DatabaseException|SQLException e)
 	    {
+	    	e.printStackTrace();
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}

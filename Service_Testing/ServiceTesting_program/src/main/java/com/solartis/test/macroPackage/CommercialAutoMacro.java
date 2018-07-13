@@ -115,7 +115,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 					{
 						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
 						String CellAddress = rowPumpinData.get("Cell_Address");
-						
+						System.out.println(Datacolumntowrite);
 						String  Datatowrite = InputData.get(Datacolumntowrite);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
@@ -142,6 +142,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 							}
 							else
 							{
+								System.out.println(rowNum-1+"----"+ columnNum+"------"+ Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}

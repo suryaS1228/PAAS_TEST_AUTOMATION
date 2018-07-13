@@ -29,6 +29,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 	protected XSSFSheet worksheet=null;
 	protected String sheet_name = null;
 	protected FileInputStream inputfilestream;
+	OPCPackage	opc=null;
 	protected Cell cell=null;
 	protected int row_number;
 	protected int column_number;
@@ -40,7 +41,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		 {
 			this.path=path;
 			inputfilestream= new FileInputStream(new File(path));
-			OPCPackage	opc = OPCPackage.open(inputfilestream);
+			opc = OPCPackage.open(inputfilestream);
 			workbook = new XSSFWorkbook(opc);
 		 } 
 		 catch (IOException e) 
@@ -340,7 +341,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		try 
 		{	
 			inputfilestream.close();
-			 
+			
 			FileOutputStream output_file =new FileOutputStream(new File(path));  //Open FileOutputStream to write updates
 			this.workbook.write(output_file); //write changes
 		    output_file.close();  //close the stream    
@@ -358,6 +359,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		try 
 		{	
 			inputfilestream.close();
+			opc.close();
 			FileOutputStream output_file =new FileOutputStream(new File(Targetexpectedpath));  //Open FileOutputStream to write updates
 			this.workbook.write(output_file); //write changes
 		    output_file.close();  //close the stream    
@@ -461,5 +463,14 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		
 	}
 	
-	
+	public static void main(String args[]) throws InvalidFormatException, POIException
+	{
+		ExcelOperationsPOI_xlsx obj=new ExcelOperationsPOI_xlsx("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\SampleRatingModel\\SampleRatingV1\\CA Rating Workbook V2.xlsx");
+		obj.getsheets("Policy");
+		System.out.println("data is"+obj.read_data(3,2));
+		obj.write_data(3, 2, "sasi");
+		obj.refresh();
+		System.out.println("data is"+obj.read_data(3,2));
+		obj.save();
+	}
 }
