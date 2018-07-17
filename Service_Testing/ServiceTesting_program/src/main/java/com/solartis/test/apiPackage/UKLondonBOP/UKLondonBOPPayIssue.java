@@ -27,7 +27,7 @@ public class UKLondonBOPPayIssue extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
-	@Override
+@Override
 	public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";
