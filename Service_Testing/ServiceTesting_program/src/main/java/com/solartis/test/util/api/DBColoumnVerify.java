@@ -72,13 +72,34 @@ public class DBColoumnVerify extends DatabaseOperation
 							}
 							else if(splits[i].contains("!{}"))
 							{
-								CondValue=splits[i].split("!{}");
-								operator = "!{}";
+								CondValue=splits[i].split("!\\{\\}");
+								String cond=CondValue[0];
+								if(!(row.get(cond).trim().isEmpty()))
+								{
+									ConditionReading=true;
+			 						return ConditionReading;
+								}
+								else
+								{
+									ConditionReading=false;
+									return ConditionReading;
+									
+								}
 							}
 							else if(splits[i].contains("{}"))
 							{
-								CondValue=splits[i].split("{}");
-								operator = "{}";
+								CondValue=splits[i].split("\\{\\}");
+								String cond=CondValue[0];
+								if(row.get(cond).trim().isEmpty())
+								{
+									ConditionReading=true;
+			 						return ConditionReading;
+								}
+								else
+								{
+									ConditionReading=false;
+									return ConditionReading;
+								}
 							}
 							
 						String cond=CondValue[0];

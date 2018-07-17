@@ -60,7 +60,7 @@ public class RequestHandler
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 			String parentName = rowInputColVerify.get("Parent");
 			List <Object> atribParent = new ArrayList<Object>();
-			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
+			if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
 			{
 				
 				boolean flag=false;
@@ -75,7 +75,7 @@ public class RequestHandler
 				{
 					parentlist.add(parentName);				
 					
-					if(rowInputColVerify.get("AttributeNature").equals("dynamic"))
+					if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("dynamic"))
 					{
 						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
 							root.put(parentName, atribParent);
@@ -106,19 +106,19 @@ public class RequestHandler
 			Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
 			{
-				if(rowInputColVerify.get("AttributeNature").equals("static"))
+				if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
-					//System.out.println(atributeName+"-----------"+atributeStaticValue);
+					System.out.println(atributeName+"-----------"+atributeStaticValue);
 				}
 				else
 				{
-					if(rowInputColVerify.get("iteration").equals("loop"))
+					if(rowInputColVerify.get("iteration").equalsIgnoreCase("loop"))
 					{
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
 			}
 			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
