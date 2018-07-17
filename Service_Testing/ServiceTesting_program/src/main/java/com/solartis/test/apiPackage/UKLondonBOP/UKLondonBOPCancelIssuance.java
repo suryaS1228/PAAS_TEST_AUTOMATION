@@ -10,15 +10,20 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
+import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.UKLondonBOPCancelPreviewMacro;
+import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
 
-public class UKLondonBOPPayIssue extends BaseClass implements API
+public class UKLondonBOPCancelIssuance extends BaseClass implements API  
+{
 
-{ 
-	public UKLondonBOPPayIssue(PropertiesHandle config)
+	public UKLondonBOPCancelIssuance(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -128,4 +133,5 @@ public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String
 	}
 	return output;
 }
+
 }
