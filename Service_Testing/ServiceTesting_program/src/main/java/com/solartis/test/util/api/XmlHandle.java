@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -62,7 +63,24 @@ public class XmlHandle implements RequestResponse{
 		return element.getText();	
 	}
 	
-
+	public List reads(String xpath) throws RequestFormatException
+	{
+		File inputFile = new File(file_location);
+        SAXReader reader = new SAXReader();
+        Document document;
+		
+        try 
+		{
+			document = reader.read(inputFile);
+		} 
+		catch (DocumentException e) 
+		{
+			throw new RequestFormatException("ERROR OCCURS WHILE READING XML FILE", e);
+		}
+		
+        List element = document.selectNodes(xpath);	                                                                                                                                                  
+		return element;	
+	}
 	//*********************method to convert a string into XML************************************************************
 	
 	@SuppressWarnings("resource")

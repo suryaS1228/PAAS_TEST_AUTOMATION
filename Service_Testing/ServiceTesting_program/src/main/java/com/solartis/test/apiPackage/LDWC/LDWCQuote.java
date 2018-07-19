@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
@@ -26,11 +27,10 @@ import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
-
-public class LDWCRating  extends BaseClass implements API
+public class LDWCQuote extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public LDWCRating(PropertiesHandle config) throws APIException
+	public LDWCQuote(PropertiesHandle config) throws APIException
 	{
 	    this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -233,9 +233,8 @@ public class LDWCRating  extends BaseClass implements API
 	 			 RequestHandler req = new RequestHandler(config);
 	 			 req.openTemplate();
 	 			 req.LoadData(requstdetail, inputrow);
-	 			//req.PumpinDatatoRequest(requstdetail, inputrow);
+	 			 //req.PumpinDatatoRequest(requstdetail, inputrow);
 	 			 req.saveJsontoPath("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-LDWC\\rating\\Results\\Request\\Testdata1.xml");
 	 		}
 	 }
 }
-
