@@ -63,6 +63,7 @@ public class XmlHandle implements RequestResponse{
 		return element.getText();	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List reads(String xpath) throws RequestFormatException
 	{
 		File inputFile = new File(file_location);
