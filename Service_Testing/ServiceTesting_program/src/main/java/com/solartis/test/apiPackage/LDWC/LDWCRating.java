@@ -213,7 +213,6 @@ public class LDWCRating  extends BaseClass implements API
 		return output;
 	}
 	
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws DatabaseException, PropertiesHandleException, ClassNotFoundException, TemplateNotFoundException, MalformedTemplateNameException, IOException, TemplateException
 	  {
 	 	 PropertiesHandle config = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-LDWC\\rating\\config\\config.properties");
