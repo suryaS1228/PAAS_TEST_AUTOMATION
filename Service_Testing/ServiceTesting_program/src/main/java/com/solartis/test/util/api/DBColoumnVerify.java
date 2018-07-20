@@ -165,29 +165,6 @@ public class DBColoumnVerify extends DatabaseOperation
 												ConditionReading=false;
 											}
 											break;
-								case "{}": 
-									if(row.get(cond).trim().isEmpty())
-									{
-										ConditionReading=true;
-				 						return ConditionReading;
-									}
-									else
-									{
-										ConditionReading=false;
-									}
-									break;
-								case "!{}":
-									if(!(row.get(cond).trim().isEmpty()))
-									{
-										ConditionReading=true;
-				 						return ConditionReading;
-									}
-									else
-									{
-										ConditionReading=false;
-										
-									}
-									break;
 								}
 								
 							}
