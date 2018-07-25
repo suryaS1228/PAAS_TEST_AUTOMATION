@@ -211,8 +211,19 @@ public class MainClass2
 					fireEventAPI.RequestToString(Token);//SHOWING REQUEST IN LOG 
 								
 					fireEventAPI.AddHeaders(Token);//ADDING HEADER || TOKENS || EVENTS FOR HITTING REQUEST
-									
-					fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
+					
+					try
+					{
+						fireEventAPI.SendAndReceiveData();//RECIEVING AND STORING RESPONSE TO THE FILE
+					}
+					catch (Exception e)
+					{
+						System.out.println(e.getMessage());
+						if(e.getMessage().contains("RETURNS EMPTY RESPONSE"))
+						{
+							outputrow.put("Flag_for_execution", "EMPTY RESPONSE");
+						}
+					}
 									
 					fireEventAPI.ResponseToString();//SHOWING RESPONSE IN LOG 
 			    }	
