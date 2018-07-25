@@ -169,7 +169,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		{
 			output.put("ResponseStatus", "FailedResponse");
 			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
-			System.out.println(updatequery);
+			//System.out.println(updatequery);
 			stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
@@ -180,12 +180,21 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				stmt.executeUpdate(updatequery);
 
 			}
+			try {
+				
+			
 			output.put("AnalyserResult","Rule-"+RuleName);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult =\""+RuleName+"\" where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+RuleName+"' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			System.out.println(updatequery);
 			stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
 			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message =\""+Message+"\" where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
 			stmt.executeUpdate(updatequery);
+			}
+			catch(Exception e)
+			{
+				System.out.println("error in sql");
+			}
 		}
 	}
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))

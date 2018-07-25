@@ -226,6 +226,18 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 			String LookupData = Lookup(Datatowrite, configFile);
 			outputdata = (T) LookupData;
 			break;
+			
+		case "Integer":
+			if(Datatowrite.matches(".*[a-z].*")||Datatowrite.matches(".*[A-Z].*"))
+			{
+				outputdata=(T) Datatowrite;
+			}
+			else
+			{
+			System.out.println(Datatowrite);
+			outputdata=(T) Integer.valueOf(Datatowrite.replace(",", ""));
+			}
+			break;
 		}
 			return outputdata;
 			
