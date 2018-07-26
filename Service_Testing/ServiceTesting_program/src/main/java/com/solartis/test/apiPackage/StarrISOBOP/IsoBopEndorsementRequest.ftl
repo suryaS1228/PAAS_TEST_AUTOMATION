@@ -12,6 +12,7 @@
       "Key": "ISO::BOP::AdditionalInsuredList",
       "AttributeDetailList": [
         <#assign i=0>
+        <#if NoOfAdditionalInsuredArray[0]==0><#else>
         <#list 1..NoOfAdditionalInsuredArray[0] as result>
         {
           "RepeatedAttributeDetail": [
@@ -101,6 +102,7 @@
           ]
         }<#if result?is_last><#else>,</#if><#assign i=i+1>
            </#list>
+           </#if>
       ]
     },
     {
