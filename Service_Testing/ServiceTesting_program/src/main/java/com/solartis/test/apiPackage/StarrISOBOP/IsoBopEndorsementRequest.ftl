@@ -1,7 +1,9 @@
+<#assign NoOfAdditionalInsuredArray=[]><#list NoOfAdditionalInsured as x><#assign NoOfAdditionalInsuredArray=NoOfAdditionalInsuredArray+[x.value]></#list>
+<#if NoOfAdditionalInsuredArray[0]==0><#else>
 <#assign AdditionalInsuredActionArray=[]><#list AdditionalInsuredAction as x><#assign AdditionalInsuredActionArray=AdditionalInsuredActionArray+[x.value]></#list>
 <#assign AdditionalInsuredNumberArray=[]><#list AdditionalInsuredNumber as x><#assign AdditionalInsuredNumberArray=AdditionalInsuredNumberArray+[x.value]></#list>
 <#assign AdditionalInsuredTypeArray=[]><#list AdditionalInsuredType as x><#assign AdditionalInsuredTypeArray=AdditionalInsuredTypeArray+[x.value]></#list>
-<#assign NoOfAdditionalInsuredArray=[]><#list NoOfAdditionalInsured as x><#assign NoOfAdditionalInsuredArray=NoOfAdditionalInsuredArray+[x.value]></#list>
+</#if>
 {
   "ServiceRequestDetail": {
   <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
