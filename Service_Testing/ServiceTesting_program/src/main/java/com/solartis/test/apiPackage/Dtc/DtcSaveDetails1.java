@@ -22,10 +22,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	}
-	
-	
-	
+	}	
 	
 	@Override
 	public void AddHeaders(String Token) throws APIException
@@ -34,7 +31,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", Token);
+			http.AddHeader("Token",Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 
@@ -51,7 +48,7 @@ public class DtcSaveDetails1 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+"_Save1_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
 			response.StringToFile(response_string);	
 		}
 		catch(RequestFormatException | HTTPHandleException e)

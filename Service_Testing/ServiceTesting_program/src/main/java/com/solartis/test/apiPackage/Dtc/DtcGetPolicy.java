@@ -23,8 +23,6 @@ public class DtcGetPolicy extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
-
-  
 	
     @Override
 	public void AddHeaders(String Token) throws APIException

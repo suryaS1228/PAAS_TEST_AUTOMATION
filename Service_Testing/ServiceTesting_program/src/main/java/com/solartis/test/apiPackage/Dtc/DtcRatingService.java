@@ -30,13 +30,68 @@ public class DtcRatingService extends BaseClass implements API
      InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 	OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	if(config.getProperty("status").equals("Y"))
+	if(config.getProperty("ComparisonFlag").equals("Y"))
 	{
 	macro=new DtcMacro(config);	
 	}
  }
  
- 
+
+
+ public void PumpDataToRequest() throws APIException
+ {
+	  try
+	  {
+		 LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify = InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+		 request = new JsonHandle(config.getProperty("request_location")+input.get("testdata")+"_request_"+input.get("State_code")+"_"+input.get("Plan_name")+".json");
+		 //request.StringToFile(sampleInput.FileToString());
+	  
+		 for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
+			{
+				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+				if(InputColVerify.DbCol(rowInputColVerify)&& (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
+				{
+				  if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
+				  {
+					if(rowInputColVerify.get(config.getProperty("InputColumn")).equals("Plan_name"))
+				    {
+				     for(int j=0;j<Planname.length;j++)
+				     {
+				      String DynamicPlannameJson = rowInputColVerify.get(config.getProperty("InputJsonPath"));
+				      String SplitPlanJson[] = DynamicPlannameJson.split("##");
+				      request.write(SplitPlanJson[0]+j+SplitPlanJson[1], Planname[j]);
+				     }
+				    }
+				    else if(rowInputColVerify.get(config.getProperty("InputColumn")).equals("Plan_code"))
+				    {
+				    	System.out.println(Plancode.length);
+				        for(int j=0;j<Plancode.length;j++)
+				        {
+				         String DynamicPlanCodeJson = rowInputColVerify.get(config.getProperty("InputJsonPath"));
+				         String SplitCodeJson[] = DynamicPlanCodeJson.split("##"); 
+				         System.out.println(SplitCodeJson[0]+j+SplitCodeJson[1]);
+				         request.write(SplitCodeJson[0]+j+SplitCodeJson[1], Plancode[j]);
+				        }
+				     }
+				    else
+				    {
+				     request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
+				    }
+				   }
+				  }
+				}
+			if(config.getProperty("ComparisonFlag").equals("Y"))
+			{
+				macro.PumpinData(input, config);    //Data feed into Sample Rating model
+			}
+	
+	  }
+	  catch(DatabaseException | RequestFormatException | POIException | MacroException e)
+	  {
+		  throw new APIException("ERROR PumpDataToRequest FUNCTION -- DTC-RatingService CLASS", e);
+	  }
+}
+
  @Override
  public void AddHeaders(String Token) throws APIException 
  {

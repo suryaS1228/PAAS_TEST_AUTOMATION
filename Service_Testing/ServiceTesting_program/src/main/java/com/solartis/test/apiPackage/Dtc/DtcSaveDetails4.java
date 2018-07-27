@@ -21,11 +21,11 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
 	
-	
+
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
@@ -38,10 +38,10 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
 		}
 	}
-	
+
 	@Override
 	public void SendAndReceiveData() throws APIException
 	{
@@ -50,17 +50,17 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			String input_data = request.FileToString();
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("StateCode1")+"_"+input.get("Plan_name")+".json");
+			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
 			response.StringToFile(response_string);
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
 		}
 	}
-	
+
 	@Override
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
 	{
 		try
 		{
@@ -69,7 +69,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(input))
+				if(OutputColVerify.DbCol(rowOutputColVerify))
 				{
 					 try
 				      {	
@@ -101,9 +101,10 @@ public class DtcSaveDetails4 extends BaseClass implements API
 	
 			return output;	
 			}
-			catch(DatabaseException | RequestFormatException e)
-			{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS4 CLASS", e);
-			}
+		catch(DatabaseException | RequestFormatException e)
+		{
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS3 CLASS", e);
+		}
 }
 }
+
