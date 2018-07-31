@@ -73,6 +73,7 @@ public class MainClass
 			try
 			{
 			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
+			
 			}
 			catch(Exception e)
 			{

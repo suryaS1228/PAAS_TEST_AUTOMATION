@@ -11,40 +11,32 @@
         "Policy":
          {   
           <#list Policy as result>"${result.atrib}":"${result.value}", </#list>
-         
-              
-                 "Coverage": [
-            {
-             "CoverageDetail":[   
-             
-      <#if  DOCoverage[0]=="Yes">
-      
-         {
-          <#list DNOCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
-        
+         "Coverage": [
+      {
+        "CoverageDetail": 
+        {
+        <#if  DOCoverage[0]=="Yes">
+        <#list DNOCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+        </#if>     
+         }
+      },
+       {
+        "CoverageDetail": 
+       {
+       <#if  EPLCoverage[0]=="Yes">
+       <#list EPLICoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
        </#if>
+       }
+      },
+      {
+        "CoverageDetail": 
+      {
+      <#if  FIDCoverage[0]=="Yes">
+      <#list FidCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+      </#if>
+      }
+      }
+    ]
+  }
+}
        
-        <#if  EPLCoverage[0]=="No">
-      
-         ,{
-          <#list EPLICoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
-         </#if>
-        
-         <#if  FIDCoverage[0]=="Yes">
-         
-         ,{
-          <#list FidCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
-        
-         </#if>
-         
-         
-           
-        ]
-        }
-        ]
-        }
-        }          
-        
