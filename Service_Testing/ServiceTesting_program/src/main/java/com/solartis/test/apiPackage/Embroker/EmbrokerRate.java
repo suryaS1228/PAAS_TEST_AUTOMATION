@@ -48,7 +48,7 @@ public class EmbrokerRate extends BaseClass implements API
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 		   String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
-			//System.out.println(input_data);
+			System.out.println(input_data);
 		   http.SendData(input_data);
 			String response_string = http.ReceiveData().toString();	
 			System.out.println(input_data+"/n/n/n"+response_string);
