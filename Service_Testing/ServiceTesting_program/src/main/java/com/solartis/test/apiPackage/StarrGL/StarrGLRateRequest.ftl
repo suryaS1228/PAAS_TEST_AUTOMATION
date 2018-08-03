@@ -20,7 +20,7 @@
         "Classification": {
             "ClassificationDetail": [
               {
-              <#list classification as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+              <#list Classification as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
               </#list>
               }
             ]
