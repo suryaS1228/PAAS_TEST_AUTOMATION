@@ -69,6 +69,7 @@ public class MainClass2
 	{
 		try
 		{
+			disableSslVerification();
 			System.setProperty("jsse.enableSNIExtension", "false");
 			System.setProperty("file.encoding","UTF-8");
 			//System.setProperty("string.encode(\"ascii\", \"ignore\")");
@@ -78,7 +79,6 @@ public class MainClass2
 			charset.set(null,null);
 			String apis = System.getProperty("Api");
 			apii = apis.split("-");			
-			disableSslVerification();
 			//InputtableQuery="SELECT * FROM INPUT_Quote_GL_V6 a INNER JOIN INPUT_GL_PolicyIssuance_V3 b on a.`S.No` = b.`S.No` INNER JOIN INPUT_GL_Cancel_V2 c on b.`S.No` = c.`S.No`";
 			ConfigObjectRepository=new PropertiesHandle[apii.length];
 			OutputDBObjectRepository= new DatabaseOperation[apii.length];
