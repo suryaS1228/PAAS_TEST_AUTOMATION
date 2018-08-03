@@ -69,9 +69,9 @@ public class MainClass2
 	{
 		try
 		{
-			disableSslVerification();
 			System.setProperty("jsse.enableSNIExtension", "false");
 			System.setProperty("file.encoding","UTF-8");
+			disableSslVerification();
 			//System.setProperty("string.encode(\"ascii\", \"ignore\")");
 			// Charset utff = StandardCharsets.US_ASCII;
 			Field charset = Charset.class.getDeclaredField("defaultCharset");
@@ -147,6 +147,7 @@ public class MainClass2
 		{
 			for(int i=0;i<apii.length;i++)
 			{
+				disableSslVerification();
 				GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
 			}
 		}
