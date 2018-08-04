@@ -92,6 +92,7 @@ public class StarrGLRate extends BaseClass implements API
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
+			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName")+config.getProperty("EventVersion"));
 		}
     	catch (HTTPHandleException e) 
 		{
@@ -109,7 +110,7 @@ public class StarrGLRate extends BaseClass implements API
 			{
 				LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 				
-				String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				if(ResponseStatus.equals("SUCCESS"))
 				{				
 					for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
