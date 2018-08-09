@@ -52,15 +52,15 @@ public class DtcSaveDetails2 extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-			  if(OutputColVerify.DbCol(rowOutputColVerify))
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
-				try
+					try
 					{
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
-					output.put("flag_for_execution", "Completed");
+						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						System.out.println(actual);
+						output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)
 					{

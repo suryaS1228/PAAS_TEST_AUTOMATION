@@ -53,7 +53,7 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(rowOutputColVerify))
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 					 try
 				      {	
