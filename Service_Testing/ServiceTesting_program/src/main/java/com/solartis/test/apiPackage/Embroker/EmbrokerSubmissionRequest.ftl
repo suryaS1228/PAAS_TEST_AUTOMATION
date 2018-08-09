@@ -24,7 +24,7 @@
                
                
                ]-->
-               "FundraiseTable": [
+               "Fundraise List": [
                   {
                    "FundraiseDetail": 
                    {
