@@ -9,7 +9,7 @@
    {
      "TravelerList" : [
      <#list 1..numoftravelers[0] as result>
-     {<#assign TravelerListS = "TravelerList"+i>
+     {<#assign TravelerListS = "TravelerList_"+i>
        <#list TravelerListS?eval as result>	  
 	  "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>	  
 	  </#list>
