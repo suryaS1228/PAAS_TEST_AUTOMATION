@@ -41,23 +41,6 @@ public class DtcSaveDetails1 extends BaseClass implements API
 	}
 	
 	@Override
-	public void SendAndReceiveData() throws APIException
-	{
-		try
-		{
-			String input_data = request.FileToString();
-			http.SendData(input_data);
-			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+"_Save1_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
-			response.StringToFile(response_string);	
-		}
-		catch(RequestFormatException | HTTPHandleException e)
-		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
-		}
-	}
-	
-	@Override
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
 		try
