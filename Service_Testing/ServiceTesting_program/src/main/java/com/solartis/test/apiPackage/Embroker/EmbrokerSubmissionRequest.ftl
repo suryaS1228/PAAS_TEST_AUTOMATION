@@ -24,7 +24,7 @@
                
                
                ]-->
-               "Fundraise List": [
+               "FundraiseList": [
                   {
                    "FundraiseDetail": 
                    {
