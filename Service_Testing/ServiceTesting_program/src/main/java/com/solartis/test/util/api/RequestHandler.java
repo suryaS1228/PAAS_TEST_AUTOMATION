@@ -109,7 +109,7 @@ public class RequestHandler
 				if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
-					System.out.println(atributeName+"-----------"+atributeStaticValue);
+					//System.out.println(atributeName+"-----------"+atributeStaticValue);
 				}
 				else
 				{

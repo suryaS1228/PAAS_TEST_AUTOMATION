@@ -38,6 +38,7 @@ public class StarrGLQuote extends BaseClass implements API
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
+			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName")+config.getProperty("EventVersion"));
 		}
     	catch (HTTPHandleException e) 
 		{

@@ -35,27 +35,11 @@ public class DtcSaveDetails2 extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
+			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 
 		{
 			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
-		}
-	}
-	
-	@Override
-	public void SendAndReceiveData() throws APIException
-	{
-		try
-		{
-			String input_data = request.FileToString();
-			http.SendData(input_data);
-			String response_string = http.ReceiveData();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("testdata")+"_response_"+input.get("State_code")+"_"+input.get("Plan_type")+".json");
-			response.StringToFile(response_string);
-		}
-		catch(RequestFormatException | HTTPHandleException e)
-		{
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- DTC-SAVEDETAILS2 CLASS", e);
 		}
 	}
 
@@ -68,15 +52,15 @@ public class DtcSaveDetails2 extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-			  if(OutputColVerify.DbCol(rowOutputColVerify))
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
-				try
+					try
 					{
-					System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-					System.out.println(actual);
-					output.put("flag_for_execution", "Completed");
+						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+						System.out.println(actual);
+						output.put("flag_for_execution", "Completed");
 					}
 					catch(PathNotFoundException e)
 					{

@@ -12,7 +12,7 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
 
-public class DtcPayIssue extends BaseClass implements API 
+public class DtcPayIssue extends BaseClass implements API
 {
 	public DtcPayIssue(PropertiesHandle config)
 	{
@@ -21,28 +21,31 @@ public class DtcPayIssue extends BaseClass implements API
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
+	
+
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
 		try 
 		{
+			System.out.println("Token is"+Token);
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
+			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-PAYISSUE CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
 		}
-		
 	}
-	
+
 	@Override
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
 	{
 		try
 		{
@@ -51,7 +54,7 @@ public class DtcPayIssue extends BaseClass implements API
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-				if(OutputColVerify.DbCol(input))
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
 				{
 					 try
 				      {	
@@ -81,11 +84,12 @@ public class DtcPayIssue extends BaseClass implements API
 					}
 				}
 	
-				return output;	
-		}
+			return output;	
+			}
 		catch(DatabaseException | RequestFormatException e)
 		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-PAYISSUE CLASS", e);
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS3 CLASS", e);
 		}
-	}
 }
+}
+

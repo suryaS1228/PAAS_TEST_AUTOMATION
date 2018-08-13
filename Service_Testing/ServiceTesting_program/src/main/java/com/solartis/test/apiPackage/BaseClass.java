@@ -206,6 +206,7 @@ public class BaseClass
 		}
 		catch(RequestFormatException | HTTPHandleException e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
 	}

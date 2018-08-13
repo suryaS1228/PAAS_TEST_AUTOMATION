@@ -416,10 +416,9 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
 		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
 		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
-		        
+		        System.out.println("TestData "+inputrow.get("Testdata")+"-----Flag_for_execution "+inputrow.get("Flag_for_execution"));
 		        if(inputrow.get("Flag_for_execution").equals("Y"))
 				{
-					System.out.println("coming to flow");
 					MG=new StarrGLMacro(configFile);
 					MG.LoadSampleRatingmodel(configFile, inputrow);
 					MG.GenerateExpected(inputrow, configFile);
