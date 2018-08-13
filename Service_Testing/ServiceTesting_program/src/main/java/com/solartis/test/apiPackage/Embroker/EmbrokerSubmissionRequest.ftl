@@ -9,7 +9,7 @@
         "Policy":
          {   
           <#list Policy as result>"${result.atrib}":"${result.value}",</#list>
-           "Coverage": [
+       <#--    "Coverage": [
                 
                      <#assign i=1>
         <#list 1..Numofcoverage[0] as result>
@@ -23,7 +23,17 @@
         </#list>
                
                
-               ]
+               ]-->
+               "FundraiseList": [
+                  {
+                   "FundraiseDetail": 
+                   {
+                     
+                               <#list FundraiseDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+                     
+                     }
+                    }
+                   ]
                }
                
                }
