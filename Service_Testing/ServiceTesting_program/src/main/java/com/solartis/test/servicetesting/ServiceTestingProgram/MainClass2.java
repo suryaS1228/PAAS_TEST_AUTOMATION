@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -55,12 +56,16 @@ public class MainClass2
 	public static boolean TokenFlag;
 	
 	@BeforeTest
-	public void beforeTest() 
+	public void beforeTest(ITestContext context) 
 	{
 		try
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
 			System.setProperty("file.encoding","UTF-8");
+			
+			context.getCurrentXmlTest().getSuite().setDataProviderThreadCount(5);
+		    context.getCurrentXmlTest().getSuite().setPreserveOrder("True");
+			
 			//System.setProperty("string.encode(\"ascii\", \"ignore\")");
 			// Charset utff = StandardCharsets.US_ASCII;
 			Field charset = Charset.class.getDeclaredField("defaultCharset");
@@ -270,7 +275,7 @@ public class MainClass2
 		}*/		
     }
 	
-	@DataProvider(name="PaaSTest")
+	@DataProvider(name="PaaSTest",parallel=true)
 	public Object[][] dpapi1() throws DatabaseException
 	{
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
