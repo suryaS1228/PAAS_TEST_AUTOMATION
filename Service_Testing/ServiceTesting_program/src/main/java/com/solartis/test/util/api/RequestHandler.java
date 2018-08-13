@@ -118,7 +118,7 @@ public class RequestHandler
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
 			}
 			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
