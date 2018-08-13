@@ -175,6 +175,7 @@
 		                        <Priority>${Priority}</Priority>
 		                        <ExecutionName>${ExecutionName}</ExecutionName>
 								<ModeofExecution>${ModeofExecution}</ModeofExecution>
+								<ThreadCount>${ThreadCount}</ThreadCount>
 		          </systemPropertyVariables>
 		        </configuration>
 			</plugin>

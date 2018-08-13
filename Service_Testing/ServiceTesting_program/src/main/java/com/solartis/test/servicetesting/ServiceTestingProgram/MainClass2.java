@@ -73,7 +73,7 @@ public class MainClass2
 			System.setProperty("jsse.enableSNIExtension", "false");
 			System.setProperty("file.encoding","UTF-8");
 			
-			context.getCurrentXmlTest().getSuite().setDataProviderThreadCount(5);
+			context.getCurrentXmlTest().getSuite().setDataProviderThreadCount(Integer.parseInt(System.getProperty("ThreadCount")));
 		    context.getCurrentXmlTest().getSuite().setPreserveOrder("True");
 			
 			disableSslVerification();
