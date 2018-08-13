@@ -15,9 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-<<<<<<< HEAD
 import org.testng.ITestContext;
-=======
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -25,7 +23,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
->>>>>>> refs/remotes/origin/rajaFlow
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -75,14 +72,11 @@ public class MainClass2
 		{
 			System.setProperty("jsse.enableSNIExtension", "false");
 			System.setProperty("file.encoding","UTF-8");
-<<<<<<< HEAD
 			
 			context.getCurrentXmlTest().getSuite().setDataProviderThreadCount(5);
 		    context.getCurrentXmlTest().getSuite().setPreserveOrder("True");
 			
-=======
 			disableSslVerification();
->>>>>>> refs/remotes/origin/rajaFlow
 			//System.setProperty("string.encode(\"ascii\", \"ignore\")");
 			// Charset utff = StandardCharsets.US_ASCII;
 			Field charset = Charset.class.getDeclaredField("defaultCharset");
