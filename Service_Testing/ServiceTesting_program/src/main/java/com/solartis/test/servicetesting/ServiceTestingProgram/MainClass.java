@@ -96,7 +96,7 @@ public class MainClass
 			fireEventAPI = new FireEventAPI(api);
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
-			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
+			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly")||ExecutionFlag.equals("ExpectedOnly"))
 			    {
 				  System.out.println("coming to token generator----------------------------");
 			//BaseClass baseclass = new BaseClass();
@@ -118,7 +118,7 @@ public class MainClass
 		{	
 			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-				System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
+				//System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
 						{		
 							System.out.println("---------------------"+ExecutionFlag);
