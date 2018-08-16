@@ -279,7 +279,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	
 	public void write_data(int rownum,int columnnum,Object strData)
 	{
-		System.out.print(rownum+columnnum);
+		System.out.print("----"+rownum+"----"+columnnum);
 		 cell = this.worksheet.getRow(rownum).getCell(columnnum);
 		 String s=(strData.getClass()).toString();
 		 //System.out.println(s);
