@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestContext;
 import javax.net.ssl.HostnameVerifier;
@@ -32,6 +33,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.BaseClass;
@@ -145,6 +147,7 @@ public class MainClass2
 	@Test(dataProvider="PaaSTest")
 	public void Api1(Integer RowIterator, Object inputtablerowobj) throws InterruptedException, DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
+		Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
 		LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
 		ObjectMapper inputtableobjectMapper = new ObjectMapper();
 		inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
