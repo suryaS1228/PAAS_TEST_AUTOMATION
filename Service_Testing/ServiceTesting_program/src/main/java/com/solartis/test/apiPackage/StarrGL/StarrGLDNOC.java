@@ -68,7 +68,8 @@ public class StarrGLDNOC extends BaseClass implements API
 								//System.out.println(actual);
 								output.put("Flag_for_execution", "Completed");
 								output.put("RuleName","");
-								output.put("User_message","");
+								output.put("Message","");
+								output.put("Status","");
 								output.put("Time", (end-start) + " Millis");
 							}
 							else
