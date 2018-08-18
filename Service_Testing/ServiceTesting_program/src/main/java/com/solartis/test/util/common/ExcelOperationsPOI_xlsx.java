@@ -10,11 +10,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -27,18 +29,20 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 	protected XSSFSheet worksheet=null;
 	protected String sheet_name = null;
 	protected FileInputStream inputfilestream;
+	OPCPackage	opc=null;
 	protected Cell cell=null;
 	protected int row_number;
 	protected int column_number;
 	
 	
-	public ExcelOperationsPOI_xlsx(String path) throws POIException
+	public ExcelOperationsPOI_xlsx(String path) throws POIException, InvalidFormatException
 	{
 		 try 
 		 {
 			this.path=path;
 			inputfilestream= new FileInputStream(new File(path));
-			workbook = new XSSFWorkbook(inputfilestream);
+			opc = OPCPackage.open(inputfilestream);
+			workbook = new XSSFWorkbook(opc);
 		 } 
 		 catch (IOException e) 
 		 {
@@ -280,7 +284,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 	
 	public void write_data(int rownum,int columnnum,Object strData)
 	{
-		//System.out.print(rownum+columnnum);
+		System.out.print(rownum+columnnum);
 		 cell = this.worksheet.getRow(rownum).getCell(columnnum);
 		 String s=(strData.getClass()).toString();
 		 //System.out.println(s);
@@ -306,9 +310,30 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void refresh()
 	{
-		 XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 //XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+		 FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+		 for (org.apache.poi.ss.usermodel.Sheet sheet : this.workbook) {
+		     for (Row r : sheet) {
+		         for (Cell c : r) {
+		             if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+		            	 //System.out.println(c+"---------------------------------------------"+r);
+		                 try
+		                 {
+		            	 evaluator.evaluateFormulaCell(c);
+		                 }
+		                 catch(Exception e)
+		                 {		                	 
+		                	 System.out.println("SheetName----"+sheet.getSheetName()+"   RowNumber----------"+r.getRowNum()+"   Cell formula is -----"+ c.getCellFormula());	
+		                	 //e.printStackTrace();
+		                 }
+		                 
+		             }
+		         }
+		     }
+		 }
 	}
 	
 	public void save() throws POIException
@@ -316,7 +341,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		try 
 		{	
 			inputfilestream.close();
-			 
+			
 			FileOutputStream output_file =new FileOutputStream(new File(path));  //Open FileOutputStream to write updates
 			this.workbook.write(output_file); //write changes
 		    output_file.close();  //close the stream    
@@ -334,6 +359,7 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		try 
 		{	
 			inputfilestream.close();
+			opc.close();
 			FileOutputStream output_file =new FileOutputStream(new File(Targetexpectedpath));  //Open FileOutputStream to write updates
 			this.workbook.write(output_file); //write changes
 		    output_file.close();  //close the stream    
@@ -437,7 +463,14 @@ public class ExcelOperationsPOI_xlsx implements ExcelOperationsPOIInterface
 		
 	}
 	
+	public static void main(String args[]) throws InvalidFormatException, POIException
+	{
+		ExcelOperationsPOI_xlsx obj=new ExcelOperationsPOI_xlsx("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\SampleRatingModel\\SampleRatingV1\\CA Rating Workbook V2.xlsx");
+		obj.getsheets("Policy");
+		System.out.println("data is"+obj.read_data(3,2));
+		obj.write_data(3, 2, "sasi");
+		obj.refresh();
+		System.out.println("data is"+obj.read_data(3,2));
+		obj.save();
+	}
 }
-
-
-
