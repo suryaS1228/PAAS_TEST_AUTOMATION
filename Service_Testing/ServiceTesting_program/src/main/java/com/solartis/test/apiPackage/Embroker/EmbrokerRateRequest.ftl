@@ -15,37 +15,36 @@
          
               
                  "Coverage": [
-            {
-             "CoverageDetail":[   
+            
+             
              
       <#if  DOCoverage[0]=="Yes">
       
-         {
+         {"CoverageDetail":{
           <#list DNOCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
+       } }
         
        </#if>
        
-        <#if  EPLCoverage[0]=="No">
+        <#if  EPLCoverage[0]=="Yes">
       
-         ,{
+         ,{"CoverageDetail":{
           <#list EPLICoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
+        }}
          </#if>
         
          <#if  FIDCoverage[0]=="Yes">
          
-         ,{
+         , {"CoverageDetail":{
           <#list FidCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }
+        }}
         
          </#if>
          
          
            
-        ]
-        }
-        ]
+       
+        ],
         }
         }          
         
