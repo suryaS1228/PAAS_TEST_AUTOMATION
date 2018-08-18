@@ -75,21 +75,22 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 		}
 	}
 
- public void AddHeaders() throws APIException 
- {
-	  try 
-	  {
-		  http = new HttpHandle(config.getProperty("test_url"),"POST");		
-		  http.AddHeader("Content-Type", config.getProperty("content_type"));
-		  http.AddHeader("Token", config.getProperty("token"));
-		  http.AddHeader("EventName", config.getProperty("EventName")); 
-	  } 
-	  catch (HTTPHandleException e) 
-	  {
-		  throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-RatingService CLASS", e);
-	  }
- }
-
+ @Override
+	public void AddHeaders(String Token) throws APIException
+	{
+		try 
+		{
+			http = new HttpHandle(config.getProperty("test_url"),"POST");
+			http.AddHeader("Content-Type", config.getProperty("content_type"));
+			http.AddHeader("Token",Token);
+			http.AddHeader("EventName", config.getProperty("EventName"));
+		}
+		catch (HTTPHandleException e) 
+		{
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
+		}
+	}
+	
 
 
  @Override
