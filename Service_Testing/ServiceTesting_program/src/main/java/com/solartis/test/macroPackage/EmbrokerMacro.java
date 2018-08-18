@@ -118,8 +118,6 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 						int rowNum = Integer.parseInt(part[1]);
 						//System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowtablePumpinData.get("Sheet_Name"));
-						excel.getcell(rowNum, columnNum);
-						
 						if(rowtablePumpinData.get("Translation_Flag").equals("Y"))
 						{
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowtablePumpinData, configFile));
