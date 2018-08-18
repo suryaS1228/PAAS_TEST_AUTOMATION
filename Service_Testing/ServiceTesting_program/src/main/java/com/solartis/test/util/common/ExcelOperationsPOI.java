@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -280,7 +279,6 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	
 	public void write_data(int rownum,int columnnum,Object strData)
 	{
-		//System.out.print(rownum+columnnum);
 		 cell = this.worksheet.getRow(rownum).getCell(columnnum);
 		 String s=(strData.getClass()).toString();
 		 //System.out.println(s);
@@ -305,8 +303,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 			System.out.println("Not a Valid Format to write. Note: It must be in 'String' or 'Date' or 'Integer' ");
 		}
 	}
-	
-	/*public void refresh()
+		/*public void refresh()
 	{
 		 HSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
 	}*/
@@ -314,6 +311,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 	public void refresh()
 	{
 		 //XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+
 		 FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
 		 for (org.apache.poi.ss.usermodel.Sheet sheet : this.workbook) {
 		     for (Row r : sheet) {
@@ -327,7 +325,9 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		                 catch(Exception e)
 		                 {		                	 
 		                	 System.out.println("SheetName----"+sheet.getSheetName()+"   RowNumber----------"+r.getRowNum()+"   Cell formula is -----"+ c.getCellFormula());	
+
 		                	 e.printStackTrace();
+
 		                 }
 		                 
 		             }
@@ -335,6 +335,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		     }
 		 }
 	}
+	
 	
 	public void save() throws POIException
 	{
