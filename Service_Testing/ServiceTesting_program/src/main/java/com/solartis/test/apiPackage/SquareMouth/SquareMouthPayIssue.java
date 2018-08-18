@@ -1,6 +1,5 @@
 package com.solartis.test.apiPackage.SquareMouth;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -10,10 +9,9 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
-import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.*;
-import com.solartis.test.macroPackage.SquareMouth;
+
 public class SquareMouthPayIssue extends BaseClass implements API 
 {
 	public SquareMouthPayIssue(PropertiesHandle config)
@@ -25,34 +23,7 @@ public class SquareMouthPayIssue extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
-	{
-		this.input = InputData;
-		
-		try
-		{
-			//====================rating model generation===============================================
-			SquareMouth sm=new SquareMouth(config);
-				System.out.println("TestData : " + InputData.get("S_No"));  	
-						if(InputData.get("Flag_for_execution").equals("Y"))
-						{
-							System.out.println("coming to flow");
-							sm.LoadSampleRatingmodel(config, InputData);
-							sm.GenerateExpected(InputData, config);
-							sm.PumpinData(InputData, config);
-							sm.PumpoutData(InputData,InputData, config);
-						}
-		//============================================================================================	
-		sampleInput = new RequestHandler(config);
-		sampleInput.openTemplate();
-		}
-		
-		catch(DatabaseException | IOException | ClassNotFoundException |MacroException  e)
-		{
-			throw new APIException("ERROR OCCURS in Load sample-- BASE CLASS", e);
-		}
-		
-	}
+	
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{

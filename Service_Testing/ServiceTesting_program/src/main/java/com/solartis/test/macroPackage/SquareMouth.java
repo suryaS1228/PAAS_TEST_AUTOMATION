@@ -31,7 +31,6 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 	protected PropertiesHandle configFile;
 	protected LinkedHashMap<Integer,String> planname;
 	protected LinkedHashMap<Integer,String> planpath;
-	DBColoumnVerify condition;
 	
 	public enum Alphabet 
 	{
@@ -50,9 +49,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 	
 	public SquareMouth(PropertiesHandle configFile) throws MacroException
 	{
-		
 		super(" ");
-		condition =new DBColoumnVerify();
 		configTable = new DatabaseOperation();
 		try 
 		{
@@ -69,9 +66,9 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 		try
 		{
 		// TODO Auto-generated method stub
-			String RatingModelName = Lookup(InputData.get("StateName"),configFile);
+			String RateingModelName = Lookup(InputData.get("StateName"),configFile);
 			System.out.println(InputData.get("StateName"));
-			Samplepath= configFile.getProperty("Samplepath")+RatingModelName+".xls";
+			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			System.out.println("Sample rating mosel"+Samplepath);
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
@@ -86,7 +83,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -107,7 +104,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{			
 				LinkedHashMap<String, String> rowPumpinData = entry.getValue();
-				if (rowPumpinData.get("flag_for_execution").equals("Y")&&ConditionReading(rowPumpinData.get("Condition"),InputData))
+				if (rowPumpinData.get("flag_for_execution").equals("Y"))//&&ConditionReading(condition,inputData))
 				{
 					if (rowPumpinData.get("Type").equals("input"))
 					{
@@ -124,7 +121,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"--------"+Datacolumntowrite);
+							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite);
 							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile));
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
@@ -142,7 +139,6 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 							}
 							else
 							{
-								System.out.println(rowNum-1+columnNum+Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}
@@ -175,7 +171,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
 			String condition = rowPumpoutData.get("Condition");
-			if(rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(rowPumpoutData.get("Condition"),inputData))
+			if(rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
 			{
 				System.out.println(condition);
 				if (rowPumpoutData.get("Type").equals("output"))
