@@ -61,7 +61,6 @@ public class MainClass
 			try
 			{
 			config = new PropertiesHandle(System.getProperty("Project"), System.getProperty("Api"), System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
-			
 			}
 			catch(Exception e)
 			{
@@ -84,7 +83,7 @@ public class MainClass
 			fireEventAPI = new FireEventAPI(api);
 			Listener listener = new LogListener();
 			fireEventAPI.addListener(listener);
-			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly")||ExecutionFlag.equals("ExpectedOnly"))
+			  if(ExecutionFlag.equals("ActualOnly")||ExecutionFlag.equals("ActualandComparison")||ExecutionFlag.equals("Comparison")||ExecutionFlag.equals("ResponseOnly"))
 			    {
 			BaseClass baseclass = new BaseClass();
 		    Token=baseclass.tokenGenerator(config);
@@ -105,7 +104,7 @@ public class MainClass
 		{	
 			LinkedHashMap<String, String> inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			LinkedHashMap<String, String> outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
-				//System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
+				System.out.println("Si_NO :"+inputrow.get("S_No")+"TestData : " + inputrow.get("Testdata"));  	
 						if(inputrow.get("Flag_for_execution").equals("Y"))
 						{		
 							System.out.println("---------------------"+ExecutionFlag);

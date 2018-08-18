@@ -30,16 +30,6 @@
                  }
                 ],
             "FormsList": [
-             {
-          <#list Formlist_Coverpage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        },
-         {
-          <#list Formlist_State_Disclosure as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        },
-        {
-          <#list Formlist_SOS as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        },
-            
             {
           <#list Formlist_Declaration as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
         },
@@ -63,16 +53,15 @@
           <#list Formlist_FID as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
         },
         
-         </#if>
-         
-          {
-          <#list Formlist_StateNoticeofCancellation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        },
-         {
-          <#list Formlist_Tria as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        }, 
+         </#if> 
          {
           <#list Formlist_Definition as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+        },
+         {
+          <#list Formlist_State_Disclosure as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+        },
+        {
+          <#list Formlist_SOS as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
         }
            
         ]

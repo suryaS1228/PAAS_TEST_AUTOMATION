@@ -5,11 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -82,17 +77,6 @@ public class BaseClass
 		}*/
 		return Token;
 	}
-	
-//------------------------------------------------------------------------------------------------------------------------------------------------------
-	public void urltopdf(String URL,String path) throws IOException
-	{
-		System.setProperty("jsse.enableSNIExtension", "false");	
-		URL website = new URL(URL);
-		Path targetPath = new File(path).toPath();
-		InputStream in = website.openStream();		
-		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
-	}
-	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
