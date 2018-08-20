@@ -1,6 +1,14 @@
 package com.solartis.test.apiPackage.StarrGL;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -14,9 +22,16 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.common.DatabaseOperation;
+
+
 
 public class StarrGLPolicyIssuance extends BaseClass implements API 
 {
+	public StarrGLPolicyIssuance ()
+	{
+		
+	}
 	public StarrGLPolicyIssuance(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
@@ -92,5 +107,52 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
+	}
+	
+	@SuppressWarnings("static-access")
+	public static void main(String[] args) throws DatabaseException 
+	{        
+        System.out.println("coming to flow1");
+        DatabaseOperation objectInput = new DatabaseOperation();
+		//PropertiesHandle configFile=null;		
+		//configFile = new propertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\CancelPreview\\Config\\configURLtoVideo.properties");
+		StarrGLPolicyIssuance pdfobj = new StarrGLPolicyIssuance();
+		objectInput.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_GL_Development_ADMIN","root","redhat");
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects("Select * From OUTPUT_GL_DNOC");
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
+		int rowIterator = 1;
+		System.out.println("coming to flow3");
+		while (inputtableiterator.hasNext() ) 
+		{
+		 //System.out.println("coming to flow4");
+			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+	        LinkedHashMap<String, String> inputrow = inputentry.getValue();
+	        
+	        if(inputrow.get("Flag_for_execution").equals("Completed"))
+			{
+	        	System.out.println(inputrow.get("Testdata"));
+	            String saveDir = "Q:\\Manual Testing\\Starr\\Starr-GL\\Renewal and Endorsement\\DNOC\\Beta\\pdfs\\";
+	            try {
+	            	
+	            	pdfobj.urltopdf(inputrow.get("DNOC_DocumentURL"),saveDir+inputrow.get("Testdata")+".pdf");
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        	
+			}
+	        //inputrow.put("Flag_for_execution", "Completed");	
+	        objectInput.UpdateRow(rowIterator, inputrow);
+	        rowIterator++;
+	        
+		}
+    }
+
+	public void urltopdf(String URL,String path) throws IOException
+	{
+		System.setProperty("jsse.enableSNIExtension", "false");	
+		URL website = new URL(URL);
+		Path targetPath = new File(path).toPath();
+		InputStream in = website.openStream();		
+		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
 	}
 }
