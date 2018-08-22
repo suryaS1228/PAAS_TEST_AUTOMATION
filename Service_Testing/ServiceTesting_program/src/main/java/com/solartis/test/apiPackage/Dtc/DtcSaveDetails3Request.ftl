@@ -15,8 +15,10 @@
 	  </#list>
      }<#if result?is_last><#else>,</#if><#assign i=i+1>
      </#list>
-     ]
-   },
+     ],
      <#list CustomerInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
+        </#list>	
+   },
+     "OwnerId": "15"
+  
 }

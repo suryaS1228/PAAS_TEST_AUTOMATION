@@ -9,14 +9,16 @@
    {
      "TravelerList" : [
      <#list 1..numoftravelers[0] as result>
-     {<#assign TravelerListS = "TravelerList_"+i>
+     {
+     <#assign TravelerListS = "TravelerList_"+i>
        <#list TravelerListS?eval as result>	  
 	  "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>	  
 	  </#list>
      }<#if result?is_last><#else>,</#if><#assign i=i+1>
      </#list>
-     ]
-   },
+     ],
      <#list CustomerInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
+        </#list>	
+   },
+     "OwnerId": "15"
 }
