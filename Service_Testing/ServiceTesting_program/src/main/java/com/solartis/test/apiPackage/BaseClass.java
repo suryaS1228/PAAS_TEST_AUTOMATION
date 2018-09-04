@@ -125,40 +125,7 @@ public class BaseClass
 		}
 		
 	}
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap) throws APIException 
-	{
-		try
-		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-					
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableInputColVerify.entrySet())	
-			{
-				
-				LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
-				request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
-				request.StringToFile(sampleInput.toString());
-				if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("Y")))
-				{
-					if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-					{
-	                  	request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(rowInputColVerify.get(config.getProperty("InputColumn"))));
-					}
-				}
-				else if(InputColVerify.DbCol(rowInputColVerify) && (rowInputColVerify.get("Flag").equalsIgnoreCase("FromPrevious")))
-				{
-					//if(!input.get(rowInputColVerify.get(config.getProperty("InputColumn"))).equals(""))
-				//	{
-	                  	request.write(rowInputColVerify.get(config.getProperty("InputJsonPath")), input.get(commonmap.get(config.getProperty("InputColumn"))));
-					//}
-				}
-			}
-		}
-			
-		catch(DatabaseException | RequestFormatException  e)
-		{
-			throw new APIException("ERROR OCCURS IN PUMPDATATOREQUEST FUNCTION -- BASE CLASS", e);
-		}
-	}
+	
 
 //------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
 	public String RequestToString(String Token) throws APIException

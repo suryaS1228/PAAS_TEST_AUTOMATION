@@ -101,7 +101,7 @@ public class UKLondonBOPCancelPreview extends BaseClass implements API
 		 }
 	}
 	
-	public void PumpDataToRequest(LinkedHashMap<String, String> InputData) throws APIException
+	public void PumpDataToRequest(LinkedHashMap<String, String> Commanmap,LinkedHashMap<String, String> InputData) throws APIException
 	{	
 		
 		try
@@ -112,7 +112,7 @@ public class UKLondonBOPCancelPreview extends BaseClass implements API
 			}
 		  if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
 		   {
-			super.PumpDataToRequest(InputData);
+			super.PumpDataToRequest(Commanmap,InputData);
 		   }
 
 		}
