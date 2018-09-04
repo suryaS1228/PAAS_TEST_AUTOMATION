@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.MarineGL;
+package com.solartis.test.apiPackage.StarrGL;
 
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
@@ -23,7 +23,7 @@ import com.solartis.test.util.api.HttpHandle;
 public class StarrGLRenewalCancel extends BaseClass implements API 
 {
  MacroInterface macro = null;
- public StarrGLRenewalCancel(PropertiesHandle config) throws SQLException, MacroException
+ public StarrGLRenewalCancel(PropertiesHandle config) throws SQLException, MacroException, DatabaseException
  {
   this.config = config;
   jsonElements = new LinkedHashMap<String, String>();
