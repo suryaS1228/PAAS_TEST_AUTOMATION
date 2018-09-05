@@ -7,10 +7,20 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -118,7 +128,7 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 		//configFile = new propertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\CancelPreview\\Config\\configURLtoVideo.properties");
 		StarrGLPolicyIssuance pdfobj = new StarrGLPolicyIssuance();
 		objectInput.ConnectionSetup("com.mysql.jdbc.Driver","jdbc:mysql://192.168.84.225:3700/Starr_GL_Development_ADMIN","root","redhat");
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects("Select * From OUTPUT_GL_DNOC");
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects("Select * From OUTPUT_GL_NonRenewal");
 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
 		int rowIterator = 1;
 		System.out.println("coming to flow3");
@@ -131,10 +141,10 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 	        if(inputrow.get("Flag_for_execution").equals("Completed"))
 			{
 	        	System.out.println(inputrow.get("Testdata"));
-	            String saveDir = "Q:\\Manual Testing\\Starr\\Starr-GL\\Renewal and Endorsement\\DNOC\\Beta\\pdfs\\";
+	            String saveDir = "Q:\\Manual Testing\\Starr\\Starr-GL\\Renewal and Endorsement\\NonRenewal\\RC\\quote policy renewalQuotePolicy NonRenewal\\pdfs\\";
 	            try {
-	            	
-	            	pdfobj.urltopdf(inputrow.get("DNOC_DocumentURL"),saveDir+inputrow.get("Testdata")+".pdf");
+	            	System.out.println(inputrow.get("Non_DocumentURL"));
+	            	pdfobj.urltopdf(inputrow.get("Non_DocumentURL"),saveDir+inputrow.get("Testdata")+".pdf");
 	            } catch (IOException ex) {
 	                ex.printStackTrace();
 	            }
@@ -149,10 +159,50 @@ public class StarrGLPolicyIssuance extends BaseClass implements API
 
 	public void urltopdf(String URL,String path) throws IOException
 	{
+		disableSslVerification();
 		System.setProperty("jsse.enableSNIExtension", "false");	
 		URL website = new URL(URL);
 		Path targetPath = new File(path).toPath();
 		InputStream in = website.openStream();		
 		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
 	}
+	public static void disableSslVerification() {
+        try
+        {
+            // Create a trust manager that does not validate certificate chains
+            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+				
+                
+            }
+            };
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            // Create all-trusting host name verifier
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+
+			
+            };
+            // Install the all-trusting host verifier
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+}
 }
