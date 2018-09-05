@@ -15,7 +15,6 @@ import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.MacroInterface;
-import com.solartis.test.macroPackage.MarineGL;
 import com.solartis.test.macroPackage.StarrGLRenewalCancelMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -138,7 +137,8 @@ public class StarrGLRenewalCancel extends BaseClass implements API
 				output.put("AnalyserResult","Error-ServerBusy");
 			}
 			output.put("AnalyserResult","Rule-"+RuleName);
-			output.put("User_message",Message);
+			output.put("User_maessage",Message);
+			output.put("Message_code", RuleName);
 		}
 		 }
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
