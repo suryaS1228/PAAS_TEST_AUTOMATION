@@ -106,7 +106,6 @@ public class StarrGLRenewalCancel extends BaseClass implements API
 		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 		if(ResponseStatus.equals("SUCCESS"))
 		{
-		
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 		{
 			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
@@ -119,6 +118,8 @@ public class StarrGLRenewalCancel extends BaseClass implements API
 	
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 					output.put("Flag_for_execution", ResponseStatus);
+					output.put("User_maessage","");
+					output.put("Message_code", "");
 					}
 					catch(PathNotFoundException | RequestFormatException e)
 					{
