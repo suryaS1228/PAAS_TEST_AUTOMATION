@@ -1,12 +1,12 @@
 <#assign array=[]><#list numofai as x><#assign array=array+[x.value]></#list><#assign i=0>
 {
   "Policy": {
-  "AdditionalInsuredList": [
+  "AdditionalInsuredList": [ <#assign j=0>
      <#list AdditionalInsuredType as result>{
         "${result.atrib}":"${result.value}",
-        "AdditionalInsuredDetail": [
+        "AdditionalInsuredDetail": [ <#assign j=j+1>
         <#list 1..array[i] as x>
-          {<#assign AdditionalInsuredDetails="AdditionalInsuredDetail"+x>
+          {<#assign AdditionalInsuredDetails="AdditionalInsuredDetail"+j>
           <#list AdditionalInsuredDetails?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
           </#list>
           }<#if x?is_last><#else>,</#if>
