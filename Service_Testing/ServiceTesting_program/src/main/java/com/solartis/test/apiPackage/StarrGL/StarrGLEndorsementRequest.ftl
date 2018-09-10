@@ -6,7 +6,7 @@
         "${result.atrib}":"${result.value}",
         "AdditionalInsuredDetail": [
         <#list 1..array[i] as x>
-          {<#assign AdditionalInsuredDetails=AdditionalInsuredDetail+x>
+          {<#assign AdditionalInsuredDetails="AdditionalInsuredDetail"+x>
           <#list AdditionalInsuredDetails?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
           </#list>
           }<#if x?is_last><#else>,</#if>
