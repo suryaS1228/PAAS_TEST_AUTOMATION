@@ -10,20 +10,20 @@ import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.util.api.DBColoumnVerify;
-import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.*;
 
-public class DtcNonMonetoryEndorsement extends BaseClass implements API
+public class DtcNonMonetoryEndorsement extends BaseClass implements API 
 {
 	public DtcNonMonetoryEndorsement(PropertiesHandle config)
-	{ 
-		this.config=config;
+	{
+		System.out.println("coming to to NME");
+		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
-	}
+	}	
 	
 	@Override
 	public void AddHeaders(String Token) throws APIException
@@ -32,60 +32,67 @@ public class DtcNonMonetoryEndorsement extends BaseClass implements API
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", Token);
-			http.AddHeader("EventName", config.getProperty("EventName"));	
+			http.AddHeader("Token",Token);
+			http.AddHeader("EventName", config.getProperty("EventName"));
+			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName"));
 		}
 		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-NON-MONETORY-ENDROSEMENT CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS1 CLASS", e);
 		}
 	}
 	
 	@Override
-public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
-{
-	try
+	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
-		String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));		
-		for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+		try
 		{
-			LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-			if(OutputColVerify.DbCol(rowOutputColVerify))
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+			String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
-				 try
-			      {	
-						if(StatusCode.equals("SUCCESS"))
-						{
-							System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-							String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-							System.out.println(actual);
-							output.put("Flag_for_execution", StatusCode);
-							
-						}
-						else
-						{
-							String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-							String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-							output.put("Flag_for_execution", "Error response");
-							output.put("Message_code", MessageCode);
-							output.put("User_message", UserMessage);
-							
-						}
-			      }
+				LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+				if((rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))&&OutputColVerify.ConditionReading(rowOutputColVerify.get("OutputColumnCondtn"),input))
+				{
+				try
+					{
+				
+				if(StatusCode.equals("SUCCESS"))
+				{
+	           
+					String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
+					System.out.println(actual);
+					output.put("Flag_for_execution", StatusCode);
+					
+				}
+				else
+				{
+					String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+					String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+					output.put("Flag_for_execution", "Error response");
+					output.put("Message_code", MessageCode);
+					output.put("User_maessage", UserMessage);
+					
+				}
+					}
 				catch(PathNotFoundException e)
 				{
 					output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 				}
-				}
 			}
+		}
 	
-		return output;	
-	}
-	catch(DatabaseException | RequestFormatException e)
-	{
-		throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-NON-MONETORY-ENDROSEMENT CLASS", e);
-	}
+		
+		return output;
+		}
+		catch(DatabaseException | RequestFormatException e)
+		{
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTC-SAVEDETAILS1 CLASS", e);
+		}
 }
 }
+
+
+
+
