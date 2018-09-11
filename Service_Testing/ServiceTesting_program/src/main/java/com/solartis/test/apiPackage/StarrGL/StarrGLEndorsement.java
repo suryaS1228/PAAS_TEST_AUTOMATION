@@ -69,7 +69,7 @@ public class StarrGLEndorsement extends BaseClass implements API
 		{
 			try 
 			{
-				macro.PumpinData(input, config);
+				macro.PumpinData(InputData, config);
 			} 
 			catch (DatabaseException | POIException | MacroException e) 
 			{
