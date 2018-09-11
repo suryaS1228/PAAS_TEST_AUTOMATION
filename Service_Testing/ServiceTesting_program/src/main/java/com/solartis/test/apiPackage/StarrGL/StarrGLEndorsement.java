@@ -135,23 +135,23 @@ public class StarrGLEndorsement extends BaseClass implements API
 							output.put("UserMessage",response.read("..Message"));
 							break;
 						}
-						if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
-						{
-							macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
-						}
 					}
-					catch(PathNotFoundException | POIException | MacroException e)
+					catch(PathNotFoundException e)
 					{
 							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
 					}
 				}
 			}
+			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
+			{
+				macro.PumpoutData(output, input, config);   //	data pumped out from expected rating model to db table
+			}
 			//System.out.println(output.get("MessageType"));
 			return output;
 		
 		}
-		catch(DatabaseException | RequestFormatException e)
+		catch(DatabaseException | RequestFormatException | POIException | MacroException e)
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
