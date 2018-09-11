@@ -178,10 +178,10 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 		{
 			LinkedHashMap<String, String> rowPumpoutData = entry.getValue();
 			String condition = rowPumpoutData.get("Condition");
-			if (rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(condition,inputData))
+			if (rowPumpoutData.get("Type").equals("output"))
 			{
-				if (rowPumpoutData.get("Type").equals("output"))
-				{
+				if (rowPumpoutData.get("flag_for_execution").equalsIgnoreCase("Y") &&ConditionReading(condition,inputData))
+				{				
 					String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
 					String CellAddress = rowPumpoutData.get("Cell_Address");
 					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
