@@ -215,6 +215,27 @@ public class FireEventAPI implements API
 		for (Listener listen : listeners1)
 			listen.afterTokenGeneratior();
 		return token;
+	}
+
+	@Override
+	public LinkedHashMap<String, String> differrence(LinkedHashMap<String, String> inputrow,
+			LinkedHashMap<String, String> output) throws APIException {
+		// TODO Auto-generated method stub
+		for (Listener listen : listeners1)
+			listen.beforedifferrence();
+		try
+		{
+			output =api.differrence(inputrow,output);
+		}
+		catch(APIException e)
+		{
+			for (Listener listen : listeners1)
+				listen.onError(e);
+			throw new APIException(e);
+		}
+		for (Listener listen : listeners1)
+			listen.afterCompareFunction();
+		return output;
 	}	
 	
 }

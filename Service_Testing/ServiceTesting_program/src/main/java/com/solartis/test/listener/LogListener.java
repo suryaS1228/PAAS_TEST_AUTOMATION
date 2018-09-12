@@ -146,4 +146,16 @@ public class LogListener implements Listener
 		// TODO Auto-generated method stub
 		Log.info("afterTokenGeneratior");
 	}
+
+	@Override
+	public void beforedifferrence() {
+		// TODO Auto-generated method stub
+		Log.info("beforedifference");
+	}
+
+	@Override
+	public void afterdifferrence() {
+		// TODO Auto-generated method stub
+		Log.info("afterdifference");
+	}
 }

@@ -505,4 +505,48 @@ public class BaseClass
 	       e.printStackTrace();
 	     }
 	}
+	
+	//==========================================================================================================================================
+	public LinkedHashMap<String, String> differrence(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	{		 
+	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
+	{		
+	    try
+	    {
+	    	LinkedHashMap<Integer, LinkedHashMap<String, String>> tableStatusColVerify = StatusColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+	    	for (Entry<Integer, LinkedHashMap<String, String>> entry : tableStatusColVerify.entrySet()) 	
+			{	
+			    LinkedHashMap<String, String> rowStatusColVerify = entry.getValue();
+			    String condition = rowStatusColVerify.get("OutputColumnCondtn");
+			    long expected;
+			    long actual;
+			    long diff;
+			    
+			    if(conditioncheck.ConditionReading(condition, inputrow) && (rowStatusColVerify.get("Comaparision_Flag").equalsIgnoreCase("Y")))
+				{
+					String ExpectedColumn = rowStatusColVerify.get(config.getProperty("ExpectedColumn"));
+					String ActualColumn = rowStatusColVerify.get(config.getProperty("OutputColumn"));
+					String StatusColumn = rowStatusColVerify.get(config.getProperty("StatusColumn"));
+					if(!(ActualColumn.equals("")) && !(ExpectedColumn.equals("")))
+					{
+						expected=(long) Double.parseDouble(outputrow.get(ExpectedColumn));
+						actual=(long) Double.parseDouble(outputrow.get(ActualColumn));
+						
+                       diff=actual-expected;
+                       outputrow.put(StatusColumn,Double.toString(diff));
+			    		
+				}
+				}
+			}
+
+	    }	
+	    catch(DatabaseException e)
+	    {
+	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
+	    }
+	}
+	 return outputrow;
+ }
+	
+	
 }

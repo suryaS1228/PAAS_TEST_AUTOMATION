@@ -21,4 +21,6 @@ public interface Listener
 	public void onError(Throwable e);
 	public void beforeTokenGenerator();
 	public void afterTokenGeneratior();
+	public void beforedifferrence();
+	public void afterdifferrence();
 }

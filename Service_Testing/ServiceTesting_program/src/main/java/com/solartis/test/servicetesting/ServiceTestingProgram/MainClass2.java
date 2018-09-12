@@ -244,7 +244,7 @@ public class MainClass2
 						//System.out.println("Update completed");
 					}					
 				}		
-				if(ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ActualandComparison"))
+				if(ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Difference"))
 				{
 					if(outputtablechoice.equalsIgnoreCase("Y"))
 					{									
@@ -259,6 +259,11 @@ public class MainClass2
 						OutputTable.UpdateRow(RowIterator, outputrow);
 						commonMap.putAll(outputrow);									
 					}
+				}
+				if(ExecutionFlag.equalsIgnoreCase("Difference"))
+				{
+					inputrow = fireEventAPI.differrence(inputrow,outputrow);
+					inputTable.UpdateRow(RowIterator, inputrow);
 				}
 				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
