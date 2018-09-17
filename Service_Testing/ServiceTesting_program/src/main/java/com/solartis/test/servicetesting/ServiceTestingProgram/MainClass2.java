@@ -63,6 +63,7 @@ public class MainClass2
 	public static String ExecutionFlag;
 	public static List<String> InputtableList;
 	public static boolean TokenFlag;
+	public int number_of_API;
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -85,7 +86,7 @@ public class MainClass2
 			inputDBObjectRepository= new DatabaseOperation[apii.length];
 			OutputTableRepository = new Object[apii.length];
 			inputIndividualTableRepository = new Object[apii.length];
-			
+			number_of_API = apii.length;
 			InputtableList = new ArrayList<String> ();
 			for(int i=0;i<apii.length;i++)
 			{
@@ -372,18 +373,25 @@ public class MainClass2
 		BaseClass base = new BaseClass();
 		try
 		{
+			//System.out.println("number_of_API________" + number_of_API);
+			for (int s=0; s<number_of_API; s++)
+			{
+			//System.out.println("inside the loop");
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
-			String ReportPath = ConfigObjectRepository[0].getProperty("report_location")+ConfigObjectRepository[0].getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
-			base.generateReport(ConfigObjectRepository[0], ReportPath);
+			String ReportPath = ConfigObjectRepository[s].getProperty("report_location")+ConfigObjectRepository[s].getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			//System.out.println(ReportPath);
+			base.generateReport(ConfigObjectRepository[s], ReportPath);
 			
-			if(ConfigObjectRepository[0].getProperty("Execution_Flag").equals("ActualandComparison")||ConfigObjectRepository[0].getProperty("Execution_Flag").equals("Comparison"))
+			if(ConfigObjectRepository[s].getProperty("Execution_Flag").equals("ActualandComparison")||ConfigObjectRepository[s].getProperty("Execution_Flag").equals("Comparison"))
 		    {
 				base.comparisonReport(ReportPath);
 		    }
 
-			DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults"));		
+			DirectoryManipulation.zipFolder(ConfigObjectRepository[s].getProperty("ZipFolderPath"), ConfigObjectRepository[s].getProperty("OverallResults"));		
+			
+			}
 			DatabaseOperation.CloseConn();
-		}
+			}
 		catch (Exception e)
 		{
 			e.printStackTrace();
