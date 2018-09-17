@@ -116,7 +116,7 @@ public class BaseClass
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
 			sampleInput.LoadData(tableInputColVerify, InputData);
 			sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData,commonmap);	
-			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
+			sampleInput.saveJsontoPath(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_request"+".json");
 		}
 		catch( DatabaseException| TemplateException| IOException e)
 		{
