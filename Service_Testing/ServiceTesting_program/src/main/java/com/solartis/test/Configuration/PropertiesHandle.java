@@ -72,6 +72,8 @@ public class PropertiesHandle extends Properties
 			{
 				this.ActualAndStatus("Y", "Y");    
 			}*/
+			this.put("APIName", Api);
+			this.put("request_response_Location", this.RdmsValue("RootFolder") + "/" + Project + "/");
 			this.InputQuery();
 			this.put("ProjectDBName", this.RdmsValue("ProjectDBName"));
 			this.put("UserDBName", this.RdmsValue("UserDBName"));

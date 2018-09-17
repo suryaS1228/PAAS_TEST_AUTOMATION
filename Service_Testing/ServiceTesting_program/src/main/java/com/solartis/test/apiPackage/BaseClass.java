@@ -132,7 +132,7 @@ public class BaseClass
 	{
 	  try 
 	  {
-		  request = new JsonHandle(config.getProperty("request_location")+input.get("Testdata")+".json");
+		  request = new JsonHandle(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_request"+".json");
 		 // request.write("$..Token", Token);
 		  return request.FileToString();
 	  } 
@@ -168,7 +168,7 @@ public class BaseClass
 		    http.SendData(input_data);
 			String response_string = http.ReceiveData();
 		    end = System.currentTimeMillis();
-			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+".json");
+		    response = new JsonHandle(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_response"+".json");
 			response.StringToFile(response_string);
 		}
 		catch(RequestFormatException | HTTPHandleException e)
@@ -547,6 +547,22 @@ public class BaseClass
 	}
 	 return outputrow;
  }
-	
+	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
+	{
+		String path=(String) config.get("request_response_Location")+InputData.get("Testdata");
+		if (new File(path).exists())
+		{
+			/*for(File file: new File(path).listFiles()) 
+			    if (!file.isDirectory()) 
+			        file.delete();*/
+		}
+		else 
+		{
+			new File(path).mkdirs();
+		}
+		//System.out.println(path+"/");
+		return path+"/";
+		
+	}
 	
 }
