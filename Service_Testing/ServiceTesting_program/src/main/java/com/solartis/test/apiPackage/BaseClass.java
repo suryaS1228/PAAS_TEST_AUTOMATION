@@ -30,6 +30,7 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
+import com.solartis.test.servicetesting.ServiceTestingProgram.MainClass2;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
@@ -54,7 +55,7 @@ public class BaseClass
 	protected ArrayList<String> errorMessage=new ArrayList<String>();
 	protected DBColoumnVerify conditioncheck = new DBColoumnVerify();
 	protected LinkedHashMap<Integer, LinkedHashMap<String, String>> table1;
-
+	public static PropertiesHandle[] ConfigObjectRepository2;
 	protected long start;
 	protected long end;
 	public String tokenGenerator(PropertiesHandle config)
@@ -392,15 +393,23 @@ public class BaseClass
 	protected String excelreportlocation;
 	public void generateReport(PropertiesHandle config,String ReportPath) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
+		MainClass2 obj = new MainClass2();
+		int j = obj.number_of_API;
+		String[] apii_list= obj.apii;
+		System.out.println(apii_list[0]);
+		
 		try 
 		{
 			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, ReportPath);
-			sample.save();
-		    
-			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), ReportPath, "Testcases");
-			this.ExportToExcelTable(config.getProperty("resultQuery"), ReportPath, "ComparisonResults");
+			
+		   	for(int i=0;i<apii_list.length;i++)
+		   	{
+			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), ReportPath, apii_list[i]+"_Input_Table");
+			this.ExportToExcelTable(config.getProperty("resultQuery"), ReportPath, apii_list[i]+"_Output_Table");		
+		   	}
+		   	sample.save();
 		}
 		catch(Exception e) 
 		{
@@ -549,7 +558,9 @@ public class BaseClass
  }
 	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
 	{
-		String path=(String) config.get("request_response_Location")+InputData.get("Testdata");
+		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+InputData.get("Testdata");
+		System.out.println(path);
+		
 		if (new File(path).exists())
 		{
 			/*for(File file: new File(path).listFiles()) 

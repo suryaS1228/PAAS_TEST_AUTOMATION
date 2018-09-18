@@ -367,7 +367,7 @@ public class MainClass2
 		DirectoryManipulation.deleteFileFromDirectory(config.getProperty("report_location"));			
 	}
 	
-	@AfterTest
+	/*@AfterTest
 	public void connectionclose() throws DatabaseException, POIException, APIException
 	{
 		BaseClass base = new BaseClass();
@@ -393,6 +393,30 @@ public class MainClass2
 			DatabaseOperation.CloseConn();
 			}
 		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}*/
+	
+	@AfterTest
+	public void connectionclose() throws DatabaseException, POIException, APIException
+	{
+		BaseClass base = new BaseClass();
+		try 
+		{
+			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+			String ReportPath = ConfigObjectRepository[0].getProperty("report_location_new")+ConfigObjectRepository[0].getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
+			base.generateReport(ConfigObjectRepository[0], ReportPath);
+			if(ConfigObjectRepository[0].getProperty("Execution_Flag").equals("ActualandComparison")||ConfigObjectRepository[0].getProperty("Execution_Flag").equals("Comparison"))
+		    {
+				base.comparisonReport(ReportPath);
+		    }
+
+			DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults_new"));		
+			DatabaseOperation.CloseConn();
+	    }
+	
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
