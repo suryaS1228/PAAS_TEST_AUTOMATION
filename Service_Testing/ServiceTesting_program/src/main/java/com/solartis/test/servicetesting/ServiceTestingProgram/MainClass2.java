@@ -64,6 +64,7 @@ public class MainClass2
 	public static List<String> InputtableList;
 	public static boolean TokenFlag;
 	public int number_of_API;
+	BaseClass base = new BaseClass();
 	
 	@BeforeTest
 	public void beforeTest() 
@@ -146,6 +147,7 @@ public class MainClass2
 		inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 		if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
 		{
+			base.deleteFolderContents(ConfigObjectRepository[0].get("request_response_Location")+"Results/"+"Test_Results/"+inputrow.get("Testdata")+"/");
 			for(int i=0;i<apii.length;i++)
 			{
 				disableSslVerification();
@@ -191,7 +193,7 @@ public class MainClass2
 			{
 				System.out.println("objects is null.............");
 			}
-		
+			
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			outputrow = outputtableobjectMapper.convertValue(outputtablerowobj, LinkedHashMap.class);
 			individualinputrow = individualInputtableobjectMapper.convertValue(individualinputtablerowobj, LinkedHashMap.class);
@@ -401,7 +403,7 @@ public class MainClass2
 	@AfterTest
 	public void connectionclose() throws DatabaseException, POIException, APIException
 	{
-		BaseClass base = new BaseClass();
+		
 		try 
 		{
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());

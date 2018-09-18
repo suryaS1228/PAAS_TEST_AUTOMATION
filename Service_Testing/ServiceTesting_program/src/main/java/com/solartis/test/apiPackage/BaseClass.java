@@ -30,7 +30,6 @@ import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.servicetesting.ServiceTestingProgram.MainClass2;
 import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
