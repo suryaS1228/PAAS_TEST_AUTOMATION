@@ -406,7 +406,7 @@ public class MainClass2
 		{
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
 			String ReportPath = ConfigObjectRepository[0].getProperty("report_location_new")+ConfigObjectRepository[0].getProperty("ExecutionName")+"_AnalysisReport_"+DateandTime+".xls";
-			base.generateReport(ConfigObjectRepository[0], ReportPath);
+			base.generateReport(ConfigObjectRepository, ReportPath);
 			if(ConfigObjectRepository[0].getProperty("Execution_Flag").equals("ActualandComparison")||ConfigObjectRepository[0].getProperty("Execution_Flag").equals("Comparison"))
 		    {
 				base.comparisonReport(ReportPath);

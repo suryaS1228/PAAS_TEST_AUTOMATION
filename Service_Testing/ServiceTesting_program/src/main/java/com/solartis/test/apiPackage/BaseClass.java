@@ -391,23 +391,18 @@ public class BaseClass
 	
 	
 	protected String excelreportlocation;
-	public void generateReport(PropertiesHandle config,String ReportPath) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
+	public void generateReport(PropertiesHandle[] config,String ReportPath) throws DatabaseException, POIException, FileNotFoundException, SQLException, IOException
 	{
-		MainClass2 obj = new MainClass2();
-		int j = obj.number_of_API;
-		String[] apii_list= obj.apii;
-		System.out.println(apii_list[0]);
-		
 		try 
 		{
-			String Samplepath = config.getProperty("report_template_location")+"ResultTemplate.xls";
+			String Samplepath = config[0].getProperty("report_template_location")+"ResultTemplate.xls";
 			ExcelOperationsPOI sample=new ExcelOperationsPOI(Samplepath);
 			sample.Copy(Samplepath, ReportPath);
 			
-		   	for(int i=0;i<apii_list.length;i++)
+		   	for(int i=0;i<config.length;i++)
 		   	{
-			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), ReportPath, apii_list[i]+"_Input_Table");
-			this.ExportToExcelTable(config.getProperty("resultQuery"), ReportPath, apii_list[i]+"_Output_Table");		
+		   		this.ExportToExcelTable(config[i].getProperty("TestcaseQuery"), ReportPath, config[i].getProperty("APIName")+"_Input_Table");
+		   		this.ExportToExcelTable(config[i].getProperty("resultQuery"), ReportPath, config[i].getProperty("APIName")+"_Output_Table");		
 		   	}
 		   	sample.save();
 		}
