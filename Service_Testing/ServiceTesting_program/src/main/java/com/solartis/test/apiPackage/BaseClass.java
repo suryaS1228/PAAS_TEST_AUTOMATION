@@ -569,4 +569,14 @@ public class BaseClass
 		
 	}
 	
+	public void deleteFolderContents(String path)
+	{
+		if (new File(path).exists())
+		{
+			for(File file: new File(path).listFiles()) 
+			    if (!file.isDirectory()) 
+			        file.delete();
+		}
+	}
+	
 }
