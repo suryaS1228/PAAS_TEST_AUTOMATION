@@ -120,7 +120,7 @@ public class PropertiesHandle extends Properties
 			this.put("outputTable", this.RdmsValue("OutputTable"));
 			this.put("TestdataPath", this.RdmsValue("RootFolder") + "/" + Project + "/"+ Api + "/Testdata/"+this.getProperty("ExecutionName")+".xls");
 			this.put("ZipFolderPath", this.RdmsValue("RootFolder") + "/" + Project + "/" +  Api + "/Results/");
-			this.put("ZipFolderPath_new", this.RdmsValue("RootFolder") + "/" + Project + "/" + "/Results/");
+			this.put("ZipFolderPath_new", this.RdmsValue("RootFolder") + "/" + Project + "/Results/");
 			Date date = new Date();
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(date);
 			this.put("OverallResults", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Reports/"+this.getProperty("ExecutionName")+"_"+Env+"_"+DateandTime+".zip");

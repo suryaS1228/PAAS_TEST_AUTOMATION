@@ -553,9 +553,7 @@ public class BaseClass
  }
 	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
 	{
-		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+InputData.get("Testdata");
-		System.out.println(path);
-		
+		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+InputData.get("Testdata");		
 		if (new File(path).exists())
 		{
 			/*for(File file: new File(path).listFiles()) 

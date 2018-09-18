@@ -412,7 +412,7 @@ public class MainClass2
 				base.comparisonReport(ReportPath);
 		    }
 
-			DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath"), ConfigObjectRepository[0].getProperty("OverallResults_new"));		
+			DirectoryManipulation.zipFolder(ConfigObjectRepository[0].getProperty("ZipFolderPath_new"), ConfigObjectRepository[0].getProperty("OverallResults_new"));		
 			DatabaseOperation.CloseConn();
 	    }
 	
