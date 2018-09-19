@@ -88,7 +88,8 @@ public class PropertiesHandle extends Properties
 			this.put("request_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Request/");
 			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
 			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Response/");
-			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
+			this.put("Samplepath_Old", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");	
+			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project +"/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");	
 			this.put("output_query", this.RdmsQuery("OutputTable"));
 			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
 			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));
@@ -101,7 +102,8 @@ public class PropertiesHandle extends Properties
 			this.put("OutputCondColumn", "OutputColumnCondtn");
 			this.put("ExpectedColumn", "ExpectedColumn");
 			this.put("StatusColumn", "StatusColumn");
-			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/Results/RatingModelResult/");
+			this.put("TargetPath_Old", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api +  "/Results/RatingModelResult/");
+			this.put("TargetPath", this.RdmsValue("RootFolder") + "/" + Project +"/Results/RatingModelResult/");
 			this.put("config_query", this.RdmsQuery("MacroMappingTable"));
 			this.put("lookup_query", this.RdmsQuery("MacroTranslationTable"));
 			this.put("test_url", this.RdmsValue("URL"));	
