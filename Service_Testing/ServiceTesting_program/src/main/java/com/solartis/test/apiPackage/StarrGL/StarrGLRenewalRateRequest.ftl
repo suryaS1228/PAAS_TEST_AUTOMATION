@@ -1,3 +1,4 @@
+<#assign array=[]><#list numofai as x><#assign array=array+[x.value]></#list><#assign i=0>
 {
   "Policy": {
    "AdditionalInsuredList": [ <#assign j=0>
