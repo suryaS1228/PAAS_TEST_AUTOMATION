@@ -2,7 +2,7 @@
 <#assign EPLCoverage=[]><#list EPLIApplicable as z><#assign EPLCoverage=EPLCoverage+[z.value]></#list>
 <#assign FIDCoverage=[]><#list FidApplicable as a><#assign FIDCoverage=FIDCoverage+[a.value]></#list>
 {   
-     <#list ClientUniqueRequestID as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+     <#list ClientUniqueRequestID as result>"${result.atrib}":"${result.value}", </#list>
 	"EndClientUserUniqueSessionId": "Uniquesession",
 	 "OwnerId": "36",
     "ServiceRequestDetail": {
