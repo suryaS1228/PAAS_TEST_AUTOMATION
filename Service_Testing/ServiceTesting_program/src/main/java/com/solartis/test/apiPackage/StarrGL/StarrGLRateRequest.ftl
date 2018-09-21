@@ -13,7 +13,7 @@
 	          </#list>
 	        ]<#assign i=i+1>
 	      }<#if result?is_last><#else>,</#if>
-	      </#list><#else></#if>>
+	      </#list><#else></#if>
     ],
   "Location": {
       "LocationDetail": [
