@@ -11,7 +11,7 @@
          "OutputTypeList": 
            [
             {
-              "Type": "Cancel PDF"
+              "Type": "CANCEL"
             }
             ]
           }
