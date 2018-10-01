@@ -253,20 +253,20 @@ public class MainClass2
 					{									
 						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									     
-						inputTable.UpdateRow(RowIterator, inputrow);
+						inputTable.UpdateRow(RowIterator+1, inputrow);
 					}
 					else
 					{
 						outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									    
-						OutputTable.UpdateRow(RowIterator, outputrow);
+						OutputTable.UpdateRow(RowIterator+1, outputrow);
 						commonMap.putAll(outputrow);									
 					}
 				}
 				if(ExecutionFlag.equalsIgnoreCase("Difference"))
 				{
 					inputrow = fireEventAPI.differrence(inputrow,outputrow);
-					inputTable.UpdateRow(RowIterator, inputrow);
+					inputTable.UpdateRow(RowIterator+1, inputrow);
 				}
 				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
