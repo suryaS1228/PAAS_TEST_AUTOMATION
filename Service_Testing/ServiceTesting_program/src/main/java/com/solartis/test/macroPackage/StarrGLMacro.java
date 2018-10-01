@@ -403,7 +403,7 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 		StarrGLMacro MG;
 		PropertiesHandle configFile=null;
 		
-		configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\Rating\\config\\config.properties");
+		configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\Rating\\config\\config.properties");
 		objectInput.ConnectionSetup(configFile);
 		 
 		 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
