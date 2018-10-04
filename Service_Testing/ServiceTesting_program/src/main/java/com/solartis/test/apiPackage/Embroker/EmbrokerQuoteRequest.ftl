@@ -13,29 +13,35 @@
           <#list Policy as result>"${result.atrib}":"${result.value}", </#list>
          "Coverage": [
       {
+      
+       <#if  DOCoverage[0]=="Yes">
         "CoverageDetail": 
         {
-        <#if  DOCoverage[0]=="Yes">
+       
         <#list DNOCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-        </#if>     
+           
          }
-      },
-       {
+      }  </#if>
+      <#if  EPLCoverage[0]=="Yes">
+      ,{
         "CoverageDetail": 
        {
-       <#if  EPLCoverage[0]=="Yes">
+       
        <#list EPLICoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-       </#if>
+       
        }
-      },
+      }
+      </#if>
+       <#if  FIDCoverage[0]=="Yes">,
       {
         "CoverageDetail": 
       {
-      <#if  FIDCoverage[0]=="Yes">
+     
       <#list FidCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-      </#if>
+     
       }
       }
+       </#if>
     ]
   }
 }
