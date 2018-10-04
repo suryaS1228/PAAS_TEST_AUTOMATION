@@ -142,6 +142,7 @@ public class StarrGLMacro extends DBColoumnVerify implements MacroInterface
 							}
 							else
 							{
+								System.out.println(Datacolumntowrite+"----------"+(rowNum-1)+"--------"+columnNum+"----"+Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}

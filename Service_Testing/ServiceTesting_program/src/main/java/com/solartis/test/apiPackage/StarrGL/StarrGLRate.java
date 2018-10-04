@@ -69,15 +69,21 @@ public class StarrGLRate extends BaseClass implements API
 		{
 			try 
 			{
+				System.out.println("coming to Pumpdata to request1");
 				macro.PumpinData(input, config);
 			} 
 			catch (DatabaseException | POIException | MacroException e) 
 			{
+				System.out.println("Exception");
+				e.printStackTrace();
 				throw new APIException("ERROR PumpDataToRequest FUNCTION -- GL-RATING CLASS");
 			}
 		}
+		boolean b=config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly");
+		System.out.println(b);
 		if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("ActualandComparison")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ResponseOnly"))
 		 {
+			System.out.println("coming to Pumpdata to request2");
 		super.PumpDataToRequest(Commanmap,InputData);
 		 }
 	}
@@ -137,7 +143,6 @@ public class StarrGLRate extends BaseClass implements API
 				else
 				{
 					output.put("Flag_for_execution", "FailedResponse");
-					
 					String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 					String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 					output.put("AnalyserResult","Rule-"+RuleName);
