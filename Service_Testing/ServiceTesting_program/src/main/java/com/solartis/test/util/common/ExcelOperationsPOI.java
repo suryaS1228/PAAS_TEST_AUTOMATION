@@ -70,7 +70,14 @@ public class ExcelOperationsPOI
 	{
 		 this.column_number=column_number;
 		 this.row_number=row_number;
+		 try
+		 {
          this.cell = this.worksheet.getRow(row_number).getCell(column_number);
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
 	}
 	
 	@SuppressWarnings("deprecation")

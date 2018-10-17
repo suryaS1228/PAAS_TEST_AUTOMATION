@@ -14,8 +14,8 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.DtcRatingSinglePlan;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.RebShareRatingMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
@@ -32,7 +32,7 @@ public class RebShareRating extends BaseClass implements API
 	StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 	{
-		macro=new DtcRatingSinglePlan(config);	
+		macro=new RebShareRatingMacro(config);	
 	}
  }
  
@@ -75,13 +75,13 @@ public class RebShareRating extends BaseClass implements API
 		}
 	}
 
- public void AddHeaders() throws APIException 
+ public void AddHeaders(String Token) throws APIException 
  {
 	  try 
 	  {
 		  http = new HttpHandle(config.getProperty("test_url"),"POST");		
 		  http.AddHeader("Content-Type", config.getProperty("content_type"));
-		  http.AddHeader("Token", config.getProperty("token"));
+		  http.AddHeader("Token", Token);
 		  http.AddHeader("EventName", config.getProperty("EventName")); 
 	  } 
 	  catch (HTTPHandleException e) 
@@ -101,7 +101,7 @@ public class RebShareRating extends BaseClass implements API
 	 {
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 		
-		String ResponseStatus=response.read("..RequestStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+		String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 		if(ResponseStatus.equals("SUCCESS"))
 		{
 		
