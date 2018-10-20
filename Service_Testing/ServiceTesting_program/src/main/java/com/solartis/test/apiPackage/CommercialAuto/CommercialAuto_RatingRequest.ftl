@@ -1,34 +1,80 @@
-<#assign numofTrucks=[]><#list numofTruck as x><#assign numofTrucks=numofTrucks+[x.value]></#list>
-<#assign numofPPassengers=[]><#list numofPPassenger as x><#assign numofPPassengers=numofPPassengers+[x.value]></#list>
 {
-  "EndClientUserUniqueSessionId": "Uniquesession",
-  "OwnerId": "35",
+ <#list Common as result>"${result.atrib}":"${result.value}",
+ </#list>
   "Policy": {
   		<#list Policy as result>"${result.atrib}":"${result.value}",
 		</#list>
-      "Truck": [<#assign i=1>
-      <#list 1..numofTrucks[0] as result><#assign TruckDetails="TruckDetail"+i>
-      {
-           "TruckDetail": {
-           <#list TruckDetails?eval as result>
-           "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-		</#list>
-           }
-      }
-      <#if i=numofTrucks[0]><#else>,</#if><#assign i=i+1>
-      </#list>
-    ],
-    "PrivatePassenger": [<#assign i=1>
-      <#list 1..numofPPassengers[0] as result><#assign PrivatePassengerDetails="PrivatePassengerDetail"+i>
-      {
-        "PrivatePassengerDetail": {
-        <#list PrivatePassengerDetails?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		
+		"AddedPersonalInjuryProtection": 
+		[
+        {
+        "AddedPersonalInjuryProtectionDetail": 
+        {
+         <#list AddedPersonalInjuryProtectionDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
-      }  <#if i=numofPPassengers[0]><#else>,</#if><#assign i=i+1>
-      </#list>
-    ],
-  },
+        }
+        ],
+	  "PrivatePassenger": [
+      {
+        "PrivatePassengerDetail":
+        {
+         <#list PrivatePassengerDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+        }
+        }
+        ],
+        
+      "Truck": 
+      [
+      {
+        "TruckDetail":
+         {
+         <#list TruckDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+         }
+       }
+       ],	
+		
+		 "ZoneRated": [
+      {
+        "ZoneRatedDetail": 
+        {
+         <#list ZoneRatedDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+        }
+        }
+        ],
+        
+         "PublicTransportation": [
+      {
+        "PublicTransportationDetail":
+        {
+         <#list PublicTransportationDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+        }
+        }
+        ],
+		
+	 "Special": [
+      {
+        "SpecialDetail":
+        {
+         <#list SpecialDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+        }
+        }
+        ],
+        "Garage": [
+      {
+        "GarageDetail":
+        {
+         <#list GarageDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+		</#list>
+        }
+        }
+        ]
+        },
   "ServiceRequestDetail": {
   <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
