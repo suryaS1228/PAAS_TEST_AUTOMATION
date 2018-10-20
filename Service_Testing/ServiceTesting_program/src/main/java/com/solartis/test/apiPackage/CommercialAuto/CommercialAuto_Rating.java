@@ -151,7 +151,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		                	System.out.println("error in update query---"+updatequery);
 		                	e.printStackTrace();
 		                }
-		                updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus =\""+ResponseStatus+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+		                updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.ResponseStatus =\""+ResponseStatus+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 						stmt.executeUpdate(updatequery);
 		                output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						output.put("ResponseStatus", ResponseStatus);
@@ -168,7 +168,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 		else
 		{
 			output.put("ResponseStatus", "FailedResponse");
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.ResponseStatus ='FailedResponse' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.ResponseStatus ='FailedResponse' where Output_CA_Rate_Policy_V1.Testdata='"+output.get("Testdata")+"'";
 			//System.out.println(updatequery);
 			stmt.executeUpdate(updatequery);
 			String RuleName=response.read("..RuleName").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
@@ -176,7 +176,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			if(Message.equals("Server Busy, Request cannot be processed right now"))
 			{
 				output.put("AnalyserResult","Error-ServerBusy");
-				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Error-ServerBusy' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.AnalyserResult ='Error-ServerBusy' where Output_CA_Rate_Policy_V1.Testdata='"+output.get("Testdata")+"'";
 				stmt.executeUpdate(updatequery);
 
 			}
@@ -184,11 +184,11 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				
 			
 			output.put("AnalyserResult","Rule-"+RuleName);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+RuleName+"' where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.AnalyserResult ='"+RuleName+"' where Output_CA_Rate_Policy_V1.Testdata='"+output.get("Testdata")+"'";
 			System.out.println(updatequery);
 			stmt.executeUpdate(updatequery);
 			output.put("User_message",Message);
-			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.User_message =\""+Message+"\" where Output_CA_Rate_Policy.Testdata='"+output.get("Testdata")+"'";
+			updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.User_message =\""+Message+"\" where Output_CA_Rate_Policy_V1.Testdata='"+output.get("Testdata")+"'";
 			stmt.executeUpdate(updatequery);
 			}
 			catch(Exception e)
@@ -260,7 +260,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 			if(message.equals(""))
 			{
 				outputrow.put("AnalyserResult", "Pass");
-				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.AnalyserResult ='Pass' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
 				 stmt.executeUpdate(updatequery);
 				//
 			}
@@ -269,7 +269,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 				outputrow.put("AnalyserResult", message.substring(0, message.length() - 2)+" Failed");
 				String FailMessage=message.substring(0, message.length() - 2)+" Failed";
 				//
-				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy.AnalyserResult ='"+FailMessage+"' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
+				updatequery="update "+ config.getProperty("outputTable")+ " SET Output_CA_Rate_Policy_V1.AnalyserResult ='"+FailMessage+"' where "+rowStatusColVerify.get("TableName")+".Testdata='"+outputrow.get("Testdata")+"'";
 				 stmt.executeUpdate(updatequery);
 			}
 			errorMessage.clear();
@@ -292,7 +292,7 @@ public static void main(String args[]) throws DatabaseException, PropertiesHandl
 	 PropertiesHandle config = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\CommercialAuto\\Rating\\Config\\config.properties");
 	 DatabaseOperation input = new DatabaseOperation();
 	 input.ConnectionSetup(config);
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects("SELECT * FROM INPUT_CA_Rate_Policy a LEFT JOIN INPUT_CA_Rate_TruckDetails b on a.`S_No` = b.`S_No` LEFT JOIN INPUT_CA_Rate_PrivatePassengerDetails c on b.`S_No` = c.`S_No` LEFT JOIN INPUT_CA_Rate_HI_NON_AI d on c.`S_No` = d.`S_No`");
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = input.GetDataObjects("SELECT * FROM INPUT_CA_Rate_Poliy_V1 a LEFT JOIN INPUT_CA_Rate_TruckDetails b on a.`S_No` = b.`S_No` LEFT JOIN INPUT_CA_Rate_PrivatePassengerDetails c on b.`S_No` = c.`S_No` LEFT JOIN INPUT_CA_Rate_HI_NON_AI d on c.`S_No` = d.`S_No`");
 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();
 		while (inputtableiterator.hasNext()) 
 		{

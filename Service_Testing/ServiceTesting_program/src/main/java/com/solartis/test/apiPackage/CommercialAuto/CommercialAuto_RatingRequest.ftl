@@ -10,7 +10,7 @@
         {
         "AddedPersonalInjuryProtectionDetail": 
         {
-         <#list AddedPersonalInjuryProtectionDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list AddedPersonalInjuryProtectionDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
@@ -19,7 +19,7 @@
       {
         "PrivatePassengerDetail":
         {
-         <#list PrivatePassengerDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list PrivatePassengerDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
@@ -30,7 +30,7 @@
       {
         "TruckDetail":
          {
-         <#list TruckDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list TruckDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
          }
        }
@@ -40,7 +40,7 @@
       {
         "ZoneRatedDetail": 
         {
-         <#list ZoneRatedDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list ZoneRated as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
@@ -50,7 +50,7 @@
       {
         "PublicTransportationDetail":
         {
-         <#list PublicTransportationDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list PublicTransportationDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
@@ -60,7 +60,7 @@
       {
         "SpecialDetail":
         {
-         <#list SpecialDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list SpecialDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
@@ -69,7 +69,7 @@
       {
         "GarageDetail":
         {
-         <#list GarageDetail?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+         <#list GarageDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 		</#list>
         }
         }
