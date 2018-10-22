@@ -414,8 +414,8 @@ public class BaseClass
 				ob.refresh();
 				ob.saveAs(excelreportlocation1);
 		    }
-			this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
-			this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
+			//this.ExportToExcelTable(config.getProperty("TestcaseQuery"), excelreportlocation1, "Testcases");
+			//this.ExportToExcelTable(config.getProperty("resultQuery"), excelreportlocation1, "ComparisonResults");
 		}
 		catch(Exception e) 
 		{
