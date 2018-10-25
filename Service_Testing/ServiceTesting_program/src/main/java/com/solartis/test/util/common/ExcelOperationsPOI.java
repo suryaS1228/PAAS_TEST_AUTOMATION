@@ -290,6 +290,7 @@ public class ExcelOperationsPOI implements ExcelOperationsPOIInterface
 		}
 		else if (s.equals("class java.lang.String"))
 		{
+			//System.out.println("data is"+strData);
 			 cell.setCellValue((String) strData);
 		}
 		else if (s.equals("class java.lang.Integer"))

@@ -141,7 +141,7 @@ public class CommercialAuto_Rating extends BaseClass implements API
 						{
 							actual="no value in response";
 						}
-						updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"=\""+actual+"\" where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
+						updatequery="update "+ config.getProperty("outputTable")+ " SET "+ rowOutputColVerify.get("TableName")+"."+rowOutputColVerify.get(config.getProperty("OutputColumn")) +"='"+actual+"' where "+rowOutputColVerify.get("TableName")+".Testdata='"+output.get("Testdata")+"'";
 		                try 
 		                {
 		                	stmt.executeUpdate(updatequery);

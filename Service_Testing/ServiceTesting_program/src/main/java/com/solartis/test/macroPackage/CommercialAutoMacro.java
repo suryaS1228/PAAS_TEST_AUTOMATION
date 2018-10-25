@@ -142,6 +142,7 @@ public class CommercialAutoMacro extends DBColoumnVerify implements MacroInterfa
 							}
 							else
 							{
+								System.out.println(Datacolumntowrite+"-----");
 								System.out.println(rowNum-1+"----"+ columnNum+"------"+ Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
