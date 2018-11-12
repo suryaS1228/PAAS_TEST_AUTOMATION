@@ -1,5 +1,6 @@
 package com.solartis.test.util.api;
 
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -9,8 +10,9 @@ import java.io.StringReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import com.jayway.jsonpath.DocumentContext;
+
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.internal.JsonReader;
 import com.solartis.test.exception.RequestFormatException;
 
 public class JsonHandle implements RequestResponse
@@ -20,19 +22,20 @@ public class JsonHandle implements RequestResponse
 	private JSONObject obj = new JSONObject();
 	@SuppressWarnings("unused")
 	private JSONParser parser = new JSONParser();
+	private JsonReader  doc = new JsonReader();
 	private String file_location;
 	private BufferedReader read_file = null;
 	private FileWriter write_file = null;
-	
 	public JsonHandle(String file_location)
 	{
 		this.file_location = file_location;
 		
-	}	
+	}
+	
 	
 	public JsonHandle() 
 	{
-
+		// TODO Auto-generated constructor stub
 	}
 
 	public void getFilePath(String filepath) 
@@ -47,13 +50,14 @@ public class JsonHandle implements RequestResponse
 		{
 			//read_file = new FileReader(file_location);
 			read_file = new BufferedReader(new InputStreamReader(new FileInputStream(file_location), "UTF-8"));
-			String s = null;			
+			String s = null;
+			
 
 			while (( s=read_file.readLine())!=null)
-		    {
-					si=si.append(s);
-		          // System.out.println(s);
-		    }
+			    {
+						si=si.append(s);
+			          // System.out.println(s);
+			    }
 		} 
 		catch (IOException e) 
 		{
@@ -121,19 +125,17 @@ public class JsonHandle implements RequestResponse
 	
 	public String read(String json_path) throws RequestFormatException
 	{
-		path = JsonPath.compile(json_path);
-		String value= "";
 		try 
 		{
-			value=JsonPath.parse(enable_read()).read(path).toString();;
+			doc.parse(enable_read());
 		} 
 		catch (RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE READING STRING OPERATION", e);
 		}
 		
-		
-		return value;
+		path = JsonPath.compile(json_path);
+		return doc.read(path).toString();	
 	}
 	
 	public String FileToString() throws RequestFormatException
@@ -143,29 +145,33 @@ public class JsonHandle implements RequestResponse
 	
 	public void write(String json_path,String new_value) throws RequestFormatException
 	{
-		path = JsonPath.compile(json_path);
-		DocumentContext newJson;
 		try 
 		{
-			newJson = JsonPath.parse(enable_read()).set(path, new_value);
+			doc.parse(enable_read());
 		} 
 		catch (RequestFormatException e) 
 		{
 			throw new RequestFormatException("ERROR OCCURS WHILE ENABLE WRITING OPERATION", e);
 		}
-		
-		enable_write(newJson.jsonString());
+		path = JsonPath.compile(json_path);
+		doc.set(path, new_value);
+		enable_write(doc.jsonString());
 		
 	}
 
 	public String readToken(String json_path, String response) throws RequestFormatException, IOException, ParseException
 	{
+		JsonReader  doc = new JsonReader();
 		JSONObject obj = new JSONObject();
 		JSONParser parser = new JSONParser();
 		JsonPath path;
 		obj = (JSONObject) parser.parse(new StringReader(response));
+		doc.parse(obj.toJSONString());		
 		path = JsonPath.compile(json_path);
-		return JsonPath.parse(obj.toJSONString()).read(path).toString();	
-	}	
+		return doc.read(path).toString();	
+	}
+	
+
+	
 	
 }
