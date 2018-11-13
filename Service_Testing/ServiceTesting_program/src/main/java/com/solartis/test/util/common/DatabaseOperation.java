@@ -14,7 +14,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -187,6 +186,12 @@ public class DatabaseOperation
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void insertRow(String Query) throws SQLException
+	{	
+		java.sql.PreparedStatement ps = conn.prepareStatement(Query);
+		ps.executeUpdate();
 	}
 	
 	
