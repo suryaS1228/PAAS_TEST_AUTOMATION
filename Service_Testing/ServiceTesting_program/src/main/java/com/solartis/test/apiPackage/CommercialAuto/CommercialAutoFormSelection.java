@@ -59,7 +59,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 			System.out.println(arraylength);
 			for (int i=0;i<Integer.parseInt(arraylength);i++) 
 			{
-				String insterQuery = "INSERT INTO Output_FormSelection VALUES(temp2)";	
+				String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
 				StringBuffer temp2 = new StringBuffer();
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 				{
