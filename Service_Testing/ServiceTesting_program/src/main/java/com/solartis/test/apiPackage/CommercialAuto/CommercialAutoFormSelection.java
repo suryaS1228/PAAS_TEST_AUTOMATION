@@ -54,10 +54,10 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));	
-		//	String arraylength = response.read("$.repeatedAttributeListDetail[0].attributeDetailList.length").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			for (int i=0;i<3/*Integer.parseInt(arraylength)*/;i++) 
+			String arraylength = response.read("$..FormsInfoList.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			for (int i=0;i<Integer.parseInt(arraylength);i++) 
 			{
-				String insterQuery = "INSERT INTO Output_MetaData VALUES(temp2)";	
+				String insterQuery = "INSERT INTO Output_FormSelection VALUES(temp2)";	
 				StringBuffer temp2 = new StringBuffer();
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 				{
@@ -72,8 +72,8 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 							//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 							String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
 							String Rep=jsonpath.replace("##", Integer.toString(i));
-							System.out.println(Rep);
-							System.out.println(response.FileToString());
+							
+							
 							String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 							
 							
