@@ -55,6 +55,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));	
 			String arraylength = response.read("$..FormsInfoList.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			System.out.println(arraylength);
 			for (int i=0;i<Integer.parseInt(arraylength);i++) 
 			{
 				String insterQuery = "INSERT INTO Output_FormSelection VALUES(temp2)";	
@@ -64,8 +65,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
 					String condition = rowOutputColVerify.get("OutputColumnCondtn");
 					if(conditioncheck.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
-					{System.out.println("in if");
-						
+					{
 						try
 						{
 							///System.out.println("Writing Response to Table");
@@ -73,11 +73,8 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 							String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
 							String Rep=jsonpath.replace("##", Integer.toString(i));
 							
-							
 							String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 							
-							
-							System.out.println(actual);
 							temp2=temp2.append("'").append(actual).append("'").append(",");
 							//System.out.println(actual);
 							output.put("flag_for_execution", "Completed");
