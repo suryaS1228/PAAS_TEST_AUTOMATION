@@ -43,6 +43,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		 }
 		catch(HTTPHandleException e)
 		{
+			e.printStackTrace();
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
 		}
 	 }
