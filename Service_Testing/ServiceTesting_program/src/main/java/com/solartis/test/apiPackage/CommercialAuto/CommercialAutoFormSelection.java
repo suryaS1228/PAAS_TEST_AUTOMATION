@@ -55,6 +55,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));	
 			String arraylength = response.read("$..FormsInfoList.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			arraylength = arraylength.replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 			System.out.println(arraylength);
 			for (int i=0;i<Integer.parseInt(arraylength);i++) 
 			{
