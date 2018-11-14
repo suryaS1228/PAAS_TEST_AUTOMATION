@@ -28,7 +28,7 @@ public class GenerateExpected
 
 	public void generateExpectedMel(PropertiesHandle configFile, LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws DatabaseException, SQLException
 	{
-		expectedMelTable.GetDataObjects("Output_FormSelection_Expected");		
+		expectedMelTable.GetDataObjects("SELECT * FROM Output_FormSelection_Expected");		
 		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from ConditionTable_CA_FormSelection");
