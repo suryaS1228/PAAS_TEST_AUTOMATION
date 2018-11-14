@@ -28,41 +28,36 @@ public class GenerateExpected
 		verify= new DBColoumnVerify();
 	}
 
-	public List<String> generateExpectedMel(PropertiesHandle configFile) throws DatabaseException, SQLException
+	public List<String> generateExpectedMel(PropertiesHandle configFile, LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws DatabaseException, SQLException
 	{
-		List<String> queryList = new ArrayList<String>();
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> OutputTable=inputoutputtable.GetDataObjects("SELECT * FROM `INPUT_Quote_GL_V6` a LEFT JOIN `INPUT_GL_PolicyIssuance_V3` b ON a.S_No=b.S_No LEFT JOIN `INPUT_GL_Cancel_V2` c on a.S_No=c.S_No LEFT JOIN `OTUPUT_Quote_GL_V6` d on a.S_No=d.`S.No` LEFT JOIN `OUTPUT_GL_PolicyIssuance_V3` e on a.S_No=e.`S.No` LEFT JOIN `OUTPUT_GL_Cancel_V2` f on a.S_No=f.`S.No`");
-		for(Entry<Integer, LinkedHashMap<String, String>> entry1 : OutputTable.entrySet())
+		List<String> queryList = new ArrayList<String>();		
+		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
-			LinkedHashMap<String, String> InputOutputRow = entry1.getValue();
-			if(InputOutputRow.get("Flag_for_execution").equals("Y"))
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from MEL_CoverageOrder");
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
 			{
-				LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from MEL_CoverageOrder");
-				for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
+				LinkedHashMap<String, String> configtablerow = entry.getValue();
+				if(configtablerow.get("Flag_for_execution").equals("Y"))
 				{
-					LinkedHashMap<String, String> configtablerow = entry.getValue();
-					if(configtablerow.get("Flag_for_execution").equals("Y"))
+					if(verify.ConditionReading(configtablerow.get("Condition"), inputrow))
 					{
-						if(verify.ConditionReading(configtablerow.get("Condition"), InputOutputRow))
-						{
-							String insterQuery = "INSERT INTO Output_FormSelection VALUES("+InputOutputRow.get("S_No")+", temp2)";	
-							StringBuffer temp2 = new StringBuffer();
-							
-							temp2=temp2.append("'").append(configtablerow.get("FormName")).append("'").append(",");
-							temp2=temp2.append("'").append(configtablerow.get("FormNumber")).append("'").append(",");
-							temp2=temp2.append("'").append(configtablerow.get("FormType")).append("'").append(",");
-							temp2=temp2.append("'").append(configtablerow.get("FormHierachy")).append("'").append(",");
-							temp2=temp2.append("'").append(configtablerow.get("Sequence")).append("'").append(",");
-							temp2=temp2.append("'").append(configtablerow.get("State")).append("'").append(",");
-							
-							insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
-							temp2=temp2.delete(0, temp2.length());
-							queryList.add(insterQuery);
-						}
+						String insterQuery = "INSERT INTO Output_FormSelection VALUES("+inputrow.get("S_No")+", temp2)";	
+						StringBuffer temp2 = new StringBuffer();
+						
+						temp2=temp2.append("'").append(configtablerow.get("FormName")).append("'").append(",");
+						temp2=temp2.append("'").append(configtablerow.get("FormNumber")).append("'").append(",");
+						temp2=temp2.append("'").append(configtablerow.get("FormType")).append("'").append(",");
+						temp2=temp2.append("'").append(configtablerow.get("FormHierachy")).append("'").append(",");
+						temp2=temp2.append("'").append(configtablerow.get("Sequence")).append("'").append(",");
+						temp2=temp2.append("'").append(configtablerow.get("State")).append("'").append(",");
+						
+						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
+						temp2=temp2.delete(0, temp2.length());
+						queryList.add(insterQuery);
 					}
 				}
 			}
-		}
+		}		
 		return queryList;
 	}	
 }

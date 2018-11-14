@@ -108,7 +108,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		List<String> querylist= null;
 		try 
 		{
-			querylist = expected.generateExpectedMel(config);
+			querylist = expected.generateExpectedMel(config, inputrow, output);
 		} 
 		catch (DatabaseException | SQLException e) 
 		{
