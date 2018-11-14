@@ -39,7 +39,7 @@ public class GenerateExpected
 				{
 					if(verify.ConditionReading(configtablerow.get("Condition"), inputrow))
 					{
-						String insterQuery = "INSERT INTO Output_FormSelection VALUES("+inputrow.get("S_No")+", temp2)";	
+						String insterQuery = "INSERT INTO Output_FormSelection_Expected VALUES("+inputrow.get("S_No")+", temp2)";	
 						StringBuffer temp2 = new StringBuffer();
 						
 						temp2=temp2.append("'").append(configtablerow.get("FormName")).append("'").append(",");
@@ -51,6 +51,7 @@ public class GenerateExpected
 						
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
+						System.out.println(insterQuery);
 						expectedMelTable.insertRow(insterQuery);
 					}
 				}
