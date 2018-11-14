@@ -101,21 +101,19 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
-	public List<String> CompareFunction(LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws APIException
+	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
 		GenerateExpected expected = new GenerateExpected(config);
-		
-		List<String> querylist= null;
 		try 
 		{
-			querylist = expected.generateExpectedMel(config, inputrow, output);
+			expected.generateExpectedMel(config, inputrow, output);
 		} 
 		catch (DatabaseException | SQLException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		return querylist;
+		return inputrow;
 		
 	}
 }

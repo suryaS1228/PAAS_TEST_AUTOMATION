@@ -1,9 +1,7 @@
 package com.solartis.test.apiPackage.CommercialAuto;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -28,9 +26,9 @@ public class GenerateExpected
 		verify= new DBColoumnVerify();
 	}
 
-	public List<String> generateExpectedMel(PropertiesHandle configFile, LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws DatabaseException, SQLException
+	public void generateExpectedMel(PropertiesHandle configFile, LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws DatabaseException, SQLException
 	{
-		List<String> queryList = new ArrayList<String>();		
+		expectedMelTable.GetDataObjects("Output_FormSelection_Expected");		
 		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from ConditionTable_CA_FormSelection");
@@ -53,11 +51,10 @@ public class GenerateExpected
 						
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
-						queryList.add(insterQuery);
+						expectedMelTable.insertRow(insterQuery);
 					}
 				}
 			}
-		}		
-		return queryList;
+		}
 	}	
 }

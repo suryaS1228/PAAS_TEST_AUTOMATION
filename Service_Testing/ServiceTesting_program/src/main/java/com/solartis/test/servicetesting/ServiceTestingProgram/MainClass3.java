@@ -257,19 +257,14 @@ public class MainClass3
 				{
 					if(outputtablechoice.equalsIgnoreCase("Y"))
 					{									
-						@SuppressWarnings("unused")
-						List<String> inputroww = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
-									     
+						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION									     
 						inputTable.UpdateRow(RowIterator, inputrow);
 					}
 					else
 					{
 						System.out.println("Coming to Comparison");
-						List<String> outputroww = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
-								
-						for (int i = 0; i < outputroww.size(); i++) {
-							OutputTable.insertRow(outputroww.get(i));
-						}
+						outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
+						OutputTable.UpdateRow(RowIterator+1, outputrow);
 						commonMap.putAll(outputrow);									
 					}
 				}
