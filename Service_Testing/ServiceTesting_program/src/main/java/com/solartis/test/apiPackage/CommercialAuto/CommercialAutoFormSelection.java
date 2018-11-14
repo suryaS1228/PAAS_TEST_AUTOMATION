@@ -113,7 +113,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 			e.printStackTrace();
 		}
 		
-		return inputrow;
+		return output;
 		
 	}
 }
