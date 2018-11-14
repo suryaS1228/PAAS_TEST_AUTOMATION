@@ -100,4 +100,22 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
 	}
+	
+	public List<String> CompareFunction(LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws APIException
+	{
+		GenerateExpected expected = new GenerateExpected(config);
+		
+		List<String> querylist= null;
+		try 
+		{
+			querylist = expected.generateExpectedMel(config);
+		} 
+		catch (DatabaseException | SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return querylist;
+		
+	}
 }

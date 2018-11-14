@@ -249,8 +249,9 @@ public class BaseClass2
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	public List<String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		 
+		List<String> strlist = new ArrayList<String>();
 	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
 	{		
 	    try
@@ -294,7 +295,7 @@ public class BaseClass2
 			}
 			errorMessage.clear();
 			errorParentname.clear();
-			return outputrow;
+			return strlist;
 
 	    }	
 	    catch(DatabaseException e)
@@ -302,7 +303,7 @@ public class BaseClass2
 	    	throw new APIException("ERROR IN DB COMPARISON FUNCTION -- BASE CLASS", e);
 	    }
 	}
-	 return outputrow;
+	 return strlist;
  }
 	
 //-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	

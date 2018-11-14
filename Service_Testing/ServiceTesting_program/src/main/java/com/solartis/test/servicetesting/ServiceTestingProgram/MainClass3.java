@@ -32,14 +32,12 @@ import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
-import com.solartis.test.apiPackage.API;
 import com.solartis.test.apiPackage.API2;
 import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.PropertiesHandleException;
-import com.solartis.test.listener.FireEventAPI;
 import com.solartis.test.listener.FireEventAPI2;
 import com.solartis.test.listener.Listener;
 import com.solartis.test.listener.LogListener;
@@ -255,20 +253,23 @@ public class MainClass3
 						
 					}					
 				}	
-				if(ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Difference"))
+				if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Difference"))
 				{
 					if(outputtablechoice.equalsIgnoreCase("Y"))
 					{									
-						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
+						@SuppressWarnings("unused")
+						List<String> inputroww = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 									     
 						inputTable.UpdateRow(RowIterator, inputrow);
 					}
 					else
 					{
 						System.out.println("Coming to Comparison");
-						outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
+						List<String> outputroww = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 								
-						OutputTable.UpdateRow(RowIterator+1, outputrow);
+						for (int i = 0; i < outputroww.size(); i++) {
+							OutputTable.insertRow(outputroww.get(i));
+						}
 						commonMap.putAll(outputrow);									
 					}
 				}

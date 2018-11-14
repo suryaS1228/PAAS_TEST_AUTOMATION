@@ -155,15 +155,16 @@ public class FireEventAPI2 implements API2
 	}
 
 	@Override
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,
+	public List<String> CompareFunction(LinkedHashMap<String, String> inputrow,
 			LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
+		List<String> output1;
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
 		try
 		{
-			output =api.CompareFunction(inputrow,output);
+			output1 =api.CompareFunction(inputrow,output);
 		}
 		catch(APIException e)
 		{
@@ -173,7 +174,7 @@ public class FireEventAPI2 implements API2
 		}
 		for (Listener listen : listeners1)
 			listen.afterCompareFunction();
-		return output;
+		return output1;
 	}
 
 	

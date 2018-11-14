@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -194,6 +196,27 @@ public class DatabaseOperation
 		ps.executeUpdate();
 	}
 	
+	@SuppressWarnings("unused")
+	public void insertRow(LinkedHashMap<String, String> row) throws SQLException
+	{
+		for (Entry<String, String> entry : row.entrySet())	
+		{
+			//System.out.println(entry.getValue());			
+		}
+		String insterQuery = "INSERT INTO MelActual(temp1) VALUES(temp2)";	
+		
+		StringBuffer temp1 = new StringBuffer();
+		StringBuffer temp2 = new StringBuffer();
+		for (Entry<String, String> entry : row.entrySet())	
+		{
+			temp2=temp2.append("'").append(entry.getValue()).append("'").append(",");
+			temp1=temp1.append(entry.getKey()).append(",");
+		}
+		insterQuery=insterQuery.replace("temp1", temp1.substring(0, temp1.length() - 1)).replace("temp2", temp2.substring(0, temp2.length() - 1));
+		//System.out.println(insterQuery);
+		java.sql.PreparedStatement ps = conn.prepareStatement(insterQuery);
+		ps.executeUpdate();
+	}
 	
 	
 	public void UpdateTable(LinkedHashMap<Integer, LinkedHashMap<String, String>> table) throws DatabaseException, SQLException
