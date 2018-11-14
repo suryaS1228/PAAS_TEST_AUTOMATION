@@ -33,7 +33,7 @@ public class GenerateExpected
 		List<String> queryList = new ArrayList<String>();		
 		if(inputrow.get("Flag_for_execution").equals("Y"))
 		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from MEL_CoverageOrder");
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("Select * from ConditionTable_CA_FormSelection");
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
 			{
 				LinkedHashMap<String, String> configtablerow = entry.getValue();
