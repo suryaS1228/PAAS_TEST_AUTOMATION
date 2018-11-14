@@ -264,7 +264,7 @@ public class MainClass3
 					{
 						System.out.println("Coming to Comparison");
 						outputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
-						OutputTable.UpdateRow(RowIterator+1, outputrow);
+						//OutputTable.UpdateRow(RowIterator+1, outputrow);
 						commonMap.putAll(outputrow);									
 					}
 				}
