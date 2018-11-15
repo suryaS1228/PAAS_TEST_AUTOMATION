@@ -82,8 +82,8 @@ public class GenerateExpected
 			LinkedHashMap<String, String> result = entry.getValue();
 			
 			temp2=temp2.append(result.get("FormNumber")).append(", ");
-			temp2=temp2.delete(temp2.length()-2, temp2.length());
 		}
+		temp2=temp2.delete(temp2.length()-2, temp2.length());
 		System.out.println(temp2);
 		return temp2.toString();
 	}
