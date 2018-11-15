@@ -107,13 +107,14 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		try 
 		{
 			expected.generateExpectedMel(config, inputrow, output);
+			inputrow.put("AnalyserResult", expected.analyser(inputrow.get("S_No")));
 		} 
 		catch (DatabaseException | SQLException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		return output;
+		return inputrow;
 		
 	}
 }

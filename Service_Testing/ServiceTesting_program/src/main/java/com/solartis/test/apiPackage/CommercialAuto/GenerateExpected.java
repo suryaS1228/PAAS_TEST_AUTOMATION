@@ -58,4 +58,33 @@ public class GenerateExpected
 			}
 		}
 	}	
+	
+	public String analyser(String rowNumber) throws DatabaseException
+	{
+		StringBuffer temp2 = new StringBuffer();
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
+				+ "FROM Output_FormSelection "
+				+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormNumber NOT IN "
+				+ "( "
+				+ "SELECT  Output_FormSelection_Expected.FormName "
+				+ "FROM    Output_FormSelection_Expected WHERE  Output_FormSelection_Expected.S_No='"+rowNumber+"' "
+				+ ") "
+				+ "UNION ALL "
+				+ "SELECT  Output_FormSelection_Expected.FormName, Output_FormSelection_Expected.FormNumber "
+				+ "FROM Output_FormSelection_Expected "
+				+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormNumber NOT IN "
+				+ "( "
+				+ "SELECT  Output_FormSelection.FormName "
+				+ "FROM Output_FormSelection WHERE Output_FormSelection.S_No='"+rowNumber+"' "
+				+ ")");
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
+		{
+			LinkedHashMap<String, String> result = entry.getValue();
+			
+			temp2=temp2.append(result.get("FormNumber")).append(", ");
+			temp2=temp2.delete(temp2.length()-2, temp2.length());
+		}
+		System.out.println(temp2);
+		return temp2.toString();
+	}
 }
