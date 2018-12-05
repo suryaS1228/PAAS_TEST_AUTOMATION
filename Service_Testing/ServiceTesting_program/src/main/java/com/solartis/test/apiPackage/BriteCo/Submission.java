@@ -62,7 +62,7 @@ public class Submission extends BaseClass implements API
 					try
 					{
 						//System.out.println("Writing Response to Table");
-						String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+						String responseStatus=response.read("$..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 						//System.out.println(responseStatus);
 						if(responseStatus.equals("SUCCESS"))
 						{
@@ -78,8 +78,8 @@ public class Submission extends BaseClass implements API
 						else
 						{
 							output.put("Flag_for_execution",responseStatus);
-							output.put("MessageType",response.read("..RuleName"));
-							output.put("UserMessage",response.read("..Message"));
+							output.put("MessageType",response.read("$..RuleName"));
+							output.put("UserMessage",response.read("$..Message"));
 							break;
 						}
 					}
