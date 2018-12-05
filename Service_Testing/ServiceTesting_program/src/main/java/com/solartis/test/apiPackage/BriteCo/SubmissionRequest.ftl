@@ -1,6 +1,6 @@
 {
   "Policy": {
-  <#list Policy?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  <#list "Policy"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 	          </#list>
   },
   "InsuredInformation": {
