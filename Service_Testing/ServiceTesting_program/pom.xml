@@ -141,7 +141,7 @@
       					<configuration>
         					<archive>
           						<manifest>
-            						<mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.MainClass</mainClass>
+            						<mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.MainClass2</mainClass>
           						</manifest>
         					</archive>
         					<descriptorRefs>
