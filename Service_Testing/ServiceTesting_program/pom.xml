@@ -139,7 +139,11 @@
        				    	<goal>single</goal>
     				    </goals>
       					<configuration>
-        					
+        					<archive>
+          						<manifest>
+            						<mainClass>com.solartis.test.servicetesting.ServiceTestingProgram.MainClass2</mainClass>
+          						</manifest>
+        					</archive>
         					<descriptorRefs>
           						<descriptorRef>jar-with-dependencies</descriptorRef>
         					</descriptorRefs>
