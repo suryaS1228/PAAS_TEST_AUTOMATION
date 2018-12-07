@@ -14,12 +14,16 @@
   },
   "JewelList": [<#assign j=0>
   	<#list 1..array[i] as x>
-    {<#assign j=j+1>
-      "JewelDetail": {<#assign JewelDetails="JewelDetail"+j>
-      <#list "JewelDetails"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+  	<#assign j=j+1><#assign JewelDetails="JewelDetail"+j>
+    <#if JewelDetails?eval??>
+    {
+      "JewelDetail": {
+      <#list JewelDetails?eval  as result>
+         "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 	          </#list>
       }
     }<#if x?is_last><#else>,</#if>
+    <#else></#if>
 	</#list>
   ],
   "OwnerId": "41",
