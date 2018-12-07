@@ -1,3 +1,4 @@
+<#assign array=[]><#list NoOfJewels as x><#assign array=array+[x.value]></#list><#assign i=0>
 {
   "Policy": {
   <#list "Policy"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
@@ -12,12 +13,14 @@
 	          </#list>
   },
   "JewelList": [
+  	<#list 1..array[i] as x>
     {
-      "JewelDetail": {
-      <#list "JewelDetail"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+      "JewelDetail": {<#assign JewelDetails="JewelDetail"+x>
+      <#list JewelDetails?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 	          </#list>
       }
-    }
+    }<#if x?is_last><#else>,</#if>
+	</#list>
   ],
   "OwnerId": "41",
   "ServiceRequestDetail": {
