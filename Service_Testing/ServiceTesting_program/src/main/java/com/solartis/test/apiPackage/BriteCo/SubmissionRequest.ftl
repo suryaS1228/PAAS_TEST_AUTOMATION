@@ -12,10 +12,10 @@
   <#list "JewelerInformation"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 	          </#list>
   },
-  "JewelList": [
+  "JewelList": [<#assign j=0>
   	<#list 1..array[i] as x>
-    {
-      "JewelDetail": {<#assign JewelDetails="JewelDetail"+x>
+    {<#assign j=j+1>
+      "JewelDetail": {<#assign JewelDetails="JewelDetail"+j>
       <#list "JewelDetails"?eval  as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
 	          </#list>
       }
