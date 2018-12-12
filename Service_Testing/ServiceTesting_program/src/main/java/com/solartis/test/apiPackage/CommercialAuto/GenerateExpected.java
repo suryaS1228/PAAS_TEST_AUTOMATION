@@ -85,7 +85,7 @@ public class GenerateExpected
 		}
 		if(temp2.length()==0)
 		{
-			
+			temp2 = temp2.append("Pass");
 		}else {
 		temp2=temp2.delete(temp2.length()-2, temp2.length());
 		}
