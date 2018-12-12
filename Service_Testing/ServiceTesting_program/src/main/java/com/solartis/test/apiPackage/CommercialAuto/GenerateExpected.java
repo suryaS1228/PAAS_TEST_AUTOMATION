@@ -83,7 +83,12 @@ public class GenerateExpected
 			
 			temp2=temp2.append(result.get("FormNumber")).append(", ");
 		}
+		if(temp2.length()==0)
+		{
+			
+		}else {
 		temp2=temp2.delete(temp2.length()-2, temp2.length());
+		}
 		System.out.println(temp2);
 		return temp2.toString();
 	}
