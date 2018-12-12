@@ -66,7 +66,7 @@ public class GenerateExpected
 				+ "FROM Output_FormSelection "
 				+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormNumber NOT IN "
 				+ "( "
-				+ "SELECT  Output_FormSelection_Expected.FormName "
+				+ "SELECT  Output_FormSelection_Expected.FormNumber "
 				+ "FROM    Output_FormSelection_Expected WHERE  Output_FormSelection_Expected.S_No='"+rowNumber+"' "
 				+ ") "
 				+ "UNION ALL "
@@ -74,7 +74,7 @@ public class GenerateExpected
 				+ "FROM Output_FormSelection_Expected "
 				+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormNumber NOT IN "
 				+ "( "
-				+ "SELECT  Output_FormSelection.FormName "
+				+ "SELECT  Output_FormSelection.FormNumber "
 				+ "FROM Output_FormSelection WHERE Output_FormSelection.S_No='"+rowNumber+"' "
 				+ ")");
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
