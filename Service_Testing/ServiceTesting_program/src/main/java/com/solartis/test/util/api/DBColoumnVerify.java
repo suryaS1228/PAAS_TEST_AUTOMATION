@@ -353,7 +353,7 @@ public class DBColoumnVerify extends DatabaseOperation
 		
 	}
 	
-	public static void main(String args[]) throws DatabaseException {
+	/*public static void main(String args[]) throws DatabaseException {
 		DatabaseOperation db = new DatabaseOperation();
 		DatabaseOperation.ConnectionSetup("com.mysql.jdbc.Driver",
 				"jdbc:mysql://192.168.84.225:3700/CommercialAuto_Development_ADMIN?useSSL=false", "root", "redhat");
@@ -379,6 +379,6 @@ public class DBColoumnVerify extends DatabaseOperation
 			}
 		}
 		DatabaseOperation.CloseConn();
-	}
+	}*/
 	
 }
