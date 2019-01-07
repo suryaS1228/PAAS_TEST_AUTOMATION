@@ -62,7 +62,8 @@ public class GenerateExpected
 	public String analyser(String rowNumber) throws DatabaseException
 	{
 		StringBuffer temp2 = new StringBuffer();
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects("SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects(
+				"SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
 				+ "FROM Output_FormSelection "
 				+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormNumber NOT IN "
 				+ "( "
