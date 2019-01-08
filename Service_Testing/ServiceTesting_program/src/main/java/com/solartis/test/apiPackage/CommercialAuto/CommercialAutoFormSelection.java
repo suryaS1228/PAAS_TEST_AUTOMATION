@@ -54,45 +54,54 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		List<String> queryList = new ArrayList<String>();
 		try
 		{
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));	
-			String arraylength = response.read("$..FormsInfoList.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
-			System.out.println(arraylength);
-			for (int i=0;i<Integer.parseInt(arraylength);i++) 
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
+			String[] vehicleArr = { "Policy", "Policy.Truck.", "Policy.PublicTransportation.",
+					"Policy.Special.", "Policy.PrivatePassenger.", "Policy.ZoneRated."//, "FormLogic-Garage","FormLogic-GarageServices"
+					};
+			for(int j=0; j<vehicleArr.length;j++)
 			{
-				String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
-				StringBuffer temp2 = new StringBuffer();
-				for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+				String arraylength = response.read("$."+vehicleArr[j]+".Forms.FormDetail.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
+				System.out.println(arraylength);
+				for (int i=0;i<Integer.parseInt(arraylength);i++) 
 				{
-					LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-					String condition = rowOutputColVerify.get("OutputColumnCondtn");
-					if(conditioncheck.ConditionReading(condition, input)&& (rowOutputColVerify.get("Flag").equalsIgnoreCase("Y")))
+					String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
+					StringBuffer temp2 = new StringBuffer();
+					for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 					{
-						try
+						LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+						String condition = rowOutputColVerify.get("OutputColumnCondtn");
+						if(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))
 						{
-							///System.out.println("Writing Response to Table");
-							//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-							String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
-							String Rep=jsonpath.replace("##", Integer.toString(i));
+							if(conditioncheck.ConditionReading(condition, input))
+							{
+								try
+								{
+									///System.out.println("Writing Response to Table");
+									//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+									String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
+									String Rep=jsonpath.replaceAll("###", vehicleArr[j]).replaceAll("##", Integer.toString(i));
+									
+									String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+									
+									temp2=temp2.append("'").append(actual).append("'").append(",");
+									//System.out.println(actual);
+									output.put("flag_for_execution", "Completed");
+									output.put("Time", (end-start) + " Millis");
+								}
+								catch(PathNotFoundException e)
+								{
+									e.printStackTrace();
+									output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+								}
+							}
 							
-							String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-							
-							temp2=temp2.append("'").append(actual).append("'").append(",");
-							//System.out.println(actual);
-							output.put("flag_for_execution", "Completed");
-							output.put("Time", (end-start) + " Millis");
 						}
-						catch(PathNotFoundException e)
-						{
-							e.printStackTrace();
-							output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-						}
-						
 					}
+					insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
+					temp2=temp2.delete(0, temp2.length());
+					queryList.add(insterQuery);
 				}
-				insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
-				temp2=temp2.delete(0, temp2.length());
-				queryList.add(insterQuery);
 			}
 			return queryList;
 		}
