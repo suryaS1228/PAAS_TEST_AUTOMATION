@@ -87,7 +87,7 @@
     "IndividualNamedInsuredOnThePolicy": "Yes",
     "InsuredName": "John Smith",
     "IstheInsuredaGovernmentalSubdivision": "No",
-    "LastRateLookUpDate": "2018-11-27",
+    "LastRateLookUpDate": "2019-01-28",
     "LegalEntity": "Partnership",
     "LimitedContractualLiabilityCoverageForPersonalAndAdvertisingInjuryManualPremium": "100",
     "LimitedFungiOrBacteriaCoverageForGarageOperationsOtherThanCoveredAutosManualPremium": "100",
