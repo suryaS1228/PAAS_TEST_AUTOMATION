@@ -95,7 +95,7 @@ public class BaseClass2
 	}
 	
 //---------------------------------------------------------------LOAD SAMPLE REQUEST--------------------------------------------------------------------	
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
+	/*public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	{
 		this.input = InputData;
 		
@@ -108,9 +108,9 @@ public class BaseClass2
 		{
 			throw new APIException("Error in load sample request", e);
 		}
-	}
+	}*/
 	
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
+	/*public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
 	{
 		try
 		{
@@ -125,7 +125,7 @@ public class BaseClass2
 			throw new APIException("Error in pumpData to request", e);
 		}
 		
-	}
+	}*/
 	
 
 //------------------------------------------------------------CONVERTING REQUEST TO STRING--------------------------------------------------------------	
@@ -249,7 +249,7 @@ public class BaseClass2
 	}
 
 //---------------------------------------------------------------COMAPRISION FUNCTION-------------------------------------------------------------------	
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
+	/*public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,LinkedHashMap<String, String> outputrow) throws APIException
 	{		 
 		List<String> strlist = new ArrayList<String>();
 	 if(outputrow.get("Flag_for_execution").equals("SUCCESS"))
@@ -304,7 +304,7 @@ public class BaseClass2
 	    }
 	}
 	 return outputrow;
- }
+ }*/
 	
 //-----------------------------------------------------PRIVATE FUNCTION FOR SUPPORTING COMPARISON FUNCTION---------------------------------------------------	
 	protected static boolean premium_comp(String expected,String actual)

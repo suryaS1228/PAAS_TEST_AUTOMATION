@@ -30,7 +30,7 @@ public class FireEventAPI2 implements API2
 	}
 	
 	@Override
-	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException 
+	public void LoadSampleRequest(LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -49,7 +49,7 @@ public class FireEventAPI2 implements API2
 			listen.afterLoadSampleRequest();
 	}
 
-	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException 
 	{
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -154,7 +154,7 @@ public class FireEventAPI2 implements API2
 	}
 
 	@Override
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,
+	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow,
 			LinkedHashMap<String, String> output) throws APIException 
 	{
 		// TODO Auto-generated method stub
@@ -162,7 +162,7 @@ public class FireEventAPI2 implements API2
 			listen.beforeCompareFunction();
 		try
 		{
-			output =api.CompareFunction(inputrow,output);
+			inputrow =api.CompareFunction(inputrow,output);
 		}
 		catch(APIException e)
 		{
@@ -172,7 +172,7 @@ public class FireEventAPI2 implements API2
 		}
 		for (Listener listen : listeners1)
 			listen.afterCompareFunction();
-		return output;
+		return inputrow;
 	}
 
 	
@@ -219,8 +219,8 @@ public class FireEventAPI2 implements API2
 		return token;
 	}
 
-	@Override
-	public LinkedHashMap<String, String> differrence(LinkedHashMap<String, String> inputrow,
+	/*@Override
+	public LinkedHashMap<String, String> differrence(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow,
 			LinkedHashMap<String, String> output) throws APIException {
 		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
@@ -238,6 +238,6 @@ public class FireEventAPI2 implements API2
 		for (Listener listen : listeners1)
 			listen.afterCompareFunction();
 		return output;
-	}	
+	}	*/
 	
 }

@@ -1,10 +1,12 @@
 package com.solartis.test.apiPackage.CommercialAuto;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -16,6 +18,9 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.RequestHandler;
+
+import freemarker.template.TemplateException;
 
 
 public class CommercialAutoFormSelection extends BaseClass2 implements API2  
@@ -48,6 +53,40 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
 		}
 	 }
+	
+	public void LoadSampleRequest(LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException
+	{
+		this.input = InputData.get("1");
+		try
+		{
+			sampleInput = new RequestHandler(config);
+			sampleInput.openTemplate();
+		}
+		catch(IOException|ClassNotFoundException| DatabaseException e)
+		{
+			throw new APIException("Error in load sample request", e);
+		}
+	}
+	
+	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException 
+	{
+		try
+		{
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			for(int i=1 ;i<=InputData.size();i++)
+			{
+				sampleInput.LoadData(tableInputColVerify, InputData.get(i),i);
+				sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData.get(String.valueOf(i)),commonmap,i);	
+			}
+			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
+		}
+		catch( DatabaseException| TemplateException| IOException e)
+		{
+			e.printStackTrace();
+			throw new APIException("Error in pumpData to request", e);
+		}
+		
+	}
 	
 	public List<String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
 	{
@@ -111,13 +150,16 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
-	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow, LinkedHashMap<String, String> output) throws APIException
+	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
 		GenerateExpected expected = new GenerateExpected(config);
 		try 
 		{
-			expected.generateExpectedMel(config, inputrow, output);
-			inputrow.put("AnalyserResult", expected.analyser(inputrow.get("S_No")));
+			for(int i=0 ;i<inputrow.size();i++)
+			{
+				expected.generateExpectedMel(config, inputrow.get(i), output);
+				inputrow.get(i).put("AnalyserResult", expected.analyser(inputrow.get(i).get("S_No")));
+			}
 		} 
 		catch (DatabaseException | SQLException e) 
 		{
@@ -127,4 +169,6 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		return inputrow;
 		
 	}
+
+	
 }

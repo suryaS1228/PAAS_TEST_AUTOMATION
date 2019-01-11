@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API2;
-import com.solartis.test.apiPackage.BaseClass;
+import com.solartis.test.apiPackage.BaseClass2;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.POIException;
@@ -132,7 +132,6 @@ public class MainClass3
 		{
 			e.printStackTrace();
 		}
-		
 	}
 
 	
@@ -140,22 +139,27 @@ public class MainClass3
 	@Test(dataProvider="PaaSTest")
 	public void Api1(Integer RowIterator, Object inputtablerowobj) throws InterruptedException, DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
-		ObjectMapper inputtableobjectMapper = new ObjectMapper();
-		inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-		if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
+		try {
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> inputrow = new LinkedHashMap<Integer, LinkedHashMap<String, String>> ();
+			ObjectMapper inputtableobjectMapper = new ObjectMapper();
+			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
+			//if(inputrow.get(1).get("Flag_for_execution").equalsIgnoreCase("Y"))
+			//{
+				for(int i=0;i<apii.length;i++)
+				{
+					disableSslVerification();
+					GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
+				}
+			//}
+			//else
+			//{
+				//System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
+			//}
+			commonMap.clear();
+		}catch (Exception e)
 		{
-			for(int i=0;i<apii.length;i++)
-			{
-				disableSslVerification();
-				GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
-			}
+			e.printStackTrace();
 		}
-		else
-		{
-			System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
-		}
-		commonMap.clear();
 	}
 	
 	@SuppressWarnings({ "unchecked" })
@@ -165,7 +169,7 @@ public class MainClass3
 		{
 			//PropertiesHandle config; 
 				
-			LinkedHashMap<String, String> inputrow = new LinkedHashMap<String, String> ();
+			LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow = new LinkedHashMap<Integer,LinkedHashMap<String, String>> ();
 			LinkedHashMap<String, String> outputrow = new LinkedHashMap<String, String> ();
 			LinkedHashMap<String, String> individualinputrow = new LinkedHashMap<String, String> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
@@ -199,19 +203,19 @@ public class MainClass3
 				System.out.println("inputrow is null");
 			}
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
-			if(inputrow.get("Flag_for_execution").equalsIgnoreCase("Y"))
+			if(inputrow.get("1").get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
-				System.out.println("TestData " + inputrow.get("S_No") + "  API--"+apis );		
+				System.out.println("TestData " + inputrow.get("1").get("S_No") + "  API--"+apis );		
 				
-				if (TokenFlag)
+				/*if (TokenFlag)
 				{
 					if(ExecutionFlag.equalsIgnoreCase("ActualOnly")||ExecutionFlag.equalsIgnoreCase("ActualandComparison")||ExecutionFlag.equalsIgnoreCase("Comparison")||ExecutionFlag.equalsIgnoreCase("ResponseOnly"))
 				    {
 					    Token=fireEventAPI.tokenGenerator(ConfigObjectRepository[0]);
 				    }
 					TokenFlag=false;
-				}
-				inputrow.put("Token", Token);
+				}*/
+				//inputrow.get("1").put("Token", Token);
 								
 				fireEventAPI.LoadSampleRequest(inputrow);//LOADING SAMPLE REQUEST
 	                            
@@ -233,17 +237,17 @@ public class MainClass3
 				{												  
 					if(outputtablechoice.equalsIgnoreCase("Y"))//INPUT AND OUT DB TABLE ARE SAME
 					{
-						List<String> inputroww = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-						commonMap.putAll(inputrow);
+						/*List<String> inputroww = fireEventAPI.SendResponseDataToFile(inputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
+						//commonMap.putAll(inputrow);
 						//inputTable.UpdateRow(RowIterator, inputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA
 						for (int i = 0; i < inputroww.size(); i++) {
 							OutputTable.insertRow(inputroww.get(i));
-						}
+						}*/
 					}
 					else//INPUT AND OUT DB TABLE ARE DIFFERENT
 					{
 						List<String> outputroww = fireEventAPI.SendResponseDataToFile(outputrow);//FETCHING DATA FROM RESPONSE AND STORE THEM INTO THE DATABASE TABLE
-						commonMap.putAll(outputrow);
+						//commonMap.putAll(outputrow);
 						//System.out.println(RowIterator+"-----------"+outputrow);
 						//OutputTable.UpdateRow(RowIterator+1, outputrow);//UPDATE DB TABLE ROWS AFTER INSERTING RESPONSE DATA		
 						//System.out.println("Update completed"); 
@@ -258,23 +262,31 @@ public class MainClass3
 					if(outputtablechoice.equalsIgnoreCase("Y"))
 					{									
 						inputrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION									     
-						inputTable.UpdateRow(RowIterator, inputrow);
+						
+						for(int i=0; i<inputrow.size();i++)
+						{
+						inputTable.UpdateRow(RowIterator, inputrow.get(i));
+						}
+					
 					}
 					else
 					{
 						System.out.println("Coming to Comparison");
-						individualinputrow = fireEventAPI.CompareFunction(individualinputrow,outputrow);//CALLING COMPARING FUNCTION
+						LinkedHashMap<Integer,LinkedHashMap<String, String>> individualrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 						//OutputTable.UpdateRow(RowIterator+1, outputrow);
-						inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);
-						commonMap.putAll(outputrow);									
+						for(int i=0;i<individualrow.size();i++)
+						{
+							inputIndividualTable.UpdateRow(RowIterator+1, individualrow.get(i));
+						}
+						//commonMap.putAll(outputrow);									
 					}
 				}
 				
 				
 				if(ExecutionFlag.equalsIgnoreCase("Difference"))
 				{
-					inputrow = fireEventAPI.differrence(inputrow,outputrow);
-					inputTable.UpdateRow(RowIterator+1, inputrow);
+					//inputrow = fireEventAPI.differrence(inputrow,outputrow);
+					//inputTable.UpdateRow(RowIterator+1, inputrow);
 				}
 				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
@@ -282,9 +294,9 @@ public class MainClass3
 				inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 				//System.out.println(individualinputrow);
 			}
-			else
+		else
 			{
-				System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
+				System.out.println("TestData " +"---flag_for_execution N");
 			}
 		}
 		catch (Exception e)
@@ -298,25 +310,29 @@ public class MainClass3
     }
 	
 	@DataProvider(name="PaaSTest")
-	public Object[][] dpapi1() throws DatabaseException
+	public Object[][] dpapi1() throws DatabaseException, NumberFormatException, SQLException
 	{
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
 		ObjectMapper inputtableobjectMapper;		
 		DatabaseOperation input = new DatabaseOperation();
-		inputtable = input.GetDataObjects(InputtableQuery);
-		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();	
+		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(S_No) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
+		Object[][] combined = new Object[noOfTestCase][2];
 		int rowIterator = 0;
-		Object[][] combined = new Object[inputtable.size()][2];
-		while (inputtableiterator.hasNext() ) 
+		for(int i=1;i<=noOfTestCase;i++) 
 		{
-			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();				
-			LinkedHashMap<String, String> inputrow = inputentry.getValue();		         
-		    inputtableobjectMapper = new ObjectMapper();
-			Object inputtablerowobject = inputtableobjectMapper.convertValue(inputrow, Object.class);				 
-			combined[rowIterator][0] = rowIterator+1;
-			combined[rowIterator][1] = inputtablerowobject;				 
-			rowIterator++;
-		}  		 
+			inputtable = input.GetDataObjects(InputtableQuery+" Where S_NO="+i);
+			//Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();			
+			//while (inputtableiterator.hasNext() ) 
+			//{
+				//Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();				
+				//LinkedHashMap<String, String> inputrow = inputentry.getValue();		         
+			    inputtableobjectMapper = new ObjectMapper();
+				Object inputtablerowobject = inputtableobjectMapper.convertValue(inputtable, Object.class);				 
+				combined[rowIterator][0] = rowIterator+1;
+				combined[rowIterator][1] = inputtablerowobject;				 
+				rowIterator++;
+			//}  
+		}
 		return combined;
 	}
 	
@@ -380,7 +396,7 @@ public class MainClass3
 	@AfterTest
 	public void connectionclose() throws DatabaseException, POIException, APIException
 	{
-		BaseClass base = new BaseClass();
+		BaseClass2 base = new BaseClass2();
 		try
 		{
 			String DateandTime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());

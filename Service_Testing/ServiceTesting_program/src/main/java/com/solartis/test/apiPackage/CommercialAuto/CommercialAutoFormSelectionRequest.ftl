@@ -1,810 +1,296 @@
-{
-  "Policy": {
-    "ALAECoverage": "Covered 100%",
-    "AbuseOrMolestationExclusionForGeneralLiabilityCoveragesManualPremium": "100",
-    "AddInsGLCoveragesConcessionairesTradingUnderYourNameManualPremium": "8000",
-    "AddedPIPCoverageType": "30,000 Medical Expenses and 20,000 Other PIP Benefits",
+<#assign array=[]><#list NoOfState1 as x><#assign array=array+[x.value]></#list><#assign i=0>
+ {
+ 	<#assign InsuredLevels="InsuredLevel1"><#list InsuredLevels?eval as result>     
+        "${result.atrib}":"${result.value}",
+        </#list> 
+ 	"State": [
+ 	<#list 1..array[i] as x> 
+    {
+    <#assign States="State"+x><#list States?eval as result>     
+        "${result.atrib}":"${result.value}",
+        </#list> 
     "AddedPersonalInjuryProtection": [
-      {
-        "AddedPersonalInjuryProtectionDetail": {
-          "FamilyMembersName": "1"
-        }
-      }
-    ],
-    "AddedPersonalInjuryProtectionLimitText": "10,000",
-    "AdditionalChiropracticTreatments": "Yes",
-    "AdditionalInsuredGaragesGrantorFranchiseDetailManualPremium": "100",
-    "AdditionalInsuredLessorOfLeasedEquipmentDetailManualPremium": "100",
-    "AdditionalPIPAggregateLimit": "",
-    "AdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-    "AdditionalPIPWorkLossOrSurvivorsIncomeLossPerWeek": "",
-    "AddlInsGLLessorOfLeasedEqpmtAutomtcStatusWhenRqdInLeasedAgrmtWithYouManualPremium": "478",
-    "AddressLine1": "27TH ST",
-    "AddressLine2": "PHOENIX",
-    "AmendmentOfLimitsOfInsuranceGeneralLiabilityCoveragesManualPremium": "100",
-    "AutosLeasedHiredRentedWithDriversPhysicalDamageCovCollisionCoverageManualPremium": "100",
-    "AutosLeasedHiredRentedWithDriversPhysicalDamageCovComprehensiveCoverageManualPremium": "100",
-    "AutosLeasedHiredRentedWithDriversPhysicalDamageCovSpecifiedCausesOfLossCoverageManualPremium": "100",
-    "BasicLimitCoLiabilityPremium": "1000",
-    "BasicLimitCoLiabilityPremiumOverride": "2000",
-    "BroadFormNamedInsured": "No",
-    "CPPIRPMFactor": "2",
-    "ChangesToTheBankruptcyOrInsolvencyExclusionForActsErrorsOrOmissionsLiabilityCoveragesManualPremium": "100",
-    "City": "Accord",
-    "CoPhysicalDamagePremium": "1000",
-    "CoPhysicalDamagePremiumOverride": "2000",
-    "CommercialAutoChangesAmendmentOfDefinitionOfPollutants": "1000",
-    "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageDeductible": "1000",
-    "CommercialAutoDrivingSchoolPedestrianPIPCoveragePedestrianPIPCoverage": "1000",
-    "CommercialAutoGrossReceiptsBasisMedicalPaymentsCoverageLimitText": "1000",
-    "CommercialAutoMinnesotaAddedPersonalInjuryProtection": "Yes",
-    "CommercialAutoPublicOrLiveryPassengerConveyanceAndOnDemandDeliveryServicesExclusion": "No",
-    "CommercialAutoPublicOrLiveryPassengerConveyanceExclusion": "No",
-    "CommercialAutoPublicTransportationAutos": "Yes",
-    "CommercialAutoTrailerInterchangeAgreementCollisionCoverageDeductible": "1000",
-    "CommercialAutoTrailerInterchangeAgreementDetailOtherThanCollisionCoverageType": "1000",
-    "CommunicableDiseaseExclusionForGeneralLiabilityCoveragesManualPremium": "100",
-    "ConnecticutChangesLiabilityOfMunicipalitiesManualPremium": "100",
-    "County": "Nobles",
-    "CoverageForInjuryToLeasedWorkersManualPremium": "100",
-    "CustomerComplaintLegalDefenseCoverageManualPremium": "100",
-    "CustomerComplaintLegalDefenseCoverageWithNoCoverageForNewlyAcquiredOrFormedAutoDealershipManualPremium": "100",
-    "DeathBenefitsLimit": "25,000",
-    "DesignatedLocationsGeneralLiabilityAggregateLimitForCertainGeneralLiabilityCoveragesManualPremium": "100",
-    "DriveOtherCarCovBroadenedCovForNamedIndividualsMedicalPaymentsCoverageLimitText": "1000",
-    "DriveOtherCarCovBroadenedCovForNamedIndividualsOtherThanCollisionCoverageFullGlassCoverage": "1000",
-    "DriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageCoverageType": "1000",
-    "DriveOtherCarCoverageBroadenedCoverageForNamedIndividualsPedestrianPIPCoveragePedestrianPIPCoverage": "1000",
-    "EffectiveDate": "2018-12-12",
-    "EmployeeBenefitsLiabilityCoverageManualpremium": "45",
-    "EmployeeBenefitsLiabilityCoverageWithNoCoverageForNewlyAcquiredOrFormedAutoDealershipManualPremium": "100",
-    "EngageInTruckingOperations": "1000",
-    "EventName": "StarrCARatingWithForms",
-    "EventVersion": "1.1.0.1",
-    "ExclusionDesignatedProductsManualPremium": "100",
-    "ExclusionDesignatedWorkYouPerformedManualPremium": "100",
-    "ExclusionNewlyAcquiredOrFormedAutoDealershipManualPremium": "100",
-    "ExclusionYear2000ComputerRelatedElectronicProblemsExceptionBodilyInjuryPremisesManualPremium": "100",
-    "ExclusionYear2000ComputerRelatedElectronicProblemsProductsWorkManualPremium": "100",
-    "ExpandedCoverageTerritoryForGeneralLiabilityCoveragesAdditionalScheduledCountriesManualPremium": "100",
-    "ExpenseVariationApplies": "Yes",
-    "ExperienceBusinessStartDate": "2018-11-11",
-    "ExperienceModificationLiabilityOverride": "0",
-    "ExperienceModificationPhysicalDamagesOverride": "0",
-    "ExperienceRatingModificationApplies": "No",
-    "ExperienceRatingModificationYear1DetailLiabilityAllocatedLossAdjustmentExpense": "1000",
-    "ExperienceRatingModificationYear2DetailLiabilityAllocatedLossAdjustmentExpense": "1500",
-    "ExperienceRatingModificationYear3DetailLiabilityAllocatedLossAdjustmentExpense": "3000",
-    "ExpirationDate": "2019-12-12",
-    "ExtendedReportingPeriodEndorsementForEmployeeBenefitsLiabilityCoverageManualPremium": "100",
-    "ExtendedReportingPeriodForEmpBensLiabilityCoverageWithNoCoverageForNewlyAcqrdOrFormedAutoDealershipManualPremium": "100",
-    "FellowEmployeeCovManualPremium": "100",
-    "FellowEmployeeCoverageForDesignatedEmployeesPositionsManualPremium": "100",
-    "FinancialResponsibility": "1000",
-    "FungiOrBacteriaExclusionGarageOperationsOtherThanCoveredAutosManualPremium": "100",
-    "GrossReceiptsRatingBasis": "1000",
-    "HiredAutoWanted": "Yes",
-    "IndividualNamedInsuredOnThePolicy": "Yes",
-    "InsuredName": "John Smith",
-    "IstheInsuredaGovernmentalSubdivision": "No",
-    "LastRateLookUpDate": "2019-01-28",
-    "LegalEntity": "Partnership",
-    "LimitedContractualLiabilityCoverageForPersonalAndAdvertisingInjuryManualPremium": "100",
-    "LimitedFungiOrBacteriaCoverageForGarageOperationsOtherThanCoveredAutosManualPremium": "100",
-    "LimitedMexicoCoverageManualPremium": "100",
-    "LimitedProductWithdrawalExpenseEndorsementManualPremium": "100",
-    "NamedIndividualsBroadenedFirstPartyBenefitAccidentalDeathBenefit": "25,000",
-    "NamedIndividualsBroadenedFirstPartyBenefitsCombinationBenefit": "100,000",
-    "NamedIndividualsBroadenedFirstPartyBenefitsCoverageType": "Additional First Party Benefit",
-    "NamedIndividualsBroadenedFirstPartyBenefitsFuneralExpenseBenefit": "2,500",
-    "NamedIndividualsBroadenedFirstPartyBenefitsMedicalExpenseBenefit": "10,000",
-    "NamedIndividualsBroadenedFirstPartyBenefitsWorkLossBenefit": "1,000 Monthly / 5,000 Total",
-    "NamedIndividualsBroadenedPersonalInjuryProtectionCoverageAddedPIPCoverage": "Yes",
-    "NamedIndividualsBroadenedPersonalInjuryProtectionCoveragePIPExtendedBenefits": "Yes",
-    "NamedIndividualsBroadenedPersonalInjuryProtectionCoverageRatingBasis": "Covered By Workers Comp and Principally Operated by Employees",
-    "NonOwnedAutoWanted": "Yes",
-    "OptionalClassPlan": "No",
-    "OptionalLimitsLossOfUseExpensesManualPremium": "100",
-    "PersonalInjuryProtectionStacking": "Yes",
-    "PersonalInjuryProtectionWorkLoss": "Include Work Loss",
-    "PolicyType": "Business Auto Coverage Form",
-    "PollutionLiabBroadenedCovBusinessAutoMotorCarrierTruckersCovFormsManualPremium": "100",
-    "PollutionLiabilityBroadenedCoverageForCoveredAutosGarageCoverageFormManualPremium": "100",
-    "PrivatePassenger": [
-      {
-        "PrivatePassengerDetail": {
-          "PrivatePassengerOriginalCostNew": "300",
-          "PrivatePassengerOtherThanCollisionCoverageDeductible": "Full Coverage",
-          "PrivatePassengerUse": "To or From Work 15 or More Miles",
-          "PrivatePassengerLiabilityCoverageLimit": "125,000",
-          "State": "AR",
-          "ZipCode": "71601",
-          "VehicleType": "Private Passenger",
-          "PrivatePassengerCollisionCoverageDeductible": "1,000",
-          "City": "Accord",
-          "PrivatePassengerType": "Farm Use - Fleet Vehicle",
-          
-          "County": "Surry",
-          "NoOfVehicles": "1",
-          "AddressLine1": "8TH ST",
-          "AddressLine2": "PHOENIX",
-          "AudioVisualAndDataElectronicEquipmentCoverageLimit": "2500",
-          "AuxillaryRunningLampsDiscount": "Yes",
-          "CommercialAutoVehicleAdditionalPIPCoverageAdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "PrivatePassengerAccidentPreventionDiscount": "Yes",
-          "PrivatePassengerAccidentPreventionRefresherDiscount": "No",
-          "PrivatePassengerAccidentalDeathBenefitCoverageWanted": "Yes",
-          "PrivatePassengerAdditionalChiropracticTreatmentsCoverageWanted": "No",
-          "PrivatePassengerAdditionalPIPCoverage": "Yes",
-          "PrivatePassengerAdditionalPersonalInjuryProtectionNewYorkAddedCoverageAdditionalMonthlyWorkLoss": "Not Applicable",
-          "PrivatePassengerAdditionalPersonalInjuryProtectionNewYorkAddedCoverageOtherExpensesLimit": "Not Applicable",
-          "PrivatePassengerAdditionalPersonalInjuryProtectionNewYorkAddedCoverageTotalAdditionalLimits": "Not Applicable",
-          "PrivatePassengerAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageAdditionalDeathBenefit": "Yes",
-          "PrivatePassengerAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageLimit": "Not Applicable",
-          "PrivatePassengerAntiTheftDevice": "Not Applicable",
-          "PrivatePassengerAntiTheftVehicleRecoveryDevice": "Fuel Cutoff",
-          "PrivatePassengerClassCode": "",
-          "PrivatePassengerCollisionCoverageCoverageType": "ACV",
-          "PrivatePassengerCollisionCoverageManualPremium": "1500",
-          "PrivatePassengerCollisionCoveragePercentOfMilesDrivenInGreenZone": "91 - 100%",
-          "PrivatePassengerDeathBenefitsCoverageWanted": "No",
-          "PrivatePassengerDefensiveDrivingCourseCredit": "No",
-          "PrivatePassengerFleet": "Yes",
-          "PrivatePassengerHiredAutosSpecifiedAsCoveredAutosYouOwn": "Yes",
-          "PrivatePassengerIncomeLossBenefitsCoverageIncomeLossBenefits": "No",
-          "PrivatePassengerIncomeLossBenefitsCoverageIncomeLossBenefitsRatingBasis": "Not Applicable",
-          "PrivatePassengerLessorAdditionalInsuredAndLossPayee": "No",
-          "PrivatePassengerLiabilityCoverageDeductible": "50,000 Combined Single Limit",
-          "PrivatePassengerLiabilityCoverageManualPremium": "15000",
-          "PrivatePassengerLiabilityCoveragePercentOfMilesDrivenInGreenZone": "81 - 90%",
-          "PrivatePassengerLiabilityCoverageType": "Combined Single Limit",
-          "PrivatePassengerMake": "KENWORTH",
-          "PrivatePassengerMatureDriverImprovementCourseDiscount": "No",
-          "PrivatePassengerMedicalPaymentsCoverageLimit": "2,000",
-          "PrivatePassengerMedicalPaymentsCoverageManualPremium": "457",
-          "PrivatePassengerModel": "CONSTRUCTION",
-          "PrivatePassengerOperatorExperience": "Not Applicable",
-          "PrivatePassengerOptionalBasicEconomicLossCoverageWanted": "Yes",
-          "PrivatePassengerOtherThanCollisionCoverageCoverageType": "ACV",
-          "PrivatePassengerOtherThanCollisionCoverageFullGlassCoverage": "Yes",
-          "PrivatePassengerOtherThanCollisionCoveragePercentOfMilesDrivenInGreenZone": "61 - 70%",
-          "PrivatePassengerPIPCoverageAccidentalDeathBenefit": "100,000",
-          "PrivatePassengerPIPCoverageAdditionalMedExpBenefits": "No",
-          "PrivatePassengerPIPCoverageAdditionalPersonalInjuryProtection": "Yes",
-          "PrivatePassengerPIPCoverageCombinationFirstPartyBenefit": "Not Applicable",
-          "PrivatePassengerPIPCoverageCopayment": "0%",
-          "PrivatePassengerPIPCoverageCoverageType": "Employers Subject to MA Workers Compensation Act",
-          "PrivatePassengerPIPCoverageCoveredByWorkersCompensation": "No",
-          "PrivatePassengerPIPCoverageDeductible": "Full Coverage",
-          "PrivatePassengerPIPCoverageExclusionOfIncomeBenefits": "No",
-          "PrivatePassengerPIPCoverageExclusionOfWorkLoss": "Not Applicable",
-          "PrivatePassengerPIPCoverageFuneralExpenseBenefits": "2,500",
-          "PrivatePassengerPIPCoverageGovernmentOwned": "No",
-          "PrivatePassengerPIPCoverageMedExpAsSecondary": "No",
-          "PrivatePassengerPIPCoverageMedicalExpenseBenefits": "25,000",
-          "PrivatePassengerPIPCoverageMedicalExpenseElimination": "No Elimination of Coverage",
-          "PrivatePassengerPIPCoveragePercentOfMilesDrivenInGreenZone": "Not Applicable",
-          "PrivatePassengerPIPCoveragePrincipalOperQualifiedNameInsrdHadWorkLossBenefitsExcl": "No",
-          "PrivatePassengerPIPCoverageRatingBasis": "Principally Operated by Employees",
-          "PrivatePassengerPIPCoverageWorkLossBenefits": "1,000 Monthly / 5,000 Total",
-          "PrivatePassengerPassiveRestraintDiscount": "Yes",
-          "PrivatePassengerPercentageOfTransportationNetworkServiceAutoUse": "80% or More",
-          "PrivatePassengerPropertyProtectionInsuranceCoverageCoverageType": "Basic",
-          "PrivatePassengerPropertyProtectionInsuranceCoverageDeductible": "100",
-          "PrivatePassengerSafetyFeatures": "Not Applicable/Not Installed",
-          "PrivatePassengerSafetyScore": "27 - 30",
-          "PrivatePassengerSafetyScoreDiscountApplies": "Yes",
-          "PrivatePassengerStatedAmount": "10000",
-          "PrivatePassengerTowingLaborCoverageLimit": "200",
-          "PrivatePassengerTowingLaborCoverageManualPremium": "35",
-          "PrivatePassengerUnderinsuredMotoristPropertyDamageCoverageWanted": "No",
-          "PrivatePassengerUnderinsuredMotoristsCoverageWanted": "Yes",
-          "PrivatePassengerUninsuredMotoristsCoverageManualPremium": "458",
-          "PrivatePassengerUninsuredMotoristsCoverageWanted": "Yes",
-          "PrivatePassengerUsedAsTNCOrOnDemand": "Used As Transportation Network Company Only",
-          "PrivatePassengerVIN": "1NKDL40X19J239303",
-          "PrivatePassengerWageLossCoverageWanted": "No",
-          "PrivatePassengerWorkLossCoverageWanted": "No",
-          "PrivatePassengerYear": "1996",
-          "PrivatePassengerZipCodeOverride": "71601",
-          "RentalReimbursementCoverageDailyRentalAmount": "35",
-          "RentalReimbursementCoverageMaximumRentalDays": "15",
-          "Territory": "106",
-          "PrivatePassengerUninsuredMotoristPropertyDamageCoverageManualPremium": "1500",
-          "PrivatePassengerUninsuredMotoristPropertyDamageCoverageWanted": "Yes",
-          "PrivatePassengerCollisionCoverageCollisionType": "Limited Collision",
-          "PrivatePassengerCollisionCoverageDeductibleWaiver": "Yes",
-          "PrivatePassengerUninsuredMotoristsCoverageType": "Split Limit",
-          "PrivatePassengerUninsuredMotoristsCoverageSplitLimit": "50,000/100,000",
-          "PrivatePassengerOtherThanCollisionCoverageGlass100Deductible": "Yes",
-          "CommercialAutoFarmLaborContractorsDeductible": "",
-          "CommercialAutoPIPMedicalExpensesCoverageLimitText": "",
-          "CommercialAutoVehicleCollisionCoverageCollisionType": "",
-          "CommercialAutoVehicleLiabilityPropertyDamageCoverageDeductible": ""
-        }
-      }
-    ],
-    "ProductNumber": "STARR CA V1",
-    "ProductVerNumber": "STARR_CA_2018_V1",
-    "PropertyDamageLiabilityCoverageBuyback": "",
-    "PublicTransportation": [
-      {
-        "PublicTransportationDetail": {
-          "AddressLine1": "",
-          "AddressLine2": "",
-          "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
-          "AuxillaryRunningLampsDiscount": "Yes",
-          "City": "Brighton",
-          "CommercialAutoVehicleAdditionalPIPCoverageAdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "County": "Surry",
-          "NoOfVehicles": "1",
-          "PublicTransportationAccidentPreventionDiscount": "Yes",
-          "PublicTransportationAccidentalDeathBenefitCoverageWanted": "Yes",
-          "PublicTransportationAdditionalChiropracticTreatmentsCoverageWanted": "",
-          "PublicTransportationAdditionalPIPCoverage": "Yes",
-          "PublicTransportationAdditionalPersonalInjuryProtectionNewYorkAddedCoverageAdditionalMonthlyWorkLoss": "",
-          "PublicTransportationAdditionalPersonalInjuryProtectionNewYorkAddedCoverageOtherExpensesLimit": "",
-          "PublicTransportationAdditionalPersonalInjuryProtectionNewYorkAddedCoverageTotalAdditionalLimits": "",
-          "PublicTransportationAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageAdditionalDeathBenefit": "Yes",
-          "PublicTransportationAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageLimit": "Not Applicable",
-          "PublicTransportationAlternativeExpensesCoverageManualPremium": "",
-          "PublicTransportationCollisionCoverageCoverageType": "ACV",
-          "PublicTransportationDeathBenefitsCoverageWanted": "",
-          "PublicTransportationFarthestTerminalZone": "Zone 01 Atlanta",
-          "PublicTransportationFleet": "No",
-          "PublicTransportationGaragingZone": "Zone 29 Phoenix",
-          "PublicTransportationIncomeLossBenefitsCoverageIncomeLossBenefits": "",
-          "PublicTransportationIncomeLossBenefitsCoverageIncomeLossBenefitsRatingBasis": "",
-          "PublicTransportationMake": "BMW",
-          "PublicTransportationMechanicalLift": "",
-          "PublicTransportationMedicalPaymentsCoverageLimit": "5,000",
-          "PublicTransportationModel": "78965",
-          "PublicTransportationNoOfDaysSchoolYear": "200",
-          "PublicTransportationOptionalBasicEconomicLossCoverageWanted": "Yes",
-          "PublicTransportationOriginalCostNew": "15000",
-          "PublicTransportationPIPCoverageAccidentalDeathBenefit": "",
-          "PublicTransportationPIPCoverageAdditionalMedExpBenefits": "",
-          "PublicTransportationPIPCoverageAdditionalPersonalInjuryProtection": "",
-          "PublicTransportationPIPCoverageCombinationFirstPartyBenefit": "",
-          "PublicTransportationPIPCoverageCopayment": "",
-          "PublicTransportationPIPCoverageCoverageType": "Employers Subject to MA Workers Compensation Act",
-          "PublicTransportationPIPCoverageCoveredByWorkersCompensation": "",
-          "PublicTransportationPIPCoverageDeductible": "",
-          "PublicTransportationPIPCoverageExclusionOfIncomeBenefits": "",
-          "PublicTransportationPIPCoverageExclusionOfWorkLoss": "",
-          "PublicTransportationPIPCoverageFuneralExpenseBenefits": "",
-          "PublicTransportationPIPCoverageGovernmentOwned": "",
-          "PublicTransportationPIPCoverageInterstateBus": "",
-          "PublicTransportationPIPCoverageMedExpAsSecondary": "",
-          "PublicTransportationPIPCoverageMedicalExpenseBenefits": "",
-          "PublicTransportationPIPCoverageMedicalExpenseElimination": "",
-          "PublicTransportationPIPCoveragePrincipalOperQualifiedNameInsrdHadWorkLossBenefitsExcl": "",
-          "PublicTransportationPIPCoverageRatingBasis": "Other Than Owner Operated",
-          "PublicTransportationPIPCoverageWorkLossBenefits": "",
-          "PublicTransportationPrimaryClassCode": "014",
-          "PublicTransportationPropertyProtectionInsuranceCoverageCoverageType": "",
-          "PublicTransportationPropertyProtectionInsuranceCoverageDeductible": "",
-          "PublicTransportationRadiusClass": "Local",
-          "PublicTransportationSafetyScore": "27 - 30",
-          "PublicTransportationSafetyScoreDiscountApplies": "Yes",
-          "PublicTransportationSchoolBusProration": "Yes",
-          "PublicTransportationSeatingCapacity": "1 to 8",
-          "PublicTransportationSecondaryClassCode": "2",
-          "PublicTransportationStatedAmount": "12000",
-          "PublicTransportationType": "Social Service - All Other",
-          "PublicTransportationUnderinsuredMotoristCoverageWanted": "",
-          "PublicTransportationUnderinsuredMotoristPropertyDamageCoverageWanted": "",
-          "PublicTransportationUninsuredMotoristsCoverageWanted": "Yes",
-          "PublicTransportationVIN": "",
-          "PublicTransportationWageLossCoverageWanted": "",
-          "PublicTransportationWorkLossCoverageWanted": "Yes",
-          "PublicTransportationYear": "1992",
-          "PublicTransportationZipCodeOverride": "71601",
-          "RentalReimbursementCoverageDailyRentalAmount": "0",
-          "RentalReimbursementCoverageMaximumRentalDays": "0",
-          "State": "AR",
-          "Territory": "106",
-          "VehicleType": "Public Transportation",
-          "ZipCode": "71601",
-          "PublicTransportationLocationUse": "Interstate",
-          "PublicTransportationUninsuredMotoristPropertyDamageCoverageWanted": "Yes",
-          "PublicTransportationSchoolCharterRegistrationPlates": "Yes",
-          "PublicTransportationMatureDriverImprovementCourseDiscount": "Yes",
-          "PublicTransportationUninsuredMotoristsCoverageType": "Split Limit",
-          "PublicTransportationUninsuredMotoristsCoverageSplitLimit": "500,000/500,000",
-          "CommercialAutoPIPMedicalExpensesCoverageLimitText": "",
-          "CommercialAutoVehicleAdditionalPIPCoverageCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "CommercialAutoVehicleLiabilityCoverageCoverageType": "",
-          "CommercialAutoVehicleLiabilityPropertyDamageCoverageDeductible": "",
-          "CommercialAutoVehicleOtherThanCollisionCoverageFullGlassCoverage": "",
-          "FarmLaborContractor": "",
-          "MotorBus": "",
-          "OwnedByNewJerseyTransitCorp": "",
-          "CommercialAutoVehicleLiabilityCoverageDeductible": "",
-          "CommercialAutoFarmLaborContractorsDeductible": "",
-          "PublicTransportationLessorAdditionalInsuredAndLossPayee": "Yes",
-          "PublicTransportationHiredAutosSpecifiedAsCoveredAutosYouOwn": "Yes",
-          "CommercialAutoVehicleLiabilityCoverageTortLimitation": "No",
-          "CommercialAutoVehicleLiabilityCoverageLimitText": "100,000",
-          "PublicTransportationGaragingLocation": "Not Applicable",
-          "PublicTransportationIndividuallyOwnedLimo": "No",
-          "PublicTransportationFareCharged": "No",
-          "PublicTransportationOwnedByEmployer": "No",
-          "PublicTransportationDefensiveDrivingCourseCredit": "No",
-          "PublicTransportationRideSharingArrangements": "No",
-          "PublicTransportationOtherThanCollisionCoverageDeductible": "3,000",
-          "PublicTransportationOtherThanCollisionCoverageCoverageType": "ACV",
-          "PublicTransportationOtherThanCollisionCoverageGlass100Deductible": "Yes",
-          "PublicTransportationCollisiontype": "Not Applicable",
-          "PublicTransportationCollisionCoverageDeductibleWaiver": "No",
-          "PublicTransportationCollisionCoverageDeductible": "500",
-          "PublicTransportationUnderinsuredMotoristsCoverageSplitLimit": "500,000/500,000",
-          "PublicTransportationUnderinsuredMotoristsCoverageType": "No Coverage",
-          "PublicTransportationExtraordinaryMedicalBenefitsCoverageSeatingCapacity": "1 To 8",
-          "PublicTransportationAntiTheftVehicleRecoveryDevice": "Yes",
-          "PublicTransportationGrossVehicleWeightOver10000": "No",
-          "PublicTransportationExtraordinaryMedicalBenefitsCoverageExtraordinaryMedicalBenefitRatingBasis": "Not Applicable",
-          "PublicTransportationExtraordinaryMedicalBenefitsCoverageExtraordinaryMedicalBenefit": "Yes"
-        }
-      }
-    ],
-    "RiskAnalyzerWanted": "",
-    "ScheduleRatingModificationApplies": "Yes",
-    "ScheduleRatingModificationDispersionPctPhysicalDamage": "41%",
-    "ScheduleRatingModificationEmployeesPct": "41%",
-    "ScheduleRatingModificationEmployeesPctPhysicalDamage": "41%",
-    "ScheduleRatingModificationEquipmentPct": "41%",
-    "ScheduleRatingModificationEquipmentPctPhysicalDamage": "41%",
-    "ScheduleRatingModificationManagementPct": "41%",
-    "ScheduleRatingModificationManagementPctPhysicalDamage": "41%",
-    "ScheduleRatingModificationSafetyOrganizationPct": "41%",
-    "ScheduleRatingModificationSafetyOrganizationPctPhysicalDamage": "41%",
-    "SilicaOrSilicaRelatedDustExclusionForCoveredAutosExposureManualPremium": "100",
-    "SilicaOrSilicaRelatedDustExclusionForOtherThanCoveredAutosExposureGarageCoverageFormManualPremium": "100",
-    "Special": [
-      {
-        "SpecialDetail": {
-          "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
-          "AuxillaryRunningLampsDiscount": "Yes",
-          "City": "Accord",
-          "CommercialAutoVehicleAdditionalPIPCoverageAdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "NoOfVehicles": "1",
-          "RentalReimbursementCoverageDailyRentalAmount": "0",
-          "SpecialAccidentPreventionDiscount": "Yes",
-          "SpecialTotalCostOfHireCollision": "63",
-          "SpecialTypesAccidentalDeathBenefitCoverageWanted": "Yes",
-          "SpecialTypesAdditionalChiropracticTreatmentsCoverageWanted": "",
-          "SpecialTypesAdditionalPIPCoverage": "Yes",
-          "SpecialTypesAdditionalPersonalInjuryProtectionNewYorkAddedCoverageAdditionalMonthlyWorkLoss": "",
-          "SpecialTypesAdditionalPersonalInjuryProtectionNewYorkAddedCoverageOtherExpensesLimit": "",
-          "SpecialTypesAdditionalPersonalInjuryProtectionNewYorkAddedCoverageTotalAdditionalLimits": "",
-          "SpecialTypesAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageAdditionalDeathBenefit": "Yes",
-          "SpecialTypesAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageLimit": "Not Applicable",
-          "SpecialTypesAddressLine1": "",
-          "SpecialTypesAddressLine2": "",
-          "SpecialTypesAlternativeExpensesCoverageManualPremium": "",
-          "SpecialTypesClass": "Leasing or Rental Concerns",
-          "SpecialTypesClassCode": "7201",
-          "SpecialTypesCollisionCoverageCoverageType": "ACV",
-          "SpecialTypesCounty": "Surry",
-          "SpecialTypesDeathBenefitsCoverageWanted": "",
-          "SpecialTypesEngineSize": "101-200",
-          "SpecialTypesGrossReceipts": "25",
-          "SpecialTypesIncomeLossBenefitsCoverageIncomeLossBenefits": "",
-          "SpecialTypesIncomeLossBenefitsCoverageIncomeLossBenefitsRatingBasis": "",
-          "SpecialTypesLiabilityCoverageCoverageType": "Combined Single Limit",
-          "SpecialTypesLiabilityCoverageDeductible": "250 Combined Single Limit",
-          "SpecialTypesLiabilityCoverageLimitText": "500,000",
-          "SpecialTypesMedicalPaymentsCoverageLimitText": "2,000",
-          "SpecialTypesNumberOfDaysVehicleIsLeased": "56",
-          "SpecialTypesNumberOfFactoryTestingEmployees": "0",
-          "SpecialTypesNumberOfRepossessedAutos": "0",
-          "SpecialTypesOptionalBasicEconomicLossCoverageWanted": "Yes",
-          "SpecialTypesOriginalCostNew": "15000",
-          "SpecialTypesPIPCoverageAccidentalDeathBenefit": "",
-          "SpecialTypesPIPCoverageAdditionalMedExpBenefits": "",
-          "SpecialTypesPIPCoverageAdditionalPersonalInjuryProtection": "",
-          "SpecialTypesPIPCoverageCombinationFirstPartyBenefit": "",
-          "SpecialTypesPIPCoverageCopayment": "",
-          "SpecialTypesPIPCoverageCoverageType": "Employers Subject to MA Workers Compensation Act",
-          "SpecialTypesPIPCoverageCoveredByWorkersCompensation": "",
-          "SpecialTypesPIPCoverageDeductible": "Full Coverage",
-          "SpecialTypesPIPCoverageExclusionOfIncomeBenefits": "",
-          "SpecialTypesPIPCoverageExclusionOfWorkLoss": "",
-          "SpecialTypesPIPCoverageFuneralExpenseBenefits": "",
-          "SpecialTypesPIPCoverageGovernmentOwned": "",
-          "SpecialTypesPIPCoverageMedExpAsSecondary": "",
-          "SpecialTypesPIPCoverageMedicalExpenseBenefits": "",
-          "SpecialTypesPIPCoverageMedicalExpenseElimination": "",
-          "SpecialTypesPIPCoveragePrincipalOperQualifiedNameInsrdHadWorkLossBenefitsExcl": "",
-          "SpecialTypesPIPCoverageRatingBasis": "Covered by Workers Compensation",
-          "SpecialTypesPIPCoverageWorkLossBenefits": "",
-          "SpecialTypesPropertyProtectionInsuranceCoverageCoverageType": "",
-          "SpecialTypesPropertyProtectionInsuranceCoverageDeductible": "",
-          "SpecialTypesState": "AR",
-          "SpecialTypesStatedAmount": "15000",
-          "SpecialTypesSupplementaryType": "Non-Dealer Garage Risks",
-          "SpecialTypesTotalCostOfHireLiabilityInsuredPrimary": "56",
-          "SpecialTypesTotalCostOfHireLiabilityOwnerPrimary": "72",
-          "SpecialTypesTotalCostOfHireOtherThanCollision": "89",
-          "SpecialTypesType": "Short Term – Trucks",
-          "SpecialTypesUnderinsuredMotoristCoverageWanted": "",
-          "SpecialTypesUnderinsuredMotoristPropertyDamageCoverageWanted": "",
-          "SpecialTypesUninsuredMotoristPropertyDamage": "",
-          "SpecialTypesVehicleType": "Special",
-          "SpecialTypesWageLossCoverageWanted": "",
-          "SpecialTypesWorkLossCoverageWanted": "Yes",
-          "SpecialTypesZipCode": "71601",
-          "Territory": "106",
-          "SpecialTypesUninsuredMotoristsCoverageWanted": "Yes",
-          "SpecialTypesPassiveRestraintDiscount": "Air Bags in Only the Driver Side Position",
-          "SpecialTypesLocationUse": "Interstate",
-          "SpecialTypesUninsuredMotoristPropertyDamageCoverageWanted": "Yes",
-          "SpecialTypesFleet": "Yes",
-          "SpecialTypesNumberOfAutoBodyManufacturersInstallersPlates": "10",
-          "SpecialTypesAIBTotalSetsDealerRepairOrGarageTrailerPlates": "20",
-          "SpecialTypesUninsuredMotoristsCoverageType": "Split Limit",
-          "SpecialTypesDrivingSchoolsOTPrivatePassenger": "Yes",
-          "SpecialTypesUninsuredMotoristsCoverageSplitLimit": "500,000/500,000",
-          "CommercialAutoPIPMedicalExpensesCoverageLimitText": "",
-          "CommercialAutoVehicleLiabilityPropertyDamageCoverageDeductible": "",
-          "SpecialTypesOtherThanCollisionCoverageCoverageType": "ACV",
-          "CommercialAutoVehicleOtherThanCollisionCoverageDeductible": "3,000",
-          "SpecialTypesOtherThanCollisionCoverageFullGlassCoverage": "",
-          "CommercialAutoVehicleAdditionalPIPCoverageCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "CommercialAutoFarmLaborContractorsDeductible": "",
-          "SpecialTypesGaragingLocation": "Arrowhead",
-          "SpecialTypesDefensiveDrivingCourseCredit": "Yes",
-          "SpecialTypesMotorcycleTrainingCourse": "Yes",
-          "SpecialTypesLessorAdditionalInsuredAndLossPayee": "Yes",
-          "SpecialTypesHiredAutosSpecifiedAsCoveredAutosYouOwn": "Yes",
-          "SpecialTypesLiabilityCoverageNumberOfRepossessedAutos": "Yes",
-          "SpecialTypesAntiTheftVehicleRecoveryDevice": "Category I Device",
-          "SpecialTypesCollisionCoverageDeductible": "5,000",
-          "SpecialTypesOtherThanCollisionCoverageGlass100Deductible": "2,000",
-          "SpecialTypesCollisiontype": "Collision",
-          "SpecialTypesCollisionCoverageDeductibleWaiver": "2,000",
-          "specialVehicleUninsuredMotoristCoverageClassFactor": "",
-          "SpecialTypesUnderinsuredMotoristsCoverageSplitLimit": "500,000/1,000,000",
-          "SpecialTypesUnderinsuredMotoristsCoverageType": "Combined Single Limit",
-          "SpecialTypesSnowmobileAuxiliaryLightingSystemDiscount": "No",
-          "SpecialTypesExtraordinaryMedicalBenefitsCoverageExtraordinaryMedicalBenefit": "Not Applicable",
-          "SpecialTypesMatureDriverImprovementCourseDiscount": "No",
-          "SpecialTypesExtraordinaryMedicalBenefitsCoverageExtraordinaryMedicalBenefitRatingBasis": "Not Applicable",
-          "SpecialTypesAccidentPreventionRefresherDiscount": "No",
-          "RentalReimbursementCoverageMaximumRentalDays": "0",
-          "SpecialTypesTowingLaborCoverageManualPremium": "0"
-        }
-      }
-    ],
-    "State": "AR",
-    "Territory": "106",
-    "TerrorismCoverage": "1000",
-    "TortLimitation": "Named Insured and all Regular Operators accepted Tort Limitation",
-    "TortLimitationCode": "C",
-    "TotalBankruptcyOrInsolvencyExclusionForActsErrorsOrOmissionsLiabilityCoveragesManualPremium": "100",
-    "TrailerInterchangeAgreement": "1000",
-    "Truck": [
-      {
-        "TruckDetail": {
-          "TruckOtherThanCollisionCoverageDeductible": "75,000",
-          "ZipCode": "71601",
-          "VehicleType": "Truck",
-          "TruckSizeClass": "Light Truck",
-          "City": "Accord",
-          "County": "Surry",
-          "TruckLiabilityCoverageLimit": "500,000",
-          "TruckBusinessUseClass": "Service",
-          "TruckCollisionCoverageDeductible": "2,000",
-          "State": "AR",
-          "TruckRadiusClass": "Local",
-          "TruckOriginalCostNew": "25001",
-          "NoOfVehicles": "2",
-          "AddressLine1": "8TH ST",
-          "AddressLine2": "PHOENIX",
-          "AudioVisualAndDataElectronicEquipmentCoverageLimit": "2500",
-          "AuxillaryRunningLampsDiscount": "Yes",
-          "CommercialAutoVehicleAdditionalPIPCoverageAdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "RentalReimbursementCoverageDailyRentalAmount": "55",
-          "RentalReimbursementCoverageMaximumRentalDays": "45",
-          "Territory": "106",
-          "TruckAccidentPreventionDiscount": "Yes",
-          "TruckAccidentalDeathBenefitCoverageWanted": "Yes",
-          "TruckAdditionalChiropracticTreatmentsCoverageWanted": "No",
-          "TruckAdditionalPIPCoverage": "Yes",
-          "TruckAdditionalPersonalInjuryProtectionNewYorkAddedCoverageAdditionalMonthlyWorkLoss": "Not Applicable",
-          "TruckAdditionalPersonalInjuryProtectionNewYorkAddedCoverageOtherExpensesLimit": "Not Applicable",
-          "TruckAdditionalPersonalInjuryProtectionNewYorkAddedCoverageTotalAdditionalLimits": "Not Applicable",
-          "TruckAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageAdditionalDeathBenefit": "Yes",
-          "TruckAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageLimit": "Not Applicable",
-          "TruckAgriculturalProduceTrailersSeasonal": "No",
-          "TruckAntiTheftDevice": "Alarm Only",
-          "TruckAntiTheftVehicleRecoveryDevice": "Category I Device",
-          "TruckAutoRentedToOtherMotorCarriers": "No",
-          "TruckCarnivalParade": "Lessee or Hirer's Risks",
-          "TruckCollisionCoverageCoverageType": "ACV",
-          "TruckCollisionCoveragePercentOfMilesDrivenInGreenZone": "Not Applicable",
-          "TruckDeathBenefitsCoverageWanted": "No",
-          "TruckDefensiveDrivingCourseCredit": "No",
-          "TruckEndOfOperations": "2019-09-01",
-          "TruckFleet": "Yes",
-          "TruckHiredAutosSpecifiedAsCoveredAutosYouOwn": "No",
-          "TruckIncomeLossBenefitsCoverageIncomeLossBenefits": "No",
-          "TruckIncomeLossBenefitsCoverageIncomeLossBenefitsRatingBasis": "Not Applicable",
-          "TruckJunkDealerClass": "Yes",
-          "TruckLessorAdditionalInsuredAndLossPayee": "Yes",
-          "TruckLiabilityCoverageDeductible": "5,000 Combined Single Limit",
-          "TruckLiabilityCoverageLocationUse": "Intrastate",
-          "TruckLiabilityCoveragePercentOfMilesDrivenInGreenZone": "61 - 70%",
-          "TruckLiabilityCoverageType": "Combined Single Limit",
-          "TruckLiabilityCoveragefarecharged": "Yes",
-          "TruckLiabilityCoveragefarmRegistrationCertificate": "No",
-          "TruckLiabilityCoverageownedByEmployer": "No",
-          "TruckLiabilityCoveragetransportationOfEmployees": "No",
-          "TruckLiabilitymoreThanOneRoundTrip": "Yes",
-          "TruckMake": "CHEVROLET",
-          "TruckMatureDriverImprovementCourseDiscount": "No",
-          "TruckMedicalPaymentsCoverageLimit": "2,000",
-          "TruckModel": "SUBURBAN",
-          "TruckOptionalBasicEconomicLossCoverageWanted": "Yes",
-          "TruckOtherThanCollisionCoverageCoverageType": "ACV",
-          "TruckOtherThanCollisionCoveragePercentOfMilesDrivenInGreenZone": "Not Applicable",
-          "TruckPIPCoverageAccidentalDeathBenefit": "10,000",
-          "TruckPIPCoverageAdditionalPersonalInjuryProtection": "No",
-          "TruckPIPCoverageCombinationFirstPartyBenefit": "Not Applicable",
-          "TruckPIPCoverageCoverageType": "Yes",
-          "TruckPIPCoverageCoveredByWorkersCompensation": "No",
-          "TruckPIPCoverageDeductible": "Not Applicable",
-          "TruckPIPCoverageExclusionOfIncomeBenefits": "No",
-          "TruckPIPCoverageExclusionOfWorkLoss": "Not Applicable",
-          "TruckPIPCoverageFuneralExpenseBenefits": "2,500",
-          "TruckPIPCoverageGovernmentOwned": "No",
-          "TruckPIPCoverageMedicalExpenseBenefits": "50,000",
-          "TruckPIPCoverageMedicalExpenseElimination": "No Elimination of Coverage",
-          "TruckPIPCoveragePercentOfMilesDrivenInGreenZone": "Not Applicable",
-          "TruckPIPCoveragePrincipalOperQualifiedNameInsrdHadWorkLossBenefitsExcl": "No",
-          "TruckPIPCoverageRatingBasis": "Covered by Workers' Compensation",
-          "TruckPIPCoverageWorkLossBenefits": "1,000 Monthly / 5,000 Total",
-          "TruckPassengerHazard": "Passenger Hazard Included",
-          "TruckPercentageOfTransportationNetworkServiceAutoUse": "80% or More",
-          "TruckPrimaryClassCode": "014",
-          "TruckPropertyProtectionInsuranceCoverageCoverageType": "Basic",
-          "TruckPropertyProtectionInsuranceCoverageDeductible": "100",
-          "TruckSafetyScore": "27 - 30",
-          "TruckSafetyScoreDiscountApplies": "Yes",
-          "TruckSecondaryClass": "Truckers - Tow Trucks For-Hire",
-          "TruckSecondaryClassCode": "099",
-          "TruckStartOfOperations": "2018-08-01",
-          "TruckStatedAmount": "45000",
-          "TruckSugarCaneHaulersCoverage": "Trucks or Tractors with Semi-Trailers",
-          "TruckSugarCaneHaulersPeriodOfCoverage": "75 Days",
-          "TruckTotalPairsJunkDealersPlates": "2",
-          "TruckTotalSetsOfDealerPlates": "4",
-          "TruckTrailerHowUsed": "Used as a Showroom",
-          "TruckUnderinsuredMotoristPropertyDamageCoverageWanted": "No",
-          "TruckUnderinsuredMotoristsCoverageWanted": "Yes",
-          "TruckUninsuredMotoristPropertyDamage": "Yes",
-          "TruckUninsuredMotoristsCoverageWanted": "Yes",
-          "TruckUsedAsTNCOrOnDemand": "Used As Transportation Network Company Only",
-          "TruckVIN": "23",
-          "TruckWageLossCoverageWanted": "Yes",
-          "TruckWorkLossCoverageWanted": "Yes",
-          "TruckYear": "1996",
-          "TruckZipCodeOverride": "71601",
-          "TruckUninsuredMotoristPropertyDamageCoverageWanted": "Yes",
-          "TruckCollisionCoverageCollisiontype": "Limited Collision",
-          "TruckCollisionCoverageDeductibleWaiver": "Yes",
-          "TruckUninsuredMotoristsCoverageType": "Split Limit",
-          "TruckUninsuredMotoristsCoverageSplitLimit": "50,000/100,000",
-          "TruckTrailerUsedWith": "Light Trucks",
-          "TruckOtherThanCollisionCoverageGlass100Deductible": "Yes",
-          "CommercialAutoPIPMedicalExpensesCoverageLimitText": "50.000",
-          "CommercialAutoVehicleLiabilityPropertyDamageCoverageDeductible": "2135",
-          "CommercialAutoFarmLaborContractorsDeductible": "2135",
-          "CommercialAutoTruckersUniformIntermodalInterchangeEndtFormUIIE1": "2135"
-        }
-      }
-    ],
-    "UnderinsuredMotoristPropertyDamageLimitText": "25,000",
-    "UnderinsuredMotoristsCoverageCombinedSingleLimit": "125,000",
-    "UnderinsuredMotoristsCoveragePulledByPowerUnit": "Yes",
-    "UnderinsuredMotoristsCoverageSplitLimit": "Not Applicable",
-    "UnderinsuredMotoristsCoverageStacked": "Non-Stacked Coverage",
-    "UnderinsuredMotoristsCoverageType": "Combined Single Limit",
-    "UninsuredMotoristPropertyDamageDeductible": "Full Coverage",
-    "UninsuredMotoristPropertyDamageLimitText": "25,000",
-    "UninsuredMotoristsCoverageCombinedSingleLimit": "100,000",
-    "UninsuredMotoristsCoverageSplitLimit": "50,000/100,000",
-    "UninsuredMotoristsCoverageStacked": "Non-Stacked Coverage",
-    "UninsuredMotoristsCoverageType": "Combined Single Limit",
-    "WageLoss": "Yes",
-    "WageLossLimit": "500/3,000",
-    "WorldwideGeneralLiabilityCoveragesManualPremium": "100",
-    "Year2000ComputerRelatedElectronicProblemsExclusionSpecifiedCoveragesManualPremium": "100",
-    "Year2000LimitedCoverageOptionsManualPremium": "100",
-    "ZipCode": "71601",
-    "ZoneRated": [
-      {
-        "ZoneRatedDetail": {
-          "AddressLine1": "",
-          "AddressLine2": "",
-          "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
-          "AutosFurnishedForRegularUse": "",
-          "AuxillaryRunningLampsDiscount": "Yes",
-          "City": "Accord",
-          "CommercialAutoVehicleAdditionalPIPCoverageAdditionalPIPCoverageType": "Option 1: Aggregate $10,400; Weekly $100",
-          "County": "Apache",
-          "GaragingLocation": "",
-          "NoOfVehicles": "1",
-          "RentalReimbursementCoverageDailyRentalAmount": "0",
-          "RentalReimbursementCoverageMaximumRentalDays": "0",
-          "State": "AR",
-          "Territory": "106",
-          "VehicleType": "Zone Rated",
-          "ZipCode": "71601",
-          "ZoneRatedAccidentPreventionDiscount": "Yes",
-          "ZoneRatedAccidentalDeathBenefitCoverageWanted": "Yes",
-          "ZoneRatedAdditionalPIPCoverage": "Yes",
-          "ZoneRatedAdditionalPersonalInjuryProtectionNewYorkAddedCoverageAdditionalMonthlyWorkLoss": "",
-          "ZoneRatedAdditionalPersonalInjuryProtectionNewYorkAddedCoverageOtherExpensesLimit": "",
-          "ZoneRatedAdditionalPersonalInjuryProtectionNewYorkAddedCoverageTotalAdditionalLimits": "",
-          "ZoneRatedAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageAdditionalDeathBenefit": "Yes",
-          "ZoneRatedAdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverageLimit": "Not Applicable",
-          "ZoneRatedAgriculturalProduceTrailersSeasonal": "Yes",
-          "ZoneRatedAntiTheftDevice": "Yes",
-          "ZoneRatedAntiTheftVehicleRecoveryDevice": "Fuel Cutoff",
-          "ZoneRatedAutoRentedToOtherMotorCarriers": "Yes",
-          "ZoneRatedBusinessUseClass": "Service",
-          "ZoneRatedCarnivalParade": "Owners Risk Only",
-          "ZoneRatedCarnivalParadeNumberOfDays": "30",
-          "ZoneRatedCollisionCoverageCollisionType": "",
-          "ZoneRatedCollisionCoverageCoverageType": "ACV",
-          "ZoneRatedCollisionCoverageDeductible": "25,000",
-          "ZoneRatedDefensiveDrivingCourseCredit": "Yes",
-          "ZoneRatedEndOfOperations": "2019-10-04",
-          "ZoneRatedFarthestTerminalZone": "Zone 01 Atlanta",
-          "ZoneRatedFleet": "Yes",
-          "ZoneRatedGaragingZone": "Zone 29 Phoenix",
-          "ZoneRatedHiredAutosSpecifiedAsCoveredAutosYouOwn": "Yes",
-          "ZoneRatedIncomeLossBenefitsCoverageIncomeLossBenefits": "",
-          "ZoneRatedIncomeLossBenefitsCoverageIncomeLossBenefitsRatingBasis": "",
-          "ZoneRatedLessorAdditionalInsuredAndLossPayee": "Yes",
-          "ZoneRatedLiabilityCoverageDeductible": "250 Combined Single Limit",
-          "ZoneRatedLiabilityCoverageLimitText": "100,000",
-          "ZoneRatedLiabilityCoverageType": "Combined Single Limit",
-          "ZoneRatedLocationUse": "",
-          "ZoneRatedMake": "BMW",
-          "ZoneRatedMatureDriverImprovementCourseDiscount": "Yes",
-          "ZoneRatedMedicalPaymentsCoverageLimit": "2,000",
-          "ZoneRatedModel": "78965",
-          "ZoneRatedOptionalBasicEconomicLossCoverageWanted": "Yes",
-          "ZoneRatedOriginalCostNew": "25001",
-          "ZoneRatedOtherThanCollisionCoverageCoverageType": "ACV",
-          "ZoneRatedOtherThanCollisionCoverageFullGlassCoverage": "Yes",
-          "ZoneRatedPIPCoverageAccidentalDeathBenefit": "Yes",
-          "ZoneRatedPIPCoverageAdditionalPersonalInjuryProtection": "Yes",
-          "ZoneRatedPIPCoverageCombinationFirstPartyBenefit": "Not Applicable",
-          "ZoneRatedPIPCoverageCoveredByWorkersCompensation": "",
-          "ZoneRatedPIPCoverageDeductible": "",
-          "ZoneRatedPIPCoverageExclusionOfIncomeBenefits": "",
-          "ZoneRatedPIPCoverageExclusionOfWorkLoss": "",
-          "ZoneRatedPIPCoverageFuneralExpenseBenefits": "",
-          "ZoneRatedPIPCoverageGovernmentOwned": "",
-          "ZoneRatedPIPCoverageMedicalExpenseBenefits": "",
-          "ZoneRatedPIPCoverageMedicalExpenseElimination": "",
-          "ZoneRatedPIPCoveragePrincipalOperQualifiedNameInsrdHadWorkLossBenefitsExcl": "",
-          "ZoneRatedPIPCoverageRatingBasis": "Principally Operated by Employees",
-          "ZoneRatedPIPCoverageWorkLossBenefits": "",
-          "ZoneRatedPassengerHazard": "Passenger Hazard Included",
-          "ZoneRatedPrimaryClassCode": "014",
-          "ZoneRatedPropertyProtectionInsuranceCoverageDeductible": "",
-          "ZoneRatedSafetyScore": "27 - 30",
-          "ZoneRatedSafetyScoreDiscountApplies": "Yes",
-          "ZoneRatedSecondaryClass": "Truckers - Carrier Both Private Carriage & Transport Goods/Materials/Commodities",
-          "ZoneRatedSecondaryClassCode": "",
-          "ZoneRatedSizeClass": "Medium Truck",
-          "ZoneRatedStartOfOperations": "2018-10-04",
-          "ZoneRatedStatedAmount": "25001",
-          "ZoneRatedSugarCaneHaulersCoverage": "Additional Trailer",
-          "ZoneRatedSugarCaneHaulersPeriodOfCoverage": "75 Days",
-          "ZoneRatedTotalPairsJunkDealersPlates": "",
-          "ZoneRatedTrailerHowUsed": "Used as a Showroom",
-          "ZoneRatedUnderinsuredMotoristCoverageWanted": "",
-          "ZoneRatedUnderinsuredMotoristPropertyDamageCoverageWanted": "",
-          "ZoneRatedUninsuredMotoristPropertyDamage": "",
-          "ZoneRatedUninsuredMotoristsCoverageWanted": "Yes",
-          "ZoneRatedVIN": "",
-          "ZoneRatedWorkLossCoverageWanted": "Yes",
-          "ZoneRatedYear": "1992",
-          "ZoneRatedZipCodeOverride": "71601",
-          "ZoneRatedtotalSetsOfDealerPlates": "",
-          "ZoneRatedOtherThanCollisionCoverageDeductible": "75,000",
-          "ZoneRatedUnderinsuredMotoristsCoverageWanted": "Yes",
-          "ZoneRatedCoverageType": "Full Covered Autos Liability Limit For Customers Coverage",
-          "ZoneRatedClass": "Franchised Private Passenger Auto Dealer",
-          "ZoneRatedUninsuredMotoristPropertyDamageCoverageWanted": "Yes",
-          "ZoneRatedUninsuredMotoristsCoverageType": "Split Limit",
-          "ZoneRatedPIPCoverageCoverageType": "Combined Single Limit",
-          "ZoneRatedUninsuredMotoristsCoverageSplitLimit": "500,000/500,000",
-          "CommercialAutoFullSafetyGlassCoverageMinnesota": "Other",
-          "CommercialAutoPIPMedicalExpensesCoverageLimitText": "2,000",
-          "CommercialAutoVehicleCollisionCoverageDeductibleWaiver": "Other",
-          "CommercialAutoVehicleLiabilityPropertyDamageCoverageDeductible": "Other",
-          "CommercialAutoFarmLaborContractorsDeductible": "Other",
-          "CommercialAutoTruckersUniformIntermodalInterchangeEndtFormUIIE1": "Other"
-        }
-      }
-    ],
-    "HiredAuto": [
-      {
-        "HiredAutoDetail": {
-          "HiredAutoTotalCostOfHireInsuredPrimary": "2500",
-          "HiredAutoTotalCostOfHireOwnerPrimary": "1500",
-          "HiredAutoLiabilityCoverageLimit": "500,000",
-          "HiredAutoLiabilityCoverageDeductible": "100,000 Combined Single Limit",
-          "HiredAutoCollisionCoverageTotalCostOfHire": "1000",
-          "HiredAutoCollisionCoverageDeductible": "500",
-          "HiredAutoOtherThanCollisionCoverageTotalCostOfHire": "1000",
-          "HiredAutoOtherThanCollisionCoverageCoverageType": "Comprehensive",
-          "HiredAutoOtherThanCollisionCoverageDeductible": "Full Coverage",
-          "HiredAutoTruckersLiabilityCoverageTotalNumberOfVehicles": "1",
-          "HiredAutoTruckersLiabilityCoverageTruckersPremium": "550",
-          "HiredAutoTruckersLiabilityCoveragePrimaryCostOfHireTruckers": "5",
-          "HiredAutoTruckersLiabilityCoverageExcessCostOfHireTruckers": "15000",
-          "HiredAutoInsuranceRequired": "Yes",
-          "HiredAutoLiabilityCoverageType": "Combined Single Limit",
-          "HiredAutoLiabilityCoveragePropertyDamageLimitText": "10,000",
-          "HiredAutoPermittedCarrier": "No",
-          "CommercialAutoHiredAutoRentalReimbursementCoverageDailyRentalAmount": "1",
-          "CommercialAutoHiredAutoPedestrianPIPCoveragePedestrianPIPCoverage": "1"
-        }
-      }
-    ],
-    "NonOwnedAuto": [
-      {
-        "NonOwnedAutoDetail": {
-          "NonOwnedAutoNumberOfEmployees": "305",
-          "NonOwnedAutoEmployeesAsInsureds": "Yes",
-          "NonOwnedAutoSocialServiceAgency": "Yes",
-          "NonOwnedAutoNumberOfPartners": "2",
-          "NonOwnedAutoNumberOfVolunteers": "15",
-          "NonOwnedAutoVolunteersAsInsureds": "Yes",
-          "NonOwnedAutoLiabilityCoverageDeductible": "20,000 Combined Single Limit",
-          "NonOwnedAutoLiabilityCoverageLimit": "100,000",
-          "NonOwnedAutoPropertyDamageLimitText": "10,000",
-          "NonOwnedAutoLiabilityCoverageType": "Split Limit Without Underinsured Motorist Coverage",
-          "CommercialAutoNonOwnedAutoPedestrianPIPCoveragePedestrianPIPCoverage": "10"
-        }
-      }
-    ],
-    "AdditionalInsuredList": [
-      {
-        "AdditionalInsuredType": "Lessor Of Leased Equipment - Automatic Status When Required In Lease Agreement With You",
-        "AdditionalInsuredDetail": [
-          {
-            "AdditionalInsuredAction": "Add",
-            "AdditionalInsuredNumber": "b76fa989-8d95-4e3e-a630-35fda14254b3",
-            "COIDescription": "Adding Vendors",
-            "AdditionalInsuredName": "Jhon Smith",
-            "AdditionalInsuredAddressLine1": "70 Bowman St",
-            "AdditionalInsuredAddressLine2": "70 Bowman St",
-            "AdditionalInsuredCounty": "Seattle",
-            "AdditionalInsuredCity": "Accord",
-            "AdditionalInsuredZipCode": "71601",
-            "AdditionalInsuredState": "AR"
+        {
+          "AddedPersonalInjuryProtectionDetail": {
+            "FamilyMembersName": "1"
           }
-        ]
-      }
-    ]
-  },
+        }
+      ],
+      "BusinessInterruptionCoverage": [
+        {
+          "BusinessIncomeCoverageType": "Business Income Without Extra Expense Coverage",
+          "BusinessInterruptionCoverageDetail": [
+            {
+              "Limit": "500",
+              "MaxAmtOfBusnsIncmLossAfterRepdOrRepld": "500",
+              "MaximumAmountOfExtraExpense": "500",
+              "MaxiumumAmountOfBusinessIncomeLoss": "500",
+              "ScheduledPropertyOption": "Option A"
+            }
+          ],
+          "DurationOfWaitingPeriod": "No waiting period",
+          "NumberOfDays": "90"
+        }
+      ],
+      "TrailerInterchangeAgreement": [
+        {
+          "TrailerInterchangeAgreementDetail": [
+            {
+              "TrailerInterchangeAgreementCollisionCoverageDeductible": "1,000",
+              "TrailerInterchangeAgreementCollisionCoverageLegalLiability": "9999999",
+              "TrailerInterchangeAgreementComprehensiveCoverageLegalLiability": "9999999",
+              "TrailerInterchangeAgreementDetailGaragingAndTerminalZoneType": "Metropolitan To Metropolitan",
+              "TrailerInterchangeAgreementDetailNumberOfDays": "15",
+              "TrailerInterchangeAgreementDetailNumberOfTrailers": "13",
+              "TrailerInterchangeAgreementDetailRadiusClass": "Intermediate",
+              "TrailerInterchangeAgreementDetailZoneOfTerminal": "Pacific",
+              "TrailerInterchangeAgreementFireAndTheftManualPremium": "150.0",
+              "TrailerInterchangeAgreementFireManualPremium": "150.0",
+              "TrailerInterchangeAgreementSpecifiedCausesOfLossCoverageLegalLiability": "9999999"
+            }
+          ]
+        }
+      ],
+      "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividuals": [
+        {
+          "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsDetail": [
+            {
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsCollisionCoverageDeductible": "1,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageCoverageType": "",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageDeductible": "250 Combined Single Limit",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageFinancialResponsibilityRequirement": "",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageLimitText": "3,000,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoveragePropertyDamageLimitText": "",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsMedicalPaymentsCoverageLimitText": "500",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsOtherThanCollisionCoverageDeductible": "1,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsOtherThanCollisionCoverageFullGlassCoverage": "No",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageCombinedSingleLimitText": "100,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageCoverageType": "Combined Single Limit",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageSplitLimit": "",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsPropertyDamageCoverageLimitText": "100,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageCombinedSingleLimitText": "100,000",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageCoverageType": "Combined Single Limit",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageSplitLimit": "",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsPropertyDamageCoverageDeductible": "Full Coverage",
+              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsPropertyDamageCoverageLimitText": "100,000"
+            }
+          ],
+          "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsSubjectToNoFault": "Yes"
+        }
+      ],
+      "CommercialAutoPennsylvaniaNamedIndividualsBroadenedFirstPartyBenefits": [
+        {
+          "CommercialAutoPennsylvaniaNamedIndividualsBroadenedFirstPartyBenefitsDetail": {
+            "AccidentalDeathBenefit": "",
+            "CombinationFirstPartyBenefit": "",
+            "CoverageType": "",
+            "FuneralExpenseBenefit": "",
+            "MedicalExpenseBenefit": "",
+            "WorkLossBenefit": ""
+          }
+        }
+      ],
+      "CommercialAutoGaragekeepersCoverage": [
+        {
+          "CommercialAutoGaragekeepersCovCollisionCoverageDeductible": "100",
+          "CommercialAutoGaragekeepersCovCollisionCoverageLimit": "6000",
+          "CommercialAutoGaragekeepersCovCollisionCoverageRatingBase": "Legal Liability",
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageDeductible": "100 / 500",
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageLimit": "6000",
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageRatingBase": "Legal Liability"
+        }
+      ],
+      "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipment": [
+        {
+          "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCoverageRatingBase": "Legal Liability",
+          "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentDetail": [
+            {
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageDeductible": "100",
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageLimit": "7500",
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageDeductible": "100 / 500",
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageLimit": "7500"
+            }
+          ]
+        }
+      ],
+      "Truck": [
+        {
+          "TruckDetail": {
+            
+            "AudioVisualAndDataElectronicEquipmentCoverageList": [
+              {
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+              }
+            ],
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_CoverageType": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_OtherExpensesLimit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_TotalAdditionalLimits": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_AdditionalDeathBenefit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
+              }
+            ],
+
+            "CommercialAutoRentalReimbursementCovList": [
+              {
+                "DailyRentalAmount": "55",
+                "MaximumRentalDays": "45"
+              }
+            ],
+            <#assign TruckLevels="TruckLevel"+x><#list TruckLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
+            }
+        }
+      ],
+      
+      "PrivatePassenger": [
+        {
+          "PrivatePassengerDetail": {
+          "AudioVisualAndDataElectronicEquipmentCoverageList": [
+              {
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+              }
+            ],
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_CoverageType": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_OtherExpensesLimit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_TotalAdditionalLimits": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_AdditionalDeathBenefit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
+              }
+            ],
+            "CommercialAutoRentalReimbursementCovList": [
+              {
+                "DailyRentalAmount": "55",
+                "MaximumRentalDays": "45"
+              }
+            ],
+            <#assign PrivatePassengerLevels="PrivatePassengerLevel"+x><#list PrivatePassengerLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>  
+            }
+        }
+      ],
+      "PublicTransportation": [
+        {
+          "PublicTransportationDetail": {
+            "AudioVisualAndDataElectronicEquipmentCoverageList": [
+              {
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+              }
+            ],
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_CoverageType": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_OtherExpensesLimit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_TotalAdditionalLimits": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_AdditionalDeathBenefit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
+              }
+            ],
+            "CommercialAutoRentalReimbursementCovList": [
+              {
+                "DailyRentalAmount": "55",
+                "MaximumRentalDays": "45"
+              }
+            ],
+            <#assign PublicTransportationLevels="PublicTransportationLevel"+x><#list PublicTransportationLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>    
+             }
+        }
+      ],
+      "ZoneRated": [
+        {
+          "ZoneRatedDetail": {
+          "AudioVisualAndDataElectronicEquipmentCoverageList": [
+              {
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+              }
+            ],
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_CoverageType": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_OtherExpensesLimit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_TotalAdditionalLimits": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_AdditionalDeathBenefit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
+              }
+            ],
+            "CommercialAutoRentalReimbursementCovList": [
+              {
+                "DailyRentalAmount": "55",
+                "MaximumRentalDays": "45"
+              }
+            ],
+            <#assign ZoneRatedLevels="ZoneRatedLevel"+x><#list ZoneRatedLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>   
+            }
+        }
+      ],
+      "Special": [
+        {
+          "SpecialDetail": {
+          "AudioVisualAndDataElectronicEquipmentCoverageList": [
+              {
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+              }
+            ],
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_CoverageType": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_OtherExpensesLimit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_TotalAdditionalLimits": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_AdditionalDeathBenefit": "Not Applicable",
+                "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
+              }
+            ],
+            "CommercialAutoRentalReimbursementCovList": [
+              {
+                "DailyRentalAmount": "55",
+                "MaximumRentalDays": "45"
+              }
+            ],
+            <#assign SpecialTypesLevels="SpecialTypesLevel"+x><#list SpecialTypesLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>   
+            }
+        }
+      ],
+      "HiredAuto": [
+        {
+          "HiredAutoDetail": {
+          	<#assign HiredAutoLevels="HiredAutoLevel"+x><#list HiredAutoLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>   
+          }
+        }
+      ],
+      "NonOwnedAuto": [
+        {
+          "NonOwnedAutoDetail": {
+          	<#assign NonOwnedAutoLevels="NonOwnedAutoLevel"+x><#list NonOwnedAutoLevels?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>    
+          }
+        }
+      ]
+    }<#if x?is_last><#else>,</#if>
+    </#list>  
+  ],
   "OwnerId": "35",
   "ServiceRequestDetail": {
-    "BrowserIp": "111.93.119.74",
-    "OwnerId": "35",
-    "ResponseType": "JSON",
-    "ServiceRequestVersion": "1.0",
-    "Token": "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",
-    "UserName": "isorateadmin"
-  },
-  "EndClientUserUniqueSessionId": "Uniquesession"
+    <#assign ServiceDetailLevels="ServiceDetailLevel1"><#list ServiceDetailLevels?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+  }
 }
