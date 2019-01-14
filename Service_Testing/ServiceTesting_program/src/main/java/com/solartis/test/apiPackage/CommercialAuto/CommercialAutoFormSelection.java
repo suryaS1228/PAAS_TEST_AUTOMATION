@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.solartis.test.Configuration.PropertiesHandle;
@@ -40,12 +39,12 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 	 {
 		try
 		{
+			System.out.println(config.getProperty("test_url")+"---"+config.getProperty("EventName"));
+			System.out.println(config.getProperty("token"));
 		  http = new HttpHandle(config.getProperty("test_url"),"POST");
 		  http.AddHeader("Content-Type", config.getProperty("content_type"));
-		  http.AddHeader("Token", Token);
+		  http.AddHeader("Token", config.getProperty("AuthenticationToken"));
 		  http.AddHeader("EventName", config.getProperty("EventName"));
-		  http.AddHeader("EventVersion", config.getProperty("EventVersion"));
-
 		 }
 		catch(HTTPHandleException e)
 		{
@@ -54,6 +53,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	 }
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public void LoadSampleRequest(LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException
 	{
 		this.input = InputData.get("1");
@@ -68,6 +68,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException 
 	{
 		try
@@ -94,52 +95,54 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-			String[] vehicleArr = { "Policy", "Policy.Truck.", "Policy.PublicTransportation.",
-					"Policy.Special.", "Policy.PrivatePassenger.", "Policy.ZoneRated."//, "FormLogic-Garage","FormLogic-GarageServices"
-					};
-			for(int j=0; j<vehicleArr.length;j++)
+			String[] vehicleArr = { "", "Truck.", "PublicTransportation.","Special.", "PrivatePassenger.", "ZoneRated."};
+			String NoOfStates = response.read("$.State.length()");
+			for(int k=0; k<Integer.parseInt(NoOfStates);k++)
 			{
-				String arraylength = response.read("$."+vehicleArr[j]+".Forms.FormDetail.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-				arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
-				System.out.println(arraylength);
-				for (int i=0;i<Integer.parseInt(arraylength);i++) 
+				for(int j=0; j<vehicleArr.length;j++)
 				{
-					String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
-					StringBuffer temp2 = new StringBuffer();
-					for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
+					String arraylength = response.read("$.State["+k+"]"+vehicleArr[j]+".Forms.FormDetail.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+					arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
+					System.out.println(arraylength);
+					for (int i=0;i<Integer.parseInt(arraylength);i++) 
 					{
-						LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
-						String condition = rowOutputColVerify.get("OutputColumnCondtn");
-						if(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))
+						String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
+						StringBuffer temp2 = new StringBuffer();
+						for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 						{
-							if(conditioncheck.ConditionReading(condition, input))
+							LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();
+							String condition = rowOutputColVerify.get("OutputColumnCondtn");
+							if(rowOutputColVerify.get("Flag").equalsIgnoreCase("Y"))
 							{
-								try
+								if(conditioncheck.ConditionReading(condition, input))
 								{
-									///System.out.println("Writing Response to Table");
-									//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-									String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
-									String Rep=jsonpath.replaceAll("###", vehicleArr[j]).replaceAll("##", Integer.toString(i));
-									
-									String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-									
-									temp2=temp2.append("'").append(actual).append("'").append(",");
-									//System.out.println(actual);
-									output.put("flag_for_execution", "Completed");
-									output.put("Time", (end-start) + " Millis");
+									try
+									{
+										///System.out.println("Writing Response to Table");
+										//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+										String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
+										String Rep=jsonpath.replaceAll("###", vehicleArr[j]).replaceAll("##", Integer.toString(i));
+										
+										String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+										
+										temp2=temp2.append("'").append(actual).append("'").append(",");
+										//System.out.println(actual);
+										output.put("flag_for_execution", "Completed");
+										output.put("Time", (end-start) + " Millis");
+									}
+									catch(PathNotFoundException e)
+									{
+										e.printStackTrace();
+										output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+									}
 								}
-								catch(PathNotFoundException e)
-								{
-									e.printStackTrace();
-									output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
-								}
+								
 							}
-							
 						}
+						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
+						temp2=temp2.delete(0, temp2.length());
+						queryList.add(insterQuery);
 					}
-					insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
-					temp2=temp2.delete(0, temp2.length());
-					queryList.add(insterQuery);
 				}
 			}
 			return queryList;
@@ -150,15 +153,16 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
 		GenerateExpected expected = new GenerateExpected(config);
 		try 
 		{
-			for(int i=0 ;i<inputrow.size();i++)
+			for(int i=1 ;i<=inputrow.size();i++)
 			{
-				expected.generateExpectedMel(config, inputrow.get(i), output);
-				inputrow.get(i).put("AnalyserResult", expected.analyser(inputrow.get(i).get("S_No")));
+				expected.generateExpectedMel(config, inputrow.get(String.valueOf(i)), output);
+				inputrow.get(String.valueOf(i)).put("AnalyserResult", expected.analyser(inputrow.get(String.valueOf(i)).get("TestCaseID")));
 			}
 		} 
 		catch (DatabaseException | SQLException e) 
@@ -167,7 +171,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 		
 		return inputrow;
-		
+	
 	}
 
 	

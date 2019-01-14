@@ -274,9 +274,10 @@ public class MainClass3
 						System.out.println("Coming to Comparison");
 						LinkedHashMap<Integer,LinkedHashMap<String, String>> individualrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 						//OutputTable.UpdateRow(RowIterator+1, outputrow);
-						for(int i=0;i<individualrow.size();i++)
+						for(int i=1;i<=individualrow.size();i++)
 						{
-							inputIndividualTable.UpdateRow(RowIterator+1, individualrow.get(i));
+							System.out.println(individualrow.get(String.valueOf(i)));
+							inputIndividualTable.UpdateRow(RowIterator+i, individualrow.get(String.valueOf(i)));
 						}
 						//commonMap.putAll(outputrow);									
 					}
@@ -291,7 +292,7 @@ public class MainClass3
 				//System.out.println(individualinputrow.get("Flag_for_execution"));				
 				individualinputrow.put("Flag_for_execution", "Completed");
 				//System.out.println(individualinputrow.get("Flag_for_execution"));
-				inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
+				//inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 				//System.out.println(individualinputrow);
 			}
 		else
@@ -315,12 +316,12 @@ public class MainClass3
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
 		ObjectMapper inputtableobjectMapper;		
 		DatabaseOperation input = new DatabaseOperation();
-		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(S_No) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
+		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(TestCaseID) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
 		Object[][] combined = new Object[noOfTestCase][2];
 		int rowIterator = 0;
 		for(int i=1;i<=noOfTestCase;i++) 
 		{
-			inputtable = input.GetDataObjects(InputtableQuery+" Where S_NO="+i);
+			inputtable = input.GetDataObjects(InputtableQuery+" Where TestCaseID="+i);
 			//Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();			
 			//while (inputtableiterator.hasNext() ) 
 			//{

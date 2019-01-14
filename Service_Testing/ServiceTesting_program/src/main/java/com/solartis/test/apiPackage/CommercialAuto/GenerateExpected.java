@@ -37,6 +37,7 @@ public class GenerateExpected
 				LinkedHashMap<String, String> configtablerow = entry.getValue();
 				if(configtablerow.get("Flag_for_execution").equals("Y"))
 				{
+					//System.out.println(configtablerow.get("Condition"));
 					if(verify.ConditionReading(configtablerow.get("Condition"), inputrow))
 					{
 						String insterQuery = "INSERT INTO Output_FormSelection_Expected VALUES("+inputrow.get("S_No")+", temp2)";	
@@ -51,7 +52,7 @@ public class GenerateExpected
 						
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
-						System.out.println(insterQuery);
+						//System.out.println(insterQuery);
 						expectedMelTable.insertRow(insterQuery);
 					}
 				}
@@ -90,7 +91,7 @@ public class GenerateExpected
 		}else {
 		temp2=temp2.delete(temp2.length()-2, temp2.length());
 		}
-		System.out.println(temp2);
+		//System.out.println(temp2);
 		return temp2.toString();
 	}
 }
