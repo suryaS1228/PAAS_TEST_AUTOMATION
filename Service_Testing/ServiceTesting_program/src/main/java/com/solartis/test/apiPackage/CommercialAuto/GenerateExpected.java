@@ -60,38 +60,47 @@ public class GenerateExpected
 		}
 	}	
 	
-	public String analyser(String rowNumber) throws DatabaseException
+	public LinkedHashMap<String,String> analyser(String rowNumber) throws DatabaseException
 	{
-		StringBuffer temp2 = new StringBuffer();
-		LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects(
-				"SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
-				+ "FROM Output_FormSelection "
-				+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormNumber NOT IN "
-				+ "( "
-				+ "SELECT  Output_FormSelection_Expected.FormNumber "
-				+ "FROM    Output_FormSelection_Expected WHERE  Output_FormSelection_Expected.S_No='"+rowNumber+"' "
-				+ ") "
-				+ "UNION ALL "
-				+ "SELECT  Output_FormSelection_Expected.FormName, Output_FormSelection_Expected.FormNumber "
-				+ "FROM Output_FormSelection_Expected "
-				+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormNumber NOT IN "
-				+ "( "
-				+ "SELECT  Output_FormSelection.FormNumber "
-				+ "FROM Output_FormSelection WHERE Output_FormSelection.S_No='"+rowNumber+"' "
-				+ ")");
-		for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
+		
+		String[] vehicleArr = { "Policy", "Truck Detail", "Public Transportation Detail","Special Types Detail", "Private Passenger Detail", "Zone Rated Detail"};
+		LinkedHashMap<String,String> analyserResult = new LinkedHashMap<String,String>();
+		
+		for(int i=0;i<vehicleArr.length;i++)
 		{
-			LinkedHashMap<String, String> result = entry.getValue();
+			StringBuffer temp2 = new StringBuffer();
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects(
+					"SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
+					+ "FROM Output_FormSelection "
+					+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormHierachy='"+vehicleArr[i]+"' and Output_FormSelection.FormNumber NOT IN "
+					+ "( "
+					+ "SELECT  Output_FormSelection_Expected.FormNumber "
+					+ "FROM    Output_FormSelection_Expected WHERE  Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormHierachy='"+vehicleArr[i]+"' "
+					+ ") "
+					+ "UNION ALL "
+					+ "SELECT  Output_FormSelection_Expected.FormName, Output_FormSelection_Expected.FormNumber "
+					+ "FROM Output_FormSelection_Expected "
+					+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection.FormHierachy='"+vehicleArr[i]+"' and Output_FormSelection_Expected.FormNumber NOT IN "
+					+ "( "
+					+ "SELECT  Output_FormSelection.FormNumber "
+					+ "FROM Output_FormSelection WHERE Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormHierachy='"+vehicleArr[i]+"' "
+					+ ")");
+			for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
+			{
+				LinkedHashMap<String, String> result = entry.getValue();
+				
+				temp2=temp2.append(result.get("FormNumber")).append(", ");
+			}
+			if(temp2.length()==0)
+			{
+				temp2 = temp2.append("Pass");
+			}else {
+			temp2=temp2.delete(temp2.length()-2, temp2.length());
+			}
 			
-			temp2=temp2.append(result.get("FormNumber")).append(", ");
-		}
-		if(temp2.length()==0)
-		{
-			temp2 = temp2.append("Pass");
-		}else {
-		temp2=temp2.delete(temp2.length()-2, temp2.length());
+			analyserResult.put(vehicleArr[i], temp2.toString());
 		}
 		//System.out.println(temp2);
-		return temp2.toString();
+		return analyserResult;
 	}
 }
