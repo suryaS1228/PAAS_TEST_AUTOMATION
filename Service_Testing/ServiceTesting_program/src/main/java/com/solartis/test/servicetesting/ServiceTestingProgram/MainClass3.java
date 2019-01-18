@@ -135,7 +135,7 @@ public class MainClass3
 	}
 
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
 	@Test(dataProvider="PaaSTest")
 	public void Api1(Integer RowIterator, Object inputtablerowobj) throws InterruptedException, DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
@@ -143,18 +143,18 @@ public class MainClass3
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> inputrow = new LinkedHashMap<Integer, LinkedHashMap<String, String>> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-			//if(inputrow.get(1).get("Flag_for_execution").equalsIgnoreCase("Y"))
-			//{
+			if(inputrow.get("1").get("Flag_for_execution").equalsIgnoreCase("Y"))
+			{
 				for(int i=0;i<apii.length;i++)
 				{
 					disableSslVerification();
 					GenericMethod(RowIterator-1, inputtablerowobj, (Object[]) OutputTableRepository[i], apii[i], ConfigObjectRepository[i],inputTable,OutputDBObjectRepository[i],inputDBObjectRepository[i],(Object[]) inputIndividualTableRepository[i]);
 				}
-			//}
-			//else
-			//{
-				//System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
-			//}
+			}
+			else
+			{
+				System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
+			}
 			commonMap.clear();
 		}catch (Exception e)
 		{
@@ -162,7 +162,7 @@ public class MainClass3
 		}
 	}
 	
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
 	public void GenericMethod(Integer RowIterator, Object inputtablerowobj, Object[] outputtablerowobject, String apis, PropertiesHandle configuration,DatabaseOperation inputTable, DatabaseOperation OutputTable, DatabaseOperation inputIndividualTable,Object[] individualInputTablerowobject)throws InterruptedException, DatabaseException, InterruptedException , DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		try
