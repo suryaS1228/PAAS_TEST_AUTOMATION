@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.net.ssl.HostnameVerifier;
@@ -143,8 +144,9 @@ public class MainClass3
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> inputrow = new LinkedHashMap<Integer, LinkedHashMap<String, String>> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-			if(inputrow.get("1").get("Flag_for_execution").equalsIgnoreCase("Y"))
+			if(inputrow.get(String.valueOf(RowIterator)).get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
+				System.out.println("S.No--->"+inputrow.get(String.valueOf(RowIterator)).get("S_No")+"--->TestDataName--->"+inputrow.get(String.valueOf(RowIterator)).get("Testdata")+"--->Flag--->"+inputrow.get(String.valueOf(RowIterator)).get("Flag_for_execution"));
 				for(int i=0;i<apii.length;i++)
 				{
 					disableSslVerification();
@@ -203,9 +205,9 @@ public class MainClass3
 				System.out.println("inputrow is null");
 			}
 			//System.out.println("TestData : " + inputrow.get("S.No"));  	
-			if(inputrow.get("1").get("Flag_for_execution").equalsIgnoreCase("Y"))
-			{
-				System.out.println("TestData " + inputrow.get("1").get("S_No") + "  API--"+apis );		
+			//if(inputrow.get("1").get("Flag_for_execution").equalsIgnoreCase("Y"))
+			//{
+				//System.out.println("TestData " + inputrow.get("1").get("S_No") + "  API--"+apis );		
 				
 				/*if (TokenFlag)
 				{
@@ -274,10 +276,11 @@ public class MainClass3
 						System.out.println("Coming to Comparison");
 						LinkedHashMap<Integer,LinkedHashMap<String, String>> individualrow = fireEventAPI.CompareFunction(inputrow,outputrow);//CALLING COMPARING FUNCTION
 						//OutputTable.UpdateRow(RowIterator+1, outputrow);
-						for(int i=1;i<=individualrow.size();i++)
+						for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : individualrow.entrySet())  
 						{
-							System.out.println(individualrow.get(String.valueOf(i)));
-							inputIndividualTable.UpdateRow(RowIterator+i, individualrow.get(String.valueOf(i)));
+							//System.out.println(individualrow.get(String.valueOf(i)));
+							entry.getValue().put("Flag_for_execution", "Completed");
+							inputIndividualTable.UpdateRow(RowIterator+1, entry.getValue());
 						}
 						//commonMap.putAll(outputrow);									
 					}
@@ -294,11 +297,11 @@ public class MainClass3
 				//System.out.println(individualinputrow.get("Flag_for_execution"));
 				//inputIndividualTable.UpdateRow(RowIterator+1, individualinputrow);//UPDATE DB TABLE ROWS AFTER COMPARSION
 				//System.out.println(individualinputrow);
-			}
-		else
-			{
-				System.out.println("TestData " +"---flag_for_execution N");
-			}
+		//	}
+		//else
+		//	{
+		//		System.out.println("TestData " +"---flag_for_execution N");
+			//}
 		}
 		catch (Exception e)
 		{
@@ -313,26 +316,32 @@ public class MainClass3
 	@DataProvider(name="PaaSTest")
 	public Object[][] dpapi1() throws DatabaseException, NumberFormatException, SQLException
 	{
+		
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
 		ObjectMapper inputtableobjectMapper;		
 		DatabaseOperation input = new DatabaseOperation();
 		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(TestCaseID) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
 		Object[][] combined = new Object[noOfTestCase][2];
-		int rowIterator = 0;
-		for(int i=1;i<=noOfTestCase;i++) 
-		{
-			inputtable = input.GetDataObjects(InputtableQuery+" Where TestCaseID="+i);
-			//Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();			
-			//while (inputtableiterator.hasNext() ) 
-			//{
-				//Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();				
-				//LinkedHashMap<String, String> inputrow = inputentry.getValue();		         
-			    inputtableobjectMapper = new ObjectMapper();
-				Object inputtablerowobject = inputtableobjectMapper.convertValue(inputtable, Object.class);				 
-				combined[rowIterator][0] = rowIterator+1;
-				combined[rowIterator][1] = inputtablerowobject;				 
-				rowIterator++;
-			//}  
+		try {
+			int rowIterator = 0;
+			for(int i=1;i<=noOfTestCase;i++) 
+			{
+				inputtable = input.GetDataObjects(InputtableQuery+" Where TestCaseID="+i);
+				//Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();			
+				//while (inputtableiterator.hasNext() ) 
+				//{
+				//System.out.println(inputtable);
+					//Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();				
+					//LinkedHashMap<String, String> inputrow = inputentry.getValue();		         
+				    inputtableobjectMapper = new ObjectMapper();
+					Object inputtablerowobject = inputtableobjectMapper.convertValue(inputtable, Object.class);				 
+					combined[rowIterator][0] = rowIterator+1;
+					combined[rowIterator][1] = inputtablerowobject;				 
+					rowIterator++;
+				//}  
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		return combined;
 	}

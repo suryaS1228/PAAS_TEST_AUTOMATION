@@ -1,10 +1,14 @@
 package com.solartis.test.apiPackage.CommercialAuto;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.jayway.jsonpath.PathNotFoundException;
@@ -17,6 +21,7 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
+import com.solartis.test.util.api.JsonHandle;
 import com.solartis.test.util.api.RequestHandler;
 
 import freemarker.template.TemplateException;
@@ -33,6 +38,26 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+	}
+	
+	public void SendAndReceiveData() throws APIException 
+	{
+		try
+		{
+			//String input_data= null;
+			//input_data = request.FileToString();
+			start = System.currentTimeMillis();
+		    //http.SendData(input_data);
+			String response_string = this.enable_read(config.getProperty("response_location")+input.get("Testdata")+".json");
+		    end = System.currentTimeMillis();
+			response = new JsonHandle(config.getProperty("response_location")+input.get("Testdata")+".json");
+			response.StringToFile(response_string);
+		}
+		catch(RequestFormatException e)
+		{
+			e.printStackTrace();
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
+		}
 	}
 	
 	public void AddHeaders(String Token) throws APIException 
@@ -53,10 +78,10 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	 }
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public void LoadSampleRequest(LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException
 	{
-		this.input = InputData.get("1");
+		Map.Entry<Integer,LinkedHashMap<String, String>>  entry = InputData.entrySet().iterator().next();
+		this.input = entry.getValue();
 		try
 		{
 			sampleInput = new RequestHandler(config);
@@ -68,16 +93,15 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<Integer,LinkedHashMap<String, String>> InputData) throws APIException 
 	{
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
-			for(int i=1 ;i<=InputData.size();i++)
+			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : InputData.entrySet())  
 			{
-				sampleInput.LoadData(tableInputColVerify, InputData.get(i),i);
-				sampleInput.PumpinDatatoRequest(tableInputColVerify,InputData.get(String.valueOf(i)),commonmap,i);	
+				sampleInput.LoadData(tableInputColVerify, entry.getValue(),1);
+				sampleInput.PumpinDatatoRequest(tableInputColVerify,entry.getValue(),commonmap,1);	
 			}
 			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
 		}
@@ -95,13 +119,13 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
-			String[] vehicleArr = { "", "Truck.", "PublicTransportation.","Special.", "PrivatePassenger.", "ZoneRated."};
+			String[] vehicleArr = { "", "Truck..", "PublicTransportation..","Special..", "PrivatePassenger..", "ZoneRated.."};
 			String NoOfStates = response.read("$.State.length()");
 			for(int k=0; k<Integer.parseInt(NoOfStates);k++)
 			{
 				for(int j=0; j<vehicleArr.length;j++)
 				{
-					String arraylength = response.read("$.State["+k+"]"+vehicleArr[j]+".Forms.FormDetail.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+					String arraylength = response.read("$.State["+k+"]."+vehicleArr[j]+"Forms.FormDetail.length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 					arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
 					System.out.println(arraylength);
 					for (int i=0;i<Integer.parseInt(arraylength);i++) 
@@ -121,8 +145,8 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 										///System.out.println("Writing Response to Table");
 										//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 										String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
-										String Rep=jsonpath.replaceAll("###", vehicleArr[j]).replaceAll("##", Integer.toString(i));
-										
+										String Rep=jsonpath.replaceAll("####", String.valueOf(k)).replaceAll("###", vehicleArr[j]).replaceAll("##", Integer.toString(i));
+										//System.out.println(Rep);
 										String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 										
 										temp2=temp2.append("'").append(actual).append("'").append(",");
@@ -132,8 +156,9 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 									}
 									catch(PathNotFoundException e)
 									{
-										e.printStackTrace();
-										output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
+										temp2=temp2.append("'").append("###").append("'").append(",");
+										//e.printStackTrace();
+										//output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 									}
 								}
 								
@@ -156,19 +181,19 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 	@SuppressWarnings("unlikely-arg-type")
 	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
-		String[] vehicleResultArr = { "Policy","Private Passenger Detail", "Truck Detail", "Public Transportation Detail", "Zone Rated Detail","Special Types Detail"};
+		String[] vehicleResultArr = { "Policy","Private Passenger Detail", "Truck Detail", "Public Transportation Detail", "Zone Rated Truck Detail","Special Type Detail"};
 		String[] vehicleColumbnArr = { "Policy", "PrivatePassenger", "Truck", "PublicTransportation", "ZoneRated", "SpecialTypes"};
 		GenerateExpected expected = new GenerateExpected(config);
 		try 
 		{
-			for(int i=1 ;i<=inputrow.size();i++)
+			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : inputrow.entrySet())  
 			{
-				expected.generateExpectedMel(config, inputrow.get(String.valueOf(i)), output);
-				LinkedHashMap<String,String> result = expected.analyser(inputrow.get(String.valueOf(i)).get("TestCaseID"));
+				expected.generateExpectedMel(config, entry.getValue(), output);
+				LinkedHashMap<String,String> result = expected.analyser(entry.getValue().get("TestCaseID"));
 				
 				for(int j=0;j<vehicleColumbnArr.length;j++)
 				{
-					inputrow.get(String.valueOf(i)).put("AnalyserResult"+vehicleColumbnArr[j], result.get(vehicleResultArr[j]));
+					entry.getValue().put("AnalyserResult"+vehicleColumbnArr[j], result.get(vehicleResultArr[j]));
 				}
 			}
 		} 
@@ -181,5 +206,32 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 	
 	}
 
-	
+	@SuppressWarnings("resource")
+	private String enable_read(String file_location) throws RequestFormatException
+	{
+		StringBuffer si = new StringBuffer();
+		BufferedReader read_file = null;
+		try 
+		{
+			//read_file = new FileReader(file_location);
+			read_file = new BufferedReader(new InputStreamReader(new FileInputStream(file_location), "UTF-8"));
+			String s = null;			
+
+			while (( s=read_file.readLine())!=null)
+		    {
+					si=si.append(s);
+		          // System.out.println(s);
+		    }
+		} 
+		catch (IOException e) 
+		{
+			throw new RequestFormatException("ERROR OCCURS WHILE SPECIFIED JSON FILEPATH = " + file_location +" TO READ", e);
+		}
+		
+		read_file = null;
+		//System.out.println(obj.toJSONString());
+		//System.out.println(si);
+		return si.toString();
+		
+	}
 }

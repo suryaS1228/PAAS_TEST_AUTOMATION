@@ -37,7 +37,7 @@ public class GenerateExpected
 				LinkedHashMap<String, String> configtablerow = entry.getValue();
 				if(configtablerow.get("Flag_for_execution").equals("Y"))
 				{
-					//System.out.println(configtablerow.get("Condition"));
+					System.out.println(configtablerow.get("Condition"));
 					if(verify.ConditionReading(configtablerow.get("Condition"), inputrow))
 					{
 						String insterQuery = "INSERT INTO Output_FormSelection_Expected VALUES("+inputrow.get("S_No")+", temp2)";	
@@ -63,14 +63,13 @@ public class GenerateExpected
 	public LinkedHashMap<String,String> analyser(String rowNumber) throws DatabaseException
 	{
 		
-		String[] vehicleArr = { "Policy", "Truck Detail", "Public Transportation Detail","Special Types Detail", "Private Passenger Detail", "Zone Rated Detail"};
+		String[] vehicleArr = { "Policy", "Truck Detail", "Public Transportation Detail","Special Type Detail", "Private Passenger Detail", "Zone Rated Truck Detail"};
 		LinkedHashMap<String,String> analyserResult = new LinkedHashMap<String,String>();
 		
 		for(int i=0;i<vehicleArr.length;i++)
 		{
 			StringBuffer temp2 = new StringBuffer();
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects(
-					"SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
+			String QueryString = "SELECT  Output_FormSelection.FormName, Output_FormSelection.FormNumber "
 					+ "FROM Output_FormSelection "
 					+ "WHERE  Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection.FormHierachy='"+vehicleArr[i]+"' and Output_FormSelection.FormNumber NOT IN "
 					+ "( "
@@ -80,11 +79,13 @@ public class GenerateExpected
 					+ "UNION ALL "
 					+ "SELECT  Output_FormSelection_Expected.FormName, Output_FormSelection_Expected.FormNumber "
 					+ "FROM Output_FormSelection_Expected "
-					+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection.FormHierachy='"+vehicleArr[i]+"' and Output_FormSelection_Expected.FormNumber NOT IN "
+					+ "WHERE   Output_FormSelection_Expected.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormHierachy='"+vehicleArr[i]+"' and Output_FormSelection_Expected.FormNumber NOT IN "
 					+ "( "
 					+ "SELECT  Output_FormSelection.FormNumber "
 					+ "FROM Output_FormSelection WHERE Output_FormSelection.S_No='"+rowNumber+"' and Output_FormSelection_Expected.FormHierachy='"+vehicleArr[i]+"' "
-					+ ")");
+					+ ")";
+			//System.out.println(QueryString);
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> coverageData = configTable.GetDataObjects(QueryString);
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : coverageData.entrySet())	
 			{
 				LinkedHashMap<String, String> result = entry.getValue();
