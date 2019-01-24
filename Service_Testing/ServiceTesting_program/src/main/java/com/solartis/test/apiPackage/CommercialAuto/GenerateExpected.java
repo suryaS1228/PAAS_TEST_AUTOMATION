@@ -43,7 +43,7 @@ public class GenerateExpected
 						String insterQuery = "INSERT INTO Output_FormSelection_Expected VALUES("+inputrow.get("S_No")+", temp2)";	
 						StringBuffer temp2 = new StringBuffer();
 						
-						temp2=temp2.append("'").append(configtablerow.get("FormName")).append("'").append(",");
+						temp2=temp2.append("\"").append(configtablerow.get("FormName")).append("\"").append(",");
 						temp2=temp2.append("'").append(configtablerow.get("FormNumber")).append("'").append(",");
 						temp2=temp2.append("'").append(configtablerow.get("FormType")).append("'").append(",");
 						temp2=temp2.append("'").append(configtablerow.get("FormHierachy")).append("'").append(",");
@@ -53,7 +53,7 @@ public class GenerateExpected
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
 						//System.out.println(insterQuery);
-						expectedMelTable.insertRow(insterQuery);
+						expectedMelTable.insertRow(insterQuery.replaceAll("'", "\\'"));
 					}
 				}
 			}
