@@ -98,10 +98,12 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery"));
+			int i=1;
 			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : InputData.entrySet())  
 			{
-				sampleInput.LoadData(tableInputColVerify, entry.getValue(),1);
-				sampleInput.PumpinDatatoRequest(tableInputColVerify,entry.getValue(),commonmap,1);	
+				sampleInput.LoadData(tableInputColVerify, entry.getValue(),i);
+				sampleInput.PumpinDatatoRequest(tableInputColVerify,entry.getValue(),commonmap,i);	
+				i++;
 			}
 			sampleInput.saveJsontoPath(config.getProperty("request_location")+input.get("Testdata")+".json");
 		}
@@ -130,7 +132,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 					System.out.println(arraylength);
 					for (int i=0;i<Integer.parseInt(arraylength);i++) 
 					{
-						String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("S_No")+", temp2)";	
+						String insterQuery = "INSERT INTO Output_FormSelection VALUES("+input.get("TestCaseID")+", temp2)";	
 						StringBuffer temp2 = new StringBuffer();
 						for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 						{
@@ -164,6 +166,7 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 								
 							}
 						}
+						temp2=temp2.append("\"").append("State["+k+"]").append("\"").append(",");
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
 						queryList.add(insterQuery);
@@ -186,15 +189,17 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		GenerateExpected expected = new GenerateExpected(config);
 		try 
 		{
+			int multiStateIndicatior = 0;
 			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : inputrow.entrySet())  
 			{
-				expected.generateExpectedMel(config, entry.getValue(), output);
-				LinkedHashMap<String,String> result = expected.analyser(entry.getValue().get("TestCaseID"));
+				expected.generateExpectedMel(config, entry.getValue(), output, multiStateIndicatior);
+				LinkedHashMap<String,String> result = expected.analyser(entry.getValue().get("TestCaseID"), multiStateIndicatior);
 				
 				for(int j=0;j<vehicleColumbnArr.length;j++)
 				{
 					entry.getValue().put("AnalyserResult"+vehicleColumbnArr[j], result.get(vehicleResultArr[j]));
 				}
+				multiStateIndicatior++;
 			}
 		} 
 		catch (DatabaseException | SQLException e) 

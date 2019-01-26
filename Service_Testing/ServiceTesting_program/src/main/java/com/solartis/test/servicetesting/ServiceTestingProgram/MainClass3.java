@@ -65,6 +65,8 @@ public class MainClass3
 	public static List<String> InputtableList;
 	public static boolean TokenFlag;
 	
+	public static LinkedHashMap<String,List<String>> testCaseToSNOMaping = new LinkedHashMap<String,List<String>>();
+	
 	@BeforeTest
 	public void beforeTest() 
 	{
@@ -144,9 +146,13 @@ public class MainClass3
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> inputrow = new LinkedHashMap<Integer, LinkedHashMap<String, String>> ();
 			ObjectMapper inputtableobjectMapper = new ObjectMapper();
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
-			if(inputrow.get(String.valueOf(RowIterator)).get("Flag_for_execution").equalsIgnoreCase("Y"))
+			
+			String testcasenumber=testCaseToSNOMaping.get(String.valueOf(RowIterator)).get(0);
+			System.out.println(testcasenumber);
+			System.out.println(inputrow.get(testcasenumber));
+			if(inputrow.get(testcasenumber).get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
-				System.out.println("S.No--->"+inputrow.get(String.valueOf(RowIterator)).get("S_No")+"--->TestDataName--->"+inputrow.get(String.valueOf(RowIterator)).get("Testdata")+"--->Flag--->"+inputrow.get(String.valueOf(RowIterator)).get("Flag_for_execution"));
+				System.out.println("S.No--->"+inputrow.get(testcasenumber).get("S_No")+"--->TestDataName--->"+inputrow.get(testcasenumber).get("Testdata")+"--->Flag--->"+inputrow.get(testcasenumber).get("Flag_for_execution"));
 				for(int i=0;i<apii.length;i++)
 				{
 					disableSslVerification();
@@ -155,7 +161,7 @@ public class MainClass3
 			}
 			else
 			{
-				System.out.println("TestData " + inputrow.get("S_No") + "---flag_for_execution N");
+				System.out.println("TestData " + inputrow.get(testcasenumber).get("S_No") + "---flag_for_execution N");
 			}
 			commonMap.clear();
 		}catch (Exception e)
@@ -164,7 +170,7 @@ public class MainClass3
 		}
 	}
 	
-	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
+	@SuppressWarnings({ "unchecked" })
 	public void GenericMethod(Integer RowIterator, Object inputtablerowobj, Object[] outputtablerowobject, String apis, PropertiesHandle configuration,DatabaseOperation inputTable, DatabaseOperation OutputTable, DatabaseOperation inputIndividualTable,Object[] individualInputTablerowobject)throws InterruptedException, DatabaseException, InterruptedException , DatabaseException, PropertiesHandleException, APIException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		try
@@ -280,7 +286,7 @@ public class MainClass3
 						{
 							//System.out.println(individualrow.get(String.valueOf(i)));
 							entry.getValue().put("Flag_for_execution", "Completed");
-							inputIndividualTable.UpdateRow(RowIterator+1, entry.getValue());
+							inputIndividualTable.UpdateRow(Integer.parseInt(entry.getValue().get("S_No")), entry.getValue());
 						}
 						//commonMap.putAll(outputrow);									
 					}
@@ -318,11 +324,23 @@ public class MainClass3
 	{
 		
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable;
+		LinkedHashMap<Integer, LinkedHashMap<String, String>> testCaseIDMapping;
 		ObjectMapper inputtableobjectMapper;		
 		DatabaseOperation input = new DatabaseOperation();
+		DatabaseOperation input11 = new DatabaseOperation();
 		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(TestCaseID) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
 		Object[][] combined = new Object[noOfTestCase][2];
 		try {
+			testCaseIDMapping = input11.GetDataObjects(InputtableQuery);
+			testCaseToSNOMaping=testCaseID(testCaseIDMapping);
+			Iterator<Entry<String, List<String>>> itee= testCaseToSNOMaping.entrySet().iterator();
+			while(itee.hasNext())
+			{
+				Entry<String, List<String>> entry = itee.next();
+				System.out.println(entry.getKey()+"----"+entry.getValue());
+				
+				
+			}
 			int rowIterator = 0;
 			for(int i=1;i<=noOfTestCase;i++) 
 			{
@@ -332,18 +350,38 @@ public class MainClass3
 				//{
 				//System.out.println(inputtable);
 					//Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();				
-					//LinkedHashMap<String, String> inputrow = inputentry.getValue();		         
-				    inputtableobjectMapper = new ObjectMapper();
-					Object inputtablerowobject = inputtableobjectMapper.convertValue(inputtable, Object.class);				 
-					combined[rowIterator][0] = rowIterator+1;
-					combined[rowIterator][1] = inputtablerowobject;				 
-					rowIterator++;
+					//LinkedHashMap<String, String> inputrow = inputentry.getValue();	
+				inputtableobjectMapper = new ObjectMapper();
+				Object inputtablerowobject = inputtableobjectMapper.convertValue(inputtable, Object.class);				 
+				combined[rowIterator][0] = rowIterator+1;
+				combined[rowIterator][1] = inputtablerowobject;				 
+				rowIterator++;
 				//}  
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return combined;
+	}
+	
+	private LinkedHashMap<String,List<String>> testCaseID(LinkedHashMap<Integer, LinkedHashMap<String, String>> testCaseIDMapping)
+	{
+		LinkedHashMap<String,List<String>> local = new LinkedHashMap<String,List<String>>();
+		Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = testCaseIDMapping.entrySet().iterator();			
+		while (inputtableiterator.hasNext()) 
+		{
+			Entry<Integer, LinkedHashMap<String, String>> inputentry = inputtableiterator.next();
+			LinkedHashMap<String, String> inputrow = inputentry.getValue();
+			if(local.containsKey(inputrow.get("TestCaseID"))){
+				local.get(inputrow.get("TestCaseID")).add(inputrow.get("S_No"));
+			}
+			else{
+				 ArrayList<String> arrr=new ArrayList<String>();
+				 arrr.add(inputrow.get("S_No"));
+				local.put(inputrow.get("TestCaseID"), arrr);
+			}
+		}
+		return local;		
 	}
 	
 	public Object[] outputtable(PropertiesHandle config) throws DatabaseException
