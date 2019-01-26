@@ -181,7 +181,6 @@ public class CommercialAutoFormSelection extends BaseClass2 implements API2
 		}
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
 		String[] vehicleResultArr = { "Policy","Private Passenger Detail", "Truck Detail", "Public Transportation Detail", "Zone Rated Truck Detail","Special Type Detail"};

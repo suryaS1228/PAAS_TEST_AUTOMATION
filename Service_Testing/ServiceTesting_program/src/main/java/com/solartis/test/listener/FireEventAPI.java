@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.apiPackage.API;
-import com.solartis.test.apiPackage.API2;
 import com.solartis.test.exception.APIException;
 
 public class FireEventAPI implements API
