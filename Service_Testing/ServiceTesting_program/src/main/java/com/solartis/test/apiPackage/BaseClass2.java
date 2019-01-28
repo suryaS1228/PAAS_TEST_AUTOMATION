@@ -35,8 +35,6 @@ import com.solartis.test.util.api.*;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-import freemarker.template.TemplateException;
-
 public class BaseClass2 
 {
 	protected RequestHandler sampleInput = null;
