@@ -169,34 +169,12 @@ public class DocGen extends BaseClass2 implements API2
 	
 	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
 	{
-		String[] vehicleResultArr = { "Policy","Private Passenger Detail", "Truck Detail", "Public Transportation Detail", "Zone Rated Truck Detail","Special Type Detail"};
-		String[] vehicleColumbnArr = { "Policy", "PrivatePassenger", "Truck", "PublicTransportation", "ZoneRated", "SpecialTypes"};
-		GenerateExpected expected = new GenerateExpected(config);
-		try 
-		{
-			int multiStateIndicatior = 0;
-			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : inputrow.entrySet())  
-			{
-				expected.generateExpectedMel(config, entry.getValue(), output, multiStateIndicatior);
-				LinkedHashMap<String,String> result = expected.analyser(entry.getValue().get("TestCaseID"), multiStateIndicatior);
-				
-				for(int j=0;j<vehicleColumbnArr.length;j++)
-				{
-					entry.getValue().put("AnalyserResult"+vehicleColumbnArr[j], result.get(vehicleResultArr[j]));
-				}
-				multiStateIndicatior++;
-			}
-		} 
-		catch (DatabaseException | SQLException e) 
-		{
-			e.printStackTrace();
-		}
 		
 		return inputrow;
 	
 	}
 
-	@SuppressWarnings({ "resource", "unused" })
+	@SuppressWarnings({ "resource" })
 	private String enable_read(String file_location) throws RequestFormatException
 	{
 		StringBuffer si = new StringBuffer();
