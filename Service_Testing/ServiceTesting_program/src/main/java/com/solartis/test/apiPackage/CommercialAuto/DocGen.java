@@ -154,11 +154,16 @@ public class DocGen extends BaseClass2 implements API2
 					
 				}
 			}
-			//temp2=temp2.append("\"").append("State["+k+"]").append("\"").append(",");
 			insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 			temp2=temp2.delete(0, temp2.length());
 			queryList.add(insterQuery);
-					System.out.println(insterQuery);
+			//System.out.println(insterQuery);
+			try {
+				String pdfURL = response.read("$..DocumentURL").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+				urltopdf(pdfURL, config.getProperty("ZipFolderPath")+"/pdfs/TestCaseID-"+input.get("TestCaseID")+".pdf");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return queryList;
 		}
 		catch(DatabaseException | RequestFormatException e)
