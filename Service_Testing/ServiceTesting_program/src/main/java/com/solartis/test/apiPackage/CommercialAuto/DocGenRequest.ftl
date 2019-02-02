@@ -18,60 +18,7 @@
     <#assign States="State"+x><#list States?eval as result>     
         "${result.atrib}":"${result.value}",
         </#list> 
-    "CommercialAutoBusinessInterruptionCoverage": [
-        {
-          "CommercialAutoBusinessInterruptionCoverageDetail": {
-          	<#assign BusinessInterruptionCoverageDetails="BusinessInterruptionCoverageDetail"+x><#list BusinessInterruptionCoverageDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-           }
-        }
-      ],
-      "CommercialAutoAddedPersonalInjuryProtection": [
-        {
-          "CommercialAutoAddedPersonalInjuryProtectionDetail": {
-          	<#assign AddedPersonalInjuryProtectionDetails="AddedPersonalInjuryProtectionDetail"+x><#list AddedPersonalInjuryProtectionDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-          }
-        }
-      ],
-      "CommercialAutoAdditionalInsured": [
-        {
-          "CommercialAutoAdditionalInsuredDetail": {
-          	<#assign AdditionalInsuredDetails="AdditionalInsuredDetail"+x><#list AdditionalInsuredDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-           }
-        }
-      ],
-       "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividuals": [
-        {
-          "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsDetail": {
-          	<#assign DriveOtherCarCovBroadenedCovForNamedIndividualsDetails="DriveOtherCarCovBroadenedCovForNamedIndividualsDetail"+x><#list DriveOtherCarCovBroadenedCovForNamedIndividualsDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-          }
-        }
-      ],
-       "CommercialAutoNamedDriverCollisionCoverage": [
-        {
-          "CommercialAutoNamedDriverCollisionCoverageDetail": {
-          	<#assign NamedDriverCollisionCoverageDetails="NamedDriverCollisionCoverageDetail"+x><#list NamedDriverCollisionCoverageDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-          }
-        }
-      ],
-      "CommercialAutoDesignatedInsuredForCoveredAutosLiabilityCoverage": [
-        {
-          "CommercialAutoDesignatedInsuredForCoveredAutosLiabilityCoverageDetail": {
-          	<#assign DesignatedInsuredForCoveredAutosLiabilityCoverageDetails="DesignatedInsuredForCoveredAutosLiabilityCoverageDetail"+x><#list DesignatedInsuredForCoveredAutosLiabilityCoverageDetails?eval as result>     
-        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
-        </#list>
-           }
-        }
-      ],
+    
       "Forms": [<#assign j=j+1>
         <#list 1..policylevelarray[0] as xx>
         {
@@ -81,30 +28,148 @@
         }<#if xx?is_last><#else>,</#if><#assign j=j+1>
 	    </#list>        
       ],
+      
+      "CommercialAutoTruckersExcessCoverageForNamedInsuredAndNamedLessorsForLeasedAuto": [
+        {
+          "CommercialAutoTruckersExcessCoverageForNamedInsuredAndNamedLessorsForLeasedAutoDetail": {
+            <#assign TruckersExcessCoverageForNamedInsuredAndNamedLessorsForLeasedAutoDetails="TruckersExcessCoverageForNamedInsuredAndNamedLessorsForLeasedAutoDetail"+x><#list TruckersExcessCoverageForNamedInsuredAndNamedLessorsForLeasedAutoDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoColoradoChangesDriverExclusion": [
+        {
+          "CommercialAutoColoradoChangesDriverExclusionDetail": {
+            <#assign ColoradoChangesDriverExclusionDetails="ColoradoChangesDriverExclusionDetail"+x><#list ColoradoChangesDriverExclusionDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoOfficialInspectionStations": [
+        {
+          "CommercialAutoOfficialInspectionStationsDetail": {
+            <#assign OfficialInspectionStationsDetails="OfficialInspectionStationsDetail"+x><#list OfficialInspectionStationsDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoCancellationNonrenewalNoticeToDesignatedPersonOrganization": [
+        {
+          "CommercialAutoCancellationNonrenewalNoticeToDesignatedPersonOrganizationDetail": {
+            <#assign CancellationNonrenewalNoticeToDesignatedPersonOrganizationDetails="CancellationNonrenewalNoticeToDesignatedPersonOrganizationDetail"+x><#list CancellationNonrenewalNoticeToDesignatedPersonOrganizationDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoTruckersNamedLesseeAsInsured": [
+        {
+          "CommercialAutoTruckersNamedLesseeAsInsuredDetail": {
+           <#assign TruckersNamedLesseeAsInsuredDetails="TruckersNamedLesseeAsInsuredDetail"+x><#list TruckersNamedLesseeAsInsuredDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoCoverageForCertainOperationsInConnectionWithRailroads": [
+        {
+          "CommercialAutoCoverageForCertainOperationsInConnectionWithRailroadsDetail": {
+            <#assign CoverageForCertainOperationsInConnectionWithRailroadsDetails="CoverageForCertainOperationsInConnectionWithRailroadsDetail"+x><#list CoverageForCertainOperationsInConnectionWithRailroadsDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoWaiverOfTransferOfRightsOfRecoveryAgainstOthersToUs": [
+        {
+          "CommercialAutoWaiverOfTransferOfRightsOfRecoveryAgainstOthersToUsDetail": {
+            <#assign WaiverOfTransferOfRightsOfRecoveryAgainstOthersToUsDetails="WaiverOfTransferOfRightsOfRecoveryAgainstOthersToUsDetail"+x><#list WaiverOfTransferOfRightsOfRecoveryAgainstOthersToUsDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoFellowEmployeeCoverageForDesignatedEmployeesPositions": [
+        {
+          "CommercialAutoFellowEmployeeCoverageForDesignatedEmployeesPositionsDetail": {
+           <#assign FellowEmployeeCoverageForDesignatedEmployeesPositionsDetails="FellowEmployeeCoverageForDesignatedEmployeesPositionsDetail"+x><#list FellowEmployeeCoverageForDesignatedEmployeesPositionsDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoOptionalBenefitsCoverage": [
+        {
+          "CommercialAutoOptionalBenefitsCoverageDetail": {
+           <#assign OptionalBenefitsCoverageDetails="OptionalBenefitsCoverageDetail"+x><#list OptionalBenefitsCoverageDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      "CommercialAutoMotorCarrierEndorsement": [
+        {
+          "CommercialAutoMotorCarrierEndorsementDetail": {
+            <#assign MotorCarrierEndorsementDetails="MotorCarrierEndorsementDetail"+x><#list MotorCarrierEndorsementDetails?eval as result>     
+        "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        </#list>
+          }
+        }
+      ],
+      
       "Truck": [
         {
           "TruckDetail": {
           	<#assign TruckLevels="TruckLevel"+x><#list TruckLevels?eval as result>     
         	"${result.atrib}":"${result.value}",
         	</#list> 
-           "CommercialAutoWashingtonLossPayableFormReg335": [
-              {
-                "CommercialAutoWashingtonLossPayableFormReg335Detail": {
-                	<#assign WashingtonLossPayableFormReg335Details="TruckWashingtonLossPayableFormReg335Detail"+x><#list WashingtonLossPayableFormReg335Details?eval as result>     
+           "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
+              {        
+                	<#assign AdditionalPersonalInjuryProtectionNewYorkLists="TruckAdditionalPersonalInjuryProtectionNewYorkList"+x><#list AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list> 
-                }
               }
+              
             ],
-            "CommercialAutoLessorAdditionalInsuredAndLossPayee": [
+            "CommercialAutoAdditionalInsuredAndLossPayee": {
+              "CommercialAutoAdditionalInsuredAndLossPayeeDetail": [
               {
-                "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": {
+                	<#assign AdditionalInsuredAndLossPayeeDetails="TruckAdditionalInsuredAndLossPayeeDetail"+x><#list AdditionalInsuredAndLossPayeeDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
+              }
+              ]
+            },
+            "CommercialAutoLessorAdditionalInsuredAndLossPayee": {
+              "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": [
+              {
                 	<#assign LessorAdditionalInsuredAndLossPayeeDetails="TruckLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list> 
                  }
-              }
-            ],
+              ]
+            },
+            "commercialAutoMultiPurposeEquipment": {
+              "CommercialAutoMultiPurposeEquipmentDetail": [
+              {
+                	<#assign MultiPurposeEquipmentDetails="TruckMultiPurposeEquipmentDetail"+x><#list MultiPurposeEquipmentDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
+                 }
+              ]
+            },
+            "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDrivers": {
+              "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDriversDetail": [
+              {
+                	<#assign TexasIncreasedLimitsOtherThanDesignatedDriversDetails="TruckTexasIncreasedLimitsOtherThanDesignatedDriversDetail"+x><#list TexasIncreasedLimitsOtherThanDesignatedDriversDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
+                 }
+              ]
+            },
             "Forms": [<#assign j=1>
 	        <#list 1..Trucklevelarray[0] as xx>
 	        {
@@ -124,24 +189,53 @@
           	<#assign SpecialTypesLevels="SpecialTypesLevel"+x><#list SpecialTypesLevels?eval as result>     
         	"${result.atrib}":"${result.value}",
         	</#list>
-          "CommercialAutoWashingtonLossPayableFormReg335": [
+          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
-                "CommercialAutoWashingtonLossPayableFormReg335Detail": {
-                <#assign WashingtonLossPayableFormReg335Details="SpecialWashingtonLossPayableFormReg335Detail"+x><#list WashingtonLossPayableFormReg335Details?eval as result>     
+                <#assign AdditionalPersonalInjuryProtectionNewYorkLists="SpecialAdditionalPersonalInjuryProtectionNewYorkList"+x><#list AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                 }
-              }
-            ],
-            "CommercialAutoLessorAdditionalInsuredAndLossPayee": [
-              {
-                "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": {
+              ],
+           
+            "CommercialAutoAdditionalInsuredAndLossPayee": {
+              "CommercialAutoAdditionalInsuredAndLossPayeeDetail": [
+                {
+                	<#assign AdditionalInsuredAndLossPayeeDetails="SpecialAdditionalInsuredAndLossPayeeDetail"+x><#list AdditionalInsuredAndLossPayeeDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+              ]
+            },
+            
+            "CommercialAutoLessorAdditionalInsuredAndLossPayee": {
+              "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": [
+                {
                 	<#assign LessorAdditionalInsuredAndLossPayeeDetails="SpecialLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                  }
-              }
-            ],
+              ]
+            },
+            
+           "commercialAutoMultiPurposeEquipment": {
+              "CommercialAutoMultiPurposeEquipmentDetail": [
+                {
+                	<#assign MultiPurposeEquipmentDetails="SpecialMultiPurposeEquipmentDetail"+x><#list MultiPurposeEquipmentDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+              ]
+            },
+            
+            "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDrivers": {
+              "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDriversDetail": [
+                {
+                	<#assign TexasIncreasedLimitsOtherThanDesignatedDriversDetails="SpecialTexasIncreasedLimitsOtherThanDesignatedDriversDetail"+x><#list TexasIncreasedLimitsOtherThanDesignatedDriversDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+              ]
+            },
             "Forms": [<#assign j=1>
 	        <#list 1..SpecialTypeslevelarray[0] as xx>
 	        {
@@ -161,24 +255,51 @@
           	<#assign PrivatePassengerLevels="PrivatePassengerLevel"+x><#list PrivatePassengerLevels?eval as result>     
         	"${result.atrib}":"${result.value}",
         	</#list>
-          "CommercialAutoWashingtonLossPayableFormReg335": [
+          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
-                "CommercialAutoWashingtonLossPayableFormReg335Detail": {
-                	<#assign WashingtonLossPayableFormReg335Details="PrivateWashingtonLossPayableFormReg335Detail"+x><#list WashingtonLossPayableFormReg335Details?eval as result>     
+               
+                	<#assign AdditionalPersonalInjuryProtectionNewYorkLists="PrivateAdditionalPersonalInjuryProtectionNewYorkList"+x><#list AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                  }
-              }
+              
             ],
-            "CommercialAutoLessorAdditionalInsuredAndLossPayee": [
+            "CommercialAutoAdditionalInsuredAndLossPayee": {
+              "CommercialAutoAdditionalInsuredAndLossPayeeDetail": [
               {
-                "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": {
+                	<#assign AdditionalInsuredAndLossPayeeDetails="PrivateAdditionalInsuredAndLossPayeeDetail"+x><#list AdditionalInsuredAndLossPayeeDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+               ]
+            },
+            "CommercialAutoLessorAdditionalInsuredAndLossPayee": {
+              "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": [
+              {
                 	<#assign LessorAdditionalInsuredAndLossPayeeDetails="PrivateLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                  }
-              }
-            ],
+               ]
+            },
+            "commercialAutoMultiPurposeEquipment": {
+              "CommercialAutoMultiPurposeEquipmentDetail": [
+              {
+                	<#assign MultiPurposeEquipmentDetails="PrivateMultiPurposeEquipmentDetail"+x><#list MultiPurposeEquipmentDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+               ]
+            },
+            "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDrivers": {
+              "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDriversDetail": [
+              {
+                	<#assign TexasIncreasedLimitsOtherThanDesignatedDriversDetails="PrivateTexasIncreasedLimitsOtherThanDesignatedDriversDetail"+x><#list TexasIncreasedLimitsOtherThanDesignatedDriversDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                 }
+               ]
+            },
             "Forms": [<#assign j=1>
 	        <#list 1..Pptlevelarray[0] as xx>
 	        {
@@ -197,24 +318,50 @@
           <#assign ZoneRatedLevels="ZoneRatedLevel"+x><#list ZoneRatedLevels?eval as result>     
         	"${result.atrib}":"${result.value}",
         	</#list>
-          "CommercialAutoWashingtonLossPayableFormReg335": [
+          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
-                "CommercialAutoWashingtonLossPayableFormReg335Detail": {
-                	<#assign oWashingtonLossPayableFormReg335s="ZoneRatedWashingtonLossPayableFormReg335"+x><#list oWashingtonLossPayableFormReg335s?eval as result>     
+                	<#assign AdditionalPersonalInjuryProtectionNewYorkLists="ZoneRatedAdditionalPersonalInjuryProtectionNewYorkList"+x><#list AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                  }
-              }
+              
             ],
-            "CommercialAutoLessorAdditionalInsuredAndLossPayee": [
+            "CommercialAutoAdditionalInsuredAndLossPayee": {
+              "CommercialAutoAdditionalInsuredAndLossPayeeDetail": [
               {
-                "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": {
+                	<#assign AdditionalInsuredAndLossPayeeDetails="ZoneRatedAdditionalInsuredAndLossPayeeDetail"+x><#list AdditionalInsuredAndLossPayeeDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
+            "CommercialAutoLessorAdditionalInsuredAndLossPayee": {
+              "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": [
+              {
                 	<#assign LessorAdditionalInsuredAndLossPayeeDetails="ZoneRatedLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                 }
-              }
-            ],
+              ]
+            },
+            "commercialAutoMultiPurposeEquipment": {
+              "CommercialAutoMultiPurposeEquipmentDetail": [
+              {
+                	<#assign MultiPurposeEquipmentDetails="ZoneRatedMultiPurposeEquipmentDetail"+x><#list MultiPurposeEquipmentDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
+            "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDrivers": {
+              "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDriversDetail": [
+              {
+                	<#assign TexasIncreasedLimitsOtherThanDesignatedDriversDetails="ZoneRatedTexasIncreasedLimitsOtherThanDesignatedDriversDetail"+x><#list TexasIncreasedLimitsOtherThanDesignatedDriversDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
             "Forms": [<#assign j=1>
 	        <#list 1..ZoneRatedlevelarray[0] as xx>
 	        {
@@ -233,24 +380,50 @@
           	<#assign PublicTransportationLevels="PublicTransportationLevel"+x><#list PublicTransportationLevels?eval as result>     
         	"${result.atrib}":"${result.value}",
         	</#list>
-           "CommercialAutoWashingtonLossPayableFormReg335": [
+            "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
-                "CommercialAutoWashingtonLossPayableFormReg335Detail": {
-                	<#assign WashingtonLossPayableFormReg335Details="PublicWashingtonLossPayableFormReg335Detail"+x><#list WashingtonLossPayableFormReg335Details?eval as result>     
+                	<#assign AdditionalPersonalInjuryProtectionNewYorkLists="PublicTransAdditionalPersonalInjuryProtectionNewYorkList"+x><#list AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
                  }
-              }
+              
             ],
-            "CommercialAutoLessorAdditionalInsuredAndLossPayee": [
+            "CommercialAutoAdditionalInsuredAndLossPayee": {
+              "CommercialAutoAdditionalInsuredAndLossPayeeDetail": [
               {
-                "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": {
-                	<#assign LessorAdditionalInsuredAndLossPayeeDetails="PublicLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
+                	<#assign AdditionalInsuredAndLossPayeeDetails="PublicTransAdditionalInsuredAndLossPayeeDetail"+x><#list AdditionalInsuredAndLossPayeeDetails?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
-                 }
-              }
-            ],
+                }
+              ]
+            },
+            "CommercialAutoLessorAdditionalInsuredAndLossPayee": {
+              "CommercialAutoLessorAdditionalInsuredAndLossPayeeDetail": [
+              {
+                	<#assign LessorAdditionalInsuredAndLossPayeeDetails="PublicTransLessorAdditionalInsuredAndLossPayeeDetail"+x><#list LessorAdditionalInsuredAndLossPayeeDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
+            "commercialAutoMultiPurposeEquipment": {
+              "CommercialAutoMultiPurposeEquipmentDetail": [
+              {
+                	<#assign MultiPurposeEquipmentDetails="PublicTransMultiPurposeEquipmentDetail"+x><#list MultiPurposeEquipmentDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
+            "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDrivers": {
+              "CommercialAutoTexasIncreasedLimitsOtherThanDesignatedDriversDetail": [
+              {
+                	<#assign TexasIncreasedLimitsOtherThanDesignatedDriversDetails="PublicTransTexasIncreasedLimitsOtherThanDesignatedDriversDetail"+x><#list TexasIncreasedLimitsOtherThanDesignatedDriversDetails?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+                }
+              ]
+            },
             "Forms": [<#assign j=1>
 	        <#list 1..PublicTranslevelarray[0] as xx>
 	        {
