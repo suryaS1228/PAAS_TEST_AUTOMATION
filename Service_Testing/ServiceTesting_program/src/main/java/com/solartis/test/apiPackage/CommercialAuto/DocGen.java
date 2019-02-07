@@ -40,7 +40,7 @@ public class DocGen extends BaseClass2 implements API2
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	public void SendAndReceiveData() throws APIException 
+	/*public void SendAndReceiveData() throws APIException 
 	{
 		try
 		{
@@ -58,7 +58,7 @@ public class DocGen extends BaseClass2 implements API2
 			e.printStackTrace();
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
-	}
+	}*/
 	
 	public void AddHeaders(String Token) throws APIException 
 	 {
