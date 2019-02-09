@@ -36,18 +36,21 @@
         {
           "TrailerInterchangeAgreementDetail": [
             {
-              "TrailerInterchangeAgreementCollisionCoverageDeductible": "1,000",
-              "TrailerInterchangeAgreementCollisionCoverageLegalLiability": "9999999",
-              "TrailerInterchangeAgreementComprehensiveCoverageLegalLiability": "9999999",
-              "TrailerInterchangeAgreementDetailGaragingAndTerminalZoneType": "Metropolitan To Metropolitan",
-              "TrailerInterchangeAgreementDetailNumberOfDays": "15",
-              "TrailerInterchangeAgreementDetailNumberOfTrailers": "13",
-              "TrailerInterchangeAgreementDetailRadiusClass": "Intermediate",
-              "TrailerInterchangeAgreementDetailZoneOfTerminal": "Pacific",
-              "TrailerInterchangeAgreementFireAndTheftManualPremium": "150.0",
-              "TrailerInterchangeAgreementFireManualPremium": "150.0",
-              "TrailerInterchangeAgreementSpecifiedCausesOfLossCoverageLegalLiability": "9999999"
+              <#assign TrailerInterchanges="TrailerInterchange"+x><#list TrailerInterchanges?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
             }
+          ]
+        }
+      ],
+      "CommercialAutoNamedIndividualsBroadenedPersonalInjuryProtectionCoverage": [
+        {
+          "CommercialAutoNamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetail": [
+            {
+              <#assign NamedIndividualss="NamedIndividuals"+x><#list NamedIndividualss?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list>
+        	}
           ]
         }
       ],
@@ -55,25 +58,10 @@
         {
           "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsDetail": [
             {
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsCollisionCoverageDeductible": "1,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageCoverageType": "",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageDeductible": "250 Combined Single Limit",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageFinancialResponsibilityRequirement": "",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoverageLimitText": "3,000,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsLiabilityCoveragePropertyDamageLimitText": "",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsMedicalPaymentsCoverageLimitText": "500",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsOtherThanCollisionCoverageDeductible": "1,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsOtherThanCollisionCoverageFullGlassCoverage": "No",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageCombinedSingleLimitText": "100,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageCoverageType": "Combined Single Limit",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsCoverageSplitLimit": "",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUnderinsuredMotoristsPropertyDamageCoverageLimitText": "100,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageCombinedSingleLimitText": "100,000",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageCoverageType": "Combined Single Limit",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsCoverageSplitLimit": "",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsPropertyDamageCoverageDeductible": "Full Coverage",
-              "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsUninsuredMotoristsPropertyDamageCoverageLimitText": "100,000"
-            }
+              <#assign DriveOtherCars="DriveOtherCar"+x><#list DriveOtherCars?eval as result>     
+        	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
+        	</#list> 
+              }
           ],
           "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsSubjectToNoFault": "Yes"
         }
@@ -92,6 +80,9 @@
       ],
       "CommercialAutoGaragekeepersCoverage": [
         {
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageAllPerilsDeductible": "Yes",
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageCoverageType": "Comprehensive",
+          "CommercialAutoGaragekeepersCovRatingBase": "Direct (Excess)",
           "CommercialAutoGaragekeepersCovCollisionCoverageDeductible": "100",
           "CommercialAutoGaragekeepersCovCollisionCoverageLimit": "6000",
           "CommercialAutoGaragekeepersCovCollisionCoverageRatingBase": "Legal Liability",
