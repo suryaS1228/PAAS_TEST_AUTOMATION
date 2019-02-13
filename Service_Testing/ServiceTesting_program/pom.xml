@@ -17,7 +17,12 @@
   </properties>
 	
   <dependencies>
-  
+    	 <!-- https://mvnrepository.com/artifact/com.flipkart.zjsonpatch/zjsonpatch -->
+<dependency>
+	    <groupId>com.flipkart.zjsonpatch</groupId>
+	    <artifactId>zjsonpatch</artifactId>
+	    <version>0.4.7</version>
+	</dependency>
 	<dependency>
 	  <groupId>org.testng</groupId>
 	  <artifactId>testng</artifactId>
