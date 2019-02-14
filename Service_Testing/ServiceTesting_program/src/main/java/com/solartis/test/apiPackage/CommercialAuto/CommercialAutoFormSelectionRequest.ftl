@@ -85,10 +85,9 @@
           "CommercialAutoGaragekeepersCovRatingBase": "Direct (Excess)",
           "CommercialAutoGaragekeepersCovCollisionCoverageDeductible": "100",
           "CommercialAutoGaragekeepersCovCollisionCoverageLimit": "6000",
-          "CommercialAutoGaragekeepersCovCollisionCoverageRatingBase": "Legal Liability",
           "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageDeductible": "100 / 500",
-          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageLimit": "6000",
-          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageRatingBase": "Legal Liability"
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageLimit": "6000"
+          
         }
       ],
       "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipment": [

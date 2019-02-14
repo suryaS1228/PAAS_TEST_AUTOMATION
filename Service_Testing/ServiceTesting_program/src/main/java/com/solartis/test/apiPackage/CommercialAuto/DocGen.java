@@ -21,7 +21,6 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
-import com.solartis.test.util.api.JsonHandle;
 import com.solartis.test.util.api.RequestHandler;
 
 import freemarker.template.TemplateException;
@@ -179,7 +178,7 @@ public class DocGen extends BaseClass2 implements API2
 	
 	}
 
-	@SuppressWarnings({ "resource" })
+	@SuppressWarnings({ "resource", "unused" })
 	private String enable_read(String file_location) throws RequestFormatException
 	{
 		StringBuffer si = new StringBuffer();
