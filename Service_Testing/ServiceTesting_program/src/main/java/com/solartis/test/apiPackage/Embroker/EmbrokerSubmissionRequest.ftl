@@ -9,6 +9,15 @@
 },
 "Policy":
 {   
+  "DataEncryption": true,
+  "DoYouOutsourceAnyWorkPerformedForClientsToSubcontractors": true,
+  "BreachOfPrivacyNotificationToCustomerClientOrEmployee": true,
+  "ComputerNetworkOrSystemOrDataSecurityBreaches": true,
+  "WrittenDemandForDamagesAsAResultOfBreachOfContractOrNegligence": true,
+  "FutureClaim": true,
+  "HasThereBeenOrDoYouAnticipateInTheNextYearABankruptcyProceeding": true,
+  "DoYouAnticipateWithinTheNextYearASaleOfTheCompanyForLessThanTheAmountOfFundingRaised": true,
+  "LiabilityClaimsOrViolationsOfLawsOrConsumerFraudOrLitigation": true,
   <#list Policy as result>"${result.atrib}":"${result.value}",</#list>
   "FundraiseList": [
   {
