@@ -39,7 +39,7 @@ public class EmbrokerRate extends BaseClass implements API
 		
 	}
 	
-	public String tokenGenerator(PropertiesHandle config)
+	/*public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";
 		try
@@ -65,7 +65,7 @@ public class EmbrokerRate extends BaseClass implements API
 		}
 		return Token;
 		
-	}
+	}*/
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
 		 this.input = InputData;
