@@ -95,6 +95,8 @@
           "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCoverageRatingBase": "Legal Liability",
           "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentDetail": [
             {
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageManualPremium": "200",
+              "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageManualPremium": "600",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageDeductible": "100",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageLimit": "7500",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageDeductible": "100 / 500",
@@ -109,7 +111,8 @@
             
             "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
-                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
+                "CostNew": "500"
               }
             ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
@@ -141,7 +144,8 @@
           "PrivatePassengerDetail": {
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
-                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
+                "CostNew": "500"
               }
             ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
@@ -171,7 +175,8 @@
           "PublicTransportationDetail": {
             "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
-                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
+                "CostNew": "500"
               }
             ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
@@ -201,7 +206,8 @@
           "ZoneRatedDetail": {
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
-                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
+                "CostNew": "500"
               }
             ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
@@ -231,7 +237,8 @@
           "SpecialDetail": {
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
-                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500"
+                "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
+                "CostNew": "500"
               }
             ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
