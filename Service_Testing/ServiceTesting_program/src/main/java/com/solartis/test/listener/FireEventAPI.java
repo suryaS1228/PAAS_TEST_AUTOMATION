@@ -14,7 +14,7 @@ public class FireEventAPI implements API
 	
 	public FireEventAPI(API api2)
 	{
-		this.api=api2;
+		this.api=api2 ;
 		
 	}
 	
