@@ -31,7 +31,7 @@ public class FireEventAPI implements API
 	@Override
 	public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeLoadSampleRequest();
 		try
@@ -50,7 +50,7 @@ public class FireEventAPI implements API
 
 	public void PumpDataToRequest(LinkedHashMap<String, String> commonmap,LinkedHashMap<String, String> InputData) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforePumpDataToRequest();
 		try
@@ -71,7 +71,7 @@ public class FireEventAPI implements API
 	@Override
 	public String RequestToString(String Token) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeRequestToString();
 		String requesttoString="";
@@ -93,7 +93,7 @@ public class FireEventAPI implements API
 	@Override
 	public void AddHeaders(String Token) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeAddHeaders(Token);
 		try
@@ -113,7 +113,7 @@ public class FireEventAPI implements API
 	@Override
 	public void SendAndReceiveData() throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeSendAndReceiveData();
 		try
@@ -133,7 +133,7 @@ public class FireEventAPI implements API
 	@Override
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeSendResponseDataToFile();
 		try
@@ -155,7 +155,7 @@ public class FireEventAPI implements API
 	public LinkedHashMap<String, String> CompareFunction(LinkedHashMap<String, String> inputrow,
 			LinkedHashMap<String, String> output) throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeCompareFunction();
 		try
@@ -178,7 +178,7 @@ public class FireEventAPI implements API
 	@Override
 	public String ResponseToString() throws APIException 
 	{
-		// TODO Auto-generated method stub
+		
 		for (Listener listen : listeners1)
 			listen.beforeResponseToString();
 		String ResponseToString = "";
@@ -220,7 +220,6 @@ public class FireEventAPI implements API
 	@Override
 	public LinkedHashMap<String, String> differrence(LinkedHashMap<String, String> inputrow,
 			LinkedHashMap<String, String> output) throws APIException {
-		// TODO Auto-generated method stub
 		for (Listener listen : listeners1)
 			listen.beforedifferrence();
 		try
