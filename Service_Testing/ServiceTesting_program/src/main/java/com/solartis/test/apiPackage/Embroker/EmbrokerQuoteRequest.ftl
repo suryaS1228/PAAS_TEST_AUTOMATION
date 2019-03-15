@@ -3,7 +3,7 @@
 <#assign FIDCoverage=[]><#list FidApplicable as a><#assign FIDCoverage=FIDCoverage+[a.value]></#list>
 <#assign EOCoverage=[]><#list ENOApplicable as b><#assign EOCoverage=EOCoverage+[b.value]></#list>
 {   
-     <#list ClientUniqueRequestID as result>"${result.atrib}":"${result.value}", </#list>
+    "ClientUniqueRequestID":"fdhfdkhdfjfdjdjdfjdj",
 	"EndClientUserUniqueSessionId": "Uniquesession",
 	 "OwnerId": "36",
     "ServiceRequestDetail": {
