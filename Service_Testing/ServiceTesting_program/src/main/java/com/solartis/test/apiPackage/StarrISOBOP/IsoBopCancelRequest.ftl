@@ -5,12 +5,14 @@
 	},
   "AttributeListDetail": {
     "AttributeDetail": [
-	    <#list QuoteInformation as result>
-	    {
-	    	"Key" : "${result.atrib}",
-	    	"Value" : "${result.value}"
-	    }<#if result?is_last><#else>,</#if>
-	  </#list>
+    
+    <#list AttributeListDetail  as result>
+	   
+	   {
+	    "Value": "${result.value}",
+        "Key":  "${result.atrib}"
+         
+        }<#if result?is_last><#else>,</#if>   </#list>
  	 ]
   }
 }
