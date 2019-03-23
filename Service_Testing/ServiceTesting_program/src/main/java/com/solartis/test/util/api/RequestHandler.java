@@ -53,7 +53,7 @@ public class RequestHandler
 	
 	public void LoadData(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData) throws DatabaseException
 	{
-		
+		System.out.println("11");
 		List <String> parentlist = new ArrayList<String>();
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
@@ -101,7 +101,7 @@ public class RequestHandler
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 			String parentName = rowInputColVerify.get("Parent");
 			String atributeName = rowInputColVerify.get("AtributeName");
-			//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
+			System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
 			String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
 			Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
@@ -109,7 +109,7 @@ public class RequestHandler
 				if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("static"))
 				{
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
-					//System.out.println(atributeName+"-----------"+atributeStaticValue);
+				System.out.println(atributeName+"-----------"+atributeStaticValue);
 				}
 				else
 				{
@@ -118,7 +118,7 @@ public class RequestHandler
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
+				System.out.println(atributeName+"-----------"+atributeDynamicValue);
 				}
 			}
 			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
@@ -133,7 +133,7 @@ public class RequestHandler
 		File file= new File(filepath);
 		Writer writer = new FileWriter (file);
 		template.process(root, writer);
-		//System.out.println(writer.toString());
+		System.out.println(writer.toString());
 		writer.flush();
 		writer.close();
 		
@@ -221,13 +221,94 @@ public class RequestHandler
 			}
 		}	
 	}
+	
+	public void LoadData(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData, int State,int vehicle) throws DatabaseException
+	{
+		
+		List <String> parentlist = new ArrayList<String>();
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
+		{
+			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+			String parentName = rowInputColVerify.get("Parent")+State+"_"+vehicle;
+			List <Object> atribParent = new ArrayList<Object>();
+			if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData) )
+			{
+				
+				boolean flag=false;
+				//System.out.println(parentName);
+				for(String str: parentlist) 
+				{
+				    if(str.trim().equals(parentName))
+				       flag=true;
+				    //System.out.println(parentName);
+				}
+				if(flag==false)
+				{
+					parentlist.add(parentName);				
+					
+					if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("dynamic"))
+					{
+						//if(!InputData.get(rowInputColVerify.get("DBColumnName")).equals(""))
+							root.put(parentName, atribParent);
+					}
+					else
+					{
+						root.put(parentName, atribParent);
+					}
+					//System.out.println(parentName);
+				}
+			}
+			else if(condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			{
+				root.put(parentName, atribParent);
+			}
+		}	
+	}
 	@SuppressWarnings("unchecked")
 	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData,LinkedHashMap<String, String> commonmap, int row) throws DatabaseException
 	{
+		//System.out.println(InputData);
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
 		{
 			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
 			String parentName = rowInputColVerify.get("Parent")+row;
+			String atributeName = rowInputColVerify.get("AtributeName");
+			//System.out.println(InputData);
+			System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
+			String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
+			Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
+			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			{
+				if(rowInputColVerify.get("AttributeNature").equalsIgnoreCase("static"))
+				{
+					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeStaticValue));
+					//System.out.println(atributeName+"-----------"+atributeStaticValue);
+				}
+				else
+				{
+					if(rowInputColVerify.get("iteration").equalsIgnoreCase("loop"))
+					{
+						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
+					}
+					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
+					//System.out.println(atributeName+"------->"+rowInputColVerify.get("DBColumnName")+"------>"+atributeDynamicValue);
+				}
+			}
+			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
+			{
+				((List<Object>) root.get(parentName)).add(new Attribute(atributeName,commonmap.get(rowInputColVerify.get("DBColumnName"))));
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void PumpinDatatoRequest(LinkedHashMap<Integer, LinkedHashMap<String, String>> requestaddconfig, LinkedHashMap<String, String> InputData,LinkedHashMap<String, String> commonmap, int State, int vehicle) throws DatabaseException
+	{
+		//System.out.println(InputData);
+		for (Entry<Integer, LinkedHashMap<String, String>> entry : requestaddconfig.entrySet())	
+		{
+			LinkedHashMap<String, String> rowInputColVerify = entry.getValue();
+			String parentName = rowInputColVerify.get("Parent")+State+"_"+vehicle;
 			String atributeName = rowInputColVerify.get("AtributeName");
 			//System.out.println(InputData);
 			//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
@@ -247,7 +328,7 @@ public class RequestHandler
 						atributeDynamicValue =Integer.parseInt((String) atributeDynamicValue);
 					}
 					((List<Object>) root.get(parentName)).add(new Attribute(atributeName,atributeDynamicValue));
-					//System.out.println(atributeName+"-----------"+atributeDynamicValue);
+					//System.out.println(atributeName+"------->"+rowInputColVerify.get("DBColumnName")+"------>"+atributeDynamicValue);
 				}
 			}
 			else if(rowInputColVerify.get("flagforexecution").equalsIgnoreCase("Previous")&&condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))

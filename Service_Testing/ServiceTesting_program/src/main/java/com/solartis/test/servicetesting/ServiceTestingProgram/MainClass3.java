@@ -64,6 +64,9 @@ public class MainClass3
 	public static String ExecutionFlag;
 	public static List<String> InputtableList;
 	public static boolean TokenFlag;
+	public static String[] inputTableNames;
+	public static String[] outputTableNames;
+	public static List<String> OutputtableList;
 	
 	public static LinkedHashMap<String,List<String>> testCaseToSNOMaping = new LinkedHashMap<String,List<String>>();
 	
@@ -90,6 +93,7 @@ public class MainClass3
 			inputIndividualTableRepository = new Object[apii.length];
 			
 			InputtableList = new ArrayList<String> ();
+			OutputtableList = new ArrayList<String> ();
 			for(int i=0;i<apii.length;i++)
 			{
 				
@@ -99,19 +103,32 @@ public class MainClass3
 					System.out.println("config is null"+i);
 				}
 				ConfigObjectRepository[i]=new PropertiesHandle(System.getProperty("Project"), apii[i], System.getProperty("Env"), System.getProperty("OutputChioce"), System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"), System.getProperty("Priority"),System.getProperty("ExecutionName"),System.getProperty("ModeofExecution"));
+				inputTableNames = ConfigObjectRepository[i].getProperty("inputTable").split(",");
+				
+				for(String tbl : inputTableNames)
+				{
+					InputtableList.add(tbl);
+				}
+				
+				outputTableNames = ConfigObjectRepository[i].getProperty("outputTable").split(",");
+				
+				for(String tbl1 : outputTableNames)
+				{
+					OutputtableList.add(tbl1);
+				}
 				
 				OutputDBObjectRepository[i]= new DatabaseOperation();
 				inputDBObjectRepository[i]= new DatabaseOperation();
 				OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
 				inputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[i]);
-				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
-				OutputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("output_query"));		
-				inputDBObjectRepository[i].GetDataObjects(ConfigObjectRepository[i].getProperty("input_query"));
+				System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
+				
+				OutputDBObjectRepository[i].GetDataObjects("Select * From "+outputTableNames[0]);		
+				inputDBObjectRepository[i].GetDataObjects("Select * From "+inputTableNames[0]);
 				//System.out.println(ConfigObjectRepository[i].getProperty("output_query"));
 				OutputTableRepository[i]=this.outputtable(ConfigObjectRepository[i]);
 				inputIndividualTableRepository[i]=this.inputTables(ConfigObjectRepository[i]);
 				
-				InputtableList.add(ConfigObjectRepository[i].getProperty("inputTable"));
 			}
 			
 			Conn=OutputDBObjectRepository[0].ConnectionSetup(ConfigObjectRepository[0]);
@@ -120,7 +137,7 @@ public class MainClass3
 				this.beforeTesting(ConfigObjectRepository[0]);
 			}
 			DatabaseOperation inputquery = new DatabaseOperation();
-			InputtableQuery = inputquery.buildJoinQuery(InputtableList);
+			InputtableQuery = "Select * From "+inputTableNames[0]+" t0" /*inputquery.buildJoinQuery(InputtableList)*/;
 			String ProjectDBName = ConfigObjectRepository[0].getProperty("ProjectDBName");
 				
 			inputTable = new DatabaseOperation();
@@ -148,11 +165,11 @@ public class MainClass3
 			inputrow = inputtableobjectMapper.convertValue(inputtablerowobj, LinkedHashMap.class);
 			
 			String testcasenumber=testCaseToSNOMaping.get(String.valueOf(RowIterator)).get(0);
-			System.out.println(testcasenumber);
-			System.out.println(inputrow.get(testcasenumber));
+			//System.out.println(testcasenumber);
+			//System.out.println(inputrow.get(testcasenumber));
 			if(inputrow.get(testcasenumber).get("Flag_for_execution").equalsIgnoreCase("Y"))
 			{
-				System.out.println("S.No--->"+inputrow.get(testcasenumber).get("S_No")+"--->TestDataName--->"+inputrow.get(testcasenumber).get("Testdata")+"--->Flag--->"+inputrow.get(testcasenumber).get("Flag_for_execution"));
+				//System.out.println("S.No--->"+inputrow.get(testcasenumber).get("S_No")+"--->TestDataName--->"+inputrow.get(testcasenumber).get("Testdata")+"--->Flag--->"+inputrow.get(testcasenumber).get("Flag_for_execution"));
 				for(int i=0;i<apii.length;i++)
 				{
 					disableSslVerification();
@@ -328,7 +345,7 @@ public class MainClass3
 		ObjectMapper inputtableobjectMapper;		
 		DatabaseOperation input = new DatabaseOperation();
 		DatabaseOperation input11 = new DatabaseOperation();
-		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(TestCaseID) ) as NoOfTestCases FROM Input_FormSelection").getString("NoOfTestCases"));
+		int noOfTestCase =Integer.parseInt(input.GetQueryResultsSet("SELECT count( DISTINCT(TestCaseID) ) as NoOfTestCases FROM "+inputTableNames[0]).getString("NoOfTestCases"));
 		Object[][] combined = new Object[noOfTestCase][2];
 		try {
 			testCaseIDMapping = input11.GetDataObjects(InputtableQuery);
@@ -344,7 +361,7 @@ public class MainClass3
 			int rowIterator = 0;
 			for(int i=1;i<=noOfTestCase;i++) 
 			{
-				inputtable = input.GetDataObjects(InputtableQuery+" Where TestCaseID="+i);
+				inputtable = input.GetDataObjects(InputtableQuery+" Where t0.TestCaseID="+i);
 				//Iterator<Entry<Integer, LinkedHashMap<String, String>>> inputtableiterator = inputtable.entrySet().iterator();			
 				//while (inputtableiterator.hasNext() ) 
 				//{
@@ -390,7 +407,7 @@ public class MainClass3
 		ObjectMapper outputtableobjectMapper;
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable;
 		DatabaseOperation output = new DatabaseOperation();
-		outputtable = output.GetDataObjects(config.getProperty("output_query"));
+		outputtable = output.GetDataObjects("Select * From "+outputTableNames[0]);
 		Object[] outputableobject = new Object[outputtable.size()];
 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
 		int rowIterator = 0;
@@ -412,7 +429,7 @@ public class MainClass3
 		ObjectMapper outputtableobjectMapper;
 		LinkedHashMap<Integer, LinkedHashMap<String, String>> outputtable;
 		DatabaseOperation output = new DatabaseOperation();
-		outputtable = output.GetDataObjects(config.getProperty("input_query"));
+		outputtable = output.GetDataObjects("Select * From "+inputTableNames[0]);
 		Object[] outputableobject = new Object[outputtable.size()];
 		Iterator<Entry<Integer, LinkedHashMap<String, String>>> outputtableiterator = outputtable.entrySet().iterator();
 		int rowIterator = 0;
