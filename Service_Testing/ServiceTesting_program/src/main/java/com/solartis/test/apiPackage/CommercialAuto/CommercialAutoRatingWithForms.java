@@ -174,7 +174,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 						LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify =  InputColVerify.GetDataObjects(config.getProperty("OutputColQuery")+" where TableName= \""+tableNames[j]+"\"");
 						if(vehicleArr[j]=="State.")  // Condition check 
 						{
-							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\", temp2)";
+							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\",\" "+input.get("Testdata") +"\", temp2)";
 						}
 						else
 						{
@@ -185,7 +185,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 							{
 								MappingID= entry1.getValue().get(StateMappingID); 
 							}	
-							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\",\""+MappingID+"\", temp2)";
+							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\",\""+input.get("Testdata")+"\",\""+MappingID+"\", temp2)";
 						}
 						for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 						{   							
@@ -216,6 +216,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
 						queryList.add(insterQuery);
+						//System.out.println("insterQuery  --- "+insterQuery);
 					}
 				}
 			}
