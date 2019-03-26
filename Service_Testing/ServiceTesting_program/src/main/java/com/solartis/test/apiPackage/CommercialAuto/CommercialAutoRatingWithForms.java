@@ -125,7 +125,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 					LinkedHashMap<Integer, LinkedHashMap<String, String>> individualTable=InputColVerify.GetDataObjects("Select * From "+tableNames[s]+" where TestCaseID= \""+TestCaseID+"\" and "+vehicleStateMapping[s-1]+" = \""+Integer.sum(k, 1)+"\"");
 					for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : individualTable.entrySet())  
 					{
-						System.out.println(config.getProperty("InputColQuery")+" where TableName= \""+tableNames[s]+"\"");
+						//System.out.println(config.getProperty("InputColQuery")+" where TableName= \""+tableNames[s]+"\"");
 						sampleInput.LoadData(tableInputColVerify, entry.getValue(),i,j);
 						sampleInput.PumpinDatatoRequest(tableInputColVerify,entry.getValue(),commonmap,i,j);	
 						j++;
@@ -150,28 +150,43 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 		{
 			String[] inputtableNames = config.getProperty("inputTable").split(",");
 			String[] tableNames = config.getProperty("outputTable").split(",");
-			//String[] vehicleArr = {"Truck.", "PublicTransportation.","Special.", "PrivatePassenger.", "ZoneRated."};
-			String[] vehicleArr = {"PrivatePassenger.","Special.","PublicTransportation.","ZoneRated.","Truck."};
+			String[] vehicleArr = {"State.","PrivatePassenger.","Special.","PublicTransportation.","ZoneRated.","Truck."};
 			String NoOfStates = response.read("$.State.length()");
 			for(int k=0; k<Integer.parseInt(NoOfStates);k++)
 			{
+				
 				for(int j=0; j<vehicleArr.length;j++)
-				{
-					String arraylength = response.read("$.State["+k+"]."+vehicleArr[j]+"length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-					arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
-					for (int i=0;i<Integer.parseInt(arraylength);i++) // 2
+				{   
+					String arraylength="";
+					if(vehicleArr[j]=="State.")
 					{
-                        String insterQuery = "";
-                        String MappingID = "";
-                        String StateMappingID=vehicleArr[j].replace(".","")+"_State_Mapping_ID";
-                        LinkedHashMap<Integer, LinkedHashMap<String, String>> individualTable=InputColVerify.GetDataObjects("Select * from " +inputtableNames[j+1]+ " where TestcaseID = "+input.get("TestCaseID"));
-                        for (Map.Entry<Integer,LinkedHashMap<String, String>> entry1 : individualTable.entrySet())  
-						{
-							MappingID= entry1.getValue().get(StateMappingID); 
-						}	
+						 arraylength = "1";
+					}
+					else
+					{
+						arraylength = response.read("$.State["+k+"]."+vehicleArr[j]+"length()").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+						arraylength = arraylength.replaceAll("\\[", "").replaceAll("\\]","");
+					}
+					for (int i=0;i<Integer.parseInt(arraylength);i++)
+					{
+                        String insterQuery = "";                        
 						StringBuffer temp2 = new StringBuffer();
 						LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify =  InputColVerify.GetDataObjects(config.getProperty("OutputColQuery")+" where TableName= \""+tableNames[j]+"\"");
-						insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\",\""+MappingID+"\", temp2)";
+						if(vehicleArr[j]=="State.")  // Condition check 
+						{
+							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\", temp2)";
+						}
+						else
+						{
+							String MappingID = "";
+	                        String StateMappingID=vehicleArr[j].replace(".","")+"_State_Mapping_ID";
+	                        LinkedHashMap<Integer, LinkedHashMap<String, String>> individualTable=InputColVerify.GetDataObjects("Select * from " +inputtableNames[j]+ " where TestcaseID = "+input.get("TestCaseID"));
+	                        for (Map.Entry<Integer,LinkedHashMap<String, String>> entry1 : individualTable.entrySet())  
+							{
+								MappingID= entry1.getValue().get(StateMappingID); 
+							}	
+							insterQuery = "INSERT INTO "+tableNames[j]+" VALUES(\""+input.get("TestCaseID")+"\",\""+MappingID+"\", temp2)";
+						}
 						for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 						{   							
 							LinkedHashMap<String, String> rowOutputColVerify = entry.getValue();							
@@ -184,7 +199,6 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 									{
 										String jsonpath = rowOutputColVerify.get(config.getProperty("OutputJsonPath"));
 										String Rep=jsonpath.replaceAll("####", String.valueOf(k)).replaceAll("###", i+"");
-										//$.State[0].PrivatePassenger[0].PrivatePassengerDetail.NoOfVehicles
 										String actual = response.read(Rep).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 										temp2=temp2.append("\"").append(actual).append("\"").append(",");
 										output.put("flag_for_execution", "Completed");
@@ -202,16 +216,19 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 						insterQuery=insterQuery.replace("temp2", temp2.substring(0, temp2.length() - 1));
 						temp2=temp2.delete(0, temp2.length());
 						queryList.add(insterQuery);
-						//temp2=temp2.append("\"").append("State["+k+"]").append("\"").append(",");
 					}
 				}
 			}
 			return queryList;
 		}
+		catch (PathNotFoundException e) {
+			System.err.println("Path Not Found" +e);
+		}
 		catch(DatabaseException | RequestFormatException e)
 		{
 			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- BASE CLASS", e);
 		}
+		return queryList;
 	}
 	
 	public LinkedHashMap<Integer,LinkedHashMap<String, String>> CompareFunction(LinkedHashMap<Integer,LinkedHashMap<String, String>> inputrow, LinkedHashMap<String, String> output) throws APIException
