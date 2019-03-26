@@ -274,7 +274,7 @@ public class RequestHandler
 			String parentName = rowInputColVerify.get("Parent")+row;
 			String atributeName = rowInputColVerify.get("AtributeName");
 			//System.out.println(InputData);
-			System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
+			//System.out.println(parentName+"---------"+atributeName+"----------"+rowInputColVerify.get("DBColumnName")+"---------"+InputData.get(rowInputColVerify.get("DBColumnName"))+"---------"+rowInputColVerify.get("AttributeStaticValue"));
 			String atributeStaticValue = rowInputColVerify.get("AttributeStaticValue");
 			Object atributeDynamicValue = InputData.get(rowInputColVerify.get("DBColumnName"));
 			if(rowInputColVerify.get("flagforexecution").equals("Y") && condition.ConditionReading(rowInputColVerify.get("Condition"),InputData))
