@@ -20,7 +20,7 @@ public class EmbrokerSubmission extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
-/*	public String tokenGenerator(PropertiesHandle config)
+	/*public String tokenGenerator(PropertiesHandle config)
 	{
 		
 		String Token="";

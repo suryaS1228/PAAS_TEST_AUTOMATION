@@ -8,9 +8,9 @@ import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.util.api.*;
 
-public class EmbrokerIssueCertificate extends BaseClass implements API
+public class EmbrokerGetpolicy extends BaseClass implements API
 {
-	public EmbrokerIssueCertificate(PropertiesHandle config)
+	public EmbrokerGetpolicy(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -19,6 +19,7 @@ public class EmbrokerIssueCertificate extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
+	
 /*	public String tokenGenerator(PropertiesHandle config)
 	{
 		
@@ -45,7 +46,6 @@ public class EmbrokerIssueCertificate extends BaseClass implements API
 		}
 		return Token;
 	}*/
-	
 
 	@Override
 	public void AddHeaders(String Token) throws APIException
