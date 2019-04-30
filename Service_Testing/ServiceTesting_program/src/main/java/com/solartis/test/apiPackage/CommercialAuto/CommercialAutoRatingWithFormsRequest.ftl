@@ -78,6 +78,14 @@
          
         }
       ],
+      "Garage": [
+        { 
+        "GarageDetail": {
+         <#assign CommercialAutoGarage="CommercialAutoGarage"+x><#list CommercialAutoGaragekeeper?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else><#if result?is_last><#else>,</#if></#if></#list>  
+         
+        }
+        }
+      ],
       "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipment": [
         {
         <#assign CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipments="CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipment"+x><#list CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipments?eval as result>"${result.atrib}":"${result.value}",</#list> 
