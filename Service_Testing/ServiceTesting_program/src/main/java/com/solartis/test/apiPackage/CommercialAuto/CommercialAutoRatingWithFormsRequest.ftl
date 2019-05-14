@@ -38,7 +38,8 @@
              <#assign TrailerInterchangeAgreementDetails="TrailerInterchangeAgreementDetail"+x><#list TrailerInterchangeAgreementDetails?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
              
             }
-          ]
+          ],
+          <#assign TrailerInterchangeAgreementDetailss="TrailerInterchangeAgreementDetail1"+x><#list TrailerInterchangeAgreementDetailss?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
         }
       ],
       "CommercialAutoNamedIndividualsBroadenedPersonalInjuryProtectionCoverage": [
@@ -48,7 +49,8 @@
              <#assign NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetails="NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetail"+x><#list NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetails?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
             
             }
-          ]
+          ],
+          <#assign NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetailss="NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetail1"+x><#list NamedIndividualsBroadenedPersonalInjuryProtectionCoverageDetailss?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
         }
       ],
       "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividuals": [
@@ -59,7 +61,7 @@
              
             }
           ],  
-          <#assign DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1s="DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1"+x><#list DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1s?eval as result>"${result.atrib}":"${result.value}"</#list>  
+          <#assign DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1s="DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1"+x><#list DriveOtherCarCovBroadenedCovForNamedIndividualsDetail1s?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>   
           
         }
       ],
@@ -80,8 +82,9 @@
       ],
       "Garage": [
         { 
-        "GarageDetail": {
-         <#assign CommercialAutoGarage="CommercialAutoGarage"+x><#list CommercialAutoGaragekeeper?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else><#if result?is_last><#else>,</#if></#if></#list>  
+        "GarageDetail": 
+        {
+         <#assign CommercialAutoGarages="CommercialAutoGarage"+x><#list CommercialAutoGarages?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else><#if result?is_last><#else>,</#if></#if></#list>  
          
         }
         }

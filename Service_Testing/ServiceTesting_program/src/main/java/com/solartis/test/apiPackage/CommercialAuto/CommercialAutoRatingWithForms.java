@@ -40,7 +40,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
-	public void SendAndReceiveData() throws APIException 
+	/*public void SendAndReceiveData() throws APIException 
 	{
 		try
 		{
@@ -59,7 +59,7 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
 		}
 	}
-	
+	*/
 	public void AddHeaders(String Token) throws APIException 
 	 {
 		try
@@ -108,6 +108,8 @@ public class CommercialAutoRatingWithForms extends BaseClass2 implements API2
 			int f=1;
 			String[] tableNames = config.getProperty("inputTable").split(",");		
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableInputColVerify1 =  InputColVerify.GetDataObjects(config.getProperty("InputColQuery")+" where TableName= \""+tableNames[0]+"\"");
+			System.out.println(config.getProperty("InputColQuery")+" where TableName= \""+tableNames[0]+"\"");
+			System.out.println(InputData);
 			for (Map.Entry<Integer,LinkedHashMap<String, String>> entry : InputData.entrySet())  
 			{
 				sampleInput.LoadData(tableInputColVerify1, entry.getValue(),f);

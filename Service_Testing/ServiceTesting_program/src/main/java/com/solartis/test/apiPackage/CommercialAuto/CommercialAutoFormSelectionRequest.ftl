@@ -73,11 +73,33 @@
             "CombinationFirstPartyBenefit": "",
             "CoverageType": "",
             "FuneralExpenseBenefit": "",
+            "LocationNumber": "",
             "MedicalExpenseBenefit": "",
             "WorkLossBenefit": ""
           }
         }
       ],
+      "Garage": [
+                {
+                    "GarageDetail": {
+                        "AddressLine1": "8TH ST",
+                        "AddressLine2": "PHOENIX",
+                        "City": "Waldorf",
+                        "County": "Surry",
+                        "GarageClassCode": "7361",
+                        "GarageCoverageType": "Full Covered Autos Liability Limit For Customers Coverage",
+                        "GarageNumberOfOfficersAndOperatorsFullTime": "5",
+                        "GarageNumberOfOfficersAndOperatorsPartTime": "10",
+                        "GarageNumberOfOtherEmployeesFullTime": "1",
+                        "GarageNumberOfOtherEmployeesPartTime": "2",
+                        "NoOfVehicles": "1",
+                        "State": "RI",
+                        "Territory": "117",
+                        "VehicleType": "Garage",
+                        "ZipCode": "85001"
+                    }
+                }
+            ],
       "CommercialAutoGaragekeepersCoverage": [
         {
           "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageAllPerilsDeductible": "Yes",
@@ -108,7 +130,9 @@
       "Truck": [
         {
           "TruckDetail": {
-            
+            "LocationNumber": "1",
+            "TruckFirstOrAdditionalAuto": "Additional Auto",
+             "VehicleNumber": "1",
             "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
                 "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
@@ -142,6 +166,9 @@
       "PrivatePassenger": [
         {
           "PrivatePassengerDetail": {
+           "LocationNumber": "1",
+           "PrivatePassengerFirstOrAdditionalAuto": "Additional Auto",
+           "VehicleNumber": "1",
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
                 "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
@@ -173,6 +200,9 @@
       "PublicTransportation": [
         {
           "PublicTransportationDetail": {
+           "LocationNumber": "1",
+            "PublicTransportationFirstOrAdditionalAuto": "Additional Auto",
+            "VehicleNumber": "1",
             "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
                 "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
@@ -204,6 +234,9 @@
       "ZoneRated": [
         {
           "ZoneRatedDetail": {
+          "LocationNumber": "1",
+          "VehicleNumber": "1",
+          "ZoneRatedFirstOrAdditionalAuto": "Additional Auto",
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
                 "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
@@ -235,6 +268,9 @@
       "Special": [
         {
           "SpecialDetail": {
+          "LocationNumber": "1",
+          "SpecialTypesFirstOrAdditionalAuto": "Additional Auto",
+          "SpecialTypesLiabilityCoverageTortLimitation": "",
           "AudioVisualAndDataElectronicEquipmentCoverageList": [
               {
                 "AudioVisualAndDataElectronicEquipmentCoverageLimit": "500",
@@ -266,6 +302,7 @@
       "HiredAuto": [
         {
           "HiredAutoDetail": {
+          "LocationNumber": "1",
           	<#assign HiredAutoLevels="HiredAutoLevel"+x><#list HiredAutoLevels?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>   
@@ -275,6 +312,7 @@
       "NonOwnedAuto": [
         {
           "NonOwnedAutoDetail": {
+            "LocationNumber": "1",
           	<#assign NonOwnedAutoLevels="NonOwnedAutoLevel"+x><#list NonOwnedAutoLevels?eval as result>     
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>    
