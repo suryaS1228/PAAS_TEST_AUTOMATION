@@ -25,7 +25,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
- public void SendAndReceiveData() throws APIException 
+/* public void SendAndReceiveData() throws APIException 
 	{
 		try
 		{
@@ -55,9 +55,9 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		//System.out.println("path -------- " + path);
 		if (new File(path).exists())
 		{
-			/*for(File file: new File(path).listFiles()) 
+			for(File file: new File(path).listFiles()) 
 			    if (!file.isDirectory()) 
-			        file.delete();*/
+			        file.delete();
 		}
 		else 
 		{
@@ -66,7 +66,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		//System.out.println(path+"/");
 		return path+"/";
 		
-	}
+	}*/
 	
 	@Override
 	public void AddHeaders(String Token) throws APIException

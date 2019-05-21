@@ -44,7 +44,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		}
 	}
 
-	public void SendAndReceiveData() throws APIException 
+	/*public void SendAndReceiveData() throws APIException 
 	{
 		try
 		{
@@ -74,9 +74,9 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		//System.out.println("path -------- " + path);
 		if (new File(path).exists())
 		{
-			/*for(File file: new File(path).listFiles()) 
+			for(File file: new File(path).listFiles()) 
 			    if (!file.isDirectory()) 
-			        file.delete();*/
+			        file.delete();
 		}
 		else 
 		{
@@ -85,7 +85,7 @@ public class DtcSaveDetails4 extends BaseClass implements API
 		//System.out.println(path+"/");
 		return path+"/";
 		
-	}
+	}*/
 	@Override
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
 	{
