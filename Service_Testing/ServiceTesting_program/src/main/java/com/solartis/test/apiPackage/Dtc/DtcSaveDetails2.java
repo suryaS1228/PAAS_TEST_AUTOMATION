@@ -25,49 +25,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
 	
- public void SendAndReceiveData() throws APIException 
-	{
-		try
-		{
-			String input_data= null;
-			input_data = request.FileToString();
-			start = System.currentTimeMillis();
-		    http.SendData(input_data);
-			String response_string = http.ReceiveData();
-		    end = System.currentTimeMillis();
-		   // System.out.println("Folder name  ---- "+this.getFolderName(config, input));
-		   // System.out.println("Test Data name  --------- "+input.get("Testdata"));
-		    response = new JsonHandle(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_response"+".json");
-		    response.StringToFile(response_string);
-		}
-		catch(RequestFormatException | HTTPHandleException e)
-		{
-			e.printStackTrace();
-			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
-		}
-	}
-	
-	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
-	{
-		//System.out.println("InputData --------- "+InputData);
-		//System.out.println("API Name ----- "+config.getProperty("APIName"));
-		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+config.getProperty("APIName")+"/"+InputData.get("Testdata");	
-		//System.out.println("path -------- " + path);
-		if (new File(path).exists())
-		{
-			/*for(File file: new File(path).listFiles()) 
-			    if (!file.isDirectory()) 
-			        file.delete();*/
-		}
-		else 
-		{
-			new File(path).mkdirs();
-		}
-		//System.out.println(path+"/");
-		return path+"/";
-		
-	}
-	
+ 
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
