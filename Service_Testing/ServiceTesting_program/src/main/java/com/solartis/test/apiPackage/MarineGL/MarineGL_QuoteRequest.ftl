@@ -1,3 +1,4 @@
+<#assign Numofdesc=[]><#list Noofdesc as x><#assign Numofdesc=Numofdesc+[x.value]></#list>
 {
   "EndClientUserUniqueSessionId": "1",
   "EndClientUserBrowserSessionId": "12",
@@ -11,6 +12,21 @@
   "QuoteInformation": {
   <#list QuoteInformation as result>"${result.atrib}":"${result.value}",
   </#list>
+     "DescriptionOfOperations": {
+            "DescriptionOfOperationsList": [
+            <#assign i=1>
+        <#list 1..Numofdesc[0] as result>
+        <#assign descDetails="descDetails"+i>
+       
+          
+              {
+	              	<#list descDetails?eval as result>"${result.atrib}":"${result.value}"</#list>
+	              
+              }	<#if result?is_last><#else>,</#if><#assign i=i+1>
+              </#list>
+            ]
+          },
+ 
   "Location": {
       "LocationDetail": [
         {
@@ -27,5 +43,7 @@
         }
       ]
     }
+    
+  
   }
-}
+  }
