@@ -1,5 +1,6 @@
 package com.solartis.test.apiPackage.Dtc;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -23,8 +24,49 @@ public class DtcSaveDetails2 extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 	}
-
 	
+ public void SendAndReceiveData() throws APIException 
+	{
+		try
+		{
+			String input_data= null;
+			input_data = request.FileToString();
+			start = System.currentTimeMillis();
+		    http.SendData(input_data);
+			String response_string = http.ReceiveData();
+		    end = System.currentTimeMillis();
+		   // System.out.println("Folder name  ---- "+this.getFolderName(config, input));
+		   // System.out.println("Test Data name  --------- "+input.get("Testdata"));
+		    response = new JsonHandle(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_response"+".json");
+		    response.StringToFile(response_string);
+		}
+		catch(RequestFormatException | HTTPHandleException e)
+		{
+			e.printStackTrace();
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
+		}
+	}
+	
+	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
+	{
+		//System.out.println("InputData --------- "+InputData);
+		//System.out.println("API Name ----- "+config.getProperty("APIName"));
+		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+config.getProperty("APIName")+"/"+InputData.get("Testdata");	
+		//System.out.println("path -------- " + path);
+		if (new File(path).exists())
+		{
+			/*for(File file: new File(path).listFiles()) 
+			    if (!file.isDirectory()) 
+			        file.delete();*/
+		}
+		else 
+		{
+			new File(path).mkdirs();
+		}
+		//System.out.println(path+"/");
+		return path+"/";
+		
+	}
 	
 	@Override
 	public void AddHeaders(String Token) throws APIException
@@ -57,7 +99,7 @@ public class DtcSaveDetails2 extends BaseClass implements API
 					try
 					{
 						System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
-						String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
+				        String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						System.out.println(actual);
 						output.put("flag_for_execution", "Completed");

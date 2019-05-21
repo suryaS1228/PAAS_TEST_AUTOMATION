@@ -1,5 +1,6 @@
 package com.solartis.test.apiPackage.Dtc;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -42,6 +43,48 @@ public class DtcSaveDetails3 extends BaseClass implements API
 			throw new APIException("ERROR ADD HEADER FUNCTION -- DTC-SAVEDETAILS3 CLASS", e);
 		}
 	}
+	public void SendAndReceiveData() throws APIException 
+	{
+		try
+		{
+			String input_data= null;
+			input_data = request.FileToString();
+			start = System.currentTimeMillis();
+		    http.SendData(input_data);
+			String response_string = http.ReceiveData();
+		    end = System.currentTimeMillis();
+		    //System.out.println("Folder name  ---- "+this.getFolderName(config, input));
+		    //System.out.println("Test Data name  --------- "+input.get("Testdata"));
+		    response = new JsonHandle(this.getFolderName(config, input)+input.get("Testdata")+"_"+config.getProperty("APIName")+"_response"+".json");
+		    response.StringToFile(response_string);
+		}
+		catch(RequestFormatException | HTTPHandleException e)
+		{
+			e.printStackTrace();
+			throw new APIException("ERROR IN SEND AND RECIEVE DATA FUNCTION -- BASE CLASS", e);
+		}
+	}
+	
+	public String getFolderName(PropertiesHandle config, LinkedHashMap<String, String> InputData) 
+	{
+		//System.out.println("InputData --------- "+InputData);
+		//System.out.println("API Name ----- "+config.getProperty("APIName"));
+		String path=(String) config.get("request_response_Location")+"Results/"+"Test_Results/"+config.getProperty("APIName")+"/"+InputData.get("Testdata");	
+		//System.out.println("path -------- " + path);
+		if (new File(path).exists())
+		{
+			/*for(File file: new File(path).listFiles()) 
+			    if (!file.isDirectory()) 
+			        file.delete();*/
+		}
+		else 
+		{
+			new File(path).mkdirs();
+		}
+		//System.out.println(path+"/");
+		return path+"/";
+		
+	}
 
 	@Override
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException 
@@ -68,8 +111,8 @@ public class DtcSaveDetails3 extends BaseClass implements API
 							}
 							else
 							{
-								String MessageCode=(response.read("..messageCode").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
-								String UserMessage=(response.read("..UserMessage").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+								String MessageCode=(response.read("..Message").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
+								String UserMessage=(response.read("..RuleName").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
 								output.put("Flag_for_execution", "Error response");
 								output.put("Message_code", MessageCode);
 								output.put("User_message", UserMessage);
