@@ -66,10 +66,17 @@ public class EmbrokerEndorsementMacro extends DBColoumnVerify implements MacroIn
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.get("Rating_end1_BusinessType"),configFile);
-			//String RateingModelName ="Coverwallet_Rating_Model";
+			//String RateingModelName = Lookup(inputData.get("Rating_end1_BusinessType"),configFile);
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			String RateingModelName = inputData.get("Testdata");
+			
+			//String RateingModelName ="Coverwallet_Rating_Model";
+			System.out.println("RateingModelName is "+RateingModelName);
+			//Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			Samplepath= "R:/RestFullAPIDeliverable/Devolpement/admin/Embroker/Results/RatingModelResult/"+RateingModelName+"New.xls";
+			//Samplepath= "E:/Rating/"+RateingModelName+".xls";
+			System.out.println("Samplepath is "+Samplepath);
+			//Samplepath= ("RootFolder") + "/" + Project +"/SampleRatingModel/SampleRating"+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
@@ -82,7 +89,9 @@ public class EmbrokerEndorsementMacro extends DBColoumnVerify implements MacroIn
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
+			//Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
+			String RateingModelName = inputData.get("Testdata");
+			Targetpath= "R:/RestFullAPIDeliverable/Devolpement/admin/Embroker/Results/RatingModelResult/"+RateingModelName+"End1.xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
