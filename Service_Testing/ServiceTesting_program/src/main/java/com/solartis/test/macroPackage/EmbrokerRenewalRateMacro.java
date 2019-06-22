@@ -20,11 +20,11 @@ import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
+public class EmbrokerRenewalRateMacro extends DBColoumnVerify implements MacroInterface
 {	
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected EmbrokerMacro trans;
+	protected EmbrokerRenewalRateMacro trans;
 	protected String Samplepath;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
@@ -47,7 +47,7 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	public EmbrokerMacro(PropertiesHandle configFile) throws MacroException
+	public EmbrokerRenewalRateMacro(PropertiesHandle configFile) throws MacroException
 	{
 		super(" ");
 			configTable = new DatabaseOperation();
@@ -66,10 +66,17 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			String RateingModelName = Lookup(inputData.get("BusinessType"),configFile);
-			//String RateingModelName ="Coverwallet_Rating_Model";
+			//String RateingModelName = Lookup(inputData.get("Rating_end1_BusinessType"),configFile);
 			
-			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
+			String RateingModelName = inputData.get("Testdata");
+			String Ratingfile = inputData.get("renew_ratingfile");
+			
+			System.out.println("RateingModelName is "+RateingModelName);
+			
+			Samplepath= "R:/RestFullAPIDeliverable/Devolpement/admin/Embroker/Results/RatingModelResult/"+RateingModelName+Ratingfile+".xls";
+			
+		   System.out.println("Samplepath is another class"+Samplepath);
+			
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
@@ -84,8 +91,8 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 		{
 			//Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			String RateingModelName = inputData.get("Testdata");
-			Targetpath= "R:/RestFullAPIDeliverable/Devolpement/admin/Embroker/Results/RatingModelResult/"+RateingModelName+"new.xls";
-			
+			//String Ratingfile = inputData.get("Ratingfile");
+			Targetpath= "R:/RestFullAPIDeliverable/Devolpement/admin/Embroker/Results/RatingModelResult/"+RateingModelName+"RenewRate.xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
@@ -101,15 +108,18 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 		try
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
+			//LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects("SELECT * FROM `INPUT_Embroker_Quote` LEFT JOIN INPUT_Embroker_End1 ON INPUT_Embroker_Quote.S_No = INPUT_Embroker_End1.S_No");
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new EmbrokerMacro(configFile);
+			trans= new EmbrokerRenewalRateMacro(configFile);
 			MacroCondVerify = new DBColoumnVerify("conditionChecking");
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{	
 				LinkedHashMap<String, String> rowtablePumpinData = entry.getValue();
 				String condition = rowtablePumpinData.get("Condition");
+				
 				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
+					
 					if (rowtablePumpinData.get("Type").equals("input"))
 					{
 						String Datacolumntowrite = rowtablePumpinData.get("Input_DB_column");
@@ -119,7 +129,7 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						//System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
+						System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowtablePumpinData.get("Sheet_Name"));
 						//excel.getcell(rowNum, columnNum);
 						if(rowtablePumpinData.get("Translation_Flag").equals("Y"))
@@ -185,8 +195,8 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 						excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 						excel.getcell(rowNum-1, columnNum);
 						String Datatowrite = excel.read_data(rowNum-1, columnNum);
-						System.out.println(rowNum-1+"----------" +columnNum);
-						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
+						//System.out.println(rowNum-1+"----------" +columnNum);
+						//System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
 						outputData.put(Datacolumntowrite, Datatowrite);
 						//outputData.WriteData(Datacolumntowrite, "poda");
 					}
@@ -296,7 +306,7 @@ public class EmbrokerMacro extends DBColoumnVerify implements MacroInterface
 		{
 			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
 		}
-		System.out.println(LookupMap.get("new"));
+		//System.out.println(LookupMap.get("new"));
 		if (LookupMap.get(Lookup1)==null)
 		{
 			return "Other";

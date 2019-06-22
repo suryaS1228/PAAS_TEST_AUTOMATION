@@ -1,14 +1,13 @@
 <#assign DOCoverage=[]><#list DNOApplicable as y><#assign DOCoverage=DOCoverage+[y.value]></#list>
 <#assign EPLCoverage=[]><#list EPLIApplicable as z><#assign EPLCoverage=EPLCoverage+[z.value]></#list>
 <#assign FIDCoverage=[]><#list FidApplicable as a><#assign FIDCoverage=FIDCoverage+[a.value]></#list>
-<#assign EOCoverage=[]><#list ENOApplicable as b><#assign EOCoverage=EOCoverage+[b.value]></#list>
+<#assign EAOCoverage=[]><#list EAOApplicable as b><#assign EAOCoverage=EAOCoverage+[b.value]></#list>
 {   
-
 "EndClientUserUniqueSessionId": "Uniquesession",
 "OwnerId": "36",
 "ServiceRequestDetail": 
 {
- <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+<#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
 },
 "Policy":
 {   
@@ -33,7 +32,7 @@
 }
 </#if>
 <#if  FIDCoverage[0]=="Yes">
-,
+, 
 {
 "CoverageDetail":
 {
@@ -41,24 +40,15 @@
 }
 }
 </#if>
-<#if  EOCoverage[0]=="Yes">
-,
+<#if  EAOCoverage[0]=="Yes">
+, 
 {
 "CoverageDetail":
 {
-<#list ENOCoverage as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+<#list EAOCoverageDetails as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
 }
 }
 </#if>
-],
-"FundraiseList": 
-[
-{
-"FundraiseDetail": 
-{
-<#list FundraiseDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
-}
-}
 ]
 }
 }

@@ -28,7 +28,7 @@ public class EmbrokerBind extends BaseClass implements API
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
-/*
+
 	public String tokenGenerator(PropertiesHandle config)
 	{
 		
@@ -55,7 +55,7 @@ public class EmbrokerBind extends BaseClass implements API
 		}
 		return Token;
 	}
-*/
+
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{

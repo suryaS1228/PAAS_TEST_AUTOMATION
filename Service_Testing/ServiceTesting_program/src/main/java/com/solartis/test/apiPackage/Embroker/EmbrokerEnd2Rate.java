@@ -13,6 +13,7 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
+import com.solartis.test.macroPackage.EmbrokerEndorsement2Macro;
 import com.solartis.test.macroPackage.EmbrokerEndorsementMacro;
 import com.solartis.test.macroPackage.EmbrokerMacro;
 import com.solartis.test.macroPackage.MacroInterface;
@@ -20,10 +21,10 @@ import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
 
-public class EmbrokerEnd1 extends BaseClass implements API
+public class EmbrokerEnd2Rate extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public EmbrokerEnd1(PropertiesHandle config) throws MacroException
+	public EmbrokerEnd2Rate(PropertiesHandle config) throws MacroException
 	{
 	
 		this.config = config;
@@ -34,12 +35,12 @@ public class EmbrokerEnd1 extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-		macro=new EmbrokerEndorsementMacro(config);	
+		macro=new EmbrokerEndorsement2Macro(config);	
 		}
 		
 	}
 	
-	public String tokenGenerator(PropertiesHandle config)
+	/*public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";
 		try
@@ -65,7 +66,7 @@ public class EmbrokerEnd1 extends BaseClass implements API
 		}
 		return Token;
 		
-	}
+	}*/
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
 		 this.input = InputData;
