@@ -40,7 +40,7 @@ public class EmbrokerRenewalRate extends BaseClass implements API
 		
 	}
 	
-	/*public String tokenGenerator(PropertiesHandle config)
+	public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";
 		try
@@ -66,7 +66,7 @@ public class EmbrokerRenewalRate extends BaseClass implements API
 		}
 		return Token;
 		
-	}*/
+	}
 	 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 	 {
 		 this.input = InputData;
@@ -117,7 +117,7 @@ public class EmbrokerRenewalRate extends BaseClass implements API
 		  http.AddHeader("Content-Type", config.getProperty("content_type"));
 		  http.AddHeader("Token", Token);
 		  http.AddHeader("EventName", config.getProperty("EventName")); 
-		  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
+		  http.AddHeader("EventVersion", config.getProperty("EventVersion"));}
 		catch(HTTPHandleException e)
 		{
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
