@@ -51,7 +51,7 @@ public class PropertiesHandle extends Properties
 			this.priority=priority;
 			this.ExecutionName=ExecutionName;
 			this.ModeofExecution=ModeofExecution;
-			//System.out.println(DB_URL);
+			
 			WriteProperty(UserName);
 			System.out.println(DB_URL);
 		}
@@ -89,8 +89,7 @@ public class PropertiesHandle extends Properties
 			this.put("sample_request", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRequest/SampleRequest" + this.RdmsValue("Version") + "/");
 			this.put("response_location", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/Response/");
 			this.put("Samplepath_Old", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");	
-			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project +"/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");
-			this.put("Samplepath_new", this.RdmsValue("RootFolder") + "/" + Project + "/" + Api + "/Results/RatingModelResult/");
+			this.put("Samplepath", this.RdmsValue("RootFolder") + "/" + Project +"/SampleRatingModel/SampleRating" + this.RdmsValue("Version") + "/");	
 			this.put("output_query", this.RdmsQuery("OutputTable"));
 			this.put("InputColQuery",this.RdmsQuery("InputConditonTable"));
 			this.put("OutputColQuery",this.RdmsQuery("OutputConditionTable"));

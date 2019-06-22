@@ -118,7 +118,6 @@ public class EmbrokerRenewalRate extends BaseClass implements API
 		  http.AddHeader("Token", Token);
 		  http.AddHeader("EventName", config.getProperty("EventName")); 
 		  http.AddHeader("EventVersion", config.getProperty("EventVersion")); 
-		 }
 		catch(HTTPHandleException e)
 		{
 			throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
