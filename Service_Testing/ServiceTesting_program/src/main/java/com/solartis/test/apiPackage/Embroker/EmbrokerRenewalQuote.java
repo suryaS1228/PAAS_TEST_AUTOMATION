@@ -1,6 +1,5 @@
-package com.solartis.test.apiPackage.StarrISOBOP;
+package com.solartis.test.apiPackage.Embroker;
 
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -11,22 +10,26 @@ import com.solartis.test.apiPackage.BaseClass;
 import com.solartis.test.exception.APIException;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.HTTPHandleException;
+import com.solartis.test.exception.MacroException;
+import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
 
-public class IsoBopEndorsement extends BaseClass implements API 
+public class EmbrokerRenewalQuote extends BaseClass implements API
 {
-	public IsoBopEndorsement(PropertiesHandle config) throws SQLException
+	public EmbrokerRenewalQuote(PropertiesHandle config)
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
+		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
-	/*public String tokenGenerator(PropertiesHandle config)
+
+/*	public String tokenGenerator(PropertiesHandle config)
 	{
 		
 		String Token="";
@@ -51,26 +54,28 @@ public class IsoBopEndorsement extends BaseClass implements API
 			e.printStackTrace();
 		}
 		return Token;
-	}*/
-	
+	}
+*/
+	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
-		try
+		try 
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
-			//http.AddHeader("EventName", config.getProperty("EventName"));
-			//http.AddHeader("EventVersion", config.getProperty("EventVersion"));
+			http.AddHeader("EventName", config.getProperty("EventName"));
+			http.AddHeader("EventVersion", config.getProperty("EventVersion"));
 		}
-    	catch (HTTPHandleException e) 
+		catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- ISO-RATING CLASS", e);
+			e.printStackTrace();
+			throw new APIException("ERROR ADD HEADER FUNCTION -- STARSEARCH&RESCUE-ISSUECERTIFICATE CLASS", e);
 		}
 	}
-	@Override
-	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
-	{
+	 @Override
+	 public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output)   throws APIException
+	 {
 		try
 		{
 			 if(config.getProperty("Execution_Flag").equals("ActualOnly")||config.getProperty("Execution_Flag").equals("Comparison")||config.getProperty("Execution_Flag").equals("ActualandComparison"))
@@ -93,7 +98,6 @@ public class IsoBopEndorsement extends BaseClass implements API
 		
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
 						output.put("Flag_for_execution", ResponseStatus);
-						output.put("Time", (end-start) + " Millis");
 						}
 						catch(PathNotFoundException | RequestFormatException e)
 						{
@@ -109,7 +113,7 @@ public class IsoBopEndorsement extends BaseClass implements API
 				String Message=response.read("..Message").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				String Message2=response.read("..UserMessage").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 				output.put("User_message",Message);
-				output.put("Message",Message2);
+				output.put("User_message2",Message2);
 				output.put("AnalyserResult","Rule-"+Message2);
 				
 			}
@@ -122,4 +126,5 @@ public class IsoBopEndorsement extends BaseClass implements API
 		}
 		return output;
 	}
+	
 }

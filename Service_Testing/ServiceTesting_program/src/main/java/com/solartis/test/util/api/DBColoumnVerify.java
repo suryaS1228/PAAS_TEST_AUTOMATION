@@ -23,7 +23,7 @@ public class DBColoumnVerify extends DatabaseOperation
 	public boolean ConditionReading(String condition,LinkedHashMap<String, String> row) throws DatabaseException
 	{
 		boolean ConditionReading=false;
-		
+		   // System.out.println(condition);
 			if(condition.equals(""))
 			{
 				ConditionReading=true;

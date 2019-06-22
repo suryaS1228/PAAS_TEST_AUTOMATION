@@ -13,18 +13,18 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-//import com.solartis.test.macroPackage.EmbrokerMacro;
-import com.solartis.test.macroPackage.EmbrokerRenewalRateMacro;
+import com.solartis.test.macroPackage.EmbrokerEndorsementMacro;
+import com.solartis.test.macroPackage.EmbrokerEndorsementReturnMacro;
+import com.solartis.test.macroPackage.EmbrokerMacro;
 import com.solartis.test.macroPackage.MacroInterface;
-//import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 import com.solartis.test.util.api.JsonHandle;
 
-public class EmbrokerRenewalRate extends BaseClass implements API
+public class EmbrokerEndReturnRate extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public EmbrokerRenewalRate(PropertiesHandle config) throws MacroException
+	public EmbrokerEndReturnRate(PropertiesHandle config) throws MacroException
 	{
 	
 		this.config = config;
@@ -35,7 +35,7 @@ public class EmbrokerRenewalRate extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 		if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 		{
-		macro=new EmbrokerRenewalRateMacro(config);	
+		macro=new EmbrokerEndorsementReturnMacro(config);	
 		}
 		
 	}
