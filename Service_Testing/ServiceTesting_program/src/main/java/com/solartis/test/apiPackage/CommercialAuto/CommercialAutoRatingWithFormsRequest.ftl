@@ -15,10 +15,11 @@
         {
           "AddedPersonalInjuryProtectionDetail": 
           {
-            "FamilyMembersName": "1"
+            "FamilyMembersName": "1",
+            <#assign AddedPersonalInjuryProtectionDetails="AddedPersonalInjuryProtectionDetail"+x><#list AddedPersonalInjuryProtectionDetails?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
           }
         }
-      ],
+      ],	
       "BusinessInterruptionCoverage": [
         {
           <#assign BusinessInterruptionCoverages="BusinessInterruptionCoverage"+x><#list BusinessInterruptionCoverages?eval as result>"${result.atrib}":"${result.value}",</#list> 
@@ -113,6 +114,12 @@
            <#assign Truck_AudioVisualAndDataElectronicEquipmentCoverageLists="Truck_AudioVisualAndDataElectronicEquipmentCoverageList"+x+"_"+y><#list Truck_AudioVisualAndDataElectronicEquipmentCoverageLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
            }
          ],
+         "CommercialAutoAutoLoanLeaseGapCovList": 
+         [
+          {
+           <#assign Truck_CommercialAutoAutoLoanLeaseGapCovLists="Truck_CommercialAutoAutoLoanLeaseGapCovList"+x+"_"+y><#list Truck_CommercialAutoAutoLoanLeaseGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          }
+         ],
          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
            {
            <#assign Truck_AdditionalPersonalInjuryProtectionNewYorkLists="Truck_AdditionalPersonalInjuryProtectionNewYorkList"+x+"_"+y><#list Truck_AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
@@ -142,6 +149,18 @@
             {
              <#assign PPT_AudioVisualAndDataElectronicEquipmentCoverageLists="PPT_AudioVisualAndDataElectronicEquipmentCoverageList"+x+"_"+z><#list PPT_AudioVisualAndDataElectronicEquipmentCoverageLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
              
+            }
+           ],
+           "CommercialAutoAutoLoanLeaseGapCovList": 
+           [
+          {
+           <#assign PPT_CommercialAutoAutoLoanLeaseGapCovLists="PPT_CommercialAutoAutoLoanLeaseGapCovList"+x+"_"+z><#list PPT_CommercialAutoAutoLoanLeaseGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          }
+         ],
+           "CommercialAutoWashingtonAutoLoanCoverageGapCovList": 
+           [
+            {
+             <#assign CommercialAutoWashingtonAutoLoanCoverageGapCovLists="CommercialAutoWashingtonAutoLoanCoverageGapCovList"+x+"_"+z><#list CommercialAutoWashingtonAutoLoanCoverageGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
             }
            ],
         "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": 
@@ -177,6 +196,12 @@
               <#assign Public_AudioVisualAndDataElectronicEquipmentCoverageLists="Public_AudioVisualAndDataElectronicEquipmentCoverageList"+x+"_"+a><#list Public_AudioVisualAndDataElectronicEquipmentCoverageLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
                 }
              ],
+             "CommercialAutoAutoLoanLeaseGapCovList": 
+           [
+          {
+           <#assign Public_CommercialAutoAutoLoanLeaseGapCovLists="Public_CommercialAutoAutoLoanLeaseGapCovList"+x+"_"+a><#list Public_CommercialAutoAutoLoanLeaseGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          }
+         ],
              "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": 
              [
                 {
@@ -210,6 +235,12 @@
            <#assign Zone_AudioVisualAndDataElectronicEquipmentCoverageLists="Zone_AudioVisualAndDataElectronicEquipmentCoverageList"+x+"_"+b><#list Zone_AudioVisualAndDataElectronicEquipmentCoverageLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
            }
          ],
+         "CommercialAutoAutoLoanLeaseGapCovList": 
+           [
+          {
+           <#assign Zone_CommercialAutoAutoLoanLeaseGapCovLists="Zone_CommercialAutoAutoLoanLeaseGapCovList"+x+"_"+b><#list Zone_CommercialAutoAutoLoanLeaseGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          }
+         ],
          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
            {
            <#assign Zone_AdditionalPersonalInjuryProtectionNewYorkLists="Zone_AdditionalPersonalInjuryProtectionNewYorkList"+x+"_"+b><#list Zone_AdditionalPersonalInjuryProtectionNewYorkLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
@@ -238,6 +269,12 @@
            {
            <#assign Special_AudioVisualAndDataElectronicEquipmentCoverageLists="Special_AudioVisualAndDataElectronicEquipmentCoverageList"+x+"_"+c><#list Special_AudioVisualAndDataElectronicEquipmentCoverageLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list> 
            }
+         ],
+         "CommercialAutoAutoLoanLeaseGapCovList": 
+           [
+          {
+           <#assign Special_Types_CommercialAutoAutoLoanLeaseGapCovLists="Special_Types_CommercialAutoAutoLoanLeaseGapCovList"+x+"_"+c><#list Special_Types_CommercialAutoAutoLoanLeaseGapCovLists?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          }
          ],
          "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
            {
