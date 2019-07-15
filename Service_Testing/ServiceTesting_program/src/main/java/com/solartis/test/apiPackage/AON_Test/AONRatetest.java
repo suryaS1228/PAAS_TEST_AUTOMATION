@@ -1,4 +1,4 @@
-package com.solartis.test.apiPackage.AON;
+package com.solartis.test.apiPackage.AON_Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -13,16 +13,15 @@ import com.solartis.test.exception.HTTPHandleException;
 import com.solartis.test.exception.MacroException;
 import com.solartis.test.exception.POIException;
 import com.solartis.test.exception.RequestFormatException;
-import com.solartis.test.macroPackage.AONMacro;
+import com.solartis.test.macroPackage.AONMacrotst;
 import com.solartis.test.macroPackage.MacroInterface;
-import com.solartis.test.macroPackage.coverWalletMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class AONRate extends BaseClass implements API
+public class AONRatetest extends BaseClass implements API
 {
 	MacroInterface macro = null;
-	public AONRate(PropertiesHandle config) throws MacroException
+	public AONRatetest(PropertiesHandle config) throws MacroException
 	{
 		
 			this.config = config;
@@ -33,7 +32,7 @@ public class AONRate extends BaseClass implements API
 			StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
 			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
-			macro=new AONMacro(config);	
+			macro=new AONMacrotst(config);	
 			}
 			
 	}
@@ -119,7 +118,7 @@ public class AONRate extends BaseClass implements API
 			 }
 			catch(HTTPHandleException e)
 			{
-				throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- Coverwallet CLASS", e);
+				throw new APIException("ERROR OCCURS IN AddHeaders FUNCTION -- AON CLASS", e);
 			}
 	}
 		
@@ -179,5 +178,5 @@ public class AONRate extends BaseClass implements API
 			}
 			return output;
 	}
-		 
+
 }

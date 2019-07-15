@@ -20,11 +20,11 @@ import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.common.DatabaseOperation;
 import com.solartis.test.util.common.ExcelOperationsPOI;
 
-public class AONMacro extends DBColoumnVerify implements MacroInterface
+public class AONMacrotst extends DBColoumnVerify implements MacroInterface
 {	
 	protected ExcelOperationsPOI sampleexcel=null;
 	protected String Targetpath;
-	protected AONMacro trans;
+	protected AONMacrotst trans;
 	protected String Samplepath;
 	protected DatabaseOperation configTable = null;
 	protected PropertiesHandle configFile;
@@ -47,7 +47,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 	    }
 	}
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	public AONMacro(PropertiesHandle configFile) throws MacroException
+	public AONMacrotst(PropertiesHandle configFile) throws MacroException
 	{
 		super(" ");
 			configTable = new DatabaseOperation();
@@ -58,7 +58,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF  COVERWALLET MACOR", e);
+			throw new MacroException("ERROR OCCURS INITILIZE THE OBJECT OF  AON Macro", e);
 		}
 		
 	}
@@ -66,15 +66,15 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			//String RateingModelName = Lookup(inputData.get("ProgramName"),configFile);
-			String RateingModelName ="Other";
+			String RateingModelName = Lookup("RatingModelName",configFile);
+			//String RateingModelName ="Coverwallet_Rating_Model";
 			
 			Samplepath= configFile.getProperty("Samplepath")+RateingModelName+".xls";
 			sampleexcel= new ExcelOperationsPOI(Samplepath);
 		}
 		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE LOADING SAMPLE RATING MODEL OF AON MACRO", e);
 		}
 	}
 	
@@ -89,7 +89,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch(POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE GENERATING THE EXPECTED RATING MODEL OF AON MACRO", e);
 		}
 	}
 	
@@ -99,7 +99,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		{
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tablePumpinData = configTable.GetDataObjects(configFile.getProperty("config_query"));
 			ExcelOperationsPOI excel=new ExcelOperationsPOI(Targetpath);
-			trans= new AONMacro(configFile);
+			trans= new AONMacrotst(configFile);
 			MacroCondVerify = new DBColoumnVerify("conditionChecking");
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tablePumpinData.entrySet())	
 			{	
@@ -107,7 +107,6 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 				String condition = rowtablePumpinData.get("Condition");
 				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
-					System.out.println(condition);
 					if (rowtablePumpinData.get("Type").equals("input"))
 					{
 						String Datacolumntowrite = rowtablePumpinData.get("Input_DB_column");
@@ -117,7 +116,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
+						//System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowtablePumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
@@ -142,6 +141,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 							}
 							else
 							{
+								System.out.println(rowNum+"  ---- " + columnNum+"   ---- " + Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}
@@ -153,11 +153,11 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch(DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE PUMP-IN THE DATA TO RATING MODEL OF AON MACRO", e);
 		}
 		catch(POIException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE OPENING AND CLOSING THE RATING MODEL OF AON MACRO", e);
 		} 
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -196,11 +196,11 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		}
 		catch(DatabaseException e)
 		{
-			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS WHILE PUMPOUT THE OUTPUT FROM RATING MODEL OF AON MACRO", e);
 		}
 		catch (POIException e)
 		{
-			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS 	WHILE OPENING/CLOSING THE RATING MODEL OF AON MACRO", e);
 		}
 	
 	}
@@ -270,7 +270,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		
 		catch (NumberFormatException | ParseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF COVERWALLET MACRO", e);
+			throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF AON MACRO", e);
 		}
 		return Date1;
 		
@@ -293,7 +293,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 		} 
 		catch (DatabaseException e) 
 		{
-			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF ISO MACRO", e);
+			throw new MacroException("ERROR OCCURS 	IN LOOKUP TABLE OF AON MACRO", e);
 		}
 		System.out.println(LookupMap.get("new"));
 		if (LookupMap.get(Lookup1)==null)
