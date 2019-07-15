@@ -114,16 +114,19 @@ public class MarineGL extends DBColoumnVerify implements MacroInterface
 						String CellAddress = rowPumpinData.get("Cell_Address");
 						
 						String  Datatowrite = InputData.get(Datacolumntowrite);
+						System.out.println(CellAddress);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
+						System.out.println("rowNum   --- " + rowNum);
+						System.out.println("columnNum   --- " + columnNum);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
-						excel.getcell(rowNum, columnNum);
+					//	excel.getcell(rowNum, columnNum);
 						
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
+							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
 							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
