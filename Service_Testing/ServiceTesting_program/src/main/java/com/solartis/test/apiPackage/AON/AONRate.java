@@ -73,6 +73,7 @@ public class AONRate extends BaseClass implements API
 					try 
 					{
 						macro.LoadSampleRatingmodel(config, InputData);		
+						System.out.println("After Load Sample Rating Model");
 						macro.GenerateExpected(InputData, config);
 					} catch (MacroException e) 
 					{
