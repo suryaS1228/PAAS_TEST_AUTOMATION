@@ -107,7 +107,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 				String condition = rowtablePumpinData.get("Condition");
 				if (rowtablePumpinData.get("flag_for_execution").equalsIgnoreCase("Y") && ConditionReading(condition,inputData))
 				{
-					System.out.println(condition);
+					//System.out.println(condition);
 					if (rowtablePumpinData.get("Type").equals("input"))
 					{
 						String Datacolumntowrite = rowtablePumpinData.get("Input_DB_column");
@@ -117,7 +117,7 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
+						//System.out.println(columnNum+"----"+rowNum+"-----"+rowtablePumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowtablePumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
 						
@@ -184,8 +184,8 @@ public class AONMacro extends DBColoumnVerify implements MacroInterface
 						excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 						excel.getcell(rowNum-1, columnNum);
 						String Datatowrite = excel.read_data(rowNum-1, columnNum);
-						System.out.println(rowNum-1+"----------" +columnNum);
-						System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
+						//System.out.println(rowNum-1+"----------" +columnNum);
+						//System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
 						outputData.put(Datacolumntowrite, Datatowrite);
 						//outputData.WriteData(Datacolumntowrite, "poda");
 					}
