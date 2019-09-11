@@ -12,14 +12,10 @@
     "AddedPersonalInjuryProtection": [
         {
           "AddedPersonalInjuryProtectionDetail": {
-           "CommercialAutoAddedPersonalInjuryProtectionDetail.IncreaseLimitsOfMedicalExpenseBenefit": "",            
             "FamilyMembersName": "1"
-          },
-                    "AddedPIPCoverageType": "",
-                    "AddedPIPNamedInsureds": ""
+          }
         }
       ],
-      
       "BusinessInterruptionCoverage": [
         {
           "BusinessIncomeCoverageType": "Business Income Without Extra Expense Coverage",
@@ -33,7 +29,6 @@
             }
           ],
           "DurationOfWaitingPeriod": "No waiting period",
-          "LocationNumber": "2",
           "NumberOfDays": "90"
         }
       ],
@@ -56,23 +51,9 @@
         	"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         	</#list>
         	}
-          ],
-           "LocationNumber": "1"
+          ]
         }
       ],
-      "CommercialAutoScheduleRatingModificationList": [
-                {
-                    "ScheduleRatingModificationDispersionPctPhysicalDamage": "41%",
-                    "ScheduleRatingModificationEmployeesPct": "41%",
-                    "ScheduleRatingModificationEmployeesPctPhysicalDamage": "41%",
-                    "ScheduleRatingModificationEquipmentPct": "41%",
-                    "ScheduleRatingModificationEquipmentPctPhysicalDamage": "41%",
-                    "ScheduleRatingModificationManagementPct": "41%",
-                    "ScheduleRatingModificationManagementPctPhysicalDamage": "41%",
-                    "ScheduleRatingModificationSafetyOrganizationPct": "41%",
-                    "ScheduleRatingModificationSafetyOrganizationPctPhysicalDamage": "41%"
-                }
-            ],
       "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividuals": [
         {
           "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsDetail": [
@@ -82,49 +63,9 @@
         	</#list> 
               }
           ],
-          "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsSubjectToNoFault": "Yes",
-          "LocationNumber": "1"
+          "CommercialAutoDriveOtherCarCovBroadenedCovForNamedIndividualsSubjectToNoFault": "Yes"
         }
       ],
-      "CommercialAutoExperienceRatingModificationList": [
-                {
-                    "ActualLiabilityExpectedLossRatio": "0",
-                    "ActualPhysicalDamageExpectedLossRatio": "0",
-                    "CommercialAutoExperienceRatingModificationYear1DetailList": [
-                        {
-                            "ExperienceRatingModificationYear1DetailLiabilityAllocatedLossAdjustmentExpense": "1000",
-                            "ExperienceRatingModificationYear1DetailLiabilityIndemnity": "100000",
-                            "ExperienceRatingModificationYear1DetailPhysicalDamageIndemnity": "100000"
-                        }
-                    ],
-                    "CommercialAutoExperienceRatingModificationYear2DetailList": [
-                        {
-                            "ExperienceRatingModificationYear2DetailLiabilityAllocatedLossAdjustmentExpense": "1500",
-                            "ExperienceRatingModificationYear2DetailLiabilityIndemnity": "100000",
-                            "ExperienceRatingModificationYear2DetailPhysicalDamageIndemnity": "100000"
-                        }
-                    ],
-                    "CommercialAutoExperienceRatingModificationYear3DetailList": [
-                        {
-                            "ExperienceRatingModificationYear3DetailLiabilityAllocatedLossAdjustmentExpense": "3000",
-                            "ExperienceRatingModificationYear3DetailLiabilityIndemnity": "100000",
-                            "ExperienceRatingModificationYear3DetailPhysicalDamageIndemnity": "100000"
-                        }
-                    ],
-                    "ExpenseVariationApplies": "No",
-                    "ExperienceModificationLiabilityOverride": "0",
-                    "ExperienceModificationPhysicalDamagesOverride": "0",
-                    "LossDevelopmentFactorOverrideYear1": "",
-                    "LossDevelopmentFactorOverrideYear2": "",
-                    "LossDevelopmentFactorOverrideYear3": "",
-                    "Year1EffectiveDate": "2018-01-01",
-                    "Year1LatestValuationDate": "2020-01-01",
-                    "Year2EffectiveDate": "2017-01-01",
-                    "Year2LatestValuationDate": "2019-01-01",
-                    "Year3EffectiveDate": "2016-01-01",
-                    "Year3LatestValuationDate": "2018-01-01"
-                }
-            ],
       "CommercialAutoPennsylvaniaNamedIndividualsBroadenedFirstPartyBenefits": [
         {
           "CommercialAutoPennsylvaniaNamedIndividualsBroadenedFirstPartyBenefitsDetail": {
@@ -161,40 +102,25 @@
             ],
       "CommercialAutoGaragekeepersCoverage": [
         {
-        "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageAllPerilsDeductible": "Yes",
-          "CommercialAutoGaragekeepersCov.ValetParking": "Yes",
-                    "CommercialAutoGaragekeepersCovCollisionCoverage.CoverageType": "No Coverage",
-                   "LocationNumber": "1",
+          "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageAllPerilsDeductible": "Yes",
           "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageCoverageType": "Comprehensive",
           "CommercialAutoGaragekeepersCovRatingBase": "Direct (Excess)",
           "CommercialAutoGaragekeepersCovCollisionCoverageDeductible": "100",
           "CommercialAutoGaragekeepersCovCollisionCoverageLimit": "6000",
           "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageDeductible": "100 / 500",
           "CommercialAutoGaragekeepersCovOtherThanCollisionCoverageLimit": "6000"
-         
           
         }
       ],
-      "CommercialAutoLeasingOrRentalConcernsContingentCoverageList": [
-                {
-                    "LesseeLiabilityPremium": "5"
-                }
-            ],
       "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipment": [
         {
-          <#assign GaragekeepersCovCustomers="GaragekeepersCovCustomer"+x><#list GaragekeepersCovCustomers?eval as result>     
-        	"${result.atrib}":"${result.value}",
-        	</#list>
+          "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCoverageRatingBase": "Legal Liability",
           "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentDetail": [
             {
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageManualPremium": "200",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageManualPremium": "600",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageDeductible": "100",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageLimit": "7500",
-               "LocationNumber": "2",
-               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentCollisionCoverageCoverageType": "",
-        "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageCoverageType": "",                      
-          
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageDeductible": "100 / 500",
               "CommercialAutoGaragekeepersCovCustomersSoundReceivingEquipmentOtherThanCollisionCoverageLimit": "7500"
             }
@@ -213,12 +139,6 @@
                 "CostNew": "500"
               }
             ],
-            "CommercialAutoAutoLoanLeaseGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
                 "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
@@ -265,18 +185,6 @@
                 "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
               }
             ],
-            "CommercialAutoAutoLoanLeaseGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
-                  "CommercialAutoWashingtonAutoLoanCoverageGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
             "CommercialAutoRentalReimbursementCovList": [
               {
                 "DailyRentalAmount": "55",
@@ -301,12 +209,6 @@
                 "CostNew": "500"
               }
             ],
-             "CommercialAutoAutoLoanLeaseGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
                 "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
@@ -317,7 +219,6 @@
                 "AdditionalPersonalInjuryProtectionNewYorkDeathBenefitCoverage_Limit": "Not Applicable"
               }
             ],
-             
             "CommercialAutoRentalReimbursementCovList": [
               {
                 "DailyRentalAmount": "55",
@@ -342,12 +243,6 @@
                 "CostNew": "500"
               }
             ],
-            "CommercialAutoAutoLoanLeaseGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
                 "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
@@ -382,19 +277,6 @@
                 "CostNew": "500"
               }
             ],
-             "CommercialAutoAutoLoanLeaseGapCovList": [
-                    {
-                        "CommercialAutoAutoLoanLeaseGapCovCollisionCoverage.CollisionCoverage": "Yes",
-                        "CommercialAutoAutoLoanLeaseGapCovOtherThanCollisionCoverage.OtherThanCollisionCoverage": "Yes"
-                    }
-                ],
-                "CommercialAutoMobileHomesContentsCovList": [
-                    {
-                        "CoverageType": "Stated Amount - Specified Causes of Loss",
-                        "Deductible": "",
-                        "Limit": "10001"
-                    }
-                ],
             "CommercialAutoAdditionalPersonalInjuryProtectionNewYorkList": [
               {
                 "AdditionalPersonalInjuryProtectionNewYorkAddedCoverage_AdditionalMonthlyWorkLoss": "Not Applicable",
@@ -427,148 +309,6 @@
           }
         }
       ],
-       "Location": [
-                {
-                    "ActualCashValue": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "CostNew": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "LocationNumber": "1",
-                    "Payroll": "",
-                    "Revenue": "",
-                    "StatedAmount": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ]
-                },
-                {
-                    "ActualCashValue": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "CostNew": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "LocationNumber": "2",
-                    "Payroll": "",
-                    "Revenue": "",
-                    "StatedAmount": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ]
-                },
-                {
-                    "ActualCashValue": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "CostNew": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "LocationNumber": "3",
-                    "Payroll": "",
-                    "Revenue": "",
-                    "StatedAmount": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ]
-                },
-                {
-                    "ActualCashValue": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "CostNew": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ],
-                    "LocationNumber": "4",
-                    "Payroll": "",
-                    "Revenue": "",
-                    "StatedAmount": [
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        },
-                        {
-                            "MaximumRange": "",
-                            "MinimumRange": ""
-                        }
-                    ]
-                }
-            ],
       "NonOwnedAuto": [
         {
           "NonOwnedAutoDetail": {
@@ -583,36 +323,6 @@
     </#list>  
   ],
   "OwnerId": "35",
-   "ActualCashValue": [
-        {
-            "MaximumRange": "",
-            "MinimumRange": ""
-        },
-        {
-            "MaximumRange": "",
-            "MinimumRange": ""
-        }
-    ],
-    "CostNew": [
-        {
-            "MaximumRange": "",
-            "MinimumRange": ""
-        },
-        {
-            "MaximumRange": "",
-            "MinimumRange": ""
-        }
-    ],
-     "StatedAmount": [
-    {
-      "MaximumRange": "",
-      "MinimumRange": ""
-    },
-    {
-      "MaximumRange": "",
-      "MinimumRange": ""
-    }
-  ],
   "ServiceRequestDetail": {
     <#assign ServiceDetailLevels="ServiceDetailLevel1"><#list ServiceDetailLevels?eval as result>     
         "${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
