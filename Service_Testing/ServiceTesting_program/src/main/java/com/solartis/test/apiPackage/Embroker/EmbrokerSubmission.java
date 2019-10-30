@@ -20,33 +20,37 @@ public class EmbrokerSubmission extends BaseClass implements API
 		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
-	public String tokenGenerator(PropertiesHandle config)
+	/*public String tokenGenerator(PropertiesHandle config)
 	{
 		
 		String Token="";
 		try
-		{
+		{   
 			System.out.println(config.getProperty("AuthenticationURL"));
 			HttpHandle http = new HttpHandle(config.getProperty("AuthenticationURL"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();	
+			
 			System.out.println(input_data+"/n/n/n"+response_string);
 			JsonHandle response = new JsonHandle();
 			//response.StringToFile(response_string);
 			//response.FileToString();
+			
 			Token = Token+response.readToken("$..Token",response_string).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			System.out.println(Token);
+			System.out.println("Try response"+Token);
+			
 		}
 		catch(Exception e)
 		{
 			System.out.println("Error in Generating Token");
 			e.printStackTrace();
+	
 		}
 		return Token;
 	}
-
+*/
 	@Override
 	public void AddHeaders(String Token) throws APIException
 	{
