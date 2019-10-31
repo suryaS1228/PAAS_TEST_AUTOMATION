@@ -38,7 +38,7 @@ public CoverWalletRate(PropertiesHandle config) throws MacroException
 		
 }
 	
-	/*public String tokenGenerator(PropertiesHandle config)
+	public String tokenGenerator(PropertiesHandle config)
 	{
 		String Token="";
 		try
@@ -64,7 +64,7 @@ public CoverWalletRate(PropertiesHandle config) throws MacroException
 		}
 		return Token;
 		
-	}*/
+	}
 public void LoadSampleRequest(LinkedHashMap<String, String> InputData) throws APIException
 {
 		 this.input = InputData;
