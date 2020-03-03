@@ -33,8 +33,9 @@ public class HylaChangePassword extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
-			http.AddHeader("MODE", "LIVE");
-			http.AddHeader("OwnerId", "2282");
+			http.AddHeader("MODE", config.getProperty("MODE"));
+			http.AddHeader("OwnerId", config.getProperty("OwnerID"));
+			http.AddHeader("Environment", config.getProperty("Environment"));
 			
 		}
 		catch(HTTPHandleException e)
