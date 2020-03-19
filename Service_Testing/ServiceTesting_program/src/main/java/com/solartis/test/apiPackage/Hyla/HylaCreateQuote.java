@@ -53,8 +53,8 @@ public class HylaCreateQuote extends BaseClass implements API
 			 {
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 			
-			String ResponseStatus=response.read("..OwnerId").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			if(ResponseStatus.equals("2282"))
+			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(ResponseStatus.equals("SUCCESS"))
 			{
 			
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
