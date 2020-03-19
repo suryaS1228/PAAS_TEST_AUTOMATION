@@ -14,9 +14,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class HylaCreateQuote extends BaseClass implements API 
+public class HylaFindAccount extends BaseClass implements API 
 {
-	public HylaCreateQuote(PropertiesHandle config) throws SQLException
+	public HylaFindAccount(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
