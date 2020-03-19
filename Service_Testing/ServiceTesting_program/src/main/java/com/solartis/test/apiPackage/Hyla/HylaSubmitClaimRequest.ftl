@@ -1,3 +1,4 @@
+
 {    
 	<#list Policy as result>"${result.atrib}":"${result.value}",</#list>
 	 "deviceInformation":[
