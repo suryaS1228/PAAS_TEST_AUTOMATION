@@ -14,9 +14,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class HylaSavePaymentMethod extends BaseClass implements API 
+public class HylaCancelClaim extends BaseClass implements API 
 {
-	public HylaSavePaymentMethod(PropertiesHandle config) throws SQLException
+	public HylaCancelClaim(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -53,8 +53,8 @@ public class HylaSavePaymentMethod extends BaseClass implements API
 			 {
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 			
-			String ResponseStatus=response.read("..OwnerId").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			if(ResponseStatus.equals("2282"))
+			String ResponseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(ResponseStatus.equals("SUCCESS"))
 			{
 			
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	

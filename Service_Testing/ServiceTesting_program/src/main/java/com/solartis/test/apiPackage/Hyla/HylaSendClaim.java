@@ -14,9 +14,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class HylaSavePaymentMethod extends BaseClass implements API 
+public class HylaSendClaim extends BaseClass implements API 
 {
-	public HylaSavePaymentMethod(PropertiesHandle config) throws SQLException
+	public HylaSendClaim(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();

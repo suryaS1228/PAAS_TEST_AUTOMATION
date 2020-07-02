@@ -14,9 +14,9 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
 
-public class HylaSavePaymentMethod extends BaseClass implements API 
+public class HylaLogin extends BaseClass implements API 
 {
-	public HylaSavePaymentMethod(PropertiesHandle config) throws SQLException
+	public HylaLogin(PropertiesHandle config) throws SQLException
 	{
 		this.config = config;
 		jsonElements = new LinkedHashMap<String, String>();
@@ -31,10 +31,10 @@ public class HylaSavePaymentMethod extends BaseClass implements API
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token", Token);
-			http.AddHeader("EventName", config.getProperty("EventName"));
+			//http.AddHeader("Token", Token);
+			//http.AddHeader("EventName", config.getProperty("EventName"));
 			http.AddHeader("MODE", config.getProperty("MODE"));
-			http.AddHeader("OwnerId", config.getProperty("OwnerID"));
+			//http.AddHeader("OwnerId", config.getProperty("OwnerID"));
 			http.AddHeader("Environment", config.getProperty("Environment"));
 			
 		}
@@ -53,8 +53,8 @@ public class HylaSavePaymentMethod extends BaseClass implements API
 			 {
 			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = OutputColVerify.GetDataObjects(config.getProperty("OutputColQuery"));
 			
-			String ResponseStatus=response.read("..OwnerId").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			if(ResponseStatus.equals("2282"))
+			String ResponseStatus=response.read("..LoginStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
+			if(ResponseStatus.equals("SUCCESS"))
 			{
 			
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	

@@ -12,7 +12,7 @@
 	    "Value": "${result.value}",
         "Key":  "${result.atrib}"
          
-        }<#if result?is_last><#else>,</#if>   </#list>
+        }<#if result?is_last><#else>,</#if> </#list>
  	 ]
   }
 }
