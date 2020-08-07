@@ -2,7 +2,8 @@
 {
   "Policy": {
   "AdditionalInsuredList": [ <#assign j=0>
-   <#if AdditionalInsuredType??><#list AdditionalInsuredType as result>{
+  <#if AdditionalInsuredType??><#list AdditionalInsuredType as result>{
+     
         "${result.atrib}":"${result.value}",
         "AdditionalInsuredDetail": [ <#assign j=j+1>
         <#list 1..array[i] as x>
@@ -13,7 +14,7 @@
           </#list>
         ]<#assign i=i+1>
       }<#if result?is_last><#else>,</#if>
-     </#list><#else></#if>
+      </#list><#else></#if>
     ],
   "Location": {
       "LocationDetail": [
