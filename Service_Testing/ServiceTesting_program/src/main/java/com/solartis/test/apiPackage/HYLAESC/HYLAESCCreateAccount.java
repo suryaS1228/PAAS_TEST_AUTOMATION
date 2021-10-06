@@ -64,7 +64,7 @@ public class HYLAESCCreateAccount extends BaseClass implements API
 							//System.out.println("Writing Response to Table");
 							String responseStatus=response.read("..ResponseStatus").replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
 							//System.out.println(responseStatus);
-							if(responseStatus.equals("SUCCESS"))
+							if(responseStatus.equals("Success"))
 							{
 								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
