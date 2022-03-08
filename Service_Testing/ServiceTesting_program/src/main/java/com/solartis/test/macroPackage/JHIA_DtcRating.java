@@ -90,7 +90,6 @@ public class JHIA_DtcRating extends DBColoumnVerify implements MacroInterface
 		{
 			Targetpath =  configFile.getProperty("TargetPath")+inputData.get("Testdata")+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
-			
 			sampleexcel.save();
 			System.out.println("generate expected rating over");
 		}
@@ -119,15 +118,13 @@ public class JHIA_DtcRating extends DBColoumnVerify implements MacroInterface
 					{
 						String Datacolumntowrite = rowPumpinData.get("Input_DB_column");
 						String CellAddress = rowPumpinData.get("Cell_Address");
-						
 						String  Datatowrite = inputData.get(Datacolumntowrite);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println(columnNum+"----"+rowNum+"-----"+rowPumpinData.get("Sheet_Name")+"-----"+Datatowrite);
+						//System.out.println(columnNum+"----"+rowNum+"-----"+rowPumpinData.get("Sheet_Name")+"-----"+Datatowrite);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 						excel.getcell(rowNum, columnNum);
-						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
@@ -194,7 +191,7 @@ public class JHIA_DtcRating extends DBColoumnVerify implements MacroInterface
 					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
-					System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
+					//System.out.println(Datacolumntowrite+"----------" +Datatowrite+"--------"+rowNum+"-------"+columnNum);
 					outputData.put(Datacolumntowrite, Datatowrite);
 					//outputData.WriteData(Datacolumntowrite, "poda");
 				}
@@ -275,29 +272,21 @@ public class JHIA_DtcRating extends DBColoumnVerify implements MacroInterface
 			String[] DateInputFormat = InputFormat.split(InputDelimiter);
 			String[] DateOutputFormat = ExpectedFormat.split(ExpectedDelimiter);
 			String[] date = Date.split(InputDelimiter); //yyyy-mm-dd
-			System.out.println(InputFormat);
-			System.out.println(ExpectedFormat);
 			HashMap<String,String> DateMaping = new HashMap<String,String>();
 			DateMaping.put(DateInputFormat[0].toLowerCase(), date[0]);
 			DateMaping.put(DateInputFormat[1].toLowerCase(), date[1]);
 			DateMaping.put(DateInputFormat[2].toLowerCase(), date[2]);
 			value =  DateMaping.get(DateOutputFormat[0].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[1].toLowerCase())+ExpectedDelimiter+DateMaping.get(DateOutputFormat[2].toLowerCase());     
-			DateFormat formatt = new SimpleDateFormat(ExpectedFormat, Locale.ENGLISH);
-			//System.out.println(value);
+			DateFormat format = new SimpleDateFormat(ExpectedFormat, Locale.ENGLISH);
 			try 
 			{
-			Date1=formatt.parse(value);
-		 
-				//Date1=formatt.parse(formatt.format(new Date()));
-			} 
+			Date1=format.parse(value);
+			}
 			catch (NumberFormatException | ParseException e) 
 			{
 				// TODO Auto-generated catch block
 				throw new MacroException("ERROR OCCURS 	IN DATE FORMAT OF StarrGL MACRO", e);
 			}  			
-		    System.out.println(Date1);  						
-		
-		
 		return Date1;
 		
 	}
@@ -424,7 +413,7 @@ public class JHIA_DtcRating extends DBColoumnVerify implements MacroInterface
 				Entry<Integer, LinkedHashMap<String, String>> outputentry = outputtableiterator.next();
 		        LinkedHashMap<String, String> inputrow = inputentry.getValue();
 		        LinkedHashMap<String, String> outputrow = outputentry.getValue();
-		        System.out.println("TestData "+inputrow.get("Testdata")+"-----Flag_for_execution "+inputrow.get("Flag_for_execution"));
+		       // System.out.println("TestData "+inputrow.get("Testdata")+"-----Flag_for_execution "+inputrow.get("Flag_for_execution"));
 		        if(inputrow.get("Flag_for_execution").equals("Y"))
 				{
 					MG=new JHIA_DtcRating(configFile);
