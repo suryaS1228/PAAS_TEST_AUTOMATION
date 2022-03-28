@@ -114,19 +114,19 @@ public class MarineGL extends DBColoumnVerify implements MacroInterface
 						String CellAddress = rowPumpinData.get("Cell_Address");
 						
 						String  Datatowrite = InputData.get(Datacolumntowrite);
-						System.out.println(CellAddress);
+						//System.out.println(CellAddress);
 						String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 						int columnNum=Alphabet.getNum(part[0].toUpperCase());
 						int rowNum = Integer.parseInt(part[1]);
-						System.out.println("rowNum   --- " + rowNum);
-						System.out.println("columnNum   --- " + columnNum);
+					//	System.out.println("rowNum   --- " + rowNum);
+						//System.out.println("columnNum   --- " + columnNum);
 						excel.getsheets(rowPumpinData.get("Sheet_Name"));
 					//	excel.getcell(rowNum, columnNum);
 						
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
+							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"------------"+CellAddress);
 							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile)+"------------"+Datatowrite);
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
@@ -340,7 +340,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	MarineGL MG;
 	PropertiesHandle configFile=null;
 	
-	configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Rating\\Config\\config.properties");
+	configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Rating\\Config\\config.properties");
 	//DatabaseOperation.ConnectionSetup(configFile);
 	 
 	 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));

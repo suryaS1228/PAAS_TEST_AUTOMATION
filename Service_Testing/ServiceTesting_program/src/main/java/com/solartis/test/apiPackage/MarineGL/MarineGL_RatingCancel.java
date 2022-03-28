@@ -49,12 +49,12 @@ public class MarineGL_RatingCancel extends BaseClass implements API
 			String input_data = "{  \"ServiceRequestDetail\": { \"OwnerId\": \""+config.getProperty("OwnerID")+"\", \"ResponseType\": \"JSON\", \"BrowserIp\": \"192.168.5.140\", \"ServiceRequestVersion\": \"2.0\" }, \"UserCredential\": { \"UserName\": \""+config.getProperty("Userneme")+"\",    \"Password\": \""+config.getProperty("Password")+"\"  } }";
 			http.SendData(input_data);
 			String response_string = http.ReceiveData();	
-			System.out.println(input_data+"/n/n/n"+response_string);
+			//System.out.println(input_data+"/n/n/n"+response_string);
 			JsonHandle response = new JsonHandle();
 			//response.StringToFile(response_string);
 			//response.FileToString();
 			Token = Token+response.readToken("$..Token",response_string).replaceAll("\\[\"", "").replaceAll("\"\\]", "").replaceAll("\\\\","");
-			System.out.println(Token);
+			//System.out.println(Token);
 		}
 		catch(Exception e)
 		{
