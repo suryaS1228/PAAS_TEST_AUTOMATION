@@ -83,7 +83,7 @@ public class MarineGl_Cancel extends DBColoumnVerify implements MacroInterface
 	{
 		try
 		{
-			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+".xls";
+			Targetpath =  configFile.getProperty("TargetPath")+InputData.get("Testdata")+"_Cancel"+".xls";
 			sampleexcel.Copy(Samplepath, Targetpath);
 			sampleexcel.save();
 		}
@@ -338,7 +338,7 @@ public static void main(String args[]) throws PropertiesHandleException, Databas
 	MarineGl_Cancel MG;
 	PropertiesHandle configFile=null;
 	
-	configFile = new PropertiesHandle("R:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\RateCancel\\Config\\config.properties");
+	configFile = new PropertiesHandle("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\MarineGL\\Cancel\\Config\\config.properties");
 	//DatabaseOperation.ConnectionSetup(configFile);
 	System.out.println("coming to flow2");
 	 LinkedHashMap<Integer, LinkedHashMap<String, String>> inputtable = objectInput.GetDataObjects(configFile.getProperty("input_query"));
