@@ -1,5 +1,5 @@
  {
-      "EndClientUserUniqueSessionId": "Uniqusession",
+      "EndClientUserUniqueSessionId": "Uniquesession",
       "OwnerId": "24",
       "ServiceRequestDetail": {
         <#list ServiceRequestDetail as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
