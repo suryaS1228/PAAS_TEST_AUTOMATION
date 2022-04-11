@@ -110,7 +110,7 @@ public class SquareMouthPayIssue extends BaseClass implements API
 					}
 				}
 	
-				return output;	
+				 return output;	
 		}
 		catch(DatabaseException | RequestFormatException e)
 		{
