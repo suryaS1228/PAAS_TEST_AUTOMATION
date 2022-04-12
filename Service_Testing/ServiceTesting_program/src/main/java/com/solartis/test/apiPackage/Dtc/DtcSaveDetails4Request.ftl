@@ -18,6 +18,6 @@
      ],
      <#list CustomerInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if>
         </#list>	
-   },
-     "OwnerId": "15"
+   }
+    
 }
