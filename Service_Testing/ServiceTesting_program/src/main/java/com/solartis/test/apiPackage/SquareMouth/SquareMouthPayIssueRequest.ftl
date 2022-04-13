@@ -10,7 +10,7 @@
 		</#list>
         },
         "PolicyInformation": {   
-          <#list PolicyInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
+          <#list PolicyInformation as result>"${result.atrib}":"${result.value}",</#list>
           "PaymentInformation": {
            <#list PaymentInformation as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
           },
@@ -22,6 +22,6 @@
          <#list Travelers?eval as result>"${result.atrib}":"${result.value}"<#if result?is_last><#else>,</#if></#list>
         }<#if result?is_last><#else>,</#if><#assign i=i+1>
         </#list>
-        ],
+        ]
        }
        }   
