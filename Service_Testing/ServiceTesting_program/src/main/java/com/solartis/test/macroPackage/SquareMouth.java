@@ -124,7 +124,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 						
 						if(rowPumpinData.get("Translation_Flag").equals("Y"))
 						{
-							System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"--------"+Datacolumntowrite);
+							//System.out.println(rowNum-1+"-------"+columnNum+"------------"+Datatowrite+"--------"+Datacolumntowrite);
 							//System.out.println(trans.Translation1(Datatowrite, rowPumpinData, configFile));
 							excel.write_data(rowNum-1, columnNum, trans.Translation1(Datatowrite, rowPumpinData, configFile));
 						}
@@ -142,7 +142,7 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 							}
 							else
 							{
-								System.out.println(rowNum-1+columnNum+Datatowrite);
+								//System.out.println(rowNum-1+columnNum+Datatowrite);
 								excel.write_data(rowNum-1, columnNum, Datatowrite);
 							}
 						}
@@ -177,19 +177,19 @@ public class SquareMouth extends DBColoumnVerify implements MacroInterface
 			String condition = rowPumpoutData.get("Condition");
 			if(rowPumpoutData.get("flag_for_execution").equals("Y")&&ConditionReading(rowPumpoutData.get("Condition"),inputData))
 			{
-				System.out.println(condition);
+				//System.out.println(condition);
 				if (rowPumpoutData.get("Type").equals("output"))
 				{
 					
 					String Datacolumntowrite = rowPumpoutData.get("Input_DB_column");
 					String CellAddress = rowPumpoutData.get("Cell_Address");
-					System.out.println(CellAddress+"cell address");
+					//System.out.println(CellAddress+"cell address");
 					String[] part = CellAddress.split("(?<=\\D)(?=\\d)");
 					int columnNum=Alphabet.getNum(part[0].toUpperCase());
 					int rowNum = Integer.parseInt(part[1]);
 					excel.getsheets(rowPumpoutData.get("Sheet_Name"));
 					excel.getcell(rowNum-1, columnNum);
-					System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite);
+					//System.out.println(rowNum-1+"--------"+columnNum+"-----"+Datacolumntowrite);
 					String Datatowrite = excel.read_data(rowNum-1, columnNum);
 					outputData.put(Datacolumntowrite, Datatowrite);
 				}
