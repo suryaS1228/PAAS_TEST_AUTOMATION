@@ -56,10 +56,10 @@ public class DtcGetPolicy extends BaseClass implements API
 				      {	
 							if(StatusCode.equals("SUCCESS"))
 							{
-								System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-								System.out.println(actual);
+								//System.out.println(actual);
 								output.put("Flag_for_execution", StatusCode);
 								
 							}

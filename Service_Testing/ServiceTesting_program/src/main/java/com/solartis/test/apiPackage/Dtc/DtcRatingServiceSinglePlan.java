@@ -83,7 +83,7 @@ public class DtcRatingServiceSinglePlan extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token",Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
-			System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName"));
+			//System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName"));
 
 	  } 
 	  catch (HTTPHandleException e) 

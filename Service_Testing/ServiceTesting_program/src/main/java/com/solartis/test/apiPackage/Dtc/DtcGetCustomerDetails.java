@@ -33,6 +33,8 @@ public class DtcGetCustomerDetails  extends BaseClass implements API
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
 			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));	
+			//System.out.println(config.getProperty("test_url")+config.getProperty("content_type")+config.getProperty("EventName")+config.getProperty("Token"));
+
 		}
 		catch (HTTPHandleException e) 
 		{
@@ -56,10 +58,10 @@ public class DtcGetCustomerDetails  extends BaseClass implements API
 				      {	
 							if(StatusCode.equals("SUCCESS"))
 							{
-								System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
+								//System.out.println(rowOutputColVerify.get(config.getProperty("OutputColumn")));
 								String actual = (response.read(rowOutputColVerify.get(config.getProperty("OutputJsonPath"))).replaceAll("\\[\"", "")).replaceAll("\"\\]", "").replaceAll("\\\\","");
 								output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), actual);
-								System.out.println(actual);
+								//System.out.println(actual);
 								output.put("Flag_for_execution", StatusCode);
 								
 							}
