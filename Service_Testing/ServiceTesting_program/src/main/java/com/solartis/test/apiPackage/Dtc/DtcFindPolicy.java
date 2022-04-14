@@ -15,34 +15,34 @@ import com.solartis.test.util.api.*;
 public class DtcFindPolicy extends BaseClass implements API
 {
 	public DtcFindPolicy(PropertiesHandle config)
-	{ 
+	{
 		this.config=config;
 		jsonElements = new LinkedHashMap<String, String>();
 		
 		InputColVerify = new DBColoumnVerify(config.getProperty("InputCondColumn"));
 		OutputColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
-		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));
+		StatusColVerify = new DBColoumnVerify(config.getProperty("OutputCondColumn"));	
 	}
 	
-	@Override
+    @Override
 	public void AddHeaders(String Token) throws APIException
 	{
-		try 
+    	try 
 		{
 			http = new HttpHandle(config.getProperty("test_url"),"POST");
 			http.AddHeader("Content-Type", config.getProperty("content_type"));
-			http.AddHeader("Token",Token);
+			http.AddHeader("Token", Token);
 			http.AddHeader("EventName", config.getProperty("EventName"));
 		}
-		catch (HTTPHandleException e) 
+    	catch (HTTPHandleException e) 
 		{
-			throw new APIException("ERROR ADD HEADER FUNCTION -- DTCFINDPOLICY CLASS", e);
+			throw new APIException("ERROR ADD HEADER FUNCTION -- DTCGETPOLICY CLASS", e);
 		}
 	}
 	
-	@Override
+	
 	public LinkedHashMap<String, String> SendResponseDataToFile(LinkedHashMap<String, String> output) throws APIException
-	{	
+	{
 		try
 		{
 			String StatusCode=(response.read("..RequestStatus").replaceAll("\\[\"", "")).replaceAll("\"\\]", "");
@@ -77,14 +77,14 @@ public class DtcFindPolicy extends BaseClass implements API
 					{
 						output.put(rowOutputColVerify.get(config.getProperty("OutputColumn")), "Path not Found");
 					}
-				}
+					}
 				}
 	
-				return output;
+			return output;	
 		}
 		catch(DatabaseException | RequestFormatException e)
 		{
-			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTCPOLICYPOLICY CLASS", e);
+			throw new APIException("ERROR IN SEND RESPONSE TO FILE FUNCTION -- 	DTCGETPOLICY CLASS", e);
 		}
-	}
+    }
 }
