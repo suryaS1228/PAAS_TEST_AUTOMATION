@@ -16,6 +16,7 @@ import com.solartis.test.exception.RequestFormatException;
 import com.solartis.test.macroPackage.AssistTripInsuranceRating;
 import com.solartis.test.macroPackage.JHIA_DtcRating;
 import com.solartis.test.macroPackage.MacroInterface;
+import com.solartis.test.macroPackage.SatoriRating;
 import com.solartis.test.macroPackage.StarrGLMacro;
 import com.solartis.test.util.api.DBColoumnVerify;
 import com.solartis.test.util.api.HttpHandle;
@@ -36,7 +37,7 @@ public class Satori extends BaseClass implements API
 			
 			if(config.getProperty("Execution_Flag").equals("ExpectedOnly")||config.getProperty("Execution_Flag").equals("Comparison"))
 			{
-			macro=new AssistTripInsuranceRating(config);	
+			macro=new SatoriRating(config);	
 			}
 	    }
 	    catch(MacroException e)
